@@ -1,0 +1,63 @@
+{% extends "blank.html" %}
+{% block title %}Medical Forms &mdash; Carthage College{% endblock %}
+{% block css %}
+    {% include "includes/extra_form_style.html" %}
+{% endblock %}
+{% block extra_style %}
+<style type="text/css" media="screen, projection">
+body {background-color: #E5DCC1;font-family: verdana,arial,sans-serif;}
+#second li { margin: 0; }
+li.ctrlHolder div ul li {display:inline; padding-right:3px;}
+.form .blockLabels label { display: inherit; font-weight: normal; }
+h1,h2,h3 {font-weight:normal;}
+.nobull li {list-style-type: none;}
+.forms-container {
+    display:none;border:1px #666 solid;
+    padding:3px;top:15px;position:relative;
+    width: 795px;
+}
+</style>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript" charset="utf-8">
+$(function() {
+    $types = $('.syncTypes');
+    $academics = $('#academics');
+    $athletics = $('#athletics');
+    $types.change(function() {
+        $this = $(this).val();
+        if ($this == "academics") {
+            $athletics.slideUp(200);
+            $academics.delay(200).slideDown(200);
+        }
+        else if ($this == "athletics") {
+            $academics.slideUp(200);
+            $athletics.delay(200).slideDown(200);
+        }
+    });
+});
+</script>
+{% endblock %}
+{% block content %}
+<div class="buffer">
+    <h1>Medical Information Forms</h1>
+    <p>Are you an NCAA athlete?</p>
+    <form id="profile" class="form">
+    <ul class="nobull">
+        <li><input type="radio" value="athletics" class="syncTypes" name="syncTypes"> Yes</li>
+        <li><input type="radio" value="academics" class="syncTypes" name="syncTypes"> No</li>
+    </ul>
+    </form>
+    <div id="academics" class="forms-container">
+        <h2>Forms for all students</h2>
+        <ul class="nobull">
+            <li>
+                <a href="{% url 'insurance_form' %}">Insurance form</a>
+            </li>
+        </ul>
+    </div>
+    <div id="athletics" class="forms-container">
+        <h2>Forms for athletes</h2>
+    </div>
+</div>
+{% endblock %}
