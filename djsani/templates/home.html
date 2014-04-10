@@ -2,6 +2,7 @@
 {% block title %}Medical Forms &mdash; Carthage College{% endblock %}
 {% block css %}
     {% include "includes/extra_form_style.html" %}
+    <link href="//www.carthage.edu/assets/current/css/core/grid-960.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block extra_style %}
 <style type="text/css" media="screen, projection">
@@ -16,6 +17,11 @@ h1,h2,h3 {font-weight:normal;}
     padding:3px;top:15px;position:relative;
     width: 795px;
 }
+form .ctrlHolder, .form .btnHolder { margin: 0 !important; }
+#profile h2 { margin-left: 2px; }
+.span-10 {margin-right:0px !important;}
+.prepend-1 { padding-left: 38px; }
+.form fieldset { border: 0; }
 </style>
 {% endblock %}
 {% block javascript %}

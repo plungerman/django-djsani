@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 
 from djsani.insurance.forms import InsuranceForm
+
 from djtools.utils.mail import send_mail
 
 if settings.DEBUG:
@@ -15,25 +16,28 @@ BCC = settings.MANAGERS
 
 def insurance_form(request):
     if request.method=='POST':
-        form = InsuranceForm(request.POST)
-        if form.is_valid():
-            data = form.save()
-            email = settings.DEFAULT_FROM_EMAIL
-            if data.email:
-                email = data.email
-            subject = "[Insurance & Emergency Information Form] %s %s" \
-                % (data.first_name,data.last_name)
+        form1 = InsuranceForm(request.POST,prefix="p")
+        form2 = InsuranceForm(request.POST,prefix="s")
+        if form1.is_valid() and form2.is_valid():
+            student = {
+                "cid": request.GET.get("cid"),
+                "email": "%s@carthage.edu" % request.GET.get("uname")
+            }
+            data = _insert_insurance(form1,form2)
+            subject = "[Insurance & Emergency Information Form] %s" \
+                % (student["cid"])
             send_mail(
-                request,TO_LIST,subject,email,
+                request,TO_LIST,subject,student["email"],
                 "insurance/email.html",data,BCC
             )
             return HttpResponseRedirect(
                 reverse_lazy("insurance_success")
             )
     else:
-        form = InsuranceForm()
+        form1 = InsuranceForm(prefix="p")
+        form2 = InsuranceForm(prefix="s")
     return render_to_response(
         "insurance/form.html",
-        {"form": form,},
+        {"form1": form1,"form2": form2,},
         context_instance=RequestContext(request)
     )

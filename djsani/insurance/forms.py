@@ -3,6 +3,7 @@
 from django import forms
 
 from djtools.fields import BINARY_CHOICES
+from djzbar.utils.informix import do_sql
 
 from localflavor.us.forms import USPhoneNumberField
 
@@ -14,11 +15,6 @@ POLICY_CHOICES = (
 )
 
 class InsuranceForm(forms.Form):
-    primary = forms.ChoiceField(
-        label="Is this your primary Insurance Policy?",
-        choices=BINARY_CHOICES,
-        widget=forms.RadioSelect()
-    )
     policy_holder = forms.CharField(
         max_length=128,
         required=False

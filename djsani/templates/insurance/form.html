@@ -1,8 +1,84 @@
 {% extends "home.html" %}
-{% block title %}Form &mdash; Carthage College{% endblock %}
+{% block title %}Insurance Form &mdash; Carthage College{% endblock %}
+{% block javascript %}
+<script type="text/javascript" charset="utf-8">
+$(function() {
+    $('#id_opt_out').change(function() {
+        if($(this).is(":checked")) {
+            $('#insurance-policies').slideUp(200);
+            $('#secondary-box').slideUp(200);
+        }else{
+            $('#insurance-policies').slideDown(200);
+            $('#secondary-box').slideDown(200);
+        }
+    });
+    $('#id_secondary').change(function() {
+        if($(this).is(":checked")) {
+            $('#secondary-form').slideUp(200);
+        }else{
+            $('#secondary-form').slideDown(200);
+        }
+    });
+});
+</script>
+{% endblock %}
 {% block content %}
-<div class="buffer">
+<div class="span-21" style="background-color:#FCFAEB;">
     <h1>Insurance Information Form</h1>
-    {% include "includes/generic_form.html" %}
+    {% if form.errors %}
+    <p class="error">There were errors with the data submitted, see below.</p>
+    {% endif %}
+    <form method="post" action="." class="form" id="profile">{% csrf_token %}
+        <div class="append-bottom">
+            <label for="id_opt_out">
+                <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
+                <span style="color:#f00;">
+                    I attest that at this time I do <strong><u>NOT</u></strong>
+                    have health insurance.
+                </span>
+            </label>
+            <div id="secondary-box">
+                <label for="id_secondary" style="display:block;">
+                    <input id="id_secondary" type="checkbox" value="1" name="secondary">
+                    <span style="color:#800;">
+                        I do <strong><u>NOT</u></strong>
+                        have a secondary health insurance policy.
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div id="insurance-policies">
+            <div class="span-10">
+                <h2>Primary Insurance Policy</h2>
+                <fieldset class="blockLabels">
+                    <ol>
+                        {% for field in form1 %}
+                            {% include "form_field.inc.html" %}
+                        {% endfor %}
+                    </ol>
+                </fieldset>
+            </div>
+            <div class="span-10 prepend-1" id="secondary-form" style="margin-left:10px;">
+                <h2>Secondary Insurance Policy</h2>
+                <fieldset class="blockLabels">
+                    <ol>
+                        {% for field in form2 %}
+                            {% include "form_field.inc.html" %}
+                        {% endfor %}
+                    </ol>
+                </fieldset>
+            </div>
+        </div>
+        <div class="span-20 clear">
+            <fieldset class="blockLabels">
+            <ol>
+                <li class="btnHolder">
+                    <label for="id_submit">&nbsp;&nbsp;</label>
+                    <input type="submit" value="Submit" class="button" />
+                </li>
+            </ol>
+            </fieldset>
+        </div>
+    </form>
 </div>
 {% endblock %}
