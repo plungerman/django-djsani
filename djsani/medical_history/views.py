@@ -4,9 +4,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 
-from djsani.insurance.forms import AcademicsForm
-from djsani.insurance.forms import AthleticsForm
-from djsani.insurance.forms import _put_data, _get_data
+from djsani.medical_history.forms import AcademicsForm
+from djsani.medical_history.forms import AthleticsForm
+from djsani.medical_history.forms import _put_data, _get_data
 
 from djtools.utils.mail import send_mail
 
@@ -22,21 +22,21 @@ def form(request,stype):
         "email": "%s@carthage.edu" % request.GET.get("uname")
     }
     # form name
-    fname = "%sForm" % stype.capitalize()
+    fname = "%sInsuranceForm" % stype.capitalize()
     # check for a record
-    data = _get_data(student["cid"],fname)
+    data = _get_insurance(student["cid"],fname)
     if request.method=='POST':
         if request.POST.get("opt_out"):
             form1 = None
             form2 = None
-            data = _put_data([form1,form2])
+            data = _put_insurance([form1,form2])
         else:
             form1 = eval(fname)(request.POST,prefix="primary")
-            if not request.POST.get("sin-secondary"):
+            if not request.POST.get("secondary"):
                 form2 = eval(name)(request.POST,prefix="seconary")
             else:
                 form2 = None
-            insurance = _put_data(
+            insurance = _put_insurance(
                 form1.cleaned_data,form2.cleaned_data,data["status"]
             )
 

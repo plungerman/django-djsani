@@ -9,6 +9,7 @@ import os
 #DEBUG = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+INFORMIX_DEBUG = "debug"
 ADMINS = (
     ('', ''),
 )
@@ -30,9 +31,9 @@ SERVER_URL = ""
 API_URL = "%s/%s" % (SERVER_URL, "api")
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ROOT_DIR = os.path.dirname(__file__)
-ROOT_URL = "/djskeletor/"
-ROOT_URLCONF = 'djskeletor.core.urls'
-WSGI_APPLICATION = 'djskeletor.wsgi.application'
+ROOT_URL = "/djsani/"
+ROOT_URLCONF = 'djsani.core.urls'
+WSGI_APPLICATION = 'djsani.wsgi.application'
 MEDIA_ROOT = ''
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_ROOT = ''
@@ -48,7 +49,7 @@ DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
         'PORT': '3306',
-        'NAME': 'djskeletor',
+        'NAME': 'django_djsani',
         'ENGINE': 'django.db.backends.mysql',
         'USER': '',
         'PASSWORD': ''
@@ -65,9 +66,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-    'djskeletor',
-    'djskeletor.core',
-    'djskeletor.myapp',
+    'djsani',
+    'djsani.core',
     'djtools',
 )
 
@@ -88,7 +88,7 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     "/data2/django_templates/djdfir/",
     "/data2/django_templates/djcher/",
-    "/data2/django_projects/djskeletor/templates/",
+    "/data2/django_projects/djsani/templates/",
     "/data2/django_templates/",
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -105,9 +105,9 @@ CACHES = {
         #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         #'LOCATION': '127.0.0.1:11211',
         #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        #'LOCATION': '/var/tmp/django_djskeletor_cache',
+        #'LOCATION': '/var/tmp/django_djsani_cache',
         #'TIMEOUT': 60*20,
-        #'KEY_PREFIX': "DJSKELETOR_",
+        #'KEY_PREFIX': "DJSANI_",
         #'OPTIONS': {
         #    'MAX_ENTRIES': 80000,
         #}
@@ -131,13 +131,13 @@ AUTHENTICATION_BACKENDS = (
     'djauth.ldapBackend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-LOGIN_URL = '/djskeletor/accounts/login/'
-LOGIN_REDIRECT_URL = '/djskeletor/'
+LOGIN_URL = '/djsani/accounts/login/'
+LOGIN_REDIRECT_URL = '/djsani/'
 USE_X_FORWARDED_HOST = True
 #SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_DOMAIN=".carthage.edu"
-SESSION_COOKIE_NAME ='django_djskeletor_cookie'
+SESSION_COOKIE_NAME ='django_djsani_cookie'
 SESSION_COOKIE_AGE = 86400
 # SMTP settings
 EMAIL_HOST = ''
@@ -168,6 +168,11 @@ LOGGING = {
             'format': '%(levelname)s %(message)s'
         },
     },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'handlers': {
         'null': {
             'level':'DEBUG',
@@ -188,11 +193,13 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'include_html': True,
             'class': 'django.utils.log.AdminEmailHandler'
         }
     },
     'loggers': {
-        'djskeletor': {
+        'djsani': {
             'handlers':['logfile'],
             'propagate': True,
             'level':'DEBUG',

@@ -18,25 +18,49 @@ h1,h2,h3 {font-weight:normal;}
     width: 795px;
 }
 form .ctrlHolder, .form .btnHolder { margin: 0 !important; }
+form textarea {width: 300px !important;height:50px !important;}
 #profile h2 { margin-left: 2px; }
 .span-10 {margin-right:0px !important;}
 .prepend-1 { padding-left: 38px; }
 .form fieldset { border: 0; }
+.help {margin-top:-2px;}
 </style>
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    // set student type: academic or athlete
+    function setStudentType(stype) {
+        var $data = {
+            "student_type": stype
+        };
+        $.ajax({
+            type: "POST",
+            async: true,
+            url:  '{{sesh_earl}}',
+            dataType: 'html',
+            data: $data
+        });
+    }
+
     $types = $('.syncTypes');
     $academics = $('#academics');
     $athletics = $('#athletics');
+    {% if request.session.stype == "academics" %}
+    $academics.delay(200).slideDown(200);
+    {% endif %}
+    {% if request.session.stype == "athletics" %}
+    $athletics.delay(200).slideDown(200);
+    {% endif %}
     $types.change(function() {
         $this = $(this).val();
         if ($this == "academics") {
+            setStudentType($this);
             $athletics.slideUp(200);
             $academics.delay(200).slideDown(200);
         }
         else if ($this == "athletics") {
+            setStudentType($this);
             $academics.slideUp(200);
             $athletics.delay(200).slideDown(200);
         }
@@ -50,20 +74,29 @@ $(function() {
     <p>Are you an NCAA athlete?</p>
     <form id="profile" class="form">
     <ul class="nobull">
-        <li><input type="radio" value="athletics" class="syncTypes" name="syncTypes"> Yes</li>
-        <li><input type="radio" value="academics" class="syncTypes" name="syncTypes"> No</li>
+        <li>
+            <input type="radio" value="athletics" class="syncTypes" name="syncTypes" {% if request.session.stype == "athletics" %}checked="checked" {% endif %}/> Yes
+        </li>
+        <li>
+            <input type="radio" value="academics" class="syncTypes" name="syncTypes" {% if request.session.stype == "academics" %}checked="checked" {% endif %}> No
+        </li>
     </ul>
     </form>
     <div id="academics" class="forms-container">
         <h2>Forms for all students</h2>
         <ul class="nobull">
             <li>
-                <a href="{% url 'insurance_form' %}">Insurance form</a>
+                <a href="{% url 'insurance_form' 'academics' %}">Insurance form</a>
             </li>
         </ul>
     </div>
     <div id="athletics" class="forms-container">
         <h2>Forms for athletes</h2>
+        <ul class="nobull">
+            <li>
+                <a href="{% url 'insurance_form' 'athletics' %}">Insurance form</a>
+            </li>
+        </ul>
     </div>
 </div>
 {% endblock %}
