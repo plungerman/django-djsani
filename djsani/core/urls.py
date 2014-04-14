@@ -9,13 +9,19 @@ urlpatterns = patterns('djsani.core.views',
     url(
         r'^insurance/', include("djsani.insurance.urls")
     ),
+    # login required error page
+    url(
+        r'^login-required/$', 'login_required', name="login_required"
+    ),
     # medical history
     url(
         r'^medical-history/', include("djsani.medical_history.urls")
     ),
+    # ajax post method to save student type to session
     url(
         r'^set-student-type/$', 'set_student_type', name="set_student_type"
     ),
+    # home
     url(
         r'^$', 'home', name="home"
     ),

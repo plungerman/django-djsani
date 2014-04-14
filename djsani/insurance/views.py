@@ -17,6 +17,17 @@ else:
 BCC = settings.MANAGERS
 
 def form(request,stype):
+    '''
+    try:
+        student = {
+            "cid": request.GET["cid"],
+            "email": "%s@carthage.edu" % request.GET["uname"]
+        }
+    except:
+        return HttpResponseRedirect(
+            reverse_lazy("login_required")
+        )
+    '''
     student = {
         "cid": request.GET.get("cid"),
         "email": "%s@carthage.edu" % request.GET.get("uname")
@@ -40,8 +51,7 @@ def form(request,stype):
                 form1.cleaned_data,form2.cleaned_data,data["status"]
             )
 
-        subject = "[Insurance & Emergency Information Form] %s" \
-            % (student["cid"])
+        subject = "[Insurance Information Form] %s" % (student["cid"])
         send_mail(
             request,TO_LIST,subject,student["email"],
             "insurance/email.html",insurance,BCC

@@ -75,6 +75,7 @@ def _put_data(forms,status=0):
         prefix = "insert into student_insurance"
     if not forms[0]:
         # opt out: set all values to null/''
+        # set opt_out to True/1
         sql = "%s " % prefix
     elif not forms[1]:
         # no secondary: set secondary to null/''

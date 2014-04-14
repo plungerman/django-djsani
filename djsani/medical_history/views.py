@@ -13,7 +13,7 @@ from djtools.utils.mail import send_mail
 if settings.DEBUG:
     TO_LIST = [settings.SERVER_EMAIL,]
 else:
-    TO_LIST = [settings.INSURANCE_RECIPIENTS,]
+    TO_LIST = [settings.MEDICAL_HISTORY_RECIPIENTS,]
 BCC = settings.MANAGERS
 
 def form(request,stype):
@@ -22,38 +22,38 @@ def form(request,stype):
         "email": "%s@carthage.edu" % request.GET.get("uname")
     }
     # form name
-    fname = "%sInsuranceForm" % stype.capitalize()
+    fname = "%sForm" % stype.capitalize()
     # check for a record
-    data = _get_insurance(student["cid"],fname)
+    data = _get_data(student["cid"],fname)
     if request.method=='POST':
         if request.POST.get("opt_out"):
             form1 = None
             form2 = None
-            data = _put_insurance([form1,form2])
+            data = _put_data([form1,form2])
         else:
             form1 = eval(fname)(request.POST,prefix="primary")
             if not request.POST.get("secondary"):
                 form2 = eval(name)(request.POST,prefix="seconary")
             else:
                 form2 = None
-            insurance = _put_insurance(
+            medical = _put_data(
                 form1.cleaned_data,form2.cleaned_data,data["status"]
             )
 
-        subject = "[Insurance & Emergency Information Form] %s" \
+        subject = "[Medical History Form] %s" \
             % (student["cid"])
         send_mail(
             request,TO_LIST,subject,student["email"],
-            "insurance/email.html",insurance,BCC
+            "medical_history/email.html",medical,BCC
         )
         return HttpResponseRedirect(
-            reverse_lazy("insurance_success")
+            reverse_lazy("medical_history_success")
         )
     else:
         form1 = eval(fname)(data["form1"],prefix="primary")
         form2 = eval(fname)(data["form2"],prefix="secondary")
     return render_to_response(
-        "insurance/form.html",
+        "medical_history/form.html",
         {
             "form1": form1,"form2": form2,
         },

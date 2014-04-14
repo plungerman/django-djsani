@@ -48,15 +48,17 @@ def _put_data(forms,status=0):
 
 def _get_data(cid,fname):
     data = {}
+    # dictionary to populate form on GET
+    """
+    data["form"] = {}
     sql = "select * from in student_medical_history where cid = '%s'" % cid
     results = do_sql(sql, key=settings.INFORMIX_DEBUG)
     obj = results.fetchall()
     # if len() == 0, insert; if len() == 1, update
     data["status"] = len(obj)
-    # dictionaries to populate forms on GET
-    data["form"] = {}
     if data["status"] == 1:
         form = eval(fname)()
         for f in form.field:
             data["form"][f] = obj["%s"] % f
+    """
     return data
