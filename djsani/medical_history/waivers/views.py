@@ -10,7 +10,7 @@ from djsani.medical_history.forms import _put_data, _get_data
 
 from djtools.utils.mail import send_mail
 
-def form(request,stype):
+def form(request,wtype):
     cid = request.GET.get("cid")
     # form name
     fname = "%sForm" % stype.capitalize()
@@ -31,6 +31,12 @@ def form(request,stype):
                 form1.cleaned_data,form2.cleaned_data,data["status"]
             )
 
+        subject = "[Medical History Form] %s" \
+            % (student["cid"])
+        send_mail(
+            request,TO_LIST,subject,student["email"],
+            "medical_history/email.html",medical,BCC
+        )
         return HttpResponseRedirect(
             reverse_lazy("medical_history_success")
         )

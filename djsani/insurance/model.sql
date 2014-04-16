@@ -1,48 +1,80 @@
-
     created_at (
         DateTimeField
-        auto_now_add=True
     )
     updated_at (
         DateTimeField
-        auto_now=True
     )
     opt_out (
-        required=False
+        boolean
+        default=False
+    )
+    secondary (
+        boolean
         default=False
     )
 
-    policy_holder (
+    primary_policy_holder (
         varchar 128
         required=False
     )
-    dob (
+    primary_dob (
         date
         required=False
     )
-    company (
+    primary_company (
         varchar 128,
         required=False
     )
-    phone (
+    primary_phone (
         varchar 12
         required=False
     )
-    member_id (
+    primary_member_id (
         varchar 64
         required=False
     )
-    group_no (
+    primary_group_no (
         varchar 64
         required=False
     )
-    policy_type (
+    primary_policy_type (
         varchar 128
         required=False
     )
-    address (
+    primary_address (
         text
         required=False
     )
 
-
+    secondary_policy_holder (
+        varchar 128
+        required=False
+    )
+    secondary_dob (
+        date
+        required=False
+    )
+    secondary_company (
+        varchar 128,
+        required=False
+    )
+    secondary_phone (
+        varchar 12
+        required=False
+    )
+    secondary_member_id (
+        varchar 64
+        required=False
+    )
+    secondary_group_no (
+        varchar 64
+        required=False
+    )
+    secondary_policy_type (
+        varchar 128
+        required=False
+    )
+    secondary_address (
+        text
+        required=False
+    )

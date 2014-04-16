@@ -3,6 +3,7 @@
 {% block css %}
     {% include "includes/extra_form_style.html" %}
     <link href="//www.carthage.edu/assets/current/css/core/grid-960.css" rel="stylesheet" type="text/css" />
+    <link href="//www.carthage.edu/live/resource/css/styles/main/icons.css" rel="stylesheet" type="text/css" media="screen, projection"/>
 {% endblock %}
 {% block extra_style %}
 <style type="text/css" media="screen, projection">
@@ -13,7 +14,8 @@ li.ctrlHolder div ul li {display:inline; padding-right:3px;}
 h1,h2,h3 {font-weight:normal;}
 .nobull li {list-style-type: none;}
 .forms-container {
-    display:none;border:1px #666 solid;
+    display:none;
+    border-top:1px #666 solid;
     padding:3px;top:15px;position:relative;
     width: 795px;
 }
@@ -75,26 +77,153 @@ $(function() {
     <form id="profile" class="form">
     <ul class="nobull">
         <li>
-            <input type="radio" value="athletics" class="syncTypes" name="syncTypes" {% if request.session.stype == "athletics" %}checked="checked" {% endif %}/> Yes
+            <input type="radio" value="academics" class="syncTypes" name="syncTypes" {% if request.session.stype == "academics" %}checked="checked" {% endif %}> No
         </li>
         <li>
-            <input type="radio" value="academics" class="syncTypes" name="syncTypes" {% if request.session.stype == "academics" %}checked="checked" {% endif %}> No
+            <input type="radio" value="athletics" class="syncTypes" name="syncTypes" {% if request.session.stype == "athletics" %}checked="checked" {% endif %}/> Yes
         </li>
     </ul>
     </form>
     <div id="academics" class="forms-container">
-        <h2>Forms for all students</h2>
+        <h2>Web forms</h2>
         <ul class="nobull">
             <li>
-                <a href="{% url 'insurance_form' 'academics' %}">Insurance form</a>
+                <a href="{% url 'insurance_form' 'academics' %}">
+                    Health insurance form
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'medical_history_form' 'academics' %}">
+                    Medical history form
+                </a>
+            </li>
+        </ul>
+        <h2>Print forms</h2>
+        <ul class="nobull">
+            <li>
+                <a href="//www.carthage.edu/live/files/766-immunization-form-docx">
+                    Immunization form
+                </a>
+            </li>
+            <li>
+                <a href="placeholder.pdf">
+                    Legal guardian
+                </a>
             </li>
         </ul>
     </div>
     <div id="athletics" class="forms-container">
-        <h2>Forms for athletes</h2>
+        <h2>Web forms</h2>
         <ul class="nobull">
             <li>
-                <a href="{% url 'insurance_form' 'athletics' %}">Insurance form</a>
+                <a href="{% url 'insurance_form' 'athletics' %}">
+                    Health insurance form
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'medical_history_form' 'athletics' %}">
+                    Medical history form
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                   Athletes medical history form
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    Sickle cell waiver
+                </a>
+                <span style="color:#f00;font-weight:bold;">*</span>
+            </li>
+            <li>
+                <a href="">
+                    Assumption of risk waiver
+                </a>
+                <span style="color:#f00;font-weight:bold;">*</span>
+            </li>
+            <li>
+                <a href="">HIPPA and FERPA waiver</a>
+                <span style="color:#f00;font-weight:bold;">*</span>
+            </li>
+            <li>
+                <a href="">
+                    CCIW Injury and Illness Reporting Acknowledgement waiver
+                </a>
+                <span style="color:#f00;font-weight:bold;">*</span>
+            </li>
+        </ul>
+        <p>
+            <span style="color:#f00;font-weight:bold;">*</span>
+            If you are under 18 years of age, you must use the print forms
+            below.
+        </p>
+        <h2>Print forms</h2>
+        <ul class="nobull">
+            <li>
+                <a href="//www.carthage.edu/live/files/766-immunization-form-docx">
+                    Immunization form
+                </a>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/783-athlete-medical-insurance-agreement-pdf">
+                    Medical insurance agreement
+                </a>
+            </li>
+            <li>
+                <a href="placeholder.pdf">
+                    Legal guardian
+                </a>
+            </li>
+        </ul>
+        <h3>Under 18 years of age print waivers</h3>
+        <p>
+        If you are under the age of 18, you must print the following forms,
+        have your parent or guardian sign them, and return them to the health
+        center.
+        </p>
+        <ul class="nobull">
+            <li>
+                <a href="//www.carthage.edu/live/files/786-athletic-training-sickle-cell-trait-testing-docx">
+                    Sickle cell waiver
+                </a>
+                <ul>
+                    <li>
+                    Carthage College Athletic Training –
+                    Sickle Cell Trait Testing.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/787-waiver-assumption-of-risk-doc">
+                    Assumption of risk waiver
+                </a>
+                <ul>
+                    <li>
+                        Carthage college intercollegiate athletic program
+                        Release and waiver of liability, assumption of risk
+                        And indemnity agreement
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/785-student-athlete-hipaa-amp-ferpa-waier-doc">HIPPA and FERPA waiver</a>
+                <ul>
+                    <li>
+                        Student Athlete Authorization/Consent For Disclosure
+                        of Protected Health Information (PHI).
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/784-cciw-injury-and-illness-reporting-form-doc">
+                    CCIW Injury and Illness Reporting Acknowledgement waiver
+                </a>
+                <ul>
+                    <li>
+                        College Conference Of Illinois And Wisconsin waiver
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>

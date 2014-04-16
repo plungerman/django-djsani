@@ -1,7 +1,12 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
 urlpatterns = patterns('djsani.medical_history.views',
+    # waivers
+    url(
+        r'^waivers/', include("djsani.insurance.waivers.urls")
+    ),
+    # medical history successfull submission redirect
     url(
         r'^success/$',
         TemplateView.as_view(
@@ -9,6 +14,7 @@ urlpatterns = patterns('djsani.medical_history.views',
         ),
         name='medical_history_success'
     ),
+    # medical history form: athletics or academics
     url(
         r'^(?P<stype>[a-zA-Z0-9_-]+)/$',
         'form', name="medical_history_form"

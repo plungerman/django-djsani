@@ -78,10 +78,11 @@ def _put_data(forms,status=0):
         # set opt_out to True/1
         sql = "%s " % prefix
     elif not forms[1]:
-        # no secondary: set secondary to null/''
+        # no secondary: set secondary_* values to null/''
         sql = "%s " % prefix
     else:
         # primary and secondary
+        # set secondary to True/1
         sql = "%s " % prefix
     do_sql(sql)
 
@@ -99,8 +100,9 @@ def _get_data(cid,fname):
     if data["status"] == 1:
         form = eval(fname)()
         for f in form.field:
-            data["form1"][f] = obj["primary-%s"] % f
-            data["form2"][f] = obj["secondary-%s"] % f
+            data["form1"][f] = obj["primary_%s"] % f
+            data["form2"][f] = obj["secondary_%s"] % f
         data["opt-out"] = obj.opt_out
+        data["secondary"] = obj.secondary
     """
     return data
