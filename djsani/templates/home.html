@@ -131,23 +131,25 @@ $(function() {
                 </a>
             </li>
             <li>
-                <a href="">
+                <a href="{% url 'waiver_form' 'sickle' %}">
                     Sickle cell waiver
                 </a>
                 <span style="color:#f00;font-weight:bold;">*</span>
             </li>
             <li>
-                <a href="">
+                <a href="{% url 'waiver_form' 'risk' %}">
                     Assumption of risk waiver
                 </a>
                 <span style="color:#f00;font-weight:bold;">*</span>
             </li>
             <li>
-                <a href="">HIPPA and FERPA waiver</a>
+                <a href="{% url 'waiver_form' 'privacy' %}">
+                    HIPPA and FERPA waiver
+                </a>
                 <span style="color:#f00;font-weight:bold;">*</span>
             </li>
             <li>
-                <a href="">
+                <a href="{% url 'waiver_form' 'reporting' %}">
                     CCIW Injury and Illness Reporting Acknowledgement waiver
                 </a>
                 <span style="color:#f00;font-weight:bold;">*</span>

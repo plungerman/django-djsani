@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 urlpatterns = patterns('djsani.medical_history.views',
     # waivers
     url(
-        r'^waivers/', include("djsani.insurance.waivers.urls")
+        r'^waivers/', include("djsani.medical_history.waivers.urls")
     ),
     # medical history successfull submission redirect
     url(

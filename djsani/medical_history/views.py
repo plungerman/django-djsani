@@ -8,8 +8,9 @@ from djsani.medical_history.forms import AcademicsForm
 from djsani.medical_history.forms import AthleticsForm
 from djsani.medical_history.forms import _put_data, _get_data
 
-from djtools.utils.mail import send_mail
+from djzbar.utils.decorators import portal_login_required
 
+@portal_login_required
 def form(request,stype):
     cid = request.GET.get("cid")
     # form name

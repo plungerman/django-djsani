@@ -2,37 +2,54 @@
 from django import forms
 from django.conf import settings
 
-from djtools.fields import BINARY_CHOICES
 from djzbar.utils.informix import do_sql
 
-CHOICES = (
-    ('', ''),
-)
-
-class AcademicsForm(forms.Form):
-    holder = forms.CharField(
-        label="",
-        max_length=128,
+class SickleForm(forms.Form):
+    waive = forms.BooleanField(
         required=False
     )
-    date = forms.DateField(
-        help_text="Format: mm/dd/yyyy",
-        required=False
-    )
-    choice = forms.ChoiceField(
-        choices=CHOICES,
-        widget=forms.RadioSelect(),
+    proof = forms.BooleanField(
         required=False
     )
 
-class AthleticsForm(AcademicsForm):
-    text = forms.CharField(
-        widget=forms.Textarea
+    def clean(self):
+        """
+        User must choose one or the other of two checkboxes.
+        """
+        cleaned_data = self.cleaned_data
+
+        if not cleaned_data["waive"] and not cleaned_data["proof"]:
+            raise forms.ValidationError(
+                "Please check one of the checkboxes below."
+            )
+        return cleaned_data
+
+class PrivacyForm(forms.Form):
+    ncaa_tool = forms.BooleanField(
+        required=False
+    )
+    medical_insurance = forms.BooleanField(
+        required=False
+    )
+    news_media = forms.BooleanField(
+        required=False
+    )
+    parents_guardians = forms.BooleanField(
+        required=False
+    )
+    disclose_records = forms.BooleanField(
+        required=False
     )
 
-    def __init__(self,*args,**kwargs):
-        super(AthleticsForm,self).__init__(*args,**kwargs)
-        self.fields.keyOrder = []
+class ReportingForm(forms.Form):
+    agree = forms.BooleanField(
+        required=True
+    )
+
+class RiskForm(forms.Form):
+    agree = forms.BooleanField(
+        required=True
+    )
 
 def _put_data(forms,status=0):
     # we pass 'status' to this method which is the

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django import forms
 from django.conf import settings
 
@@ -84,25 +83,27 @@ def _put_data(forms,status=0):
         # primary and secondary
         # set secondary to True/1
         sql = "%s " % prefix
-    do_sql(sql)
+    if not settings.DEBUG:
+        do_sql(sql, key=settings.INFORMIX_DEBUG)
 
 def _get_data(cid,fname):
     data = {}
     data["form1"] = {}
     data["form2"] = {}
-    """
-    sql = "select * from in student_insurance where cid = '%s'" % cid
-    results = do_sql(sql, key=settings.INFORMIX_DEBUG)
-    obj = results.fetchall()
-    # if len() == 0, insert; if len() == 1, update
-    data["status"] = len(obj)
-    # dictionaries to populate forms on GET
-    if data["status"] == 1:
-        form = eval(fname)()
-        for f in form.field:
-            data["form1"][f] = obj["primary_%s"] % f
-            data["form2"][f] = obj["secondary_%s"] % f
-        data["opt-out"] = obj.opt_out
-        data["secondary"] = obj.secondary
-    """
+    if not settings.DEBUG:
+        sql = "select * from in student_insurance where cid = '%s'" % cid
+        results = do_sql(sql, key=settings.INFORMIX_DEBUG)
+        obj = results.fetchall()
+        # if len() == 0, insert; if len() == 1, update
+        data["status"] = len(obj)
+        # dictionaries to populate forms on GET
+        if data["status"] == 1:
+            form = eval(fname)()
+            for f in form.field:
+                data["form1"][f] = obj["primary_%s"] % f
+                data["form2"][f] = obj["secondary_%s"] % f
+            data["opt-out"] = obj.opt_out
+            data["secondary"] = obj.secondary
+    else:
+        data["status"] = 0
     return data

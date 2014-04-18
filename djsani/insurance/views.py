@@ -8,7 +8,9 @@ from djsani.insurance.forms import AcademicsForm
 from djsani.insurance.forms import AthleticsForm
 from djsani.insurance.forms import _put_data, _get_data
 
-#@login_required
+from djzbar.utils.decorators import portal_login_required
+
+@portal_login_required
 def form(request,stype):
     cid = request.GET.get("cid")
     # form name

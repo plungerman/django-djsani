@@ -9,8 +9,7 @@ sys.path.append('/data2/django_projects/')
 sys.path.append('/data2/django_third/')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
 
-from django.conf import settings
-from djzbar.settings import MSSQL_EARL
+from djzbar.utils.mssql import get_userid
 from optparse import OptionParser
 
 """
@@ -34,15 +33,8 @@ def main():
     main method
     """
 
-    import pyodbc
-
-
-    cnxn = pyodbc.connect(MSSQL_EARL)
-    cursor = cnxn.cursor()
-    cursor.execute("SELECT * FROM fwk_user WHERE id='%s'" % cid)
-    row = cursor.fetchone()
-    print row[5]
-    cursor.close()
+    uid = get_userid(cid)
+    print uid
 
 ######################
 # shell command line
