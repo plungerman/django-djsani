@@ -17,8 +17,9 @@ $(function() {
 {% endblock %}
 {% block content %}
 <div class="span-21" style="background-color:#FCFAEB;">
+    <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
     <h2>
-        Carthage College Athletic Training &mdash;
+        Carthage College Athletic Training &mdash;<br />
         Sickle Cell Trait Testing
     </h2>
     {% if form.errors %}

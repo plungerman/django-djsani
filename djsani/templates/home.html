@@ -11,6 +11,7 @@ body {background-color: #E5DCC1;font-family: verdana,arial,sans-serif;}
 #second li { margin: 0; }
 li.ctrlHolder div ul li {display:inline; padding-right:3px;}
 .form .blockLabels label { display: inherit; font-weight: normal; }
+.placeholder {color:#800;}
 h1,h2,h3 {font-weight:normal;}
 .nobull li {list-style-type: none;}
 .forms-container {
@@ -121,13 +122,13 @@ $(function() {
                 </a>
             </li>
             <li>
-                <a href="{% url 'medical_history_form' 'athletics' %}">
-                    Medical history form
+                <a href="{% url 'medical_history_form' 'academics' %}">
+                    Medical history form for all students
                 </a>
             </li>
             <li>
-                <a href="#">
-                   Athletes medical history form
+                <a href="{% url 'medical_history_form' 'athletics' %}">
+                   Medical history form for athletes only
                 </a>
             </li>
             <li>

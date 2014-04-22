@@ -9,6 +9,7 @@ from djsani.medical_history.forms import AthleticsForm
 from djsani.medical_history.forms import _put_data, _get_data
 
 from djzbar.utils.decorators import portal_login_required
+from djtools.fields import NEXT_YEAR
 
 @portal_login_required
 def form(request,stype):
@@ -18,32 +19,23 @@ def form(request,stype):
     # check for a record
     data = _get_data(cid,fname)
     if request.method=='POST':
-        if request.POST.get("opt_out"):
-            form1 = None
-            form2 = None
-            data = _put_data([form1,form2])
-        else:
-            form1 = eval(fname)(request.POST,prefix="primary")
-            if not request.POST.get("secondary"):
-                form2 = eval(name)(request.POST,prefix="seconary")
-            else:
-                form2 = None
-            medical = _put_data(
-                form1.cleaned_data,form2.cleaned_data,data["status"]
+        form = eval(fname)(request.POST)
+        if form.is_valid():
+            history = _put_data(
+                form.cleaned_data,data["status"]
             )
-
-        return HttpResponseRedirect(
-            reverse_lazy("medical_history_success")
-        )
+            return HttpResponseRedirect(
+                reverse_lazy("medical_history_success")
+            )
     else:
-        form1 = eval(fname)(data["form1"],prefix="primary")
-        form2 = eval(fname)(data["form2"],prefix="secondary")
+        if data["form"]:
+            form = eval(fname)(data["form"])
+        else:
+            form = eval(fname)
     return render_to_response(
         "medical_history/form.html",
         {
-            "form1": form1,"form2": form2,
+            "form":form,"data":data,"stype":stype,
         },
         context_instance=RequestContext(request)
     )
-
-

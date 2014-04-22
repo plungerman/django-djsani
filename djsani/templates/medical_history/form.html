@@ -1,14 +1,52 @@
 {% extends "home.html" %}
-{% block title %}Medical History Form &mdash; Health and Counseling &mdash; Carthage College{% endblock %}
+{% block title %}
+    Medical History Form &mdash;
+    Health and Counseling &mdash; Carthage College
+{% endblock %}
 {% block javascript %}
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    $("#toggle_no").click(function() {
+        /* we need 'prop' to manage the UI selecting of 'no' button */
+        $("input[id$='_0']").prop('checked', this.checked);
+        /* we need 'attr' to set checked="checked for POST value */
+        if ($(this).is(':checked')) {
+            $("input[id$='_0']").attr("checked", "checked");
+            $("li[id$='_2']").remove();
+        } else {
+            $("input[id$='_0']").removeAttr("checked");
+        }
+    });
+    $("input:radio").change(function() {
+        nm = $(this).attr('name');
+        id = "id_" + nm + "_2";
+        if ($(this).val() == "Yes") {
+            html = '<li id="' + id + '" class="infield">';
+            html +='<label class="placeholder">&mdash;Explain:&nbsp;</label>';
+            html +='<input type="text" name="' + nm + '" ';
+            html +='class="xlarge" maxlength="255" /></li>';
+            $(this).closest('ul').append(html);
+        }
+        if ($(this).val() == "No") {
+            $("#" + id).remove();
+        }
+    });
 });
 </script>
 {% endblock %}
 {% block content %}
 <div class="span-21" style="background-color:#FCFAEB;">
-    <h1>Medical History Form</h1>
+    <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
+    <h1>
+        Medical history form
+        {% if stype == "athletics" %}
+        for athletes
+        {% endif %}
+    </h1>
+    <p>
+        Any item to which you answer "Yes", please
+        provide an explanation.
+    </p>
     {% if form.errors %}
     <p class="error">There were errors with the data submitted, see below.</p>
     {% endif %}
@@ -17,6 +55,14 @@ $(function() {
             <div class="span-20">
                 <fieldset class="blockLabels">
                     <ol>
+                        <li>
+                            <input
+                                type="checkbox"
+                                name="toggle_no" id="toggle_no" />
+                            <label for="toggle_no" style="display:inline;">
+                                Mark all as "No"
+                            </label>
+                        </li>
                         {% for field in form %}
                             {% include "form_field.inc.html" %}
                         {% endfor %}
