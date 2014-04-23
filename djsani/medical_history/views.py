@@ -11,7 +11,7 @@ from djsani.medical_history.forms import _put_data, _get_data
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NEXT_YEAR
 
-@portal_login_required
+#@portal_login_required
 def form(request,stype):
     cid = request.GET.get("cid")
     # form name
