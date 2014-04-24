@@ -1,11 +1,19 @@
 {% extends "home.html" %}
 {% block title %}
     Student Athlete Authorization/Consent For
-    Disclosure of Protected Health Information (PHI) 
+    Disclosure of Protected Health Information (PHI)
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    $('#profile').submit(function() {
+        if ($('input:checkbox', this).length == $('input:checked', this).length ) {
+            return true;
+        } else {
+            alert('You must check each box before proceeding.');
+            return false;
+        }
+    });
 });
 </script>
 {% endblock %}
@@ -35,11 +43,13 @@ $(function() {
             </h4>
             <div class="span-1">
                 <p>
-                <input id="id_ncaa_tool" type="checkbox" name="ncaa_tool" value="1" />
+                <input id="id_ncaa_tool"
+                    type="checkbox" name="ncaa_tool" value="1" />
                 </p>
             </div>
             <div class="span-18">
-                <p>
+                <label for="id_ncaa_tool">
+                    <p>
                     <em>
                         National Collegiate Athletic Association (NCAA)
                         Datalys Injury Surveillance Tool
@@ -58,15 +68,18 @@ $(function() {
                     disclosure.  I also understand that I am not required to
                     initial this portion of this authorization/consent in
                     order to be eligible for participation in NCAA athletics.
-                </p>
+                    </p>
+                </label>
             </div>
             <div class="span-1">
                 <p>
-                <input id="id_medical_insurance" type="checkbox" name="medical_insurance" value="1" />
+                <input id="id_medical_insurance"
+                    type="checkbox" name="medical_insurance" value="1" />
                 </p>
             </div>
             <div class="span-18">
-                <p>
+                <label for="id_medical_insurance">
+                    <p>
                     <em>My Personal Medical Insurance</em>
                     For the use of electronic transmission, US post mail, or
                     facsimile involving billing, reimbursement, benefits
@@ -75,47 +88,57 @@ $(function() {
                         Authorization in this category is required to
                         participate in athletics at Carthage College.
                     </strong>
-                </p>
+                    </p>
+                </label>
             </div>
             <div class="span-1">
                 <p>
-                <input id="id_news_media" type="checkbox" name="news_media" value="1" />
+                <input id="id_news_media"
+                    type="checkbox" name="news_media" value="1" />
                 </p>
             </div>
             <div class="span-18">
-                <p>
+                <label for="id_news_media">
+                    <p>
                     <em>The News Media</em>
                     Should the media inquire as to the extent of an injury or
                     illness, you are allowing Carthage College athletics
                     representatives to discuss your condition.
-                </p>
+                    </p>
+                </label>
             </div>
             <div class="span-1">
                 <p>
-                <input id="id_parents_guardians" type="checkbox" name="parents_guardians" value="1" />
+                <input id="id_parents_guardians"
+                    type="checkbox" name="parents_guardians" value="1" />
                 </p>
             </div>
             <div class="span-18">
-                <p>
+                <label for="id_parents_guardians">
+                    <p>
                     <em>Parents/Guardian</em>
                     Should the parents/guardian inquire as to the extent of an
                     injury or illness, you are allowing Carthage College
                     athletics representatives to discuss your condition.
-                </p>
+                    </p>
+                </label>
             </div>
             <div class="span-1">
                 <p>
-                <input id="id_disclose_records" type="checkbox" name="disclose_records" value="1" />
+                <input id="id_disclose_records"
+                    type="checkbox" name="disclose_records" value="1" />
                 </p>
             </div>
             <div class="span-18">
-                <p>
+                <label for="id_disclose_records">
+                    <p>
                     I also allow any treating physicians or other medical
                     facilities to disclose my medical records to the Carthage
                     College Athletic Training staff for purposes of continued
                     quality of care during my athletic participation at that
                     institution.  Fax to: 262-551-5809
-                </p>
+                    </p>
+                </label>
             </div>
             <div class="span-20">
                 <p>
@@ -141,14 +164,7 @@ $(function() {
                     Please check the box below.
                 </p>
             {% endif %}
-            <fieldset class="blockLabels">
-            <ol>
-                <li class="btnHolder">
-                    <label for="id_submit">&nbsp;&nbsp;</label>
-                    <input id="id_submit" type="submit" value="Submit" class="button" />
-                </li>
-            </ol>
-            </fieldset>
+            {% include "form_submit.inc.html" %}
         </div>
     </form>
 </div>
