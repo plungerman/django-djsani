@@ -2,6 +2,7 @@
 {% block title %}Insurance Form &mdash; Health and Counseling &mdash; Carthage College{% endblock %}
 {% block javascript %}
 <!-- TODO: add django template logic to deal with values for opt_out and no secondary -->
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.validate.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $('#id_opt_out').change(function() {
@@ -15,9 +16,17 @@ $(function() {
     });
     $('#id_secondary').change(function() {
         if($(this).is(":checked")) {
+            $("input[id^='id_secondary']").removeClass("error required");
             $('#secondary-form').slideUp(200);
         }else{
+            $("input[id^='id_secondary']").addClass("required");
             $('#secondary-form').slideDown(200);
+        }
+    });
+    $("#profile").validate();
+    $("select[id$='policy_type']").on('change', function() {
+        if( $(this).val() == "State Insurance") {
+            $(this).closest('li').next().find('select').addClass("required");
         }
     });
 });
@@ -27,10 +36,17 @@ $(function() {
 <div class="span-21" style="background-color:#FCFAEB;">
     <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
     <h1>Insurance Information Form</h1>
+    <p>
+        Fields marked with an asterisk
+        <img src="//www.carthage.edu/static/forms/img/icons/red_asterisk.png"
+        alt="asterisk" style="margin-bottom:-3px;" />
+        are required.
+    </p>
     {% if form.errors %}
     <p class="error">There were errors with the data submitted, see below.</p>
     {% endif %}
-    <form method="post" action="." class="form" id="profile">{% csrf_token %}
+    <form method="post" action="." type="actionForm" class="form" id="profile">
+        {% csrf_token %}
         <div class="append-bottom">
             <label for="id_opt_out">
                 <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
@@ -50,7 +66,7 @@ $(function() {
             </div>
         </div>
         <div id="insurance-policies">
-            <div class="span-10">
+            <div class="span-10" id="primary-form">
                 <h2>Primary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol>

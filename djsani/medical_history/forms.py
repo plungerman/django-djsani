@@ -2,7 +2,6 @@
 from django import forms
 from django.conf import settings
 
-#from djtools.fields import BINARY_CHOICES
 from djzbar.utils.informix import do_sql
 
 BINARY_CHOICES = (
@@ -12,11 +11,6 @@ BINARY_CHOICES = (
 
 class AcademicsForm(forms.Form):
     """
-     = forms.ChoiceField(
-        choices=BINARY_CHOICES,
-        widget=forms.RadioSelect(),
-        required=False
-    )
     """
     allergies_medical = forms.CharField(
         label = "Medical allergies",

@@ -4,11 +4,22 @@ from django.conf import settings
 
 from djzbar.utils.informix import do_sql
 
+BINARY_CHOICES = (
+    ('Positive', 'Positive'),
+    ('Negative', 'Negative'),
+)
+
 class SickleForm(forms.Form):
     waive = forms.BooleanField(
         required=False
     )
     proof = forms.BooleanField(
+        required=False
+    )
+
+    results = forms.ChoiceField(
+        choices=BINARY_CHOICES,
+        widget=forms.RadioSelect(),
         required=False
     )
 

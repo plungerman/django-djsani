@@ -23,13 +23,17 @@ def form(request,stype):
             form1 = None
             form2 = None
         else:
-            form1 = eval(fname)(request.POST,prefix="primary").cleaned_data
+            form1 = eval(fname)(request.POST,prefix="primary")
+            if form1.is_valid():
+                form1 = form1.cleaned_data
             if not request.POST.get("secondary"):
-                form2 = eval(name)(request.POST,prefix="seconary").cleaned_data
-                form1["secondary"]=True
+                form2 = eval(name)(request.POST,prefix="seconary")
+                if form2.is_valid():
+                    form1["secondary"]=True
+                    form2 = form2.cleaned_data
             else:
                 form2 = None
-        insurance = _put_data(form1,form2,data["status"])
+            insurance = _put_data([form1,form2],data["status"])
 
         return HttpResponseRedirect(
             reverse_lazy("insurance_success")

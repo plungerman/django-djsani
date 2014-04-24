@@ -6,30 +6,10 @@
     <link href="//www.carthage.edu/live/resource/css/styles/main/icons.css" rel="stylesheet" type="text/css" media="screen, projection"/>
 {% endblock %}
 {% block extra_style %}
-<style type="text/css" media="screen, projection">
-body {background-color: #E5DCC1;font-family: verdana,arial,sans-serif;}
-#second li { margin: 0; }
-li.ctrlHolder div ul li {display:inline; padding-right:3px;}
-.form .blockLabels label { display: inherit; font-weight: normal; }
-.placeholder {color:#800;}
-h1,h2,h3 {font-weight:normal;}
-.nobull li {list-style-type: none;}
-.forms-container {
-    display:none;
-    border-top:1px #666 solid;
-    padding:3px;top:15px;position:relative;
-    width: 795px;
-}
-form .ctrlHolder, .form .btnHolder { margin: 0 !important; }
-form textarea {width: 300px !important;height:50px !important;}
-#profile h2 { margin-left: 2px; }
-.span-10 {margin-right:0px !important;}
-.prepend-1 { padding-left: 38px; }
-.form fieldset { border: 0; }
-.help {margin-top:-2px;}
-</style>
+<link href="/static/djsani/css/djsani.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block javascript %}
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.validate.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     // set student type: academic or athlete
@@ -78,10 +58,22 @@ $(function() {
     <form id="profile" class="form">
     <ul class="nobull">
         <li>
-            <input type="radio" value="academics" class="syncTypes" name="syncTypes" {% if request.session.stype == "academics" %}checked="checked" {% endif %}> No
+            <label for="id_syncTypes_no">
+                <input id="id_syncTypes_no" type="radio" value="academics"
+                    class="syncTypes" name="syncTypes"
+                    {% if request.session.stype == "academics" %}
+                        checked="checked"
+                    {% endif %}/> No
+            </label>
         </li>
         <li>
-            <input type="radio" value="athletics" class="syncTypes" name="syncTypes" {% if request.session.stype == "athletics" %}checked="checked" {% endif %}/> Yes
+            <label for="id_syncTypes_yes">
+                <input id="id_syncTypes_yes" type="radio" value="athletics"
+                    class="syncTypes" name="syncTypes"
+                    {% if request.session.stype == "athletics" %}
+                        checked="checked"
+                    {% endif %}/> Yes
+            </label>
         </li>
     </ul>
     </form>
@@ -145,7 +137,7 @@ $(function() {
             </li>
             <li>
                 <a href="{% url 'waiver_form' 'privacy' %}">
-                    HIPPA and FERPA waiver
+                    HIPAA and FERPA waiver
                 </a>
                 <span style="color:#f00;font-weight:bold;">*</span>
             </li>
@@ -164,12 +156,12 @@ $(function() {
         <h2>Print forms</h2>
         <ul class="nobull">
             <li>
-                <a href="//www.carthage.edu/live/files/766-immunization-form-docx">
+                <a href="/live/files/766-pdf">
                     Immunization form
                 </a>
             </li>
             <li>
-                <a href="//www.carthage.edu/live/files/783-athlete-medical-insurance-agreement-pdf">
+                <a href="/live/files/783-pdf">
                     Medical insurance agreement
                 </a>
             </li>
@@ -187,7 +179,7 @@ $(function() {
         </p>
         <ul class="nobull">
             <li>
-                <a href="//www.carthage.edu/live/files/786-athletic-training-sickle-cell-trait-testing-docx">
+                <a href="/live/files/786-pdf">
                     Sickle cell waiver
                 </a>
                 <ul>
@@ -198,7 +190,7 @@ $(function() {
                 </ul>
             </li>
             <li>
-                <a href="//www.carthage.edu/live/files/787-waiver-assumption-of-risk-doc">
+                <a href="/live/files/787-pdf">
                     Assumption of risk waiver
                 </a>
                 <ul>
@@ -210,7 +202,9 @@ $(function() {
                 </ul>
             </li>
             <li>
-                <a href="//www.carthage.edu/live/files/785-student-athlete-hipaa-amp-ferpa-waier-doc">HIPPA and FERPA waiver</a>
+                <a href="/live/files/785-pdf">
+                    HIPAA and FERPA waiver
+                </a>
                 <ul>
                     <li>
                         Student Athlete Authorization/Consent For Disclosure
@@ -219,7 +213,7 @@ $(function() {
                 </ul>
             </li>
             <li>
-                <a href="//www.carthage.edu/live/files/784-cciw-injury-and-illness-reporting-form-doc">
+                <a href="/live/files/784-pdf">
                     CCIW Injury and Illness Reporting Acknowledgement waiver
                 </a>
                 <ul>

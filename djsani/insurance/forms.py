@@ -3,58 +3,65 @@ from django import forms
 from django.conf import settings
 
 from djzbar.utils.informix import do_sql
+from djtools.fields import STATE_CHOICES, REQ_CSS
 
 from localflavor.us.forms import USPhoneNumberField
 
 POLICY_CHOICES = (
+    ('', '---select---'),
     ('HMO', 'HMO'),
     ('PPO', 'PPO'),
-    ('EPO', 'EPO'),
     ('POS', 'POS'),
+    ('State Insurance', 'State Insurance'),
+    ('Other', 'Other'),
 )
 
 class AcademicsForm(forms.Form):
     policy_holder = forms.CharField(
         max_length=128,
-        required=False
+        required=False,widget=forms.TextInput(attrs=REQ_CSS)
     )
     dob = forms.DateField(
         label = "Birth date (policy holder)",
         help_text="Format: mm/dd/yyyy",
-        required=False
+        required=False,widget=forms.TextInput(attrs=REQ_CSS)
     )
     company = forms.CharField(
         label = "Insurance company",
         max_length=128,
-        required=False
+        required=False,widget=forms.TextInput(attrs=REQ_CSS)
     )
     phone = USPhoneNumberField(
         label = "Insurance phone number",
         max_length=12,
         help_text="Please provide a toll free number",
-        required=False
+        required=False,widget=forms.TextInput(attrs=REQ_CSS)
     )
     member_id = forms.CharField(
         label = "Member ID",
         max_length=64,
-        required=False
+        required=False,widget=forms.TextInput(attrs=REQ_CSS)
     )
     group_no = forms.CharField(
         label = "Group number",
         max_length=64,
-        required=False
+        required=False,widget=forms.TextInput(attrs=REQ_CSS)
     )
-    policy_type = forms.ChoiceField(
+    policy_type = forms.CharField(
         label="Type of policy",
-        choices=POLICY_CHOICES,
-        widget=forms.RadioSelect(),
+        required=False,
+        widget=forms.Select(choices=POLICY_CHOICES,attrs=REQ_CSS)
+    )
+    policy_state = forms.CharField(
+        widget=forms.Select(choices=STATE_CHOICES),
         required=False
     )
 
 class AthleticsForm(AcademicsForm):
     address = forms.CharField(
         label="Insurance address",
-        widget=forms.Textarea
+        widget=forms.Textarea,
+        required=False
     )
 
     def __init__(self,*args,**kwargs):
