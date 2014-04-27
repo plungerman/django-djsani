@@ -10,6 +10,9 @@ from djsani.insurance.forms import _put_data, _get_data
 
 from djzbar.utils.decorators import portal_login_required
 
+import logging
+logger = logging.getLogger(__name__)
+
 #@portal_login_required
 def form(request,stype):
     cid = request.GET.get("cid")
@@ -26,8 +29,10 @@ def form(request,stype):
             form1 = eval(fname)(request.POST,prefix="primary")
             if form1.is_valid():
                 form1 = form1.cleaned_data
+            else:
+                logger.debug("form1 errors = %s" % form1.errors)
             if not request.POST.get("secondary"):
-                form2 = eval(name)(request.POST,prefix="seconary")
+                form2 = eval(fname)(request.POST,prefix="seconary")
                 if form2.is_valid():
                     form1["secondary"]=True
                     form2 = form2.cleaned_data

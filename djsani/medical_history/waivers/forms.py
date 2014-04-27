@@ -25,7 +25,8 @@ class SickleForm(forms.Form):
 
     def clean(self):
         """
-        User must choose one or the other of two checkboxes.
+        Student must choose one or the other of two checkboxes,
+        and the results if they choose "proof".
         """
         cleaned_data = self.cleaned_data
 
@@ -33,6 +34,14 @@ class SickleForm(forms.Form):
             raise forms.ValidationError(
                 "Please check one of the checkboxes below."
             )
+        elif cleaned_data["proof"] and not cleaned_data["results"]:
+            raise forms.ValidationError(
+                '''
+                Please indicate whether your test results were
+                "positive or "negative".
+                '''
+            )
+
         return cleaned_data
 
 class PrivacyForm(forms.Form):

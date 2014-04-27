@@ -1,8 +1,16 @@
 {% extends "home.html" %}
-{% block title %}Insurance Form &mdash; Health and Counseling &mdash; Carthage College{% endblock %}
+{% block title %}
+    Insurance Form &mdash;
+    Health and Counseling &mdash;
+    Carthage College
+{% endblock %}
 {% block javascript %}
-<!-- TODO: add django template logic to deal with values for opt_out and no secondary -->
-<script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.validate.min.js"></script>
+<!--
+    TODO: add django template logic to deal with
+    values for opt_out and no secondary
+-->
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/additional-methods.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $('#id_opt_out').change(function() {
@@ -14,7 +22,7 @@ $(function() {
             $('#secondary-box').slideDown(200);
         }
     });
-    $('#id_secondary').change(function() {
+    $('#id_second').change(function() {
         if($(this).is(":checked")) {
             $("input[id^='id_secondary']").removeClass("error required");
             $('#secondary-form').slideUp(200);
@@ -49,15 +57,17 @@ $(function() {
         {% csrf_token %}
         <div class="append-bottom">
             <label for="id_opt_out">
-                <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
+                <input id="id_opt_out" type="checkbox" value="1"
+                    name="opt_out">
                 <span style="color:#f00;">
                     I attest that at this time I do <strong><u>NOT</u></strong>
                     have health insurance.
                 </span>
             </label>
             <div id="secondary-box">
-                <label for="id_secondary" style="display:block;">
-                    <input id="id_secondary" type="checkbox" value="1" name="secondary">
+                <label for="id_second" style="display:block;">
+                    <input id="id_second" type="checkbox" value="1"
+                        name="second_policy">
                     <span style="color:#800;">
                         I do <strong><u>NOT</u></strong>
                         have a secondary health insurance policy.
@@ -76,7 +86,8 @@ $(function() {
                     </ol>
                 </fieldset>
             </div>
-            <div class="span-10 prepend-1" id="secondary-form" style="margin-left:10px;">
+            <div class="span-10 prepend-1" id="secondary-form"
+                style="margin-left:10px;">
                 <h2>Secondary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol>

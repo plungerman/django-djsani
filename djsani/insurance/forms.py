@@ -24,7 +24,8 @@ class AcademicsForm(forms.Form):
     dob = forms.DateField(
         label = "Birth date (policy holder)",
         help_text="Format: mm/dd/yyyy",
-        required=False,widget=forms.TextInput(attrs=REQ_CSS)
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'required date'})
     )
     company = forms.CharField(
         label = "Insurance company",
@@ -35,7 +36,8 @@ class AcademicsForm(forms.Form):
         label = "Insurance phone number",
         max_length=12,
         help_text="Please provide a toll free number",
-        required=False,widget=forms.TextInput(attrs=REQ_CSS)
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'required phoneUS'})
     )
     member_id = forms.CharField(
         label = "Member ID",
@@ -68,7 +70,7 @@ class AthleticsForm(AcademicsForm):
         super(AthleticsForm,self).__init__(*args,**kwargs)
         self.fields.keyOrder = [
             'policy_holder','dob','company','phone',
-            'address','member_id','group_no','policy_type'
+            'address','member_id','group_no','policy_type','policy_state'
         ]
 
 def _put_data(forms,status=0):

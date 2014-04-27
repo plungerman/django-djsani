@@ -97,12 +97,19 @@ $(function() {
                 </p>
                 {% if form.errors %}
                     <p class="error">
+                        {% if form.data.proof %}
+                        Please indicate whether your test results were
+                        "positive or "negative".
+                        {% else %}
                         Please check one of the checkboxes below.
+                        {% endif %}
                     </p>
                 {% endif %}
                 <div class="span-1">
                     <p>
-                    <input id="proof" type="checkbox" name="proof" value="1" />
+                    <input id="proof" type="checkbox" name="proof" value="1"
+                        {% if form.data.proof %}checked="checked"{% endif %}
+                    />
                     </p>
                 </div>
                 <div class="span-18">
@@ -112,7 +119,7 @@ $(function() {
                     staff (as well as answer below):
                     </p>
                     <p>
-                    Test Results:
+                    <strong>Test Results:</strong>
                     <ul class="inline">
                     <li>
                         <input type="radio" name="results" value="Positive" />

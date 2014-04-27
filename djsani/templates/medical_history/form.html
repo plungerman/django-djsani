@@ -4,6 +4,7 @@
     Health and Counseling &mdash; Carthage College
 {% endblock %}
 {% block javascript %}
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $("#toggle_no").click(function() {
@@ -13,22 +14,40 @@ $(function() {
         if ($(this).is(':checked')) {
             $("input[id$='_0']").attr("checked", "checked");
             $("li[id$='_2']").remove();
+            $("li.error").remove();
         } else {
             $("input[id$='_0']").removeAttr("checked");
         }
     });
     $("input:radio").change(function() {
-        nm = $(this).attr('name');
+        nm = $(this).attr('name') + "_text";
         id = "id_" + nm + "_2";
         if ($(this).val() == "Yes") {
             html = '<li id="' + id + '" class="infield">';
-            html +='<label class="placeholder">&mdash;Explain:&nbsp;</label>';
+            html +='<label>&mdash;Explain:&nbsp;</label>';
             html +='<input type="text" name="' + nm + '" ';
-            html +='class="xlarge" maxlength="255" /></li>';
+            html +='class="dyntext required xlarge" maxlength="255" /></li>';
             $(this).closest('ul').append(html);
         }
         if ($(this).val() == "No") {
             $("#" + id).remove();
+            $("li.error").remove();
+        }
+    });
+    var validator = $("#profile").validate({
+        debug: true,
+        errorElement: "li",
+        errorPlacement: function (error, element) {
+            icon = '<img src="';
+            icon +='//www.carthage.edu/static/forms/img/icons/requiredx.png" />';
+            error.appendTo ( element.parents("ul:first") );
+            //offset = element.offset();
+            error.addClass('error');
+            error.css('width', 20);
+            error.html(icon);
+        },
+        submitHandler: function(form) {
+            form.submit();
         }
     });
 });
@@ -50,7 +69,8 @@ $(function() {
     {% if form.errors %}
     <p class="error">There were errors with the data submitted, see below.</p>
     {% endif %}
-    <form method="post" action="." class="form" id="profile">{% csrf_token %}
+    <form method="post" action="." class="form" id="profile">
+        {% csrf_token %}
         <div id="medical-history">
             <div class="span-20">
                 <fieldset class="blockLabels">
@@ -63,9 +83,126 @@ $(function() {
                                 Mark all as "No"
                             </label>
                         </li>
-                        {% for field in form %}
-                            {% include "form_field.inc.html" %}
-                        {% endfor %}
+                        {% if stype == "athletics" %}
+                            {% for field in form %}
+                                {% if field.name == "concussion" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <h3>Head and Neck Injury</h3>
+                                <p>
+                                    A "Yes" answer will require an explanation,
+                                    including the severity, the year of
+                                    occurrence(s), and the number of diagnosed
+                                    and suspected concussions.
+                                </p>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "abdomen_injury" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <h3>Torso Injury</h3>
+                                <p>
+                                    A "Yes" answer will require an explanation.
+                                </p>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "shoulder_fracture" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <h3>Upper Extremity Injury</h3>
+                                <p>
+                                    A "Yes" answer will require an explanation:
+                                    Right or Left; History of surgery
+                                </p>
+                                <h4 style="margin-bottom:-30px;margin-left:9px;">
+                                    Shoulder/Clavicle
+                                </h4>
+                                <blockquote>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "labrum_injury" %}
+                                </ol>
+                                </blockquote>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "hip_pelvis" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <h3>Lower Extremity Injury</h3>
+                                <p style="margin-bottom:-5px;">
+                                    A "Yes" answer will require an explanation:
+                                    Right or Left; History of surgery
+                                </p>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "hamstring" %}
+                                </ol>
+                                <h4 style="margin-bottom:-30px;margin-left:9px;">
+                                    <p>&nbsp;<p/>
+                                    Thigh
+                                </h4>
+                                <blockquote>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "knee_ligaments" %}
+                                </ol>
+                                </blockquote>
+                                <h4 style="margin-bottom:-30px;margin-left:9px;">
+                                    Knee
+                                </h4>
+                                <blockquote>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "shin_spints" %}
+                                </ol>
+                                </blockquote>
+                                <h4 style="margin-bottom:-30px;margin-left:9px;">
+                                    <p>&nbsp;<p/>
+                                    Lower leg
+                                </h4>
+                                <blockquote>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "ankle_fracture" %}
+                                </ol>
+                                </blockquote>
+                                <h4 style="margin-bottom:-30px;margin-left:9px;">
+                                    <p>&nbsp;<p/>
+                                    Ankle
+                                </h4>
+                                <blockquote>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "foot" %}
+                                </ol>
+                                </blockquote>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "glasses" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <h3>Ears, Eyes, Dental</h3>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "previous_year_change" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <h3>Additional Medical Information</h3>
+                                <ol>
+                                {% endif %}
+                                {% if field.name == "menstrual_cycle" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <h3>Female Athletes Only</h3>
+                                <ol>
+                                {% endif %}
+                                {% include "form_field.inc.html" %}
+                            {% endfor %}
+                        {% else %}
+                            {% for field in form %}
+                                {% include "form_field.inc.html" %}
+                            {% endfor %}
+                        {% endif %}
                     </ol>
                 </fieldset>
             </div>

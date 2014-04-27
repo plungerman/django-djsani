@@ -9,7 +9,6 @@
 <link href="/static/djsani/css/djsani.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block javascript %}
-<script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.validate.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     // set student type: academic or athlete
@@ -54,7 +53,7 @@ $(function() {
 {% block content %}
 <div class="buffer">
     <h1>Medical Information Forms</h1>
-    <p>Are you an NCAA athlete?</p>
+    <p>Do you plan to participate in NCAA Intercollegiate Athletics?</p>
     <form id="profile" class="form">
     <ul class="nobull">
         <li>
@@ -94,7 +93,7 @@ $(function() {
         <h2>Print forms</h2>
         <ul class="nobull">
             <li>
-                <a href="//www.carthage.edu/live/files/766-immunization-form-docx">
+                <a href="//www.carthage.edu/live/files/766-docx">
                     Immunization form
                 </a>
             </li>
@@ -156,13 +155,28 @@ $(function() {
         <h2>Print forms</h2>
         <ul class="nobull">
             <li>
-                <a href="/live/files/766-pdf">
-                    Immunization form
+                <a href="placeholder.pdf">
+                    Print Forms Instructions & Checklist
                 </a>
             </li>
             <li>
-                <a href="/live/files/783-pdf">
+                <a href="//www.carthage.edu/live/files/793-pdf">
+                    Athlete Pre-Participation Physical
+                </a>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/783-pdf">
                     Medical insurance agreement
+                </a>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/792-pdf">
+                    Athlete ADHD Medical Exception
+                </a>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/766-pdf">
+                    Immunization form
                 </a>
             </li>
             <li>
@@ -174,23 +188,23 @@ $(function() {
         <h3>Under 18 years of age print waivers</h3>
         <p>
         If you are under the age of 18, you must print the following forms,
-        have your parent or guardian sign them, and return them to the health
-        center.
+        sign them, and hand deliver them to the athletic training staff
+        during sport check-in.
         </p>
         <ul class="nobull">
             <li>
-                <a href="/live/files/786-pdf">
+                <a href="//www.carthage.edu/live/files/794-pdf">
                     Sickle cell waiver
                 </a>
                 <ul>
                     <li>
-                    Carthage College Athletic Training –
+                    Carthage College Athletic Training &mdash;
                     Sickle Cell Trait Testing.
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="/live/files/787-pdf">
+                <a href="//www.carthage.edu/live/files/795-pdf">
                     Assumption of risk waiver
                 </a>
                 <ul>
@@ -202,7 +216,7 @@ $(function() {
                 </ul>
             </li>
             <li>
-                <a href="/live/files/785-pdf">
+                <a href="//www.carthage.edu/live/files/796-pdf">
                     HIPAA and FERPA waiver
                 </a>
                 <ul>
@@ -213,7 +227,7 @@ $(function() {
                 </ul>
             </li>
             <li>
-                <a href="/live/files/784-pdf">
+                <a href="//www.carthage.edu/live/files/797-pdf">
                     CCIW Injury and Illness Reporting Acknowledgement waiver
                 </a>
                 <ul>
@@ -226,3 +240,4 @@ $(function() {
     </div>
 </div>
 {% endblock %}
+{% block urchin %}{% endblock %}
