@@ -1,6 +1,6 @@
 /* table athlete_medical_history */
 
-CREATE TABLE athlete_health_insurance
+CREATE TABLE athlete_medical_history
 (
     /* core */
     id                      SERIAL NOT NULL,

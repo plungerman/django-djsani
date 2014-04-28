@@ -1,6 +1,6 @@
-/* table athlete_sicklecell_waiver */
+/* table athlete_privacy_waiver */
 
-CREATE TABLE athlete_sicklecell_waiver
+CREATE TABLE athlete_privacy_waiver
 (
     /* core */
     id                      SERIAL NOT NULL,
