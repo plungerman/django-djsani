@@ -1,12 +1,22 @@
 {% extends "home.html" %}
 {% block title %}
-    Medical History Form &mdash;
+    Medical History &mdash;
     Health and Counseling &mdash; Carthage College
+{% endblock %}
+{% block extra_style %}
+{{block.super}}
+<link rel="stylesheet" type="text/css" media="screen"
+    href="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css">
 {% endblock %}
 {% block javascript %}
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    options = {
+        startYear: 1980,
+        finalYear: 2014
+    };
     $("#toggle_no").click(function() {
         /* we need 'prop' to manage the UI selecting of 'no' button */
         $("input[id$='_0']").prop('checked', this.checked);
@@ -25,9 +35,18 @@ $(function() {
         if ($(this).val() == "Yes") {
             html = '<li id="' + id + '" class="infield">';
             html +='<label>&mdash;Explain:&nbsp;</label>';
-            html +='<input type="text" name="' + nm + '" ';
-            html +='class="dyntext required xlarge" maxlength="255" /></li>';
+            html +='<input type="text" name="' + nm + '" maxlength="255"';
+            if ( $(this).attr('name') == "chicken_pox"){
+                html +='class="dyntext required date-picker" />';
+            } else {
+                html +='class="dyntext required xlarge" />';
+            }
+            html +='</li>';
             $(this).closest('ul').append(html);
+            if ( $(this).attr('name') == "chicken_pox"){
+                $('.date-picker').monthpicker(options);
+                $('.date-picker').monthpicker('show');
+            }
         }
         if ($(this).val() == "No") {
             $("#" + id).remove();
@@ -57,14 +76,19 @@ $(function() {
 <div class="span-21" style="background-color:#FCFAEB;">
     <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
     <h1>
-        Medical history form
+        Medical history
         {% if stype == "athletics" %}
         for athletes
         {% endif %}
     </h1>
     <p>
-        Any item to which you answer "Yes", please
-        provide an explanation.
+        This information will become a part of your medical record.
+        Accurate health information is essential to provide you with
+        the best care possible. Medical record information is
+        confidential and will not be released to anyone outside
+        Carthage College without your permission, except as required
+        by law, such as with court-ordered release or in reporting of
+        certain communicable diseases to the Department of Health.
     </p>
     {% if form.errors %}
     <p class="error">There were errors with the data submitted, see below.</p>
@@ -200,6 +224,25 @@ $(function() {
                             {% endfor %}
                         {% else %}
                             {% for field in form %}
+                                {% if forloop.first %}
+                                <li>
+                                    <p>
+                                        Any item to which you answer "Yes",
+                                        please provide an explanation.
+                                    </p>
+                                </li>
+                                {% endif %}
+                                {% if field.name == "anemia" %}
+                                </li></ol></fieldset>
+                                <fieldset class="blockLabels">
+                                <p>
+                                    Please check "yes" for any conditions with
+                                    which you have been diagnosed. Please
+                                    provide an explanation for item with a
+                                    "yes" response.
+                                </p>
+                                <ol>
+                                {% endif %}
                                 {% include "form_field.inc.html" %}
                             {% endfor %}
                         {% endif %}

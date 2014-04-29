@@ -3,10 +3,10 @@
 CREATE TABLE student_medical_history
 (
     /* core */
-    id                      SERIAL NOT NULL,
-    cid                     INTEGER NOT NULL,
-    created_at DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND NOT NULL,
-    updated_at DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    cid                     INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
     /* medical questions/explanations */
     allergies_medical       VARCHAR(255),
     allergies_other         VARCHAR(255),
@@ -46,8 +46,5 @@ CREATE TABLE student_medical_history
     substance_abuse         VARCHAR(255),
     thyroid_disorder        VARCHAR(255),
     tuberculosis            VARCHAR(255),
-    other_condition         VARCHAR(255),
-    /* constraints */
-    PRIMARY KEY (id),
-    FOREIGN KEY (cid) REFERENCES id_rec (id)
+    other_condition         VARCHAR(255)
 );

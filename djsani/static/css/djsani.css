@@ -20,4 +20,6 @@ form textarea {width: 300px !important;height:50px !important;}
 .form fieldset { border: 0; }
 .help {margin-top:-2px;}
 .form select {width:200px;}
-li.error { background: no-repeat right center; border:0; margin-bottom:0; padding:0; }
+li.error { background: no-repeat right center; border:0; margin-bottom:0;
+padding:0; }
+.ui-datepicker-calendar { display: none; }

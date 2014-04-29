@@ -76,50 +76,65 @@ $(function() {
         </li>
     </ul>
     </form>
-    <div id="academics" class="forms-container">
-        <h2>Web forms</h2>
+    <div class="span-20">
+        <p>
+            All incoming freshmen and transfer students are required
+            to provide information regarding health insurance, emergency
+            contact, medical history, and immunization history. In
+            addition, if you will be 17 years of age or younger when
+            you arrive to campus, your parent or legal guardian must
+            complete the "Parental/Legal guardian consent" form.
+        </p>
+    </div>
+    <div id="academics" class="clear forms-container">
+        <h2>Online forms</h2>
         <ul class="nobull">
             <li>
                 <a href="{% url 'insurance_form' 'academics' %}">
-                    Health insurance form
+                    Health insurance information
                 </a>
             </li>
             <li>
                 <a href="{% url 'medical_history_form' 'academics' %}">
-                    Medical history form
+                    Medical history
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    Meningococcal meningitis/Hepatitis B response
                 </a>
             </li>
         </ul>
-        <h2>Print forms</h2>
+        <h2>Printable forms</h2>
         <ul class="nobull">
             <li>
                 <a href="//www.carthage.edu/live/files/766-docx">
-                    Immunization form
+                    Immunization history
                 </a>
             </li>
             <li>
                 <a href="placeholder.pdf">
-                    Legal guardian
+                    Parent/Legal guardian consent form
                 </a>
             </li>
         </ul>
     </div>
-    <div id="athletics" class="forms-container">
-        <h2>Web forms</h2>
+    <div id="athletics" class="clear forms-container">
+        <h2>Online forms</h2>
         <ul class="nobull">
             <li>
                 <a href="{% url 'insurance_form' 'athletics' %}">
-                    Health insurance form
+                    Health insurance information
                 </a>
             </li>
             <li>
                 <a href="{% url 'medical_history_form' 'academics' %}">
-                    Medical history form for all students
+                    Medical history for all students
                 </a>
             </li>
             <li>
                 <a href="{% url 'medical_history_form' 'athletics' %}">
-                   Medical history form for athletes only
+                   Medical history for athletes only
                 </a>
             </li>
             <li>
@@ -152,16 +167,16 @@ $(function() {
             If you are under 18 years of age, you must use the print forms
             below.
         </p>
-        <h2>Print forms</h2>
+        <h2>Printable forms</h2>
         <ul class="nobull">
             <li>
                 <a href="placeholder.pdf">
-                    Print Forms Instructions & Checklist
+                    Instructions and checklist
                 </a>
             </li>
             <li>
                 <a href="//www.carthage.edu/live/files/793-pdf">
-                    Athlete Pre-Participation Physical
+                    Athlete pre-participation physical
                 </a>
             </li>
             <li>
@@ -171,17 +186,17 @@ $(function() {
             </li>
             <li>
                 <a href="//www.carthage.edu/live/files/792-pdf">
-                    Athlete ADHD Medical Exception
+                    Athlete ADHD medical exception
                 </a>
             </li>
             <li>
                 <a href="//www.carthage.edu/live/files/766-pdf">
-                    Immunization form
+                    Immunization history
                 </a>
             </li>
             <li>
                 <a href="placeholder.pdf">
-                    Legal guardian
+                    Parent/Legal guardian consent form
                 </a>
             </li>
         </ul>
@@ -228,7 +243,7 @@ $(function() {
             </li>
             <li>
                 <a href="//www.carthage.edu/live/files/797-pdf">
-                    CCIW Injury and Illness Reporting Acknowledgement waiver
+                    CCIW injury and illness reporting acknowledgement waiver
                 </a>
                 <ul>
                     <li>

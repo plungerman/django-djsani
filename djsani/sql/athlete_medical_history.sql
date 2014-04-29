@@ -3,10 +3,10 @@
 CREATE TABLE athlete_medical_history
 (
     /* core */
-    id                      SERIAL NOT NULL,
-    cid                     INTEGER NOT NULL,
-    created_at DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND NOT NULL,
-    updated_at DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    cid                     INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
     /* medical questions/explanations */
     exertional_syncope      VARCHAR(255),
     heat_illness            VARCHAR(255),
@@ -62,8 +62,5 @@ CREATE TABLE athlete_medical_history
     other_information       VARCHAR(255),
     supplements             VARCHAR(255),
     /* Female Athletes Only */
-    menstrual_cycle         VARCHAR(255),
-    /* constraints */
-    PRIMARY KEY (id),
-    FOREIGN KEY (cid) REFERENCES id_rec (id)
+    menstrual_cycle         VARCHAR(255)
 );

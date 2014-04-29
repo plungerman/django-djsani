@@ -15,13 +15,53 @@ class AcademicsForm(forms.Form):
     Medical history for all students
     """
     allergies_medical = forms.CharField(
-        label = "Allergies to medicine",
+        label = "Do you have any allergies to medicine?",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
     allergies_other = forms.CharField(
-        label = "Seasonal, environmental, or food allergies",
+        label = "Do you have any seasonal, environmental, or food allergies?",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+        required=False
+    )
+    medications = forms.CharField(
+        label = "Do you take any medications on a routine basis?",
+        help_text = """
+            This should include prescription & over the counter medicines
+            (name, dose, frequency)
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+        required=False
+    )
+    hospitalizations = forms.CharField(
+        label = "Have you had any hospitalizations or surgeries?",
+        help_text = """
+            If yes, please provide the year(s) in your explanation
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+        required=False
+    )
+    chicken_pox = forms.CharField(
+        label = "Have you had chicken pox?",
+        help_text = """
+            If yes, please provide the month and year in your explanation
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+        required=False
+    )
+    organ_loss = forms.CharField(
+        label = "Absence/Loss of organ",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+        required=False
+    )
+    substance_abuse = forms.CharField(
+        label = "Alcohol/Substance abuse",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -75,15 +115,6 @@ class AcademicsForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
-    chicken_pox = forms.CharField(
-        label = "Have you had chicken pox?",
-        help_text = """
-            If yes, please provide the month and year in your explanation
-        """,
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
-    )
     counseling = forms.CharField(
         label = "Counseling/Mental health treatment",
         max_length=255,
@@ -106,7 +137,7 @@ class AcademicsForm(forms.Form):
         required=False
     )
     ent_disorder = forms.CharField(
-        label = "Ear, Nose and Throat disorder",
+        label = "Ear, nose, and throat disorder",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -123,7 +154,7 @@ class AcademicsForm(forms.Form):
         required=False
     )
     heart_condition = forms.CharField(
-        label = "Heart Condition/Murmur",
+        label = "Heart condition/murmur",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -150,17 +181,14 @@ class AcademicsForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
-    hospitalizations = forms.CharField(
-        label = "Hospitalizations & surgeries",
-        help_text = """
-            If yes, please provide the year(s) in your explanation
-        """,
+    mononucleosis = forms.CharField(
+        label = "Infectious mononucleosis",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
     ibd = forms.CharField(
-        label = "Inflammatory Bowel Disease",
+        label = "Inflammatory bowel disease",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -171,35 +199,13 @@ class AcademicsForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
-    medications = forms.CharField(
-        label = "Routine medications",
-        help_text = """
-            Prescription & over the counter medicines
-            (name, dose, frequency)
-        """,
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
-    )
     meningitis = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
-    )
-    mononucleosis = forms.CharField(
-        label = "Infectious mononucleosis",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
     mrsa = forms.CharField(
         label = "MRSA/Staph infection",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
-    )
-    organ_loss = forms.CharField(
-        label = "Absence/Loss of organ",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -224,12 +230,6 @@ class AcademicsForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
-    substance_abuse = forms.CharField(
-        label = "Alcohol/Substance abuse",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
-    )
     thyroid_disorder = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
@@ -241,7 +241,9 @@ class AcademicsForm(forms.Form):
         required=False
     )
     other_condition = forms.CharField(
-        label = "Illness or medical condition not listed above",
+        label = """
+            Do you have any illness or medical condition not listed above
+        """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -290,7 +292,7 @@ class AthleticsForm(forms.Form):
         required=False
     )
     cervical_injury = forms.CharField(
-        label="Cervical (Neck) injury",
+        label="Cervical (neck) injury",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False

@@ -35,7 +35,7 @@ class AcademicsForm(forms.Form):
     phone = USPhoneNumberField(
         label = "Insurance phone number",
         max_length=12,
-        help_text="Please provide a toll free number",
+        help_text="Please provide the toll free customer service number",
         required=False,
         widget=forms.TextInput(attrs={'class': 'required phoneUS'})
     )

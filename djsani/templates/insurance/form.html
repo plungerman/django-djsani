@@ -1,6 +1,6 @@
 {% extends "home.html" %}
 {% block title %}
-    Insurance Form &mdash;
+    Health Insurance Information &mdash;
     Health and Counseling &mdash;
     Carthage College
 {% endblock %}
@@ -43,7 +43,14 @@ $(function() {
 {% block content %}
 <div class="span-21" style="background-color:#FCFAEB;">
     <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
-    <h1>Insurance Information Form</h1>
+    <h1>Health Insurance Information</h1>
+    <p>
+        Carthage College requires every full-time undergraduate student to
+        provide insurance and emergency contact information each academic
+        year. By completing this form, you are providing your permission
+        for Carthage College to release your insurance information to a
+        healthcare provider in the event that treatment is needed off-campus.
+    </p>
     <p>
         Fields marked with an asterisk
         <img src="//www.carthage.edu/static/forms/img/icons/red_asterisk.png"
@@ -60,17 +67,19 @@ $(function() {
                 <input id="id_opt_out" type="checkbox" value="1"
                     name="opt_out">
                 <span style="color:#f00;">
-                    I attest that at this time I do <strong><u>NOT</u></strong>
+                    I attest that I do <strong><u>NOT</u></strong>
                     have health insurance.
                 </span>
             </label>
-            <div id="secondary-box">
+        </div>
+        <div class="span-20">
+            <div id="secondary-box" class="fright" style="width:350px;">
                 <label for="id_second" style="display:block;">
                     <input id="id_second" type="checkbox" value="1"
                         name="second_policy">
                     <span style="color:#800;">
                         I do <strong><u>NOT</u></strong>
-                        have a secondary health insurance policy.
+                        have a secondary policy.
                     </span>
                 </label>
             </div>

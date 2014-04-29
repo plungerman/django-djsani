@@ -3,13 +3,10 @@
 CREATE TABLE athlete_acknowledgement_reporting
 (
     /* core */
-    id                      SERIAL NOT NULL,
-    cid                     INTEGER NOT NULL,
-    created_at DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND NOT NULL,
-    updated_at DATETIME YEAR TO SECOND DEFAULT CURRENT YEAR TO SECOND NOT NULL,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    cid                     INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
     /* waiver fields */
-    agree                   BOOLEAN,
-    /* constraints */
-    PRIMARY KEY (id),
-    FOREIGN KEY (cid) REFERENCES id_rec (id)
+    agree                   BOOLEAN
 );

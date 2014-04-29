@@ -5,6 +5,10 @@ handler404 = 'djtools.views.errors.four_oh_four_error'
 handler500 = 'djtools.views.errors.server_error'
 
 urlpatterns = patterns('djsani.core.views',
+    # admin manager
+    url(
+        r'^admin/', include("djsani.admin.urls")
+    ),
     # insurance forms
     url(
         r'^insurance/', include("djsani.insurance.urls")
