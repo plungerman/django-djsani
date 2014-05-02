@@ -2,9 +2,9 @@
 from django import forms
 from django.conf import settings
 
-from djzbar.utils.informix import do_sql
+from djzbar.utils.informix import do_sql as do_esql
 from djtools.fields import STATE_CHOICES, REQ_CSS
-
+from djtools.utils.database import do_mysql
 from localflavor.us.forms import USPhoneNumberField
 
 POLICY_CHOICES = (
@@ -16,7 +16,10 @@ POLICY_CHOICES = (
     ('Other', 'Other'),
 )
 
-class AcademicsForm(forms.Form):
+import logging
+logger = logging.getLogger(__name__)
+
+class StudentForm(forms.Form):
     policy_holder = forms.CharField(
         max_length=128,
         required=False,widget=forms.TextInput(attrs=REQ_CSS)
@@ -59,7 +62,15 @@ class AcademicsForm(forms.Form):
         required=False
     )
 
-class AthleticsForm(AcademicsForm):
+    def __init__(self,*args,**kwargs):
+        super(StudentForm,self).__init__(*args,**kwargs)
+        self.fields.keyOrder = [
+            'cid','created_at','updated_at','opt_out','second_policy',
+            'policy_holder','dob','company','phone',
+            'member_id','group_no','policy_type','policy_state'
+        ]
+
+class AthleteForm(StudentForm):
     address = forms.CharField(
         label="Insurance address",
         widget=forms.Textarea,
@@ -67,33 +78,11 @@ class AthleticsForm(AcademicsForm):
     )
 
     def __init__(self,*args,**kwargs):
-        super(AthleticsForm,self).__init__(*args,**kwargs)
+        super(AthleteForm,self).__init__(*args,**kwargs)
         self.fields.keyOrder = [
             'policy_holder','dob','company','phone',
             'address','member_id','group_no','policy_type','policy_state'
         ]
-
-def _put_data(forms,status=0):
-    # we pass 'status' to this method which is the
-    # len() of the data set returned from informix
-    # via the _get_data() method.
-    if status==1:
-        prefix = "update student_insurance"
-    else:
-        prefix = "insert into student_insurance"
-    if not forms[0]:
-        # opt out: set all values to null/''
-        # set opt_out to True/1
-        sql = "%s " % prefix
-    elif not forms[1]:
-        # no secondary: set secondary_* values to null/''
-        sql = "%s " % prefix
-    else:
-        # primary and secondary
-        # set secondary to True/1
-        sql = "%s " % prefix
-    if not settings.DEBUG:
-        do_sql(sql, key=settings.INFORMIX_DEBUG)
 
 def _get_data(cid,fname):
     data = {}
@@ -101,7 +90,7 @@ def _get_data(cid,fname):
     data["form2"] = {}
     if not settings.DEBUG:
         sql = "select * from in student_insurance where cid = '%s'" % cid
-        results = do_sql(sql, key=settings.INFORMIX_DEBUG)
+        results = do_esql(sql, key=settings.INFORMIX_DEBUG)
         obj = results.fetchall()
         # if len() == 0, insert; if len() == 1, update
         data["status"] = len(obj)

@@ -26,25 +26,25 @@ $(function() {
     }
 
     $types = $('.syncTypes');
-    $academics = $('#academics');
-    $athletics = $('#athletics');
-    {% if request.session.stype == "academics" %}
-    $academics.delay(200).slideDown(200);
+    $student = $('#student');
+    $athlete = $('#athlete');
+    {% if request.session.stype == "student" %}
+    $student.delay(200).slideDown(200);
     {% endif %}
-    {% if request.session.stype == "athletics" %}
-    $athletics.delay(200).slideDown(200);
+    {% if request.session.stype == "athlete" %}
+    $athlete.delay(200).slideDown(200);
     {% endif %}
     $types.change(function() {
         $this = $(this).val();
-        if ($this == "academics") {
+        if ($this == "student") {
             setStudentType($this);
-            $athletics.slideUp(200);
-            $academics.delay(200).slideDown(200);
+            $athlete.slideUp(200);
+            $student.delay(200).slideDown(200);
         }
-        else if ($this == "athletics") {
+        else if ($this == "athlete") {
             setStudentType($this);
-            $academics.slideUp(200);
-            $athletics.delay(200).slideDown(200);
+            $student.slideUp(200);
+            $athlete.delay(200).slideDown(200);
         }
     });
 });
@@ -58,18 +58,18 @@ $(function() {
     <ul class="nobull">
         <li>
             <label for="id_syncTypes_no">
-                <input id="id_syncTypes_no" type="radio" value="academics"
+                <input id="id_syncTypes_no" type="radio" value="student"
                     class="syncTypes" name="syncTypes"
-                    {% if request.session.stype == "academics" %}
+                    {% if request.session.stype == "student" %}
                         checked="checked"
                     {% endif %}/> No
             </label>
         </li>
         <li>
             <label for="id_syncTypes_yes">
-                <input id="id_syncTypes_yes" type="radio" value="athletics"
+                <input id="id_syncTypes_yes" type="radio" value="athlete"
                     class="syncTypes" name="syncTypes"
-                    {% if request.session.stype == "athletics" %}
+                    {% if request.session.stype == "athlete" %}
                         checked="checked"
                     {% endif %}/> Yes
             </label>
@@ -86,16 +86,16 @@ $(function() {
             complete the "Parental/Legal guardian consent" form.
         </p>
     </div>
-    <div id="academics" class="clear forms-container">
+    <div id="student" class="clear forms-container">
         <h2>Online forms</h2>
         <ul class="nobull">
             <li>
-                <a href="{% url 'insurance_form' 'academics' %}">
+                <a href="{% url 'insurance_form' 'student' %}">
                     Health insurance information
                 </a>
             </li>
             <li>
-                <a href="{% url 'medical_history_form' 'academics' %}">
+                <a href="{% url 'medical_history_form' 'student' %}">
                     Medical history
                 </a>
             </li>
@@ -119,26 +119,31 @@ $(function() {
             </li>
         </ul>
     </div>
-    <div id="athletics" class="clear forms-container">
+    <div id="athlete" class="clear forms-container">
         <h2>Online forms</h2>
         <ul class="nobull">
             <li>
-                <a href="{% url 'insurance_form' 'athletics' %}">
+                <a href="{% url 'insurance_form' 'athlete' %}">
                     Health insurance information
                 </a>
             </li>
             <li>
-                <a href="{% url 'medical_history_form' 'academics' %}">
+                <a href="{% url 'medical_history_form' 'student' %}">
                     Medical history for all students
                 </a>
             </li>
             <li>
-                <a href="{% url 'medical_history_form' 'athletics' %}">
+                <a href="{% url 'medical_history_form' 'athlete' %}">
                    Medical history for athletes only
                 </a>
             </li>
             <li>
-                <a href="{% url 'waiver_form' 'sickle' %}">
+                <a href="#">
+                    Meningococcal meningitis/Hepatitis B response
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'waiver_form' 'sicklecell' %}">
                     Sickle cell waiver
                 </a>
                 <span style="color:#f00;font-weight:bold;">*</span>
@@ -185,9 +190,18 @@ $(function() {
                 </a>
             </li>
             <li>
+                <a href="//www.carthage.edu/live/files/802-pdf">
+                    Primary Insurance Card Copy
+                </a>
+            </li>
+
+            <li>
                 <a href="//www.carthage.edu/live/files/792-pdf">
                     Athlete ADHD medical exception
                 </a>
+                <span style="margin-left:5px;">
+                    (only if prescribed ADHD stimulant meds)
+                </span>
             </li>
             <li>
                 <a href="//www.carthage.edu/live/files/766-pdf">

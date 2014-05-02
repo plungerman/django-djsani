@@ -10,7 +10,7 @@ BINARY_CHOICES = (
     ('Yes', 'Yes'),
 )
 
-class AcademicsForm(forms.Form):
+class StudentForm(forms.Form):
     """
     Medical history for all students
     """
@@ -250,10 +250,10 @@ class AcademicsForm(forms.Form):
     )
 
     def __init__(self,*args,**kwargs):
-        super(AcademicsForm,self).__init__(*args,**kwargs)
+        super(StudentForm,self).__init__(*args,**kwargs)
         #self.fields.keyOrder = []
 
-class AthleticsForm(forms.Form):
+class AthleteForm(forms.Form):
     """
     Medical history for student athletes
     """
@@ -280,7 +280,19 @@ class AthleticsForm(forms.Form):
     )
     # Head and Neck Injury
     concussion = forms.CharField(
-        label='Concussion or "knocked out"',
+        label='Diagnosed concussion',
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+        required=False
+    )
+    suspected_concussion = forms.CharField(
+        label='Suspected, unreported concussion',
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+        required=False
+    )
+    head_injuries = forms.CharField(
+        label='Multiple head injuries',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -553,18 +565,6 @@ class AthleticsForm(forms.Form):
         required=False
     )
 
-
-def _put_data(forms,status=0):
-    # we pass 'status' to this method which is the
-    # len() of the data set returned from informix
-    # via the _get_data() method.
-    if status==1:
-        prefix = "update student_medical_history"
-    else:
-        prefix = "insert into student_medical_history"
-    sql = "%s " % prefix
-    if not settings.DEBUG:
-        do_sql(sql, key=settings.INFORMIX_DEBUG)
 
 def _get_data(cid,fname):
     data = {}

@@ -7,37 +7,38 @@ from django.core.urlresolvers import reverse_lazy
 from djsani.medical_history.waivers.forms import PrivacyForm
 from djsani.medical_history.waivers.forms import ReportingForm
 from djsani.medical_history.waivers.forms import RiskForm
-from djsani.medical_history.waivers.forms import SickleForm
-from djsani.medical_history.waivers.forms import _put_data, _get_data
+from djsani.medical_history.waivers.forms import SicklecellForm
+from djsani.core.views import put_data
 
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NEXT_YEAR
 
-#@portal_login_required
+@portal_login_required
 def form(request,wtype):
     cid = request.GET.get("cid")
     # form name
     fname = "%sForm" % wtype.capitalize()
-    # check for a record
-    data = _get_data(cid,fname)
     if request.method=='POST':
         form = eval(fname)(request.POST)
         if form.is_valid():
-            waiver = _put_data(
-                form.cleaned_data,data["status"]
+            table = "athlete_%s_waiver" % wtype
+            success = put_data(
+                form.cleaned_data,table=table
             )
-            return HttpResponseRedirect(
-                reverse_lazy("waiver_success")
-            )
+            if success:
+                return HttpResponseRedirect(
+                    reverse_lazy("waiver_success")
+                )
+            else:
+                return HttpResponseRedirect(
+                    reverse_lazy("medical_forms_error")
+                )
     else:
-        if data["form"]:
-            form = eval(fname)(data["form"])
-        else:
-            form = eval(fname)
+        form = eval(fname)
     return render_to_response(
         "medical_history/waivers/%s.html" % wtype,
         {
-            "form":form,"data":data,"next_year":NEXT_YEAR,
+            "form":form,"next_year":NEXT_YEAR,
         },
         context_instance=RequestContext(request)
     )

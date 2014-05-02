@@ -1,6 +1,6 @@
-/* table athlete_risk_waiver */
+/* table athlete_reporting_waiver */
 
-CREATE TABLE athlete_risk_waiver
+CREATE TABLE athlete_reporting_waiver
 (
     /* core */
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,

@@ -222,9 +222,11 @@ $(function() {
             {% endif %}
             <p>
                 <input id="id_agree" type="checkbox" name="agree" value="1" />
+                <label for="id_agree" style="display:inline;">
                 I hereby acknowledge that I have read, understand and will
                 abide by each of the terms and conditions of this
                 Agreement.
+                </label>
             </p>
             {% include "form_submit.inc.html" %}
         </div>

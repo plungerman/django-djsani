@@ -4,9 +4,8 @@ CREATE TABLE student_medical_history
 (
     /* core */
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     INT NOT NULL,
+    cid                     varchar(12) NOT NULL,
     created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL,
     /* medical questions/explanations */
     allergies_medical       VARCHAR(255),
     allergies_other         VARCHAR(255),

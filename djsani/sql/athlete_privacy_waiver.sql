@@ -4,9 +4,8 @@ CREATE TABLE athlete_privacy_waiver
 (
     /* core */
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     INT NOT NULL,
+    cid                     varchar(12) NOT NULL,
     created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL,
     /* waiver fields */
     ncaa_tool               BOOLEAN,
     medical_insurance       BOOLEAN,

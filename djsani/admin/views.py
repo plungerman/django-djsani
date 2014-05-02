@@ -5,12 +5,6 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from djsani.insurance.forms import AcademicsForm
-from djsani.insurance.forms import AthleticsForm
-from djsani.insurance.forms import _put_data, _get_data
-
-from djzbar.utils.decorators import portal_login_required
-
 import logging
 logger = logging.getLogger(__name__)
 

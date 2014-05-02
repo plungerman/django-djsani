@@ -3,7 +3,6 @@ import os, sys, datetime
 
 # env
 sys.path.append('/usr/local/lib/python2.7/dist-packages/')
-sys.path.append('/usr/local/lib/python2.7/')
 sys.path.append('/usr/lib/python2.7/dist-packages/')
 sys.path.append('/usr/lib/python2.7/')
 sys.path.append('/data2/django_projects/')
@@ -13,7 +12,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djaludir.settings")
 from django.conf import settings
 from django.db import connections
 
-from djzbar.utils.informix import do_sql
+from djtools.utils.database import dictfetchall
 
 from optparse import OptionParser
 
@@ -25,14 +24,6 @@ Accepts as input a SQL statement from command line or from a text file.
 parser = OptionParser(description=desc)
 parser.add_option( "-s", "--sql", help="SQL statement.", dest="sql")
 parser.add_option( "-t", "--sql_text", help="Text file with sql.", dest="txt")
-
-def dictfetchall(cursor):
-    "Returns all rows from a cursor as a dict"
-    desc = cursor.description
-    return [
-        dict(zip([col[0] for col in desc], row))
-        for row in cursor.fetchall()
-    ]
 
 def main():
     """

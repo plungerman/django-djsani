@@ -4,19 +4,36 @@
     Health and Counseling &mdash;
     Carthage College
 {% endblock %}
+{% block extra_style %}
+{{block.super}}
+<link rel="stylesheet" href="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+{% endblock %}
 {% block javascript %}
-<!--
-    TODO: add django template logic to deal with
-    values for opt_out and no secondary
--->
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/additional-methods.min.js"></script>
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    $(".fancybox").fancybox({
+        maxWidth    : 800,
+        maxHeight   : 800,
+        fitToView   : false,
+        width       : '70%',
+        height      : '70%',
+        autoSize    : false,
+        closeClick  : false,
+        openEffect  : 'none',
+        closeEffect : 'none'
+    });
     $('#id_opt_out').change(function() {
         if($(this).is(":checked")) {
             $('#insurance-policies').slideUp(200);
             $('#secondary-box').slideUp(200);
+            {% if request.session.stype == "athlete" %}
+            $.fancybox.open([{
+                href : '#warning'
+            }]);
+            {% endif %}
         }else{
             $('#insurance-policies').slideDown(200);
             $('#secondary-box').slideDown(200);
@@ -62,6 +79,9 @@ $(function() {
     {% endif %}
     <form method="post" action="." type="actionForm" class="form" id="profile">
         {% csrf_token %}
+        {% for hidden in form1.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
         <div class="append-bottom">
             <label for="id_opt_out">
                 <input id="id_opt_out" type="checkbox" value="1"
@@ -89,7 +109,7 @@ $(function() {
                 <h2>Primary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol>
-                        {% for field in form1 %}
+                        {% for field in form1.visible_fields %}
                             {% include "form_field.inc.html" %}
                         {% endfor %}
                     </ol>
@@ -100,7 +120,7 @@ $(function() {
                 <h2>Secondary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol>
-                        {% for field in form2 %}
+                        {% for field in form2.visible_fields %}
                             {% include "form_field.inc.html" %}
                         {% endfor %}
                     </ol>
@@ -111,5 +131,20 @@ $(function() {
             {% include "form_submit.inc.html" %}
         </div>
     </form>
+    <div id="warning" style="display:none;width:500px;">
+        <h2>Primary Insurance Required</h2>
+        <p>
+            All student-athletes must maintain primary insurance
+            that covers intercollegiate athletics and is applicable
+            to coverage in the state of Wisconsin. A copy of this
+            insurance card (front and back) needs to be on file with
+            Carthage Athletic Training.  Primary insurance can be
+            purchased from the Head Athletic Trainer during sport
+            check-in.
+        </p>
+        <p>
+            <a href="javascript:$.fancybox.close();">Close</a>
+        </p>
+    </div>
 </div>
 {% endblock %}

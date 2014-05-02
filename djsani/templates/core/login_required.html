@@ -6,7 +6,11 @@
     <h1>Session expired</h1>
     <p>Your sessions has expired.</p>
     <p>
-        <a href="https://my.carthage.edu/">Click here</a> to continue.
+        {% if django_debug %}
+        <a href="{% url 'home' %}?cid={{cid}}">Click here</a> to continue.
+        {% else %}
+        <a href="{% url 'login_required' %}">Click here</a> to continue.
+        {% endif %}
     </p>
 </div>
 {% endblock %}

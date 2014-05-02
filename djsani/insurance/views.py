@@ -4,50 +4,51 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 
-from djsani.insurance.forms import AcademicsForm
-from djsani.insurance.forms import AthleticsForm
-from djsani.insurance.forms import _put_data, _get_data
+from djsani.insurance.forms import StudentForm
+from djsani.insurance.forms import AthleteForm
+from djsani.core.views import put_data
 
 from djzbar.utils.decorators import portal_login_required
 
-import logging
-logger = logging.getLogger(__name__)
-
-#@portal_login_required
+@portal_login_required
 def form(request,stype):
     cid = request.GET.get("cid")
     # form name
     fname = "%sForm" % stype.capitalize()
-    # check for a record
-    data = _get_data(cid,fname)
     if request.method=='POST':
-        # has no insurance at this time
-        if request.POST.get("opt_out"):
-            form1 = None
-            form2 = None
+        # primary
+        form1 = eval(fname)(request.POST,prefix="primary")
+        form1.is_valid()
+        form1 = form1.cleaned_data
+        # secondary
+        form2 = eval(fname)(request.POST,prefix="secondary")
+        form2.is_valid()
+        form2 = form2.cleaned_data
+        forms = {}
+        for k,v in form1.items():
+            if v == "None":
+                v = ""
+            forms["primary_%s" % k] = v
+        for k,v in form2.items():
+            if v == "None":
+                v = ""
+            forms["secondary_%s" % k] = v
+        forms["cid"] = cid
+        oo = request.POST.get("opt_out")
+        if not oo:
+            oo = 0
         else:
-            form1 = eval(fname)(request.POST,prefix="primary")
-            if form1.is_valid():
-                form1 = form1.cleaned_data
-            else:
-                logger.debug("form1 errors = %s" % form1.errors)
-            if not request.POST.get("secondary"):
-                form2 = eval(fname)(request.POST,prefix="seconary")
-                if form2.is_valid():
-                    form1["secondary"]=True
-                    form2 = form2.cleaned_data
-            else:
-                form2 = None
-            insurance = _put_data([form1,form2],data["status"])
+            oo = 1
+        forms["opt_out"] = oo
+        insurance = put_data(forms,table="student_health_insurance")
 
         return HttpResponseRedirect(
             reverse_lazy("insurance_success")
         )
     else:
-        form1 = eval(fname)(data["form1"],prefix="primary")
-        form2 = eval(fname)(data["form2"],prefix="secondary")
+        form1 = eval(fname)(prefix="primary")
+        form2 = eval(fname)(prefix="secondary")
     return render_to_response(
         "insurance/form.html", {"form1": form1,"form2": form2,},
         context_instance=RequestContext(request)
     )
-

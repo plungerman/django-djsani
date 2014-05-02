@@ -61,8 +61,10 @@ $(function() {
             {% endif %}
             <p>
                 <input id="id_agree" type="checkbox" name="agree" value="1" />
+                <label for="id_agree" style="display:inline;">
                 I have read the above and agree that the statements are
                 accurate.
+                </label>
             </p>
             {% include "form_submit.inc.html" %}
         </div>

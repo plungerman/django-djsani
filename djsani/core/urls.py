@@ -15,11 +15,11 @@ urlpatterns = patterns('djsani.core.views',
     ),
     # login required error page
     url(
-        r'^login-required/$', 'login_required', name="login_required"
+        r'^login-required/@@UserID', 'login_required', name="login_required"
     ),
     # medical history
     url(
-        r'^medical-history/', include("djsani.medical_history.urls")
+        r'^history/', include("djsani.medical_history.urls")
     ),
     # ajax post method to save student type to session
     url(
