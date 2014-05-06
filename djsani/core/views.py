@@ -7,7 +7,6 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
 from djzbar.utils.decorators import portal_login_required
-from djzbar.utils.mssql import get_userid
 
 import logging
 logger = logging.getLogger(__name__)
@@ -21,20 +20,6 @@ def home(request):
         },
         context_instance=RequestContext(request)
     )
-
-def login_required(request):
-    cid = get_userid(request.GET.get("cid"))
-    if cid:
-        request.session["cid"] = cid
-        return HttpResponseRedirect(
-            reverse_lazy("home")
-        )
-    else:
-        return render_to_response(
-            "core/login_required.html",
-            {"cid":settings.DEFAULT_CID},
-            context_instance=RequestContext(request)
-        )
 
 @csrf_exempt
 def set_student_type(request):
