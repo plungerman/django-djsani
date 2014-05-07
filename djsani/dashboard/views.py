@@ -36,12 +36,15 @@ def panel_detail(request):
     cid = request.POST.get("cid")
     ens = ""
     for c in CODES:
-        ens +=  "++%s++++++++++++++++++++++\n" % c
         sql = "SELECT * FROM aa_rec WHERE aa = '%s' AND id='%s'" % (c,cid)
-        result = do_sql(sql).fetchone()
-        for f in FIELDS:
-            if result[f]:
-                ens += "%s = %s\n" % (f,result[f])
+        try:
+            result = do_sql(sql).fetchone()
+            ens +=  "++%s++++++++++++++++++++++\n" % c
+            for f in FIELDS:
+                if result[f]:
+                    ens += "%s = %s\n" % (f,result[f])
+        except:
+            pass
 
     return render_to_response(
         "dashboard/panel_%s.html" % dom,
