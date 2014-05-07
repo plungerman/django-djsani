@@ -14,7 +14,8 @@ $(function() {
     // set student type: academic or athlete
     function setStudentType(stype) {
         var $data = {
-            "student_type": stype
+            "student_type": stype,
+            "cid": "{{request.session.cid}}"
         };
         $.ajax({
             type: "POST",

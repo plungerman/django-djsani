@@ -6,13 +6,13 @@ from django.core.urlresolvers import reverse_lazy
 
 from djsani.insurance.forms import StudentForm
 from djsani.insurance.forms import AthleteForm
-from djsani.core.views import put_data
+from djsani.core.views import put_data, update_manager
 
 from djzbar.utils.decorators import portal_login_required
 
 @portal_login_required
 def form(request,stype):
-    cid = request.GET.get("cid")
+    cid = request.session["cid"]
     # form name
     fname = "%sForm" % stype.capitalize()
     if request.method=='POST':
@@ -40,8 +40,11 @@ def form(request,stype):
         else:
             oo = 1
         forms["opt_out"] = oo
-        insurance = put_data(forms,table="student_health_insurance")
-
+        table = "student_health_insurance"
+        # insert
+        put_data(forms,table)
+        # update the manager
+        update_manager(table,cid)
         return HttpResponseRedirect(
             reverse_lazy("insurance_success")
         )

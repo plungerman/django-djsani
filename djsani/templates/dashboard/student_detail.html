@@ -2,6 +2,8 @@
 {% block extra_style %}
 {% endblock %}
 {% block extra_javascript %}
+<script src="/static/djaludir/js/spin.min.js" type="text/javascript"></script>
+<script src="/static/djsani/js/dashboard.js" type="text/javascript"></script>
 {% endblock %}
 {% block content %}
     <div class="row">
@@ -12,145 +14,166 @@
     </div>
     <!-- /.row -->
     <div class="row">
-        <div class="col-lg-12">
-            <div class="col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Medical History</h3>
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <div class="medical-history">
-                            <ul style="margin-bottom: 15px;" class="nav nav-tabs">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#student-medical-history">
-                                        Student
-                                    </a>
-                                </li>
-                                <li class="disabled">
-                                    <a>Athlete</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-tabs -->
-                            <div class="tab-content" id="medical-history-content">
-                                <div id="student-medical-history" class="tab-pane fade active in">
-                                    <p>
-                                        student form
-                                    </p>
-                                </div>
-                                <div id="athlete-medical-history" class="tab-pane fade">
-                                    <p>
-                                        athlete form
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- /.tab-content -->
-                        </div>
-                        <!-- /.medical-history -->
-                    </div>
-                    <!-- /.panel-body -->
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Medical History</h3>
                 </div>
-                <!-- /.panel-info -->
-            </div>
-            <!-- /.col-lg-6 -->
-            <div class="col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Health Insurance</h3>
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <div class="health-insurance">
-                            <ul style="margin-bottom: 15px;" class="nav nav-tabs">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#primary-insurance">
-                                        Primary
-                                    </a>
-                                </li>
-                                <li class="disabled">
-                                    <a>
-                                        Secondary
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-tabs -->
-                            <div class="tab-content" id="insurance-content">
-                                <div id="primary-insurance" class="tab-pane fade active in">
-                                    <p>
-                                        table?
-                                    </p>
-                                </div>
-                                <div id="secondary-insurance" class="tab-pane fade">
-                                    <p>
-                                        table?
-                                    </p>
-                                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="medical-history">
+                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#student-medical-history">
+                                    Student
+                                </a>
+                            </li>
+                            <li class="disabled">
+                                <a>Athlete</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-tabs -->
+                        <div class="tab-content" id="medical-history-content">
+                            <div id="student-medical-history" class="tab-pane fade active in">
+                                <p>
+                                    student form
+                                </p>
                             </div>
-                            <!-- /.tab-content -->
+                            <div id="athlete-medical-history" class="tab-pane fade">
+                                <p>
+                                    athlete form
+                                </p>
+                            </div>
                         </div>
-                        <!-- /.health-insurance -->
+                        <!-- /.tab-content -->
                     </div>
-                    <!-- /.panel-body -->
+                    <!-- /.medical-history -->
                 </div>
-                <!-- /.panel-info -->
+                <!-- /.panel-body -->
             </div>
-            <!-- /.col-lg-6 -->
+            <!-- /.panel-info -->
         </div>
-        <!-- /.col-lg-12 -->
+        <!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Health Insurance</h3>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="health-insurance">
+                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#primary-insurance">
+                                    Primary
+                                </a>
+                            </li>
+                            <li class="disabled">
+                                <a>
+                                    Secondary
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-tabs -->
+                        <div class="tab-content" id="insurance-content">
+                            <div id="primary-insurance" class="tab-pane fade active in">
+                                <p>
+                                    table?
+                                </p>
+                            </div>
+                            <div id="secondary-insurance" class="tab-pane fade">
+                                <p>
+                                    table?
+                                </p>
+                            </div>
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                    <!-- /.health-insurance -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel-info -->
+        </div>
+        <!-- /.col-lg-6 -->
     </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-6">
-            <h2 id="nav-tabs">Waivers and Agreements</h2>
-            <div class="waivers">
-                <ul style="margin-bottom: 15px;" class="nav nav-tabs">
-                    <li class="active">
-                        <a data-toggle="tab" href="#assumption-risk">
-                            Risk waiver
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#cciw-reporting">
-                            CCIW waiver
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#privacy">
-                            HIPAA/FERPA waiver
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#sickle-cell">
-                            Sickle cell waiver
-                        </a>
-                    </li>
-                </ul>
-                <!-- /.nav-tabs -->
-                <div class="tab-content" id="waiver-content">
-                    <div id="assumption-risk" class="tab-pane fade active in">
-                        <p>
-                            risk
-                        </p>
-                    </div>
-                    <div id="cciw-reporting" class="tab-pane fade">
-                        <p>
-                            cciw
-                        </p>
-                    </div>
-                    <div id="privacy" class="tab-pane fade">
-                        <p>
-                            HIPAA and FERPA waiver
-                        </p>
-                    </div>
-                    <div id="sickle-cell" class="tab-pane fade">
-                        <p>
-                            Sickle cell
-                        </p>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Emergency Contact Information</h3>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="emergency-information">
+                        <p>boo!</p>
                     </div>
                 </div>
-                <!-- /.tab-content -->
+                <!-- /.panel-body -->
             </div>
-            <!-- /.waivers -->
+            <!-- /.panel-info -->
+        </div>
+        <!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Waivers and Agreements</h3>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="waivers-agreements">
+                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#assumption-risk">
+                                    Risk waiver
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#cciw-reporting">
+                                    CCIW waiver
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#privacy">
+                                    HIPAA/FERPA waiver
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#sickle-cell">
+                                    Sickle cell waiver
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-tabs -->
+                        <div class="tab-content" id="waiver-content">
+                            <div id="assumption-risk" class="tab-pane fade active in">
+                                <p>
+                                    risk
+                                </p>
+                            </div>
+                            <div id="cciw-reporting" class="tab-pane fade">
+                                <p>
+                                    cciw
+                                </p>
+                            </div>
+                            <div id="privacy" class="tab-pane fade">
+                                <p>
+                                    HIPAA and FERPA waiver
+                                </p>
+                            </div>
+                            <div id="sickle-cell" class="tab-pane fade">
+                                <p>
+                                    Sickle cell
+                                </p>
+                            </div>
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel-info -->
         </div>
         <!-- /.col-lg-6 -->
     </div>

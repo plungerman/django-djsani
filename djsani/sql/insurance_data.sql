@@ -31,7 +31,7 @@ VALUES (
 'company2',
 '343423566',
 '1979-02-04',
-'1351860',
+'00001217657',
 '1313 mockingbird lane springfield MA 08003',
 'policy1',
 '333-555-6666',

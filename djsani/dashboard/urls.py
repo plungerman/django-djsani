@@ -9,6 +9,15 @@ urlpatterns = patterns('djsani.dashboard.views',
         ),
         name='admin_success'
     ),
+    # ajax communication to paint the panels
+    url(
+        r'^panel/$',
+        'panel_detail', name="panel_detail"
+    ),
+    # home
+    url(
+        r'^$', 'home', name="dashboard_home"
+    ),
     url(
         r'^student/(?P<cid>\d+)/$',
         'student_detail', name="student_detail"

@@ -6,14 +6,14 @@ from django.http import HttpResponseRedirect
 
 from djsani.medical_history.forms import StudentForm
 from djsani.medical_history.forms import AthleteForm
-from djsani.core.views import put_data
+from djsani.core.views import put_data, update_manager
 
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NEXT_YEAR
 
 @portal_login_required
 def form(request,stype):
-    cid = request.GET.get("cid")
+    cid = request.session["cid"]
     # form name
     fname = "%sForm" % stype.capitalize()
     if request.method=='POST':
@@ -21,15 +21,13 @@ def form(request,stype):
         form.is_valid()
         forms = form.cleaned_data
         table = "%s_medical_history" % stype
-        success = put_data(forms,table=table)
-        if success:
-            return HttpResponseRedirect(
-                reverse_lazy("medical_history_success")
-            )
-        else:
-            return HttpResponseRedirect(
-                reverse_lazy("medical_forms_error")
-            )
+        # insert
+        put_data(forms,table=table)
+        # update the manager
+        update_manager(table,cid)
+        return HttpResponseRedirect(
+            reverse_lazy("medical_history_success")
+        )
     else:
         form = eval(fname)
     return render_to_response(

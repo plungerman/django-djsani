@@ -15,24 +15,20 @@ from djtools.fields import NEXT_YEAR
 
 @portal_login_required
 def form(request,wtype):
-    cid = request.GET.get("cid")
+    cid = request.session["cid"]
     # form name
     fname = "%sForm" % wtype.capitalize()
     if request.method=='POST':
         form = eval(fname)(request.POST)
         if form.is_valid():
             table = "athlete_%s_waiver" % wtype
-            success = put_data(
-                form.cleaned_data,table=table
+            # insert
+            put_data(form.cleaned_data,table)
+            # update the manager
+            update_manager(table,cid)
+            return HttpResponseRedirect(
+                reverse_lazy("waiver_success")
             )
-            if success:
-                return HttpResponseRedirect(
-                    reverse_lazy("waiver_success")
-                )
-            else:
-                return HttpResponseRedirect(
-                    reverse_lazy("medical_forms_error")
-                )
     else:
         form = eval(fname)
     return render_to_response(
