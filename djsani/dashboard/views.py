@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from djsani.core import *
@@ -16,7 +17,6 @@ from djtools.decorators.auth import group_required
 
 @group_required('Medical Staff')
 def home(request):
-
     students = cache.get('STUDENTS_ALPHA')
     if not students:
         objs = do_sql(STUDENTS_ALPHA, key=settings.INFORMIX_DEBUG)
@@ -29,11 +29,23 @@ def home(request):
         context_instance=RequestContext(request)
     )
 
+@csrf_exempt
 @group_required('Medical Staff')
 def panel_detail(request):
-    panel = request.POST.get("panel")
+    dom = request.POST.get("dom")
+    cid = request.POST.get("cid")
+    ens = ""
+    for c in CODES:
+        ens +=  "++%s++++++++++++++++++++++\n" % c
+        sql = "SELECT * FROM aa_rec WHERE aa = '%s' AND id='%s'" % (c,cid)
+        result = do_sql(sql).fetchone()
+        for f in FIELDS:
+            if result[f]:
+                ens += "%s = %s\n" % (f,result[f])
+
     return render_to_response(
-        "dashboard/panel_%s.html",
+        "dashboard/panel_%s.html" % dom,
+        {"ens":ens},
         context_instance=RequestContext(request)
     )
 

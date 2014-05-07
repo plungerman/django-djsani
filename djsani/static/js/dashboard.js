@@ -20,14 +20,4 @@ $(function() {
     };
     var target = document.getElementById('emergency-information');
     var spinner = new Spinner(opts).spin(target);
-    $.ajax ({
-        type: "POST",
-        url: "{% url 'emergency_information' %}",
-        data: dataString,
-        cache: false,
-        success: function(html) {
-            spinner.stop(target);
-            $("#emergency-information").html(html);
-        }
-    });
 });

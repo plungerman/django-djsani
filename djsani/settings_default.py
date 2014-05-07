@@ -31,7 +31,7 @@ SERVER_URL = ""
 API_URL = "%s/%s" % (SERVER_URL, "api")
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ROOT_DIR = os.path.dirname(__file__)
-ROOT_URL = "/djsani/"
+ROOT_URL = "/campus-life/medical/forms/"
 ROOT_URLCONF = 'djsani.core.urls'
 WSGI_APPLICATION = 'djsani.wsgi.application'
 MEDIA_ROOT = ''
@@ -131,8 +131,8 @@ AUTHENTICATION_BACKENDS = (
     'djauth.ldapBackend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-LOGIN_URL = '/djsani/accounts/login/'
-LOGIN_REDIRECT_URL = '/djsani/'
+LOGIN_URL = '%saccounts/login/' % ROOT_URL
+LOGIN_REDIRECT_URL = '%sdashboard/' % ROOT_URL
 USE_X_FORWARDED_HOST = True
 #SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False

@@ -18,7 +18,7 @@ AND stu_acad_rec.reg_hrs > 0
 
 STUDENT = """
 SELECT
-    id_rec.lastname, id_rec.firstname
+    id_rec.lastname, id_rec.firstname, id_rec.id
 FROM
     id_rec
 WHERE
@@ -32,3 +32,10 @@ SELECT * FROM student_health_insurance WHERE cid =
 MEDICAL = """
 SELECT * FROM student_medical_history WHERE cid =
 """
+
+FIELDS = [
+    'aa','beg_date','end_date','line1','line2','line3',
+    'phone','phone_ext','cell_carrier','opt_out'
+]
+
+CODES = ['MIS1','MIS2','ICE','ICE2','ENS']

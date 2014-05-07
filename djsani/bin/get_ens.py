@@ -31,41 +31,20 @@ parser.add_option(
 FIELDS = ['aa','beg_date','end_date','line1','line2','line3',
 'phone','phone_ext','cell_carrier','opt_out']
 
+CODES = ['MIS1','MIS2','ICE','ICE2','ENS']
+
 def main():
     """
     main method
     """
 
-    print "++MIS1++++++++++++++++++++++"
-    sql = "SELECT * FROM aa_rec WHERE aa = 'MIS1' AND id='%s'" % cid
-    result = do_sql(sql).fetchone()
-    for f in FIELDS:
-        if result[f]:
-            print "%s = %s" % (f,result[f])
-    print "++MIS2++++++++++++++++++++++"
-    sql = "SELECT * FROM aa_rec WHERE aa = 'MIS2' AND id='%s'" % cid
-    result = do_sql(sql).fetchone()
-    for f in FIELDS:
-        if result[f]:
-            print "%s = %s" % (f,result[f])
-    print "++ICE2++++++++++++++++++++++"
-    sql = "SELECT * FROM aa_rec WHERE aa = 'ICE2' AND id='%s'" % cid
-    result = do_sql(sql).fetchone()
-    for f in FIELDS:
-        if result[f]:
-            print "%s = %s" % (f,result[f])
-    print "++ICE+++++++++++++++++++++++"
-    sql = "SELECT * FROM aa_rec WHERE aa = 'ICE' AND id='%s'" % cid
-    result = do_sql(sql).fetchone()
-    for f in FIELDS:
-        if result[f]:
-            print "%s = %s" % (f,result[f])
-    print "++ENS+++++++++++++++++++++++"
-    sql = "SELECT * FROM aa_rec WHERE aa = 'ENS' AND id='%s'" % cid
-    result = do_sql(sql).fetchone()
-    for f in FIELDS:
-        if result[f]:
-            print "%s = %s" % (f,result[f])
+    for c in CODES:
+        print "++%s++++++++++++++++++++++" % c
+        sql = "SELECT * FROM aa_rec WHERE aa = '%s' AND id='%s'" % (c,cid)
+        result = do_sql(sql).fetchone()
+        for f in FIELDS:
+            if result[f]:
+                print "%s = %s" % (f,result[f])
 
 ######################
 # shell command line
