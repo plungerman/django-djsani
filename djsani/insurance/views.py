@@ -9,6 +9,7 @@ from djsani.insurance.forms import AthleteForm
 from djsani.core.views import put_data, update_manager
 
 from djzbar.utils.decorators import portal_login_required
+from djtools.fields import NOW
 
 @portal_login_required
 def form(request,stype):
@@ -40,8 +41,10 @@ def form(request,stype):
         else:
             oo = 1
         forms["opt_out"] = oo
+        forms["created_at"] = NOW
         table = "student_health_insurance"
         # insert
+        forms["cid"] = cid
         put_data(forms,table)
         # update the manager
         update_manager(table,cid)

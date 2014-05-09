@@ -3,9 +3,9 @@
 CREATE TABLE athlete_medical_history
 (
     /* core */
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     varchar(12) NOT NULL,
-    created_at DATETIME NOT NULL,
+    id                      INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    cid                     VARCHAR(12) NOT NULL,
+    created_at              DATETIME NOT NULL,
     /* medical questions/explanations */
     exertional_syncope      VARCHAR(255),
     heat_illness            VARCHAR(255),
@@ -13,6 +13,8 @@ CREATE TABLE athlete_medical_history
     sickle_cell_trait       VARCHAR(255),
     /* Head and Neck Injury */
     concussion              VARCHAR(255),
+    suspected_concussion    VARCHAR(255),
+    head_injuries           VARCHAR(255),
     season_ending           VARCHAR(255),
     cervical_injury         VARCHAR(255),
     stinger_injury          VARCHAR(255),

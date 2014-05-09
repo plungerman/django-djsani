@@ -9,20 +9,27 @@ from djsani.medical_history.forms import AthleteForm
 from djsani.core.views import put_data, update_manager
 
 from djzbar.utils.decorators import portal_login_required
-from djtools.fields import NEXT_YEAR
+from djtools.fields import NOW
+
+import logging
+logger = logging.getLogger(__name__)
 
 @portal_login_required
 def form(request,stype):
     cid = request.session["cid"]
     # form name
     fname = "%sForm" % stype.capitalize()
+    logger.debug("here1")
     if request.method=='POST':
+        logger.debug("here2")
         form = eval(fname)(request.POST)
         form.is_valid()
         forms = form.cleaned_data
+        forms["cid"] = cid
+        forms["created_at"] = NOW
         table = "%s_medical_history" % stype
         # insert
-        put_data(forms,table=table)
+        put_data(forms,table)
         # update the manager
         update_manager(table,cid)
         return HttpResponseRedirect(

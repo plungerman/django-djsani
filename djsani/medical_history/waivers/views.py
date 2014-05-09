@@ -23,7 +23,8 @@ def form(request,wtype):
         if form.is_valid():
             table = "athlete_%s_waiver" % wtype
             # insert
-            put_data(form.cleaned_data,table)
+            form["cid"] = cid
+            put_data(form,table)
             # update the manager
             update_manager(table,cid)
             return HttpResponseRedirect(

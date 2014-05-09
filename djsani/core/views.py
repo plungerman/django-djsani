@@ -8,10 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from djzbar.utils.informix import do_sql as do_esql
 from djzbar.utils.decorators import portal_login_required
-from djtools.utils.database import do_mysql
-
-import logging
-logger = logging.getLogger(__name__)
+from djtools.utils.database import do_mysql, mysql_db
+from djtools.fields import NOW
 
 def get_data(table,cid,fields=None,date=None):
     """
@@ -28,19 +26,17 @@ def get_data(table,cid,fields=None,date=None):
     sql += " FROM %s WHERE cid='%s'" % (table,cid)
     if date:
         sql += " AND created_at?"
-    #result = do_esql(sql, key=settings.INFORMIX_DEBUG)
-    result = do_mysql(sql)
-    if result:
-        if settings.DEBUG:
-            logger.debug("result = %s" % result)
-        status = True
-    return status
+    #result = do_esql(sql)
+    #result = do_mysql(sql)
+    result = mysql_db(sql,select=True)
+    return result
 
 def put_data(dic,table,cid=None,noquo=None):
     """
+    dic:    dictionary of data
+    table:  the name of the table in the database
     cid:    create or update
     noquo:  a list of field names that do not require quotes
-    table:  the name of the table in the database
     """
     if cid:
         prefix = "UPDATE %s SET " % table
@@ -64,11 +60,9 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
-    if not settings.DEBUG:
-        #do_esql(sql, key=settings.INFORMIX_DEBUG)
-        do_mysql(sql,select=False)
-    else:
-        logger.debug("sql = %s" % sql)
+    #result = do_esql(sql)
+    #result = do_mysql(sql,select=False)
+    result = mysql_db(sql)
 
 def update_manager(field,cid):
     """
@@ -108,8 +102,11 @@ def set_student_type(request):
     if stype:
         update = cid
     # insert or update the manager
+    dic = {"athlete":athlete,"cid":cid}
+    if not update:
+        dic["created_at"] = NOW
     put_data(
-        {"athlete":athlete,"cid":cid},
+        dic,
         "student_medical_manager",
         cid = update,
         noquo=["athlete"],

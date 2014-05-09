@@ -12,14 +12,21 @@ from djsani.core.views import get_data
 from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
 
-from djzbar.utils.informix import do_sql
+from djzbar.utils.informix import do_sql as do_esql
+from djtools.utils.database import do_mysql
 from djtools.decorators.auth import group_required
+
+import logging
+logger = logging.getLogger(__name__)
 
 @group_required('Medical Staff')
 def home(request):
+    """
+    dashboard home with a list of students
+    """
     students = cache.get('STUDENTS_ALPHA')
     if not students:
-        objs = do_sql(STUDENTS_ALPHA, key=settings.INFORMIX_DEBUG)
+        objs = do_esql(STUDENTS_ALPHA)
         students = objs.fetchall()
         cache.set('STUDENTS_ALPHA', students)
 
@@ -29,45 +36,85 @@ def home(request):
         context_instance=RequestContext(request)
     )
 
-@csrf_exempt
-@group_required('Medical Staff')
-def panel_detail(request):
-    dom = request.POST.get("dom")
-    cid = request.POST.get("cid")
+def emergency_information(cid):
+    """
+    returns all of the emergency contact information for any given student
+    """
+    FIELDS = [
+        'aa','beg_date','end_date','line1','line2','line3',
+        'phone','phone_ext','cell_carrier','opt_out'
+    ]
+    CODES = ['ICE','ICE2']
+
     ens = ""
     for c in CODES:
         sql = "SELECT * FROM aa_rec WHERE aa = '%s' AND id='%s'" % (c,cid)
         try:
-            result = do_sql(sql).fetchone()
+            result = do_esql(sql).fetchone()
             ens +=  "++%s++++++++++++++++++++++\n" % c
             for f in FIELDS:
                 if result[f]:
                     ens += "%s = %s\n" % (f,result[f])
         except:
             pass
+    return ens
 
+def student_health_insurance(cid):
+    """
+    returns the health insurance information for any given student
+    """
+    #insurance = get_data("student_health_insurance",cid)
+    sql = "%s'%s'" % (STUDENT_HEALTH_INSURANCE,cid)
+    try:
+        insurance = do_mysql(sql)[0]
+    except:
+        insurance = None
+    return insurance
+
+def student_medical_history(cid):
+    """
+    returns the medical history for any given student
+    """
+    #medical = get_data("student_medical_history",cid)
+    sql = "%s'%s'" % (STUDENT_MEDICAL_HISTORY,cid)
+    try:
+        medical = do_mysql(sql)[0]
+    except:
+        medical = None
+    return medical
+
+@csrf_exempt
+@group_required('Medical Staff')
+def panels(request):
+    """
+    ajax POST with DOM id and student ID.
+    returns the data that paints the panels in the
+    student detail view.
+    """
+    dom = request.POST.get("dom")
+    cid = request.POST.get("cid")
+    # don't want to eval any ole thing
+    valid = [
+        "emergency_information","student_health_insurance",
+        "student_medical_history"
+    ]
+    
+    if dom in valid:
+        m = eval(dom)
+        data = m(cid)
     return render_to_response(
         "dashboard/panel_%s.html" % dom,
-        {"ens":ens},
+        {"data":data},
         context_instance=RequestContext(request)
     )
 
 @group_required('Medical Staff')
 def student_detail(request,cid):
     # get student
-    obj = do_sql("%s'%s'" % (STUDENT,cid),key=settings.INFORMIX_DEBUG)
+    obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
     student = obj.fetchone()
-    # get health insurance
-    opt_out = False
-    """
-    insurance = get_data("student_health_insurance",cid).fetchone()
-    if insurance.opt_out:
-        opt_out = True
-    # get medical history
-    medical = get_data("student_medical_history",cid)
-    """
     return render_to_response(
         "dashboard/student_detail.html",
-        {"student":student,"opt_out":opt_out,},
+        {"student":student,},
         context_instance=RequestContext(request)
     )

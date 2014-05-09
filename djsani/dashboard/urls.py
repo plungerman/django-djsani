@@ -12,7 +12,7 @@ urlpatterns = patterns('djsani.dashboard.views',
     # ajax communication to paint the panels
     url(
         r'^panels/$',
-        'panel_detail', name="panel_detail"
+        'panels', name="dashboard_panels"
     ),
     # home
     url(

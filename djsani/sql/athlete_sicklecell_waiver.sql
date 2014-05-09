@@ -3,9 +3,9 @@
 CREATE TABLE athlete_sicklecell_waiver
 (
     /* core */
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     varchar(12) NOT NULL,
-    created_at DATETIME NOT NULL,
+    id                      INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    cid                     VARCHAR(12) NOT NULL,
+    created_at              DATETIME NOT NULL,
     /* waiver fields */
     waive                   BOOLEAN,
     proof                   BOOLEAN,

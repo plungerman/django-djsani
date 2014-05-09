@@ -25,8 +25,16 @@ $(function() {
         left: 'auto' // Left position relative to parent in px
     };
     var i;
+    /*
     var doms = [
-        "emergency-information"
+        "student_health_insurance",
+        "student_medical_history",
+        "emergency_information"
+    ];
+    */
+    var doms = [
+        "student_health_insurance",
+        "student_medical_history"
     ];
     for (i = 0; i < doms.length; ++i) {
         var target = document.getElementById(doms[i]);
@@ -35,7 +43,7 @@ $(function() {
     for (i = 0; i < doms.length; ++i) {
         $.ajax ({
             type: "POST",
-            url: "{% url 'panel_detail' %}",
+            url: "{% url 'dashboard_panels' %}",
             data: {"dom":doms[i],"cid":{{student.id}}},
             cache: false,
             indexValue: i,
@@ -51,21 +59,50 @@ $(function() {
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">{{student.firstname}} {{student.lastname}}</h1>
+        <div class="col-lg-8">
+            <h1 class="page-header">
+                {{student.firstname}} {{student.lastname}}
+                <small>Athlete</small>
+            </h1>
         </div>
         <!-- /.col-lg-12 -->
+        <div class="col-lg-4">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-globe fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8">
+                            <address>
+                            {{student.addr_line1}} {{student.addr_line2}}<br>
+                            {{student.city}}, {{student.st}}<br>
+                            {{student.zip}} {{student.ctry}}<br>
+                            <abbr title="Phone">P:</abbr>
+                            {{student.phone}}<br>
+                            <a href="mailto:{{student.ldap_name}}@carthage.edu">
+                                {{student.ldap_name}}@carthage.edu
+                            </a>
+                            </address>
+                        </div>
+                    </div> <!-- /.row -->
+                </div> <!--/.panel-heading -->
+            </div> <!-- /.panel-success -->
+        </div> <!-- /.col-lg-4 -->
     </div>
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Medical History</h3>
+                    <h3 class="panel-title">
+                        <i class="fa fa-plus-square"></i>
+                        Medical History
+                    </h3>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="medical-history">
+                    <div id="student_medical_history" style="height:200px;">
                         <ul style="margin-bottom: 15px;" class="nav nav-tabs">
                             <li class="active">
                                 <a data-toggle="tab" href="#student-medical-history">
@@ -101,11 +138,14 @@ $(function() {
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Health Insurance</h3>
+                    <h3 class="panel-title">
+                        <i class="fa fa-umbrella"></i>
+                        Health Insurance
+                    </h3>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="health-insurance">
+                    <div id="student_health_insurance" style="height:200px;">
                         <ul style="margin-bottom: 15px;" class="nav nav-tabs">
                             <li class="active">
                                 <a data-toggle="tab" href="#primary-insurance">
@@ -119,16 +159,12 @@ $(function() {
                             </li>
                         </ul>
                         <!-- /.nav-tabs -->
-                        <div class="tab-content" id="insurance-content">
+                        <div class="tab-content">
                             <div id="primary-insurance" class="tab-pane fade active in">
-                                <p>
-                                    table?
-                                </p>
+                                <p></p>
                             </div>
                             <div id="secondary-insurance" class="tab-pane fade">
-                                <p>
-                                    table?
-                                </p>
+                                <p></p>
                             </div>
                         </div>
                         <!-- /.tab-content -->
@@ -146,11 +182,14 @@ $(function() {
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Emergency Contact Information</h3>
+                    <h3 class="panel-title">
+                        <i class="fa fa-ambulance"></i>
+                        Emergency Contact Information
+                    </h3>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div id="emergency-information">
+                    <div id="emergency_information">
                         <p style="height:200px;"></p>
                     </div>
                 </div>
@@ -162,7 +201,10 @@ $(function() {
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Waivers and Agreements</h3>
+                    <h3 class="panel-title">
+                        <i class="fa fa-hospital-o"></i>
+                        Waivers and Agreements
+                    </h3>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body" style="height:220px;">
@@ -180,7 +222,7 @@ $(function() {
                             </li>
                             <li>
                                 <a data-toggle="tab" href="#privacy">
-                                    HIPAA/FERPA waiver
+                                    Privacy waiver
                                 </a>
                             </li>
                             <li>

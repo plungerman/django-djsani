@@ -16,26 +16,26 @@ AND stu_acad_rec.sess IN ("RA","RC","AM","GC","PC","TC")
 AND stu_acad_rec.reg_hrs > 0
 """
 
-STUDENT = """
+#AND prog_enr_rec.cl IN  ("FF","FR","SO","JR","SR","GR","NM")
+
+STUDENT_VITALS = """
 SELECT
-    id_rec.lastname, id_rec.firstname, id_rec.id
+    id_rec.lastname, id_rec.firstname, id_rec.id,
+    id_rec.addr_line1, id_rec.addr_line2, id_rec.city, id_rec.st,
+    id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name
 FROM
     id_rec
+LEFT JOIN
+    cvid_rec on id_rec.id = cvid_rec.cx_id
 WHERE
     id_rec.id =
 """
 
-INSURANCE = """
+STUDENT_HEALTH_INSURANCE = """
 SELECT * FROM student_health_insurance WHERE cid =
 """
 
-MEDICAL = """
+STUDENT_MEDICAL_HISTORY = """
 SELECT * FROM student_medical_history WHERE cid =
 """
 
-FIELDS = [
-    'aa','beg_date','end_date','line1','line2','line3',
-    'phone','phone_ext','cell_carrier','opt_out'
-]
-
-CODES = ['MIS1','MIS2','MIS3','ICE','ICE2','ENS']

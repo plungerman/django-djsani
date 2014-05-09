@@ -3,10 +3,10 @@
 CREATE TABLE student_medical_manager
 (
     /* core */
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     varchar(12) NOT NULL,
-    created_at DATETIME NOT NULL,
-    athlete                 BOOLEAN,
+    id                          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    cid                         VARCHAR(12) NOT NULL,
+    created_at                  DATETIME NOT NULL,
+    athlete                     BOOLEAN,
     /* forms and waivers */
     student_medical_history     BOOLEAN not null default 0,
     athlete_medical_history     BOOLEAN not null default 0,

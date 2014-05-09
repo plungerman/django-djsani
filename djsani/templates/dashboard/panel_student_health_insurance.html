@@ -1,0 +1,80 @@
+{% if data %}{% if data.opt_out %}
+<div class="alert alert-danger">
+    <h3>Opt out</h3>
+    <p>
+        I attest that I do <strong><u>NOT</u></strong>
+        have health insurance.
+    </p>
+</div>
+{% else %}
+<ul style="margin-bottom: 15px;" class="nav nav-tabs">
+    <li class="active">
+        <a data-toggle="tab" href="#primary-insurance">
+            Primary
+        </a>
+    </li>
+    <li{% if not data.secondary_company %} class="disabled"{% endif %}>
+        <a data-toggle="tab" href="#secondary-insurance">
+            Secondary
+        </a>
+    </li>
+</ul>
+<!-- /.nav-tabs -->
+<div class="tab-content">
+    <div id="primary-insurance" class="tab-pane fade active in">
+        <h3>Primary Health Insurance</h3>
+        <dl class="dl-horizontal">
+            <dt>Policy holder</dt>
+            <dd>{{data.primary_policy_holder}}</dd>
+            <dt>Date of birth</dt>
+            <dd>{{data.primary_dob}}</dd>
+            <dt>Company</dt>
+            <dd>{{data.primary_company}}</dd>
+            <dt>Phone</dt>
+            <dd>{{data.primary_phone}}</dd>
+            <dt>Member ID</dt>
+            <dd>{{data.primary_member_id}}</dd>
+            <dt>Group number</dt>
+            <dd>{{data.primary_group_no}}</dd>
+            <dt>Policy type</dt>
+            <dd>{{data.primary_policy_type}}</dd>
+            {% if data.primary_policy_state %}
+            <dt>Policy state</dt>
+            <dd>{{data.primary_policy_state}}</dd>
+            {% endif %}
+            {% if data.primary_address %}
+            <dt>Address</dt>
+            <dd>{{data.primary_address}}</dd>
+            {% endif %}
+        </dl>
+    </div>
+    <div id="secondary-insurance" class="tab-pane fade"> 
+        <h3>Secondary Health Insurance</h3>
+        <dl class="dl-horizontal">
+            <dt>Policy holder</dt>
+            <dd>{{data.secondary_policy_holder}}</dd>
+            <dt>Date of birth</dt>
+            <dd>{{data.secondary.dob}}</dd>
+            <dt>Company</dt>
+            <dd>{{data.secondary_company}}</dd>
+            <dt>Phone</dt>
+            <dd>{{data.secondary_phone}}</dd>
+            <dt>Member ID</dt>
+            <dd>{{data.secondary_member_id}}</dd>
+            <dt>Group number</dt>
+            <dd>{{data.secondary_group_no}}</dd>
+            <dt>Policy type</dt>
+            <dd>{{data.secondary_policy_type}}</dd>
+            {% if data.secondary_policy_state %}
+            <dt>Policy state</dt>
+            <dd>{{data.secondary_policy_state}}</dd>
+            {% endif %}
+            {% if data.secondary_address %}
+            <dt>Address</dt>
+            <dd>{{data.secondary_address}}</dd>
+            {% endif %}
+        </dl>
+    </div>
+</div>
+<!-- /.tab-content -->
+{% endif %}{% endif %}
