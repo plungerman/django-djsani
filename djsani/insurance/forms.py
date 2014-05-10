@@ -62,7 +62,6 @@ class StudentForm(forms.Form):
     def __init__(self,*args,**kwargs):
         super(StudentForm,self).__init__(*args,**kwargs)
         self.fields.keyOrder = [
-            'cid','created_at','updated_at','second_policy',
             'policy_holder','dob','company','phone',
             'member_id','group_no','policy_type','policy_state'
         ]

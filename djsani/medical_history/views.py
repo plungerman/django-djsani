@@ -11,17 +11,12 @@ from djsani.core.views import put_data, update_manager
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NOW
 
-import logging
-logger = logging.getLogger(__name__)
-
 @portal_login_required
 def form(request,stype):
     cid = request.session["cid"]
     # form name
     fname = "%sForm" % stype.capitalize()
-    logger.debug("here1")
     if request.method=='POST':
-        logger.debug("here2")
         form = eval(fname)(request.POST)
         form.is_valid()
         forms = form.cleaned_data

@@ -280,13 +280,13 @@ class AthleteForm(forms.Form):
     )
     # Head and Neck Injury
     concussion = forms.CharField(
-        label='Diagnosed concussion',
+        label='Diagnosed concussion (#)',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
     suspected_concussion = forms.CharField(
-        label='Suspected, unreported concussion',
+        label='Suspected, unreported concussion (#)',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False

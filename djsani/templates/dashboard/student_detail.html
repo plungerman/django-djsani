@@ -1,5 +1,15 @@
 {% extends "dashboard/home.html" %}
 {% block extra_style %}
+<style>
+.dl-horizontal dt.widus {
+    overflow: auto;
+    width: 300px;
+    margin-right:9px;
+}
+.dl-horizontal dd.yes {
+    margin-left: 0;
+}
+</style>
 {% endblock %}
 {% block extra_javascript %}
 <script src="/static/djaludir/js/spin.min.js" type="text/javascript"></script>
@@ -27,6 +37,7 @@ $(function() {
     var i;
     /*
     var doms = [
+        "athlete_medical_history",
         "student_health_insurance",
         "student_medical_history",
         "emergency_information"
@@ -34,7 +45,8 @@ $(function() {
     */
     var doms = [
         "student_health_insurance",
-        "student_medical_history"
+        "student_medical_history",
+        "athlete_medical_history"
     ];
     for (i = 0; i < doms.length; ++i) {
         var target = document.getElementById(doms[i]);
@@ -96,39 +108,15 @@ $(function() {
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        <i class="fa fa-plus-square"></i>
-                        Medical History
+                        <i class="fa fa-ambulance"></i>
+                        Emergency Contact Information
                     </h3>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div id="student_medical_history" style="height:200px;">
-                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
-                            <li class="active">
-                                <a data-toggle="tab" href="#student-medical-history">
-                                    Student
-                                </a>
-                            </li>
-                            <li class="disabled">
-                                <a>Athlete</a>
-                            </li>
-                        </ul>
-                        <!-- /.nav-tabs -->
-                        <div class="tab-content" id="medical-history-content">
-                            <div id="student-medical-history" class="tab-pane fade active in">
-                                <p>
-                                    student form
-                                </p>
-                            </div>
-                            <div id="athlete-medical-history" class="tab-pane fade">
-                                <p>
-                                    athlete form
-                                </p>
-                            </div>
-                        </div>
-                        <!-- /.tab-content -->
+                    <div id="emergency_information">
+                        <p style="height:200px;"></p>
                     </div>
-                    <!-- /.medical-history -->
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -183,15 +171,37 @@ $(function() {
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        <i class="fa fa-ambulance"></i>
-                        Emergency Contact Information
+                        <i class="fa fa-plus-square"></i>
+                        Medical History
                     </h3>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div id="emergency_information">
-                        <p style="height:200px;"></p>
+                    <div id="student-medical-history">
+                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#student_medical_history">
+                                    Student
+                                </a>
+                            </li>
+                            <li{#% if not student.athlete class="disabled" endif #}>
+                                <a href="#athlete_medical_history" data-toggle="tab">
+                                    Athlete
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-tabs -->
+                        <div class="tab-content" id="medical-history-content">
+                            <div id="student_medical_history" class="tab-pane fade active in">
+                                <p>&nbsp;</p>
+                            </div>
+                            <div id="athlete_medical_history" class="tab-pane fade">
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                        <!-- /.tab-content -->
                     </div>
+                    <!-- /.medical-history -->
                 </div>
                 <!-- /.panel-body -->
             </div>

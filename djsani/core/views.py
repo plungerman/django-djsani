@@ -11,6 +11,9 @@ from djzbar.utils.decorators import portal_login_required
 from djtools.utils.database import do_mysql, mysql_db
 from djtools.fields import NOW
 
+import logging
+logger = logging.getLogger(__name__)
+
 def get_data(table,cid,fields=None,date=None):
     """
     table   = name of database table
@@ -27,8 +30,7 @@ def get_data(table,cid,fields=None,date=None):
     if date:
         sql += " AND created_at?"
     #result = do_esql(sql)
-    #result = do_mysql(sql)
-    result = mysql_db(sql,select=True)
+    result = do_mysql(sql)
     return result
 
 def put_data(dic,table,cid=None,noquo=None):
@@ -47,6 +49,7 @@ def put_data(dic,table,cid=None,noquo=None):
             else:
                 prefix += "'%s'," % val
         sql = "%s WHERE cid='%s'" % (prefix[:-1],cid)
+        result = do_mysql(sql,select=False)
     else:
         prefix = "INSERT INTO %s" % table
         fields = "("
@@ -60,9 +63,9 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
+        result = mysql_db(sql)
+    # removed the other mysql method calls when informix tables are ready
     #result = do_esql(sql)
-    #result = do_mysql(sql,select=False)
-    result = mysql_db(sql)
 
 def update_manager(field,cid):
     """

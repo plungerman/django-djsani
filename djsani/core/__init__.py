@@ -38,4 +38,33 @@ SELECT * FROM student_health_insurance WHERE cid =
 STUDENT_MEDICAL_HISTORY = """
 SELECT * FROM student_medical_history WHERE cid =
 """
-
+ATHLETE_MEDICAL_HISTORY = """
+SELECT * FROM athlete_medical_history WHERE cid =
+"""
+SPORTS = (
+    ("0","----Select Sport----"),
+    ("","----Men's sports----"),
+    ("Men's Baseball","Baseball"),
+    ("Men's Basketball","Basketball"),
+    ("Men's Cross Country","Cross Country"),
+    ("Men's Football","Football"),
+    ("Men's Golf","Golf"),
+    ("Men's Lacrosse","Lacrosse"),
+    ("Men's Soccer","Soccer"),
+    ("Men's Swimming","Swimming"),
+    ("Men's Tennis","Tennis"),
+    ("Men's Track &amp; Field","Track &amp; Field"),
+    ("Men's Volleyball","Volleyball"),
+    ("","----Women's sports----"),
+    ("Women's Basketball","Basketball"),
+    ("Women's Cross Country","Cross Country"),
+    ("Women's Golf","Golf"),
+    ("Women's Lacrosse","Lacrosse"),
+    ("Women's Soccer","Soccer"),
+    ("Women's Softball","Softball"),
+    ("Women's Swimming","Swimming"),
+    ("Women's Tennis","Tennis"),
+    ("Women's Track &amp; Field","Track &amp; Field"),
+    ("Women's Volleyball","Volleyball"),
+    ("Women's Water Polo","Water Polo")
+)
