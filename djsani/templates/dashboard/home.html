@@ -129,91 +129,13 @@
                                 </option>
                                 {% endfor %}
                                 </select>
+                                <input type="submit" name="submit" value="submit" />
                             </div>
                         </form>
                     </div>
                 </div>
                 <!-- /.panel-heading -->
-                <div class="panel-body" id="student-data-panel">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="student-data">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Insurance</th>
-                                    <th>Medical history</th>
-                                    <th>Athlete medical history</th>
-                                    <th>Privacy waiver</th>
-                                    <th>Sickle cell waiver</th>
-                                    <th>Reporting waiver</th>
-                                    <th>Risk waiver</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for s in students %}
-                                <tr>
-                                    <td>
-                                        <a href="{% url 'student_detail' s.id %}">
-                                            {{s.lastname}}, {{s.firstname}}
-                                        </a>
-                                    </td>
-                                    <td class="center">
-                                        <a href="{# url 'health_insurance' {{s.id}} #}">
-                                            <i class="fa fa-check green"></i>
-                                        </a>
-                                    </td>
-                                    <td class="center">
-                                        <a href="{# url 'medical_history' {{s.id}} #}">
-                                            {# if s.mrsa #}
-                                            {% if mrsa %}
-                                            <i class="fa fa-check"></i>
-                                            {% else %}
-                                            <i class="fa fa-times red"></i>
-                                            {% endif %}
-                                        </a>
-                                    </td>
-                                    <td class="center">
-                                    </td>
-                                    <td class="center">
-                                        {# if s.privacy #}
-                                        {% if privacy %}
-                                        <i class="fa fa-check"></i>
-                                        {% else %}
-                                        <i class="fa fa-times red"></i>
-                                        {% endif %}
-                                    </td>
-                                    <td class="center">
-                                        {# if s.sickle #}
-                                        {% if sickle %}
-                                        <i class="fa fa-check"></i>
-                                        {% else %}
-                                        <i class="fa fa-times red"></i>
-                                        {% endif %}
-                                    </td>
-                                    <td class="center">
-                                        {# if s.reporting #}
-                                        {% if reporting %}
-                                        <i class="fa fa-check"></i>
-                                        {% else %}
-                                        <i class="fa fa-times red"></i>
-                                        {% endif %}
-                                    </td>
-                                    <td class="center">
-                                        {# if s.risk #}
-                                        {% if risk %}
-                                        <i class="fa fa-check"></i>
-                                        {% else %}
-                                        <i class="fa fa-times red"></i>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.panel-body -->
+                {% include "dashboard/panels/student_data.inc.html" %}
             </div>
             <!-- /.panel -->
         </div>
