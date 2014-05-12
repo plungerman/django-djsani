@@ -15,14 +15,14 @@ from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NEXT_YEAR
 
 @portal_login_required
-def form(request,wtype):
+def form(request,stype,wtype):
     cid = request.session["cid"]
     # form name
     fname = "%sForm" % wtype.capitalize()
     if request.method=='POST':
         form = eval(fname)(request.POST)
         if form.is_valid():
-            table = "athlete_%s_waiver" % wtype
+            table = "%s_%s_waiver" % (stype,wtype)
             # insert
             form["cid"] = cid
             put_data(form,table)
@@ -34,7 +34,7 @@ def form(request,wtype):
     else:
         form = eval(fname)
     return render_to_response(
-        "medical_history/waivers/%s.html" % wtype,
+        "medical_history/waivers/%s_%s.html" % (stype,wtype),
         {
             "form":form,"next_year":NEXT_YEAR,
         },

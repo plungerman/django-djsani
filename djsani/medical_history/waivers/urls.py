@@ -12,7 +12,7 @@ urlpatterns = patterns('djsani.medical_history.waivers.views',
     ),
     # medical history waiver forms
     url(
-        r'^(?P<wtype>[a-zA-Z0-9_-]+)/$',
+        r'^(?P<stype>[a-zA-Z0-9_-]+)/(?P<wtype>[a-zA-Z0-9_-]+)/$',
         'form', name="waiver_form"
     ),
 )

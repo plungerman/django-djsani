@@ -11,6 +11,9 @@ from djzbar.utils.decorators import portal_login_required
 from djtools.utils.database import do_mysql, mysql_db
 from djtools.fields import NOW
 
+import logging
+logger = logging.getLogger(__name__)
+
 def get_data(table,cid,fields=None,date=None):
     """
     table   = name of database table
@@ -60,6 +63,7 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
+        logger.debug("sql = %s" % sql)
         result = mysql_db(sql)
     # removed the other mysql method calls when informix tables are ready
     #result = do_esql(sql)
@@ -93,10 +97,11 @@ def set_student_type(request):
     # set the session variable for use at UI level
     request.session["stype"] = stype
     # check for existing record
-    athlete = False
+    # OJO: 0/1 might change for informix
+    athlete = 0
     table="student_medical_manager"
     if stype == "athlete":
-        athlete = True
+        athlete = 1
     stype = get_data(table,cid)
     update = None
     if stype:
