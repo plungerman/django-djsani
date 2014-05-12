@@ -64,7 +64,8 @@ def put_data(dic,table,cid=None,noquo=None):
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
         logger.debug("sql = %s" % sql)
-        result = mysql_db(sql)
+        result = do_mysql(sql)
+        #result = mysql_db(sql)
     # removed the other mysql method calls when informix tables are ready
     #result = do_esql(sql)
 
