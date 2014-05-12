@@ -79,25 +79,3 @@ class AthleteForm(StudentForm):
             'policy_holder','dob','company','phone',
             'address','member_id','group_no','policy_type','policy_state'
         ]
-
-def _get_data(cid,fname):
-    data = {}
-    data["form1"] = {}
-    data["form2"] = {}
-    if not settings.DEBUG:
-        sql = "select * from in student_insurance where cid = '%s'" % cid
-        results = do_esql(sql, key=settings.INFORMIX_DEBUG)
-        obj = results.fetchall()
-        # if len() == 0, insert; if len() == 1, update
-        data["status"] = len(obj)
-        # dictionaries to populate forms on GET
-        if data["status"] == 1:
-            form = eval(fname)()
-            for f in form.field:
-                data["form1"][f] = obj["primary_%s"] % f
-                data["form2"][f] = obj["secondary_%s"] % f
-            data["opt-out"] = obj.opt_out
-            data["secondary"] = obj.secondary
-    else:
-        data["status"] = 0
-    return data

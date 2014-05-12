@@ -45,6 +45,11 @@ urlpatterns = patterns('djsani.core.views',
     url(
         r'^history/', include("djsani.medical_history.urls")
     ),
+    # override mobile first responsive UI
+    url(
+        r'^responsive/(?P<action>[-\w]+)',
+        'responsive_switch', name="responsive_switch"
+    ),
     # ajax post method to save student type to session
     url(
         r'^set-student-type/$', 'set_student_type', name="set_student_type"

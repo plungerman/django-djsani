@@ -6,10 +6,13 @@ from django.core.urlresolvers import reverse_lazy
 
 from djsani.insurance.forms import StudentForm
 from djsani.insurance.forms import AthleteForm
-from djsani.core.views import put_data, update_manager
+from djsani.core.views import get_data, put_data, update_manager
 
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NOW
+
+import logging
+logger = logging.getLogger(__name__)
 
 @portal_login_required
 def form(request,stype):
@@ -36,6 +39,7 @@ def form(request,stype):
             forms["secondary_%s" % k] = v
         forms["cid"] = cid
         oo = request.POST.get("opt_out")
+        # OJO: this might change with informix
         if not oo:
             oo = 0
         else:
@@ -52,8 +56,17 @@ def form(request,stype):
             reverse_lazy("insurance_success")
         )
     else:
-        form1 = eval(fname)(prefix="primary")
-        form2 = eval(fname)(prefix="secondary")
+        data = get_data("student_health_insurance",cid)
+        primary = {}
+        secondary = {}
+        if data:
+            for k,v in data[0].items():
+                if k.startswith("primary_"):
+                    primary[k[8:]] = v
+                else:
+                    secondary[k[10:]] = v
+        form1 = eval(fname)(prefix="primary",initial=primary)
+        form2 = eval(fname)(prefix="secondary",initial=secondary)
     return render_to_response(
         "insurance/form.html", {"form1": form1,"form2": form2,},
         context_instance=RequestContext(request)

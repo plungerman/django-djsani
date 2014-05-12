@@ -1,6 +1,6 @@
 STUDENTS_ALPHA = """
 SELECT UNIQUE
-id_rec.lastname, id_rec.firstname, id_rec.id
+    id_rec.lastname, id_rec.firstname, id_rec.id
 FROM
     id_rec
 INNER JOIN  prog_enr_rec ON  id_rec.id = prog_enr_rec.id
@@ -9,7 +9,6 @@ WHERE
     prog_enr_rec.subprog
 NOT IN ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
 AND prog_enr_rec.lv_date IS NULL
-AND prog_enr_rec.cl IN ("FF","FR")
 AND prog_enr_rec.acst
 IN ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
 AND stu_acad_rec.sess IN ("RA","RC","AM","GC","PC","TC")

@@ -21,14 +21,25 @@ def home(request):
     """
     dashboard home with a list of students
     """
-    students = cache.get('STUDENTS_ALPHA')
-    if not students:
-        objs = do_esql(STUDENTS_ALPHA)
+    template = "dashboard/home.html",
+    if request.POST:
+        template = "dashboard/students_data.inc.html"
+        sql = "%s AND prog_enr_rec.cl IN (%s)" % (
+            STUDENTS_ALPHA,request.POST["class"]
+        )
+        objs = do_esql(sql)
         students = objs.fetchall()
         cache.set('STUDENTS_ALPHA', students)
+    else:
+        students = cache.get('STUDENTS_ALPHA')
+        if not students:
+            sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
+            objs = do_esql(sql)
+            students = objs.fetchall()
+            cache.set('STUDENTS_ALPHA', students)
 
     return render_to_response(
-        "dashboard/home.html",
+        template,
         {"students":students,"sports":SPORTS,},
         context_instance=RequestContext(request)
     )
@@ -108,7 +119,7 @@ def panels(request):
     if dom in valid:
         # medical = get_data(dom,cid)
         # insurance = get_data(dom,cid)
-        # temporary solution until informix tables are built.
+        # eval = temporary solution until informix tables are built.
         # i'm looking at you, kish :-)
         m = eval(dom)
         data = m(cid)

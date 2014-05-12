@@ -11,9 +11,6 @@ from djzbar.utils.decorators import portal_login_required
 from djtools.utils.database import do_mysql, mysql_db
 from djtools.fields import NOW
 
-import logging
-logger = logging.getLogger(__name__)
-
 def get_data(table,cid,fields=None,date=None):
     """
     table   = name of database table
@@ -115,4 +112,11 @@ def set_student_type(request):
         noquo=["athlete"],
     )
     return HttpResponse(stype, mimetype="text/plain; charset=utf-8")
+
+def responsive_switch(request,action):
+    if action=="go":
+        request.session['desktop_mode']=True
+    elif action=="leave":
+        request.session['desktop_mode']=False
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", ""))
 

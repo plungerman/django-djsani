@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 
+from djsani.medical_history.waivers.forms import MeniForm
 from djsani.medical_history.waivers.forms import PrivacyForm
 from djsani.medical_history.waivers.forms import ReportingForm
 from djsani.medical_history.waivers.forms import RiskForm
