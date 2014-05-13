@@ -2,9 +2,7 @@
 from django import forms
 from django.conf import settings
 
-from djzbar.utils.informix import do_sql as do_esql
 from djtools.fields import STATE_CHOICES, REQ_CSS
-from djtools.utils.database import do_mysql
 from localflavor.us.forms import USPhoneNumberField
 
 POLICY_CHOICES = (

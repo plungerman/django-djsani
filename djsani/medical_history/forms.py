@@ -2,7 +2,6 @@
 from django import forms
 from django.conf import settings
 
-from djzbar.utils.informix import do_sql
 from djtools.fields import REQ_CSS
 
 BINARY_CHOICES = (

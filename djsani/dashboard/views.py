@@ -13,7 +13,6 @@ from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
 
 from djzbar.utils.informix import do_sql as do_esql
-from djtools.utils.database import do_mysql
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
 
@@ -71,40 +70,6 @@ def emergency_information(cid):
             pass
     return ens
 
-def student_health_insurance(cid):
-    """
-    returns the health insurance information for any given student
-    """
-    #insurance = get_data("student_health_insurance",cid)
-    sql = "%s'%s'" % (STUDENT_HEALTH_INSURANCE,cid)
-    try:
-        insurance = do_mysql(sql)[0]
-    except:
-        insurance = None
-    return insurance
-
-def student_medical_history(cid):
-    """
-    returns the medical history for any given student
-    """
-    sql = "%s'%s'" % (STUDENT_MEDICAL_HISTORY,cid)
-    try:
-        medical = do_mysql(sql)[0]
-    except:
-        medical = None
-    return medical
-
-def athlete_medical_history(cid):
-    """
-    returns the medical history for any given athlete
-    """
-    sql = "%s'%s'" % (ATHLETE_MEDICAL_HISTORY,cid)
-    try:
-        medical = do_mysql(sql)[0]
-    except:
-        medical = None
-    return medical
-
 @csrf_exempt
 @group_required('Medical Staff')
 def panels(request):
@@ -115,23 +80,12 @@ def panels(request):
     """
     dom = request.POST.get("dom")
     cid = request.POST.get("cid")
-    # don't want to eval any ole thing
-    valid = [
-        "emergency_information","student_health_insurance",
-        "student_medical_history","athlete_medical_history"
-    ]
-    if dom in valid:
-        # medical = get_data(dom,cid)
-        # insurance = get_data(dom,cid)
-        # eval = temporary solution until informix tables are built.
-        # i'm looking at you, kish :-)
-        m = eval(dom)
-        data = m(cid)
-        form = None
-        if dom == "student_medical_history":
-            form = SmedForm(initial=data)
-        if dom == "athlete_medical_history":
-            form = AmedForm(initial=data)
+    data = get_data(dom,cid)
+    form = None
+    if dom == "student_medical_history":
+        form = SmedForm(initial=data)
+    if dom == "athlete_medical_history":
+        form = AmedForm(initial=data)
     return render_to_response(
         "dashboard/panels/%s.html" % dom,
         {"data":data,"form":form},

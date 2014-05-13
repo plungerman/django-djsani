@@ -9,9 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from djsani.core import STUDENT_VITALS
 from djzbar.utils.informix import do_sql as do_esql
 from djzbar.utils.decorators import portal_login_required
-from djtools.utils.database import do_mysql, mysql_db
 from djtools.utils.date import calculate_age
-from djtools.fields import NOW
+from djtools.fields import TODAY
 
 import logging
 logger = logging.getLogger(__name__)
@@ -31,8 +30,8 @@ def get_data(table,cid,fields=None,date=None):
     sql += " FROM %s WHERE cid='%s'" % (table,cid)
     if date:
         sql += " AND created_at?"
-    #result = do_esql(sql)
-    result = do_mysql(sql)
+    result = do_esql(sql)
+    logger.debug("sql = %s" % sql)
     return result
 
 def put_data(dic,table,cid=None,noquo=None):
@@ -51,7 +50,6 @@ def put_data(dic,table,cid=None,noquo=None):
             else:
                 prefix += "'%s'," % val
         sql = "%s WHERE cid='%s'" % (prefix[:-1],cid)
-        result = do_mysql(sql,select=False)
     else:
         prefix = "INSERT INTO %s" % table
         fields = "("
@@ -65,11 +63,8 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
-        logger.debug("sql = %s" % sql)
-        result = do_mysql(sql)
-        #result = mysql_db(sql)
-    # removed the other mysql method calls when informix tables are ready
-    #result = do_esql(sql)
+    logger.debug("sql = %s" % sql)
+    do_esql(sql,key=settings.INFORMIX_DEBUG)
 
 def update_manager(field,cid):
     """
@@ -95,6 +90,7 @@ def home(request):
     if obj:
         student = obj.fetchone()
         request.session["student"] = student
+    logger.debug("student = %s" % student)
     if student:
         # adult or minor?
         age = calculate_age(student.birth_date)
@@ -124,19 +120,20 @@ def set_type(request):
         table="student_medical_manager"
         if switch == "athlete":
             athlete = 1
-        student = get_data(table,cid)
+        student = get_data(table,cid).fetchone()
         update = None
         if student:
             update = cid
         # insert or update the manager
         dic = {"athlete":athlete,"cid":cid}
         if not update:
-            dic["created_at"] = NOW
+            #dic["created_at"] = TODAY
+            dic["created_at"] = 'TO_DATE("%s", "%%Y-%%m-%%d")' % TODAY
         put_data(
             dic,
             "student_medical_manager",
             cid = update,
-            noquo=["athlete"],
+            noquo=["athlete","created_at"],
         )
     return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
 

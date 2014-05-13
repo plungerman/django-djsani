@@ -33,16 +33,6 @@ WHERE
     id_rec.id =
 """
 
-STUDENT_HEALTH_INSURANCE = """
-SELECT * FROM student_health_insurance WHERE cid =
-"""
-
-STUDENT_MEDICAL_HISTORY = """
-SELECT * FROM student_medical_history WHERE cid =
-"""
-ATHLETE_MEDICAL_HISTORY = """
-SELECT * FROM athlete_medical_history WHERE cid =
-"""
 SPORTS = (
     ("0","----Select Sport----"),
     ("","----Men's sports----"),

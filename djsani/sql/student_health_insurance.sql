@@ -6,7 +6,7 @@ CREATE TABLE student_health_insurance
     id                      INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     cid                     VARCHAR(12) NOT NULL,
     created_at              DATETIME NOT NULL,
-    opt_out                 BOOLEAN NOT NULL,
+    opt_out                 BOOLEAN,
     /* primary */
     primary_policy_holder   VARCHAR(128),
     primary_dob             DATE,

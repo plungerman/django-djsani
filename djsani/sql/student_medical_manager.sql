@@ -7,7 +7,7 @@ CREATE TABLE student_medical_manager
     cid                         VARCHAR(12) NOT NULL,
     created_at                  DATETIME NOT NULL,
     athlete                     BOOLEAN,
-    sports                      VARCHAR(255) NOT NULL,
+    sports                      VARCHAR(255),
     /* forms and waivers */
 
 

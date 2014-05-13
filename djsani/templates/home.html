@@ -58,7 +58,7 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="buffer">
+<div>
     {% if student %}
     <h1>Medical Information Forms</h1>
     <p>Do you plan to participate in NCAA Intercollegiate Athletics?</p>
@@ -89,9 +89,9 @@ $(function() {
         <ul class="nobull">
             <li>
                 <a href="{% url 'insurance_form' 'student' %}">
-                    <i class="fa fa-check green"></i>
                     Health insurance information
                 </a>
+                <i class="fa fa-check green"></i>
             </li>
             <li>
                 <a href="{% url 'medical_history_form' 'student' %}">

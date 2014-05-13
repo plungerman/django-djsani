@@ -2,8 +2,6 @@
 from django import forms
 from django.conf import settings
 
-from djzbar.utils.informix import do_sql
-
 BINARY_CHOICES = (
     ('Positive', 'Positive'),
     ('Negative', 'Negative'),
