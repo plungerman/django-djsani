@@ -8,8 +8,6 @@ h1,h2,h3 {font-weight:normal;}
 .nobull li {list-style-type: none;}
 .forms-container {
     display:none;
-    border-top:1px #666 solid;
-    padding:3px;top:15px;position:relative;
     width: 795px;
 }
 form .ctrlHolder, .form .btnHolder { margin: 0 !important; }
@@ -23,3 +21,6 @@ form textarea {width: 300px !important;height:50px !important;}
 li.error { background: no-repeat right center; border:0; margin-bottom:0;
 padding:0; }
 .ui-datepicker-calendar { display: none; }
+.center{text-align:center;}
+.red {color:#800;}
+.green {color:#008000;}

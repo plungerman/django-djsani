@@ -15,6 +15,10 @@ from djsani.medical_history.forms import AthleteForm as AmedForm
 from djzbar.utils.informix import do_sql as do_esql
 from djtools.utils.database import do_mysql
 from djtools.decorators.auth import group_required
+from djtools.utils.date import calculate_age
+
+import logging
+logger = logging.getLogger(__name__)
 
 @group_required('Medical Staff')
 def home(request):
@@ -139,8 +143,9 @@ def student_detail(request,cid):
     # get student
     obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
     student = obj.fetchone()
+    age = calculate_age(student.birth_date)
     return render_to_response(
         "dashboard/student_detail.html",
-        {"student":student,},
+        {"student":student,"age":age},
         context_instance=RequestContext(request)
     )

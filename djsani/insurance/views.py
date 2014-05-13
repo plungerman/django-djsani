@@ -11,9 +11,6 @@ from djsani.core.views import get_data, put_data, update_manager
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NOW
 
-import logging
-logger = logging.getLogger(__name__)
-
 @portal_login_required
 def form(request,stype):
     cid = request.session["cid"]

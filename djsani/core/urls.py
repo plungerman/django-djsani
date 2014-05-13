@@ -50,9 +50,9 @@ urlpatterns = patterns('djsani.core.views',
         r'^responsive/(?P<action>[-\w]+)',
         'responsive_switch', name="responsive_switch"
     ),
-    # ajax post method to save student type to session
+    # ajax post method to save various types characteristics to db and session
     url(
-        r'^set-student-type/$', 'set_student_type', name="set_student_type"
+        r'^set-type/$', 'set_type', name="set_type"
     ),
     # home
     url(

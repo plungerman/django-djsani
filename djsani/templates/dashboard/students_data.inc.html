@@ -22,19 +22,15 @@
                     <span style="float:right;">[A]</span>
                 </td>
                 <td class="center">
-                    <a href="{# url 'health_insurance' {{s.id}} #}">
-                        <i class="fa fa-check green"></i>
-                    </a>
+                    <i class="fa fa-check green"></i>
                 </td>
                 <td class="center">
-                    <a href="{# url 'medical_history' {{s.id}} #}">
-                        {# if s.mrsa #}
-                        {% if mrsa %}
+                    {# if s.mrsa #}
+                    {% if mrsa %}
                         <i class="fa fa-check"></i>
-                        {% else %}
+                    {% else %}
                         <i class="fa fa-times red"></i>
-                        {% endif %}
-                    </a>
+                    {% endif %}
                 </td>
                 <td class="center">
                 </td>

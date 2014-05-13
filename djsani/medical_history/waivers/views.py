@@ -12,7 +12,7 @@ from djsani.medical_history.waivers.forms import SicklecellForm
 from djsani.core.views import put_data
 
 from djzbar.utils.decorators import portal_login_required
-from djtools.fields import NEXT_YEAR
+from djtools.fields import NEXT_YEAR, NOW
 
 @portal_login_required
 def form(request,stype,wtype):
@@ -23,9 +23,11 @@ def form(request,stype,wtype):
         form = eval(fname)(request.POST)
         if form.is_valid():
             table = "%s_%s_waiver" % (stype,wtype)
+            data = form.cleaned_data
             # insert
-            form["cid"] = cid
-            put_data(form,table)
+            data["cid"] = cid
+            data["created_at"] = NOW
+            put_data(data,table)
             # update the manager
             update_manager(table,cid)
             return HttpResponseRedirect(

@@ -60,9 +60,9 @@ $(function() {
             data: {"dom":doms[i],"cid":{{student.id}}},
             cache: false,
             indexValue: i,
-            target: target,
+            target: document.getElementById(doms[i]),
             success: function(html) {
-                spinner.stop(this.target);
+                //spinner.stop(this.target);
                 $("#" + doms[this.indexValue]).html(html);
             }
         });
@@ -75,7 +75,8 @@ $(function() {
         <div class="col-lg-8">
             <h1 class="page-header">
                 {{student.firstname}} {{student.lastname}}
-                <small>Athlete</small>
+                <small>Athlete</small><br />
+                <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
             </h1>
         </div>
         <!-- /.col-lg-12 -->
