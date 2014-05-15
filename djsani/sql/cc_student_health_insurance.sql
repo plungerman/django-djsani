@@ -1,12 +1,12 @@
-/* table student_health_insurance */
+/* table cc_student_health_insurance */
 
-CREATE TABLE student_health_insurance
+CREATE TABLE cc_student_health_insurance
 (
     /* core */
     id                      INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     VARCHAR(12) NOT NULL,
+    cid                     INT(11) NOT NULL,
     created_at              DATETIME NOT NULL,
-    opt_out                 BOOLEAN,
+    opt_out                 TINYINT(1),
     /* primary */
     primary_policy_holder   VARCHAR(128),
     primary_dob             DATE,

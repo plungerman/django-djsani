@@ -1,11 +1,11 @@
-/* table athlete_risk_waiver */
+/* table cc_athlete_risk_waiver */
 
 CREATE TABLE athlete_risk_waiver
 (
     /* core */
     id                      INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     VARCHAR(12) NOT NULL,
+    cid                     INT(11) NOT NULL,
     created_at              DATETIME NOT NULL,
     /* waiver fields */
-    agree                   BOOLEAN
+    agree                   TINYINT(1)
 );

@@ -1,4 +1,4 @@
-INSERT INTO student_health_insurance (
+INSERT INTO cc_student_health_insurance (
 primary_company,
 secondary_member_id,
 secondary_policy_type,
@@ -31,13 +31,13 @@ VALUES (
 'company2',
 '343423566',
 '1979-02-04',
-'00001338012',
+1338012,
 '1313 mockingbird lane springfield MA 08003',
 'policy1',
 '333-555-6666',
 'PPO',
 'AK',
 '980808080',
-'0',
+0,
 'policy2')
 

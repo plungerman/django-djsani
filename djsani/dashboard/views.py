@@ -82,9 +82,9 @@ def panels(request):
     cid = request.POST.get("cid")
     data = get_data(dom,cid)
     form = None
-    if dom == "student_medical_history":
+    if dom == "cc_student_medical_history":
         form = SmedForm(initial=data)
-    if dom == "athlete_medical_history":
+    if dom == "cc_athlete_medical_history":
         form = AmedForm(initial=data)
     return render_to_response(
         "dashboard/panels/%s.html" % dom,

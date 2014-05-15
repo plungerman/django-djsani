@@ -14,6 +14,7 @@ from djtools.fields import TODAY
 
 import logging
 logger = logging.getLogger(__name__)
+#logger.debug("sql = %s" % sql)
 
 def get_data(table,cid,fields=None,date=None):
     """
@@ -27,11 +28,10 @@ def get_data(table,cid,fields=None,date=None):
         sql += ','.join(fields)
     else:
         sql += "*"
-    sql += " FROM %s WHERE cid='%s'" % (table,cid)
+    sql += " FROM %s WHERE cid=%s" % (table,cid)
     if date:
         sql += " AND created_at?"
     result = do_esql(sql)
-    logger.debug("sql = %s" % sql)
     return result
 
 def put_data(dic,table,cid=None,noquo=None):
@@ -49,7 +49,7 @@ def put_data(dic,table,cid=None,noquo=None):
                 prefix += "%s," % val
             else:
                 prefix += "'%s'," % val
-        sql = "%s WHERE cid='%s'" % (prefix[:-1],cid)
+        sql = "%s WHERE cid=%s" % (prefix[:-1],cid)
     else:
         prefix = "INSERT INTO %s" % table
         fields = "("
@@ -63,7 +63,6 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
-    logger.debug("sql = %s" % sql)
     do_esql(sql,key=settings.INFORMIX_DEBUG)
 
 def update_manager(field,cid):
@@ -73,9 +72,9 @@ def update_manager(field,cid):
     """
     put_data(
         {field:True,"cid":cid},
-        "student_medical_manager",
+        "cc_student_medical_manager",
         cid=cid,
-        noquo=[field]
+        noquo=[field,cid]
     )
 
 @portal_login_required
@@ -90,17 +89,18 @@ def home(request):
     if obj:
         student = obj.fetchone()
         request.session["student"] = student
-    logger.debug("student = %s" % student)
     if student:
         # adult or minor?
         age = calculate_age(student.birth_date)
         if age >= 18:
             adult = True
+        manager = get_data("cc_student_medical_manager",cid)
     return render_to_response(
         "home.html",
         {
             "switch_earl": reverse_lazy("set_type"),
             "student":student,
+            "manager":manager,
             "adult":adult
         },
         context_instance=RequestContext(request)
@@ -114,10 +114,10 @@ def set_type(request):
     # set the session variable for use at UI level
     request.session[field] = switch
     if field == "stype":
+        table="cc_student_medical_manager"
         # check for existing record
         # OJO: 0/1 might change for informix
         athlete = 0
-        table="student_medical_manager"
         if switch == "athlete":
             athlete = 1
         student = get_data(table,cid).fetchone()
@@ -126,14 +126,13 @@ def set_type(request):
             update = cid
         # insert or update the manager
         dic = {"athlete":athlete,"cid":cid}
-        if not update:
-            #dic["created_at"] = TODAY
-            dic["created_at"] = 'TO_DATE("%s", "%%Y-%%m-%%d")' % TODAY
+        #if not update:
+        #    dic["created_at"] = 'TO_DATE("%s", "%%Y-%%m-%%d")' % TODAY
         put_data(
             dic,
-            "student_medical_manager",
+            table,
             cid = update,
-            noquo=["athlete","created_at"],
+            noquo=["athlete","cid"],
         )
     return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
 

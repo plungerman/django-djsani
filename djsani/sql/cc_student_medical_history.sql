@@ -1,10 +1,10 @@
-/* table student_medical_history */
+/* table cc_student_medical_history */
 
-CREATE TABLE student_medical_history
+CREATE TABLE cc_student_medical_history
 (
     /* core */
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     varchar(12) NOT NULL,
+    cid                     INT(11) NOT NULL,
     created_at DATETIME NOT NULL,
     /* medical questions/explanations */
     allergies_medical       VARCHAR(255),

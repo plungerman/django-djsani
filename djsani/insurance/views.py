@@ -16,6 +16,7 @@ def form(request,stype):
     cid = request.session["cid"]
     # form name
     fname = "%sForm" % stype.capitalize()
+    table = "cc_student_health_insurance"
     if request.method=='POST':
         # primary
         form1 = eval(fname)(request.POST,prefix="primary")
@@ -43,7 +44,6 @@ def form(request,stype):
             oo = 1
         forms["opt_out"] = oo
         forms["created_at"] = NOW
-        table = "student_health_insurance"
         # insert
         forms["cid"] = cid
         put_data(forms,table)
@@ -53,7 +53,7 @@ def form(request,stype):
             reverse_lazy("insurance_success")
         )
     else:
-        data = get_data("student_health_insurance",cid)
+        data = get_data(table,cid)
         primary = {}
         secondary = {}
         if data:

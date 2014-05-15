@@ -1,10 +1,10 @@
-/* table athlete_medical_history */
+/* table cc_athlete_medical_history */
 
-CREATE TABLE athlete_medical_history
+CREATE TABLE cc_athlete_medical_history
 (
     /* core */
     id                      INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                     VARCHAR(12) NOT NULL,
+    cid                     INT(11) NOT NULL,
     created_at              DATETIME NOT NULL,
     /* medical questions/explanations */
     exertional_syncope      VARCHAR(255),
