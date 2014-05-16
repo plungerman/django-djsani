@@ -14,7 +14,6 @@ from djtools.fields import TODAY
 
 import logging
 logger = logging.getLogger(__name__)
-#logger.debug("sql = %s" % sql)
 
 def get_data(table,cid,fields=None,date=None):
     """
@@ -44,6 +43,11 @@ def put_data(dic,table,cid=None,noquo=None):
     if cid:
         prefix = "UPDATE %s SET " % table
         for key,val in dic.items():
+            # informix expects 1 or 0
+            if val == True:
+                val = 1
+            if val == False:
+                val = 0
             prefix += "%s=" % key
             if noquo and key in noquo:
                 prefix += "%s," % val
@@ -55,6 +59,11 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "("
         values = "VALUES ("
         for key,val in dic.items():
+            # informix expects 1 or 0
+            if val == True:
+                val = 1
+            if val == False:
+                val = 0
             fields +='%s,' % key
             if noquo and key in noquo:
                 values +="%s," % val
@@ -63,6 +72,7 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
+    logger.debug("sql = %s" % sql)
     do_esql(sql,key=settings.INFORMIX_DEBUG)
 
 def update_manager(field,cid):
@@ -71,10 +81,10 @@ def update_manager(field,cid):
     which we use throughout the app
     """
     put_data(
-        {field:True,"cid":cid},
+        {field:1,"cid":cid},
         "cc_student_medical_manager",
         cid=cid,
-        noquo=[field,cid]
+        noquo=[field,"cid"]
     )
 
 @portal_login_required
@@ -94,7 +104,9 @@ def home(request):
         age = calculate_age(student.birth_date)
         if age >= 18:
             adult = True
-        manager = get_data("cc_student_medical_manager",cid)
+        obj = get_data("cc_student_medical_manager",cid)
+        if obj:
+            manager = obj.fetchone()
     return render_to_response(
         "home.html",
         {

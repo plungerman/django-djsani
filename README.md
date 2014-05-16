@@ -38,3 +38,18 @@ Django apps for the Health and Counseling Centre
     CPTimeout       =
     CPReuse         =
     FileUsage       = 1
+
+# Informix schemas
+
+    /opt/carsi/schema/development/
+
+    CCHEALTHINSURANCE
+    CCATHLETEMEDICALHISTORY
+    CCSTUDENTMEDICALHISTORY
+    CCATHLETEPRIVACYWAIVER
+    CCATHLETEREPORTINGWAIVER
+    CCATHLETERISKWAIVER
+    CCATHLETESICKLECELLWAIVER
+    CCSTUDENTHEALTHINSURANCE
+    CCSTUDENTMENIWAIVER
+    CCSTUDENTMEDICALMANAGER

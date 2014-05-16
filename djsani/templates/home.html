@@ -31,10 +31,10 @@ $(function() {
     $stypes = $('.sTypes');
     $student = $('#student');
     $athlete = $('#athlete');
-    {% if request.session.stype == "student" %}
+    {% if request.session.stype == "student" or manager.athlete == 0 %}
     $student.delay(200).slideDown(200);
     {% endif %}
-    {% if request.session.stype == "athlete" %}
+    {% if request.session.stype == "athlete" or manager.athlete == 1 %}
     $athlete.delay(200).slideDown(200);
     {% endif %}
     $stypes.change(function() {
@@ -68,7 +68,7 @@ $(function() {
             <label for="id_sTypes_no">
                 <input id="id_sTypes_no" type="radio" value="student"
                     class="sTypes" name="sTypes"
-                    {% if request.session.stype == "student" %}
+                    {% if request.session.stype == "student" or manager.athlete == 0 %}
                         checked="checked"
                     {% endif %}/> No
             </label>
@@ -77,7 +77,7 @@ $(function() {
             <label for="id_sTypes_yes">
                 <input id="id_sTypes_yes" type="radio" value="athlete"
                     class="sTypes" name="sTypes"
-                    {% if request.session.stype == "athlete" %}
+                    {% if request.session.stype == "athlete" or manager.athlete == 1 %}
                         checked="checked"
                     {% endif %}/> Yes
             </label>
@@ -91,19 +91,31 @@ $(function() {
                 <a href="{% url 'insurance_form' 'student' %}">
                     Health insurance information
                 </a>
-                <i class="fa fa-check green"></i>
+                {% if manager.cc_student_health_insurance %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
             </li>
             <li>
+                {% if manager.cc_student_medical_history %}
+                    Medical history
+                    <i class="fa fa-check green"></i>
+                {% else %}
                 <a href="{% url 'medical_history_form' 'student' %}">
                     Medical history
                 </a>
+                {% endif %}
             </li>
         </ul>
         <ul class="nobull forms-container" id="adult_student">
             <li>
+                {% if manager.cc_student_medical_history %}
+                    Meningococcal meningitis/Hepatitis B response
+                    <i class="fa fa-check green"></i>
+                {% else %}
                 <a href="{% url 'waiver_form' 'student' 'meni' %}">
                     Meningococcal meningitis/Hepatitis B response
                 </a>
+                {% endif %}
             </li>
         </ul>
         <h2>Printable forms</h2>
@@ -137,44 +149,81 @@ $(function() {
                 <a href="{% url 'insurance_form' 'athlete' %}">
                     Health insurance information
                 </a>
-                <i class="fa fa-check green"></i>
+                {% if manager.cc_student_health_insurance %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
             </li>
             <li>
+                {% if manager.cc_student_medical_history %}
+                    Medical history
+                    <i class="fa fa-check green"></i>
+                {% else %}
                 <a href="{% url 'medical_history_form' 'student' %}">
-                    Medical history for all students
+                    Medical history
                 </a>
+                {% endif %}
             </li>
             <li>
+                {% if manager.cc_athlete_medical_history %}
+                    Medical history for athletes only
+                    <i class="fa fa-check green"></i>
+                {% else %}
                 <a href="{% url 'medical_history_form' 'athlete' %}">
-                   Medical history for athletes only
+                    Medical history for athletes only
                 </a>
+                {% endif %}
             </li>
         </ul>
         <ul class="nobull forms-container" id="adult_athlete">
             <li>
+                {% if manager.cc_student_meni_waiver %}
+                    Meningococcal meningitis/Hepatitis B response
+                    <i class="fa fa-check green"></i>
+                {% else %}
                 <a href="{% url 'waiver_form' 'student' 'meni' %}">
                     Meningococcal meningitis/Hepatitis B response
                 </a>
+                {% endif %}
             </li>
             <li>
-                <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
+                {% if manager.cc_athlete_sicklecell_waiver %}
                     Sickle cell waiver
-                </a>
+                    <i class="fa fa-check green"></i>
+                {% else %}
+                    <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
+                        Sickle cell waiver
+                    </a>
+                {% endif %}
             </li>
             <li>
-                <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
+                {% if manager.cc_athlete_risk_waiver %}
                     Assumption of risk waiver
-                </a>
+                    <i class="fa fa-check green"></i>
+                {% else %}
+                    <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
+                        Assumption of risk waiver
+                    </a>
+                {% endif %}
             </li>
             <li>
-                <a href="{% url 'waiver_form' 'athlete' 'privacy' %}">
+                {% if manager.cc_athlete_privacy_waiver %}
                     HIPAA and FERPA waiver
-                </a>
+                    <i class="fa fa-check green"></i>
+                {% else %}
+                    <a href="{% url 'waiver_form' 'athlete' 'privacy' %}">
+                        HIPAA and FERPA waiver
+                    </a>
+                {% endif %}
             </li>
             <li>
-                <a href="{% url 'waiver_form' 'athlete' 'reporting' %}">
+                {% if manager.cc_athlete_reporting_waiver %}
                     CCIW Injury and Illness Reporting Acknowledgement waiver
-                </a>
+                    <i class="fa fa-check green"></i>
+                {% else %}
+                    <a href="{% url 'waiver_form' 'athlete' 'reporting' %}">
+                        CCIW Injury and Illness Reporting Acknowledgement waiver
+                    </a>
+                {% endif %}
             </li>
         </ul>
         <h2>Printable forms</h2>

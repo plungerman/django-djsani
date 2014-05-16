@@ -9,30 +9,39 @@ from djsani.medical_history.waivers.forms import PrivacyForm
 from djsani.medical_history.waivers.forms import ReportingForm
 from djsani.medical_history.waivers.forms import RiskForm
 from djsani.medical_history.waivers.forms import SicklecellForm
-from djsani.core.views import put_data
+from djsani.core.views import get_data, put_data, update_manager
 
 from djzbar.utils.decorators import portal_login_required
-from djtools.fields import NEXT_YEAR, NOW
+from djtools.fields import NEXT_YEAR
+
+import logging
+logger = logging.getLogger(__name__)
 
 @portal_login_required
 def form(request,stype,wtype):
     cid = request.session["cid"]
+    table = "cc_%s_%s_waiver" % (stype,wtype)
+    manager = get_data("cc_student_medical_manager",cid).fetchone()
+    # check to see if they already submitted this form
+    if manager[table]:
+        return HttpResponseRedirect(
+            reverse_lazy("home")
+        )
     # form name
     fname = "%sForm" % wtype.capitalize()
     if request.method=='POST':
         form = eval(fname)(request.POST)
-        if form.is_valid():
-            table = "%s_%s_waiver" % (stype,wtype)
-            data = form.cleaned_data
-            # insert
-            data["cid"] = cid
-            data["created_at"] = NOW
-            put_data(data,table)
-            # update the manager
-            update_manager(table,cid)
-            return HttpResponseRedirect(
-                reverse_lazy("waiver_success")
-            )
+        form.is_valid():
+        data = form.cleaned_data
+        # insert
+        data["cid"] = cid
+        logger.debug("data =  %s" % data)
+        put_data(data,table,noquo=["cid"])
+        # update the manager
+        update_manager(table,cid)
+        return HttpResponseRedirect(
+            reverse_lazy("waiver_success")
+        )
     else:
         form = eval(fname)
     return render_to_response(

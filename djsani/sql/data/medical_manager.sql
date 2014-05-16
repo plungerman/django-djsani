@@ -1,7 +1,7 @@
 INSERT INTO cc_student_medical_manager (
     athlete,cid,created_at,
-    cc_student_medical_history,
     cc_student_health_insurance,
+    cc_student_medical_history,
     cc_student_meni_waiver,
     cc_athlete_medical_history,
     cc_athlete_privacy_waiver,
@@ -10,5 +10,5 @@ INSERT INTO cc_student_medical_manager (
     cc_athlete_sicklecell_waiver
 ) VALUES (
     1,1338012,TODAY,
-    0,0,0,0,0,0,0,0
+    1,0,0,0,0,0,0,0
 )

@@ -450,7 +450,7 @@ class AthleteForm(forms.Form):
         required=False
     )
     #### Lower leg
-    shin_spints = forms.CharField(
+    shin_splints = forms.CharField(
         label="MTSS/Shin splints",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),

@@ -6,25 +6,29 @@ from django.http import HttpResponseRedirect
 
 from djsani.medical_history.forms import StudentForm
 from djsani.medical_history.forms import AthleteForm
-from djsani.core.views import put_data, update_manager
+from djsani.core.views import get_data, put_data, update_manager
 
 from djzbar.utils.decorators import portal_login_required
-from djtools.fields import NOW
 
 @portal_login_required
 def form(request,stype):
     cid = request.session["cid"]
+    table = "cc_%s_medical_history" % stype
+    manager = get_data("cc_student_medical_manager",cid).fetchone()
+    # check to see if they already submitted this form
+    if manager[table]:
+        return HttpResponseRedirect(
+            reverse_lazy("home")
+        )
     # form name
     fname = "%sForm" % stype.capitalize()
     if request.method=='POST':
         form = eval(fname)(request.POST)
         form.is_valid()
-        forms = form.cleaned_data
-        forms["cid"] = cid
-        forms["created_at"] = NOW
-        table = "%s_medical_history" % stype
+        data = form.cleaned_data
+        data["cid"] = cid
         # insert
-        put_data(forms,table)
+        put_data(data,table,noquo=["cid"])
         # update the manager
         update_manager(table,cid)
         return HttpResponseRedirect(

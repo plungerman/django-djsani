@@ -58,6 +58,7 @@ class RiskForm(forms.Form):
     agree = forms.BooleanField(
         required=True
     )
+
 class MeniForm(forms.Form):
     agree = forms.BooleanField(
         required=True

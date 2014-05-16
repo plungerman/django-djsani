@@ -82,6 +82,8 @@ $(function() {
         {% for hidden in form1.hidden_fields %}
             {{ hidden }}
         {% endfor %}
+        <input id="id_update" type="hidden"
+            value="{{update}}" name="update">
         <div class="append-bottom">
             <label for="id_opt_out">
                 <input id="id_opt_out" type="checkbox" value="1"

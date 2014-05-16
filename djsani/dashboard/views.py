@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -15,9 +15,6 @@ from djsani.medical_history.forms import AthleteForm as AmedForm
 from djzbar.utils.informix import do_sql as do_esql
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
-
-import logging
-logger = logging.getLogger(__name__)
 
 @group_required('Medical Staff')
 def home(request):
@@ -93,13 +90,18 @@ def panels(request):
     )
 
 @group_required('Medical Staff')
-def student_detail(request,cid):
-    # get student
-    obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
-    student = obj.fetchone()
-    age = calculate_age(student.birth_date)
-    return render_to_response(
-        "dashboard/student_detail.html",
-        {"student":student,"age":age},
-        context_instance=RequestContext(request)
-    )
+def student_detail(request,cid=None):
+    if not cid:
+        cid = request.POST.get("cid")
+    if cid:
+        # get student
+        obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
+        student = obj.fetchone()
+        age = calculate_age(student.birth_date)
+        return render_to_response(
+            "dashboard/student_detail.html",
+            {"student":student,"age":age},
+            context_instance=RequestContext(request)
+        )
+    else:
+        raise Http404

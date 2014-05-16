@@ -44,7 +44,7 @@ CREATE TABLE cc_athlete_medical_history
     meniscus                VARCHAR(255),
     patella                 VARCHAR(255),
     knee_other              VARCHAR(255),
-    shin_spints             VARCHAR(255),
+    shin_splints            VARCHAR(255),
     stress_fractures        VARCHAR(255),
     compartment_syndrome    VARCHAR(255),
     lower_leg_other         VARCHAR(255),
