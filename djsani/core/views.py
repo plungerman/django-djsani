@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
-from djsani.core import STUDENT_VITALS
+from djsani.core import STUDENT_VITALS, SPORTS
 from djzbar.utils.informix import do_sql as do_esql
 from djzbar.utils.decorators import portal_login_required
 from djtools.utils.date import calculate_age
@@ -72,7 +72,6 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
-    logger.debug("sql = %s" % sql)
     do_esql(sql,key=settings.INFORMIX_DEBUG)
 
 def update_manager(field,cid):
@@ -90,15 +89,11 @@ def update_manager(field,cid):
 @portal_login_required
 def home(request):
     cid = request.session["cid"]
-    # get student
-    student = request.session.get("student")
-    obj = None
-    if not student:
-        obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
     adult = False
+    # get student
+    obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
     if obj:
         student = obj.fetchone()
-        request.session["student"] = student
     if student:
         # adult or minor?
         age = calculate_age(student.birth_date)
@@ -113,6 +108,7 @@ def home(request):
             "switch_earl": reverse_lazy("set_type"),
             "student":student,
             "manager":manager,
+            "sports":SPORTS,
             "adult":adult
         },
         context_instance=RequestContext(request)
@@ -120,32 +116,35 @@ def home(request):
 
 @csrf_exempt
 def set_type(request):
-    switch = request.POST.get("switch")
     field = request.POST.get("field")
     cid = request.POST.get("cid")
-    # set the session variable for use at UI level
-    request.session[field] = switch
+    table="cc_student_medical_manager"
+    # check for student manager record
+    student = get_data(table,cid).fetchone()
+    update = None
+    if student:
+        update = cid
+
+    # student or athlete
     if field == "stype":
-        table="cc_student_medical_manager"
-        # check for existing record
-        # OJO: 0/1 might change for informix
+        switch = request.POST.get("switch")
         athlete = 0
         if switch == "athlete":
             athlete = 1
-        student = get_data(table,cid).fetchone()
-        update = None
-        if student:
-            update = cid
-        # insert or update the manager
         dic = {"athlete":athlete,"cid":cid}
-        #if not update:
-        #    dic["created_at"] = 'TO_DATE("%s", "%%Y-%%m-%%d")' % TODAY
-        put_data(
-            dic,
-            table,
-            cid = update,
-            noquo=["athlete","cid"],
-        )
+        noquo=["athlete","cid"]
+    # sports
+    if field == "sports":
+        switch = ','.join(request.POST.getlist("switch[]"))
+        logger.debug("sports = %s" % switch)
+        dic = {"sports":switch,"cid":cid}
+        noquo=["cid"]
+
+    # set the session variable for use at UI level
+    request.session[field] = switch
+    logger.debug("dic = %s" % dic)
+    put_data( dic, table, cid = update, noquo=noquo )
+
     return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
 
 def responsive_switch(request,action):

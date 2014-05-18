@@ -1,15 +1,19 @@
 {% extends "blank.html" %}
 {% block title %}{{request.session.stype|capfirst}} Medical Forms &mdash; Carthage College{% endblock %}
 {% block css %}
-    {% include "includes/extra_form_style.html" %}
-    <link href="//www.carthage.edu/assets/current/css/core/grid-960.css" rel="stylesheet" type="text/css" />
-    <link href="//www.carthage.edu/live/resource/css/styles/main/icons.css" rel="stylesheet" type="text/css" media="screen, projection"/>
-    <link href="//www.carthage.edu/static/vendor/dashboard/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+{% include "includes/extra_form_style.html" %}
+<link href="//www.carthage.edu/assets/current/css/core/grid-960.css" rel="stylesheet" type="text/css" />
+<link href="//www.carthage.edu/live/resource/css/styles/main/icons.css" rel="stylesheet" type="text/css" />
+<link href="//www.carthage.edu/static/vendor/dashboard/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 {% endblock %}
 {% block extra_style %}
 <link href="/static/djsani/css/djsani.css" rel="stylesheet" type="text/css" />
+<link href="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block javascript %}
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     // set student types
@@ -27,32 +31,45 @@ $(function() {
             data: $data
         });
     }
+    // multiple select picker
+    //$('#id_sports').selectpicker();
+    //$('#id_sports').selectpicker('val', ['Mustard','Relish']);
+    $('#id_sports').on('focusout', function(){
+        $this = $(this).val();
+        //alert($this);
+        setType($this,"sports");
+    });
 
     $stypes = $('.sTypes');
     $student = $('#student');
     $athlete = $('#athlete');
     {% if request.session.stype == "student" or manager.athlete == 0 %}
     $student.delay(200).slideDown(200);
+    $("#sports-container").slideUp(200);
     {% endif %}
     {% if request.session.stype == "athlete" or manager.athlete == 1 %}
     $athlete.delay(200).slideDown(200);
+    $("#sports-container").delay(200).slideDown(200);
     {% endif %}
     $stypes.change(function() {
         $this = $(this).val();
         if ($this == "student") {
             setType($this,"stype");
             $athlete.slideUp(200);
+            $("#sports-container").slideUp(200);
             $student.delay(200).slideDown(200);
         }
         else if ($this == "athlete") {
             setType($this,"stype");
             $student.slideUp(200);
             $athlete.delay(200).slideDown(200);
+            $("#sports-container").delay(200).slideDown(200);
         }
     });
     {% if adult %}
         $('#adult_athlete').delay(200).slideDown(200);
         $('#adult_student').delay(200).slideDown(200);
+        $('#minor').slideUp(200);
     {% endif %}
 });
 </script>
@@ -81,6 +98,34 @@ $(function() {
                         checked="checked"
                     {% endif %}/> Yes
             </label>
+        </li>
+        <li id="sports-container">
+            <p>
+            <h4>
+                Sports
+                <small>
+                    (user CTRL or Command key to select multiple sports)
+                </small>
+            </h4>
+            <select name="sports" class="selectpicker" id="id_sports" size="5"
+                multiple="multiple" title="Choose your sport(s)...">
+                {% for s in sports %}
+                {% if not forloop.first %}
+                <option
+                {% if not s.0 %}
+                    disabled
+                {% else %} value="{{s.0}}"
+                    {% if s.0 in manager.sports %}
+                        selected="selected"
+                    {% endif %}
+                {% endif %}
+                >
+                {{s.1}}
+                </option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            </p>
         </li>
     </ul>
     </form>
@@ -268,68 +313,70 @@ $(function() {
                 </a>
             </li>
         </ul>
-        <h3>Under 18 years of age print waivers</h3>
-        <p>
-        If you are under the age of 18, you must print the following forms,
-        sign them, and hand deliver them to the athletic training staff
-        during sport check-in.
-        </p>
-        <ul class="nobull">
-            <li>
-                <a href="//www.carthage.edu/live/files/794-pdf">
-                    Sickle cell waiver
-                </a>
-                <ul>
-                    <li>
-                    Carthage College Athletic Training &mdash;
-                    Sickle Cell Trait Testing.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/795-pdf">
-                    Assumption of risk waiver
-                </a>
-                <ul>
-                    <li>
-                        Carthage college intercollegiate athletic program
-                        Release and waiver of liability, assumption of risk
-                        And indemnity agreement
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/796-pdf">
-                    HIPAA and FERPA waiver
-                </a>
-                <ul>
-                    <li>
-                        Student Athlete Authorization/Consent For Disclosure
-                        of Protected Health Information (PHI).
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/797-pdf">
-                    CCIW injury and illness reporting acknowledgement waiver
-                </a>
-                <ul>
-                    <li>
-                        College Conference Of Illinois And Wisconsin waiver
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/832-pdf">
-                    Meningococcal meningitis/Hepatitis B response
-                </a>
-                <ul>
-                    <li>
-                        Important Information about Meningitis and Hepatitis B
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <div id="minor">
+            <h3>Under 18 years of age print waivers</h3>
+            <p>
+            If you are under the age of 18, you must print the following forms,
+            sign them, and hand deliver them to the athletic training staff
+            during sport check-in.
+            </p>
+            <ul class="nobull">
+                <li>
+                    <a href="//www.carthage.edu/live/files/794-pdf">
+                        Sickle cell waiver
+                    </a>
+                    <ul>
+                        <li>
+                        Carthage College Athletic Training &mdash;
+                        Sickle Cell Trait Testing.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="//www.carthage.edu/live/files/795-pdf">
+                        Assumption of risk waiver
+                    </a>
+                    <ul>
+                        <li>
+                            Carthage college intercollegiate athletic program
+                            Release and waiver of liability, assumption of risk
+                            And indemnity agreement
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="//www.carthage.edu/live/files/796-pdf">
+                        HIPAA and FERPA waiver
+                    </a>
+                    <ul>
+                        <li>
+                            Student Athlete Authorization/Consent For Disclosure
+                            of Protected Health Information (PHI).
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="//www.carthage.edu/live/files/797-pdf">
+                        CCIW injury and illness reporting acknowledgement waiver
+                    </a>
+                    <ul>
+                        <li>
+                            College Conference Of Illinois And Wisconsin waiver
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="//www.carthage.edu/live/files/832-pdf">
+                        Meningococcal meningitis/Hepatitis B response
+                    </a>
+                    <ul>
+                        <li>
+                            Important Information about Meningitis and Hepatitis B
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div> <!-- ./minor -->
     </div>
     {% else %}
     <h1>We could not find your student record</h1>

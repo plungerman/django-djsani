@@ -31,7 +31,7 @@ def form(request,stype,wtype):
     fname = "%sForm" % wtype.capitalize()
     if request.method=='POST':
         form = eval(fname)(request.POST)
-        form.is_valid():
+        form.is_valid()
         data = form.cleaned_data
         # insert
         data["cid"] = cid
