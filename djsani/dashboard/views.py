@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.cache import cache
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
@@ -8,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from djsani.core import *
-from djsani.core.views import get_data
+from djsani.core.views import get_data, is_member
 from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
 
@@ -16,33 +15,48 @@ from djzbar.utils.informix import do_sql as do_esql
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
 
+import logging
+logger = logging.getLogger(__name__)
+
 @group_required('Medical Staff')
 def home(request):
     """
     dashboard home with a list of students
     """
     template = "dashboard/home.html",
-    if request.POST:
-        template = "dashboard/students_data.inc.html"
-        sql = "%s AND prog_enr_rec.cl IN (%s)" % (
-            STUDENTS_ALPHA,request.POST["class"]
-        )
-        objs = do_esql(sql)
-        students = objs.fetchall()
-        cache.set('STUDENTS_ALPHA', students)
-    else:
-        students = cache.get('STUDENTS_ALPHA')
-        if not students:
-            sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
-            objs = do_esql(sql)
-            students = objs.fetchall()
-            cache.set('STUDENTS_ALPHA', students)
+    sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
+    objs = do_esql(sql)
+    students = objs.fetchall()
 
     return render_to_response(
         template,
         {"students":students,"sports":SPORTS,},
         context_instance=RequestContext(request)
     )
+
+def get_students(request):
+    """
+    ajax POST returns a list of students
+    """
+    if request.POST and is_member(request.user,"Medical Staff"):
+        template = "dashboard/students_data.inc.html"
+        sport = request.POST.get("sport")
+        sql = " %s AND prog_enr_rec.cl IN (%s)" % (
+            STUDENTS_ALPHA,request.POST["class"]
+        )
+        if sport and sport != '0':
+            sql += """
+                AND cc_student_medical_manager.sports like '%%%s%%'
+            """ % sport
+        objs = do_esql(sql)
+        students = objs.fetchall()
+        return render_to_response(
+            template,
+            {"students":students,"sports":SPORTS,},
+            context_instance=RequestContext(request)
+        )
+    else:
+        return HttpResponse("error", mimetype="text/plain; charset=utf-8")
 
 def emergency_information(cid):
     """
@@ -68,26 +82,31 @@ def emergency_information(cid):
     return ens
 
 @csrf_exempt
-@group_required('Medical Staff')
 def panels(request):
     """
     ajax POST with DOM id and student ID.
     returns the data that paints the panels in the
     student detail view.
     """
-    dom = request.POST.get("dom")
-    cid = request.POST.get("cid")
-    data = get_data(dom,cid)
-    form = None
-    if dom == "cc_student_medical_history":
-        form = SmedForm(initial=data)
-    if dom == "cc_athlete_medical_history":
-        form = AmedForm(initial=data)
-    return render_to_response(
-        "dashboard/panels/%s.html" % dom,
-        {"data":data,"form":form},
-        context_instance=RequestContext(request)
-    )
+    if is_member(request.user,"Medical Staff"):
+        dom = request.POST.get("dom")
+        cid = request.POST.get("cid")
+        obj = get_data(dom,cid)
+        form = None
+        data = None
+        if obj:
+            data = obj.fetchone()
+        if dom == "cc_student_medical_history":
+            form = SmedForm(initial=data)
+        if dom == "cc_athlete_medical_history":
+            form = AmedForm(initial=data)
+        return render_to_response(
+            "dashboard/panels/%s.html" % dom,
+            {"data":data,"form":form},
+            context_instance=RequestContext(request)
+        )
+    else:
+        raise Http404
 
 @group_required('Medical Staff')
 def student_detail(request,cid=None):

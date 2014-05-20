@@ -11,6 +11,8 @@ from djsani.core.views import get_data, put_data, update_manager
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NOW
 
+from textwrap import fill
+
 @portal_login_required
 def form(request,stype):
     cid = request.session["cid"]
@@ -39,21 +41,31 @@ def form(request,stype):
         oo = request.POST.get("opt_out")
         if not oo:
             oo = 0
+            # convert python dates to informix date formats
+            forms["primary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["primary_dob"]
+            if forms.get("secondary_dob"):
+                forms["secondary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["secondary_dob"]
         else:
             oo = 1
         forms["opt_out"] = oo
-        # update the manager first so we can repurpose cid
-        update_manager(table,cid)
+
         # insert or update
         if not request.POST.get("update"):
             forms["cid"] = cid
+            # update the manager now so we can repurpose cid
+            update_manager(table,cid)
+            # no cid means insert
             cid = None
+
         noquo = ["cid","opt_out","primary_dob","secondary_dob"]
         put_data(forms,table,cid=cid,noquo=noquo)
         return HttpResponseRedirect(
             reverse_lazy("insurance_success")
         )
     else:
+        obj = get_data("cc_student_medical_manager",cid)
+        # student must have a record at this point
+        manager = obj.fetchone()
         obj = get_data(table,cid)
         primary = {}
         secondary = {}
@@ -70,6 +82,9 @@ def form(request,stype):
         form1 = eval(fname)(prefix="primary",initial=primary)
         form2 = eval(fname)(prefix="secondary",initial=secondary)
     return render_to_response(
-        "insurance/form.html", {"form1":form1,"form2":form2,"update":update},
+        "insurance/form.html", {
+            "form1":form1,"form2":form2,"update":update,
+            "manager":manager
+        },
         context_instance=RequestContext(request)
     )

@@ -4,12 +4,13 @@
             <tr>
                 <th>Name</th>
                 <th>Insurance</th>
+                <th>Meni</th>
                 <th>Medical history</th>
                 <th>Athlete medical history</th>
-                <th>Privacy waiver</th>
-                <th>Sickle cell waiver</th>
-                <th>Reporting waiver</th>
-                <th>Risk waiver</th>
+                <th>Privacy</th>
+                <th>Sickle cell</th>
+                <th>Reporting</th>
+                <th>Risk</th>
             </tr>
         </thead>
         <tbody>
@@ -19,51 +20,82 @@
                     <a href="{% url 'student_detail' s.id %}">
                         {{s.lastname}}, {{s.firstname}}
                     </a>
-                    <span style="float:right;">[A]</span>
+                    {% if s.athlete %}
+                    <span style="float:right;">
+                    <i class="fa fa-star green"></i>
+                    </span>
+                    {% endif %}
                 </td>
                 <td class="center">
-                    <i class="fa fa-check green"></i>
-                </td>
-                <td class="center">
-                    {# if s.mrsa #}
-                    {% if mrsa %}
-                        <i class="fa fa-check"></i>
+                    {% if s.cc_student_health_insurance %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
                     {% else %}
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
                 <td class="center">
-                </td>
-                <td class="center">
-                    {# if s.privacy #}
-                    {% if privacy %}
-                    <i class="fa fa-check"></i>
+                    {% if s.cc_student_meni_waiver %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
                     {% else %}
-                    <i class="fa fa-times red"></i>
+                        <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
                 <td class="center">
-                    {# if s.sickle #}
-                    {% if sickle %}
-                    <i class="fa fa-check"></i>
+                    {% if s.cc_student_medical_history %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
                     {% else %}
-                    <i class="fa fa-times red"></i>
+                        <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
                 <td class="center">
-                    {# if s.reporting #}
-                    {% if reporting %}
-                    <i class="fa fa-check"></i>
+                    {% if s.cc_athlete_medical_history %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
                     {% else %}
-                    <i class="fa fa-times red"></i>
+                        <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
                 <td class="center">
-                    {# if s.risk #}
-                    {% if risk %}
-                    <i class="fa fa-check"></i>
+                    {% if s.cc_athlete_privacy_waiver %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
                     {% else %}
-                    <i class="fa fa-times red"></i>
+                        <i class="fa fa-times red"></i>
+                    {% endif %}
+                </td>
+                <td class="center">
+                    {% if s.cc_athlete_sicklecell_waiver %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
+                    {% else %}
+                        <i class="fa fa-times red"></i>
+                    {% endif %}
+                </td>
+                <td class="center">
+                    {% if s.cc_athlete_reporting_waiver %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
+                    {% else %}
+                        <i class="fa fa-times red"></i>
+                    {% endif %}
+                </td>
+                <td class="center">
+                    {% if s.cc_athlete_risk_waiver %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
+                    {% else %}
+                        <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
             </tr>

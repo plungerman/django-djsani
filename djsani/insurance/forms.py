@@ -65,7 +65,7 @@ class StudentForm(forms.Form):
         ]
 
 class AthleteForm(StudentForm):
-    address = forms.CharField(
+    policy_address = forms.CharField(
         label="Insurance address",
         widget=forms.Textarea,
         required=False
@@ -75,5 +75,5 @@ class AthleteForm(StudentForm):
         super(AthleteForm,self).__init__(*args,**kwargs)
         self.fields.keyOrder = [
             'policy_holder','dob','company','phone',
-            'address','member_id','group_no','policy_type','policy_state'
+            'policy_address','member_id','group_no','policy_type','policy_state'
         ]

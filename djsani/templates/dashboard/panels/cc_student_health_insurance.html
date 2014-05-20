@@ -42,9 +42,9 @@
             <dt>Policy state</dt>
             <dd>{{data.primary_policy_state}}</dd>
             {% endif %}
-            {% if data.primary_address %}
+            {% if data.primary_policy_address %}
             <dt>Address</dt>
-            <dd>{{data.primary_address}}</dd>
+            <dd>{{data.primary_policy_address}}</dd>
             {% endif %}
         </dl>
     </div>
@@ -54,7 +54,7 @@
             <dt>Policy holder</dt>
             <dd>{{data.secondary_policy_holder}}</dd>
             <dt>Date of birth</dt>
-            <dd>{{data.secondary.dob}}</dd>
+            <dd>{{data.secondary_dob}}</dd>
             <dt>Company</dt>
             <dd>{{data.secondary_company}}</dd>
             <dt>Phone</dt>
@@ -69,9 +69,9 @@
             <dt>Policy state</dt>
             <dd>{{data.secondary_policy_state}}</dd>
             {% endif %}
-            {% if data.secondary_address %}
+            {% if data.secondary_policy_address %}
             <dt>Address</dt>
-            <dd>{{data.secondary_address}}</dd>
+            <dd>{{data.secondary_policy_address}}</dd>
             {% endif %}
         </dl>
     </div>

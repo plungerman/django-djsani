@@ -1,14 +1,14 @@
 {% extends "blank.html" %}
-{% block title %}{{request.session.stype|capfirst}} Medical Forms &mdash; Carthage College{% endblock %}
+{% block title %}Medical Forms &mdash; Carthage College{% endblock %}
 {% block css %}
 {% include "includes/extra_form_style.html" %}
 <link href="//www.carthage.edu/assets/current/css/core/grid-960.css" rel="stylesheet" type="text/css" />
 <link href="//www.carthage.edu/live/resource/css/styles/main/icons.css" rel="stylesheet" type="text/css" />
 <link href="//www.carthage.edu/static/vendor/dashboard/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/djsani/css/djsani.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block extra_style %}
-<link href="/static/djsani/css/djsani.css" rel="stylesheet" type="text/css" />
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block javascript %}
@@ -43,24 +43,24 @@ $(function() {
     $stypes = $('.sTypes');
     $student = $('#student');
     $athlete = $('#athlete');
-    {% if request.session.stype == "student" or manager.athlete == 0 %}
+    {% if manager.athlete == 0 %}
     $student.delay(200).slideDown(200);
     $("#sports-container").slideUp(200);
     {% endif %}
-    {% if request.session.stype == "athlete" or manager.athlete == 1 %}
+    {% if manager.athlete == 1 %}
     $athlete.delay(200).slideDown(200);
     $("#sports-container").delay(200).slideDown(200);
     {% endif %}
     $stypes.change(function() {
         $this = $(this).val();
         if ($this == "student") {
-            setType($this,"stype");
+            setType($this,"athlete");
             $athlete.slideUp(200);
             $("#sports-container").slideUp(200);
             $student.delay(200).slideDown(200);
         }
         else if ($this == "athlete") {
-            setType($this,"stype");
+            setType($this,"athlete");
             $student.slideUp(200);
             $athlete.delay(200).slideDown(200);
             $("#sports-container").delay(200).slideDown(200);
@@ -82,19 +82,19 @@ $(function() {
     <form id="profile" class="form">
     <ul class="nobull">
         <li>
-            <label for="id_sTypes_no">
-                <input id="id_sTypes_no" type="radio" value="student"
-                    class="sTypes" name="sTypes"
-                    {% if request.session.stype == "student" or manager.athlete == 0 %}
+            <label for="id_athlete_no">
+                <input id="id_athlete_no" type="radio" value="0"
+                    class="sTypes" name="athlete"
+                    {% if manager.athlete == 0 %}
                         checked="checked"
                     {% endif %}/> No
             </label>
         </li>
         <li>
-            <label for="id_sTypes_yes">
-                <input id="id_sTypes_yes" type="radio" value="athlete"
-                    class="sTypes" name="sTypes"
-                    {% if request.session.stype == "athlete" or manager.athlete == 1 %}
+            <label for="id_athlete_yes">
+                <input id="id_athlete_yes" type="radio" value="1"
+                    class="sTypes" name="athlete"
+                    {% if manager.athlete == 1 %}
                         checked="checked"
                     {% endif %}/> Yes
             </label>
@@ -104,18 +104,19 @@ $(function() {
             <h4>
                 Sports
                 <small>
-                    (user CTRL or Command key to select multiple sports)
+                    (user Ctrl or Command key to select multiple sports)
                 </small>
             </h4>
             <select name="sports" class="selectpicker" id="id_sports" size="5"
-                multiple="multiple" title="Choose your sport(s)...">
+                multiple="multiple" title="Choose your sport(s)&hellip;:wq
+">
                 {% for s in sports %}
                 {% if not forloop.first %}
                 <option
                 {% if not s.0 %}
                     disabled
                 {% else %} value="{{s.0}}"
-                    {% if s.0 in manager.sports %}
+                    {% if s.0 in my_sports %}
                         selected="selected"
                     {% endif %}
                 {% endif %}

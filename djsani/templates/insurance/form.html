@@ -5,7 +5,6 @@
     Carthage College
 {% endblock %}
 {% block extra_style %}
-{{block.super}}
 <link rel="stylesheet" href="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
 {% endblock %}
 {% block javascript %}
@@ -29,7 +28,7 @@ $(function() {
         if($(this).is(":checked")) {
             $('#insurance-policies').slideUp(200);
             $('#secondary-box').slideUp(200);
-            {% if request.session.stype == "athlete" %}
+            {% if manager.athlete == 1 %}
             $.fancybox.open([{
                 href : '#warning'
             }]);

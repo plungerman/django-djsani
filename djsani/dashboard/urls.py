@@ -14,9 +14,11 @@ urlpatterns = patterns('djsani.dashboard.views',
         r'^panels/$',
         'panels', name="dashboard_panels"
     ),
-    # home
+    # ajax returns students because using home view is a
+    # pain in the ass with security involved & spinner
     url(
-        r'^$', 'home', name="dashboard_home"
+        r'^get-students/$',
+        'get_students', name="get_students"
     ),
     url(
         r'^student/(?P<cid>\d+)/$',

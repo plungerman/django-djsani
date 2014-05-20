@@ -1,7 +1,6 @@
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -72,7 +71,9 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
-    do_esql(sql,key=settings.INFORMIX_DEBUG)
+    logger.debug("sql = %s" % sql)
+    #do_esql(sql,key=settings.INFORMIX_DEBUG)
+    do_esql(sql,key="debug")
 
 def update_manager(field,cid):
     """
@@ -90,18 +91,22 @@ def update_manager(field,cid):
 def home(request):
     cid = request.session["cid"]
     adult = False
+    my_sports = ""
     # get student
     obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
-    if obj:
+    try:
         student = obj.fetchone()
-    if student:
-        # adult or minor?
-        age = calculate_age(student.birth_date)
-        if age >= 18:
-            adult = True
-        obj = get_data("cc_student_medical_manager",cid)
-        if obj:
-            manager = obj.fetchone()
+    except:
+        raise Http404
+    # adult or minor?
+    age = calculate_age(student.birth_date)
+    if age >= 18:
+        adult = True
+    obj = get_data("cc_student_medical_manager",cid)
+    # student must have a record at this point
+    manager = obj.fetchone()
+    # which needs a python list
+    my_sports = manager.sports.split(",")
     return render_to_response(
         "home.html",
         {
@@ -109,6 +114,7 @@ def home(request):
             "student":student,
             "manager":manager,
             "sports":SPORTS,
+            "my_sports":my_sports,
             "adult":adult
         },
         context_instance=RequestContext(request)
@@ -128,21 +134,12 @@ def set_type(request):
     # student or athlete
     if field == "stype":
         switch = request.POST.get("switch")
-        athlete = 0
-        if switch == "athlete":
-            athlete = 1
-        dic = {"athlete":athlete,"cid":cid}
-        noquo=["athlete","cid"]
     # sports
     if field == "sports":
         switch = ','.join(request.POST.getlist("switch[]"))
-        logger.debug("sports = %s" % switch)
-        dic = {"sports":switch,"cid":cid}
-        noquo=["cid"]
 
-    # set the session variable for use at UI level
-    request.session[field] = switch
-    logger.debug("dic = %s" % dic)
+    dic = {field:switch,"cid":cid}
+    noquo=["athlete","cid"]
     put_data( dic, table, cid = update, noquo=noquo )
 
     return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
@@ -153,4 +150,11 @@ def responsive_switch(request,action):
     elif action=="leave":
         request.session['desktop_mode']=False
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", ""))
+
+def is_member(user,group):
+    """
+    simple method to check if a user belongs to a group
+    """
+    return user.groups.filter(name=group)
+
 

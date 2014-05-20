@@ -14,9 +14,6 @@ from djsani.core.views import get_data, put_data, update_manager
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NEXT_YEAR
 
-import logging
-logger = logging.getLogger(__name__)
-
 @portal_login_required
 def form(request,stype,wtype):
     cid = request.session["cid"]
@@ -35,7 +32,6 @@ def form(request,stype,wtype):
         data = form.cleaned_data
         # insert
         data["cid"] = cid
-        logger.debug("data =  %s" % data)
         put_data(data,table,noquo=["cid"])
         # update the manager
         update_manager(table,cid)
