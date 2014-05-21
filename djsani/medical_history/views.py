@@ -27,6 +27,12 @@ def form(request,stype):
         form.is_valid()
         data = form.cleaned_data
         data["cid"] = cid
+        # chapuza to grab dynamic textfield values
+        """
+        for k,v in request.POST:
+            if k[-2:] == "_2":
+                data[-2:]= v
+        """
         # insert
         put_data(data,table,noquo=["cid"])
         # update the manager

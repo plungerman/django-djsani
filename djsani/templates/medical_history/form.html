@@ -28,13 +28,13 @@ $(function() {
             $("input[id$='_0']").removeAttr("checked");
         }
     });
-    $("input:radio").change(function() {
+    $("input:radio").on('change', function() {
         nm = $(this).attr('name');
         id = "id_" + nm + "_2";
         if ($(this).val() == "Yes") {
             html = '<li id="' + id + '" class="infield">';
             html +='<label>&mdash;Explain:&nbsp;</label>';
-            html +='<input type="text" name="' + nm + '" maxlength="255"';
+            html +='<input type="text" name="' + nm + '_2" maxlength="255"';
             if ( $(this).attr('name') == "chicken_pox"){
                 html +='class="dyntext required date-picker" />';
             } else {
@@ -65,6 +65,13 @@ $(function() {
             error.html(icon);
         },
         submitHandler: function(form) {
+            for(var i=0;i<form.elements.length;i++){
+                var e = form.elements[i];
+                if (e.name.match(/_2$/)) {
+                    form.elements[i-1].value = e.value;
+                    alert(form.elements[i-1].name+"="+form.elements[i-1].value);
+                }
+            }
             form.submit();
         }
     });
