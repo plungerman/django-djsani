@@ -71,9 +71,7 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
-    logger.debug("sql = %s" % sql)
-    #do_esql(sql,key=settings.INFORMIX_DEBUG)
-    do_esql(sql,key="debug")
+    do_esql(sql,key=settings.INFORMIX_DEBUG)
 
 def update_manager(field,cid):
     """

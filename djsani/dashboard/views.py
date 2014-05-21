@@ -63,8 +63,8 @@ def emergency_information(cid):
     returns all of the emergency contact information for any given student
     """
     FIELDS = [
-        'aa','beg_date','end_date','line1','line2','line3',
-        'phone','phone_ext','cell_carrier','opt_out'
+        'beg_date','end_date','line1','line2','line3',
+        'phone','phone_ext','opt_out'
     ]
     CODES = ['ICE','ICE2']
 
@@ -91,15 +91,24 @@ def panels(request):
     if is_member(request.user,"Medical Staff"):
         dom = request.POST.get("dom")
         cid = request.POST.get("cid")
-        obj = get_data(dom,cid)
         form = None
         data = None
-        if obj:
-            data = obj.fetchone()
-        if dom == "cc_student_medical_history":
-            form = SmedForm(initial=data)
-        if dom == "cc_athlete_medical_history":
-            form = AmedForm(initial=data)
+        if dom == "emergency_information":
+            data = emergency_information(cid)
+        else:
+            obj = get_data(dom,cid)
+            if obj:
+                data = obj.fetchone()
+                innit = {}
+                if dom == "cc_student_medical_history":
+                    for k,v in data.items():
+                        innit[k] = v
+                    logger.debug("innit = %s" % innit)
+                    form = SmedForm(initial=innit)
+                if dom == "cc_athlete_medical_history":
+                    for k,v in data.items():
+                        innit[k] = v
+                    form = AmedForm(initial=innit)
         return render_to_response(
             "dashboard/panels/%s.html" % dom,
             {"data":data,"form":form},

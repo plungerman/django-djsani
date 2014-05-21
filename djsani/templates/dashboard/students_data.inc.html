@@ -76,6 +76,14 @@
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
                         </i>
+                        {% if s.proof %}
+                            <strong>/</strong>
+                            {% if s.results == "Positive" %}
+                                <i class="fa fa-plus"></i>
+                            {% else %}
+                                <i class="fa fa-minus"></i>
+                            {% endif %}
+                        {% endif %}
                     {% else %}
                         <i class="fa fa-times red"></i>
                     {% endif %}
