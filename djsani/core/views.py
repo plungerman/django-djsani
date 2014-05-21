@@ -105,6 +105,8 @@ def home(request):
     manager = obj.fetchone()
     # which needs a python list
     my_sports = manager.sports.split(",")
+    if request.GET.get("minor"):
+        adult = False
     return render_to_response(
         "home.html",
         {

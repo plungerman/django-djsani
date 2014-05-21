@@ -1,10 +1,9 @@
 from django.conf import settings
-from django.template import RequestContext
-from django.http import HttpResponseRedirect, Http404
+from django.template import RequestContext, loader
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 
 from djsani.core import *
 from djsani.core.views import get_data, is_member
@@ -14,49 +13,6 @@ from djsani.medical_history.forms import AthleteForm as AmedForm
 from djzbar.utils.informix import do_sql as do_esql
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
-
-import logging
-logger = logging.getLogger(__name__)
-
-@group_required('Medical Staff')
-def home(request):
-    """
-    dashboard home with a list of students
-    """
-    template = "dashboard/home.html",
-    sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
-    objs = do_esql(sql)
-    students = objs.fetchall()
-
-    return render_to_response(
-        template,
-        {"students":students,"sports":SPORTS,},
-        context_instance=RequestContext(request)
-    )
-
-def get_students(request):
-    """
-    ajax POST returns a list of students
-    """
-    if request.POST and is_member(request.user,"Medical Staff"):
-        template = "dashboard/students_data.inc.html"
-        sport = request.POST.get("sport")
-        sql = " %s AND prog_enr_rec.cl IN (%s)" % (
-            STUDENTS_ALPHA,request.POST["class"]
-        )
-        if sport and sport != '0':
-            sql += """
-                AND cc_student_medical_manager.sports like '%%%s%%'
-            """ % sport
-        objs = do_esql(sql)
-        students = objs.fetchall()
-        return render_to_response(
-            template,
-            {"students":students,"sports":SPORTS,},
-            context_instance=RequestContext(request)
-        )
-    else:
-        return HttpResponse("error", mimetype="text/plain; charset=utf-8")
 
 def emergency_information(cid):
     """
@@ -81,44 +37,75 @@ def emergency_information(cid):
             pass
     return ens
 
-@csrf_exempt
-def panels(request):
+@group_required('Medical Staff')
+def home(request):
     """
-    ajax POST with DOM id and student ID.
-    returns the data that paints the panels in the
-    student detail view.
+    dashboard home with a list of students
     """
-    if is_member(request.user,"Medical Staff"):
-        dom = request.POST.get("dom")
-        cid = request.POST.get("cid")
-        form = None
-        data = None
-        if dom == "emergency_information":
-            data = emergency_information(cid)
-        else:
-            obj = get_data(dom,cid)
-            if obj:
-                data = obj.fetchone()
-                innit = {}
-                if dom == "cc_student_medical_history":
-                    for k,v in data.items():
-                        innit[k] = v
-                    logger.debug("innit = %s" % innit)
-                    form = SmedForm(initial=innit)
-                if dom == "cc_athlete_medical_history":
-                    for k,v in data.items():
-                        innit[k] = v
-                    form = AmedForm(initial=innit)
+    template = "dashboard/home.html",
+    sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
+    objs = do_esql(sql)
+    students = objs.fetchall()
+
+    return render_to_response(
+        template,
+        {"students":students,"sports":SPORTS},
+        context_instance=RequestContext(request)
+    )
+
+def get_students(request):
+    """
+    ajax POST returns a list of students
+    """
+    if request.POST and (is_member(request.user,"Medical Staff") or request.user.is_superuser):
+        template = "dashboard/students_data.inc.html"
+        sport = request.POST.get("sport")
+        sql = " %s AND prog_enr_rec.cl IN (%s)" % (
+            STUDENTS_ALPHA,request.POST["class"]
+        )
+        if sport and sport != '0':
+            sql += """
+                AND cc_student_medical_manager.sports like '%%%s%%'
+            """ % sport
+        objs = do_esql(sql)
+        students = objs.fetchall()
         return render_to_response(
-            "dashboard/panels/%s.html" % dom,
-            {"data":data,"form":form},
+            template,
+            {"students":students,"sports":SPORTS,},
             context_instance=RequestContext(request)
         )
     else:
-        raise Http404
+        return HttpResponse("error", mimetype="text/plain; charset=utf-8")
+
+def panels(request,table,cid):
+    """
+    Takes database table and student ID.
+    Returns the template data that paints the panels in the
+    student detail view.
+    """
+    form = None
+    data = None
+    obj = get_data(table,cid)
+    if obj:
+        data = obj.fetchone()
+        innit = {}
+        if table == "cc_student_medical_history":
+            for k,v in data.items():
+                innit[k] = v
+            form = SmedForm(initial=innit)
+        if table == "cc_athlete_medical_history":
+            for k,v in data.items():
+                innit[k] = v
+            form = AmedForm(initial=innit)
+    t = loader.get_template("dashboard/panels/%s.html" % table)
+    c = RequestContext(request, {'data':data,'form':form})
+    return t.render(c)
 
 @group_required('Medical Staff')
 def student_detail(request,cid=None):
+    """
+    main method for displaying student data
+    """
     if not cid:
         cid = request.POST.get("cid")
     if cid:
@@ -126,9 +113,16 @@ def student_detail(request,cid=None):
         obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
         student = obj.fetchone()
         age = calculate_age(student.birth_date)
+        ens = emergency_information(cid)
+        shi = panels(request,"cc_student_health_insurance",cid)
+        smh = panels(request,"cc_student_medical_history",cid)
+        amh = panels(request,"cc_athlete_medical_history",cid)
         return render_to_response(
             "dashboard/student_detail.html",
-            {"student":student,"age":age},
+            {
+                "student":student,"age":age,"ens":ens,
+                "shi":shi,"amh":amh,"smh":smh
+            },
             context_instance=RequestContext(request)
         )
     else:

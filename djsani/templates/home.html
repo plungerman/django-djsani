@@ -40,37 +40,40 @@ $(function() {
         setType($this,"sports");
     });
 
+    {% if adult %}
+        $('#adult_athlete').delay(200).slideDown(200);
+        $('#adult_student').delay(200).slideDown(200);
+        $('#minor').slideUp(200);
+    {% endif %}
+
     $stypes = $('.sTypes');
     $student = $('#student');
     $athlete = $('#athlete');
     {% if manager.athlete == 0 %}
+    $athlete.slideUp(200);
     $student.delay(200).slideDown(200);
     $("#sports-container").slideUp(200);
     {% endif %}
     {% if manager.athlete == 1 %}
+    $student.slideUp(200);
     $athlete.delay(200).slideDown(200);
     $("#sports-container").delay(200).slideDown(200);
     {% endif %}
     $stypes.change(function() {
         $this = $(this).val();
-        if ($this == "student") {
+        if ($this == "0") {
             setType($this,"athlete");
             $athlete.slideUp(200);
             $("#sports-container").slideUp(200);
             $student.delay(200).slideDown(200);
         }
-        else if ($this == "athlete") {
+        else if ($this == "1") {
             setType($this,"athlete");
             $student.slideUp(200);
             $athlete.delay(200).slideDown(200);
             $("#sports-container").delay(200).slideDown(200);
         }
     });
-    {% if adult %}
-        $('#adult_athlete').delay(200).slideDown(200);
-        $('#adult_student').delay(200).slideDown(200);
-        $('#minor').slideUp(200);
-    {% endif %}
 });
 </script>
 {% endblock %}
@@ -100,16 +103,14 @@ $(function() {
             </label>
         </li>
         <li id="sports-container">
-            <p>
             <h4>
                 Sports
                 <small>
-                    (user Ctrl or Command key to select multiple sports)
+                    (use the Ctrl or Command key to select multiple sports)
                 </small>
             </h4>
             <select name="sports" class="selectpicker" id="id_sports" size="5"
-                multiple="multiple" title="Choose your sport(s)&hellip;:wq
-">
+                multiple="multiple" title="Choose your sport(s)&hellip;">
                 {% for s in sports %}
                 {% if not forloop.first %}
                 <option
@@ -126,12 +127,11 @@ $(function() {
                 {% endif %}
                 {% endfor %}
             </select>
-            </p>
         </li>
     </ul>
     </form>
     <div id="student" class="clear forms-container">
-        <h2>Online forms</h2>
+        <h2 class="clear">Online forms</h2>
         <ul class="nobull">
             <li>
                 <a href="{% url 'insurance_form' 'student' %}">
@@ -189,7 +189,7 @@ $(function() {
             complete the "Parental/Legal guardian consent" form.
             </p>
         </div>
-        <h2>Online forms</h2>
+        <h2 class="clear">Online forms</h2>
         <ul class="nobull">
             <li>
                 <a href="{% url 'insurance_form' 'athlete' %}">

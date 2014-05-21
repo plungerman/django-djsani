@@ -11,57 +11,7 @@
 }
 </style>
 {% endblock %}
-{% block extra_javascript %}
-<script src="//www.carthage.edu/static/vendor/js/spin.min.js" type="text/javascript"></script>
-<script>
-$(function() {
-    /* spinner */
-    var opts = {
-        lines: 13, // The number of lines to draw
-        length: 20, // The length of each line
-        width: 10, // The line thickness
-        radius: 30, // The radius of the inner circle
-        corners: 1, // Corner roundness (0..1)
-        rotate: 0, // The rotation offset
-        direction: 1, // 1: clockwise, -1: counterclockwise
-        color: '#000', // #rgb or #rrggbb or array of colors
-        speed: 1, // Rounds per second
-        trail: 60, // Afterglow percentage
-        shadow: false, // Whether to render a shadow
-        hwaccel: false, // Whether to use hardware acceleration
-        className: 'search-results', // The CSS class to assign to the spinner
-        zIndex: 2e9, // The z-index (defaults to 2000000000)
-        top: '50px', // Top position relative to parent in px
-        left: 'auto' // Left position relative to parent in px
-    };
-    var i;
-    var doms = [
-        "cc_student_medical_history",
-        "cc_athlete_medical_history",
-        "emergency_information",
-        "cc_student_health_insurance"
-    ];
-    for (i = 0; i < doms.length; ++i) {
-        var target = document.getElementById(doms[i]);
-        var spinner = new Spinner(opts).spin(target);
-    }
-    for (i = 0; i < doms.length; ++i) {
-        $.ajax ({
-            type: "POST",
-            url: "{% url 'dashboard_panels' %}",
-            data: {"dom":doms[i],"cid":{{student.id}}},
-            cache: false,
-            indexValue: i,
-            target: document.getElementById(doms[i]),
-            success: function(html) {
-                spinner.stop(this.target);
-                $("#" + doms[this.indexValue]).html(html);
-            }
-        });
-    }
-});
-</script>
-{% endblock %}
+{% block extra_javascript %}{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-8">
@@ -109,7 +59,7 @@ $(function() {
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div id="emergency_information">
-                        <p style="height:200px;"></p>
+                        <pre>{{ens}}</pre>
                     </div>
                 </div>
                 <!-- /.panel-body -->
@@ -128,28 +78,7 @@ $(function() {
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div id="cc_student_health_insurance">
-                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
-                            <li class="active">
-                                <a data-toggle="tab" href="#primary-insurance">
-                                    Primary
-                                </a>
-                            </li>
-                            <li class="disabled">
-                                <a>
-                                    Secondary
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- /.nav-tabs -->
-                        <div class="tab-content">
-                            <div id="primary-insurance" class="tab-pane fade active in">
-                                <p></p>
-                            </div>
-                            <div id="secondary-insurance" class="tab-pane fade">
-                                <p></p>
-                            </div>
-                        </div>
-                        <!-- /.tab-content -->
+                        {{shi}}
                     </div>
                     <!-- /.health-insurance -->
                 </div>
@@ -187,10 +116,10 @@ $(function() {
                         <!-- /.nav-tabs -->
                         <div class="tab-content" id="medical-history-content">
                             <div id="cc_student_medical_history" class="tab-pane fade active in">
-                                <p>&nbsp;</p>
+                                {{smh}}
                             </div>
                             <div id="cc_athlete_medical_history" class="tab-pane fade">
-                                <p>&nbsp;</p>
+                                {{amh}}
                             </div>
                         </div>
                         <!-- /.tab-content -->
