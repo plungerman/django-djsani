@@ -63,6 +63,6 @@ urlpatterns = patterns('djsani.core.views',
 urlpatterns += patterns('djzbar.views.auth',
     # login required error page
     url(
-        r'^login-required/@@UserID', 'login_required', name="login_required"
+        r'^login-required/?cid=@@UserID', 'login_required', name="login_required"
     ),
 )

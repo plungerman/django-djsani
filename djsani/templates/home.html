@@ -2,8 +2,8 @@
 {% block title %}Medical Forms &mdash; Carthage College{% endblock %}
 {% block css %}
 {% include "includes/extra_form_style.html" %}
-<link href="//www.carthage.edu/assets/current/css/core/grid-960.css" rel="stylesheet" type="text/css" />
-<link href="//www.carthage.edu/live/resource/css/styles/main/icons.css" rel="stylesheet" type="text/css" />
+<link href="//www.carthage.edu/static/vendor/css/grid-960.css" rel="stylesheet" type="text/css" />
+<link href="//www.carthage.edu/themes/shared/css/icons.css" rel="stylesheet" type="text/css" />
 <link href="//www.carthage.edu/static/vendor/dashboard/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <link href="/static/djsani/css/djsani.css" rel="stylesheet" type="text/css" />
 {% endblock %}
@@ -49,6 +49,7 @@ $(function() {
     $stypes = $('.sTypes');
     $student = $('#student');
     $athlete = $('#athlete');
+    $("#sports-container").slideUp(200);
     {% if manager.athlete == 0 %}
     $athlete.slideUp(200);
     $student.delay(200).slideDown(200);
@@ -131,6 +132,16 @@ $(function() {
     </ul>
     </form>
     <div id="student" class="clear forms-container">
+        <div class="span-20">
+            <p>
+            All incoming freshmen and transfer students are required
+            to provide information regarding health insurance, emergency
+            contact, medical history, and immunization history. In
+            addition, if you will be 17 years of age or younger when
+            you arrive to campus, your parent or legal guardian must
+            complete the "Parental/Legal guardian consent" form.
+            </p>
+        </div>
         <h2 class="clear">Online forms</h2>
         <ul class="nobull">
             <li>
@@ -176,19 +187,14 @@ $(function() {
                     Parent/Legal guardian consent form
                 </a>
             </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/832-pdf">
+                    Meningococcal meningitis/Hepatitis B response
+                </a>
+            </li>
         </ul>
     </div>
     <div id="athlete" class="clear forms-container">
-        <div class="span-20">
-            <p>
-            All incoming freshmen and transfer students are required
-            to provide information regarding health insurance, emergency
-            contact, medical history, and immunization history. In
-            addition, if you will be 17 years of age or younger when
-            you arrive to campus, your parent or legal guardian must
-            complete the "Parental/Legal guardian consent" form.
-            </p>
-        </div>
         <h2 class="clear">Online forms</h2>
         <ul class="nobull">
             <li>
@@ -294,7 +300,6 @@ $(function() {
                     Primary Insurance Card Copy
                 </a>
             </li>
-
             <li>
                 <a href="//www.carthage.edu/live/files/792-pdf">
                     Athlete ADHD medical exception
@@ -311,6 +316,11 @@ $(function() {
             <li>
                 <a href="//www.carthage.edu/live/files/831-pdf">
                     Parent/Legal guardian consent form
+                </a>
+            </li>
+            <li>
+                <a href="//www.carthage.edu/live/files/832-pdf">
+                    Meningococcal meningitis/Hepatitis B response
                 </a>
             </li>
         </ul>
@@ -363,16 +373,6 @@ $(function() {
                     <ul>
                         <li>
                             College Conference Of Illinois And Wisconsin waiver
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="//www.carthage.edu/live/files/832-pdf">
-                        Meningococcal meningitis/Hepatitis B response
-                    </a>
-                    <ul>
-                        <li>
-                            Important Information about Meningitis and Hepatitis B
                         </li>
                     </ul>
                 </li>

@@ -84,19 +84,19 @@ def panels(request,table,cid):
     student detail view.
     """
     form = None
-    data = None
     obj = get_data(table,cid)
     if obj:
         data = obj.fetchone()
-        innit = {}
-        if table == "cc_student_medical_history":
-            for k,v in data.items():
-                innit[k] = v
-            form = SmedForm(initial=innit)
-        if table == "cc_athlete_medical_history":
-            for k,v in data.items():
-                innit[k] = v
-            form = AmedForm(initial=innit)
+        if data:
+            innit = {}
+            if table == "cc_student_medical_history":
+                for k,v in data.items():
+                    innit[k] = v
+                form = SmedForm(initial=innit)
+            if table == "cc_athlete_medical_history":
+                for k,v in data.items():
+                    innit[k] = v
+                form = AmedForm(initial=innit)
     t = loader.get_template("dashboard/panels/%s.html" % table)
     c = RequestContext(request, {'data':data,'form':form})
     return t.render(c)

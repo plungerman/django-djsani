@@ -101,10 +101,12 @@ def home(request):
     if age >= 18:
         adult = True
     obj = get_data("cc_student_medical_manager",cid)
-    # student must have a record at this point
+    # check for a manager
     manager = obj.fetchone()
-    # which needs a python list
-    my_sports = manager.sports.split(",")
+    if manager:
+        # sports needs a python list
+        if manager.sports:
+            my_sports = manager.sports.split(",")
     if request.GET.get("minor"):
         adult = False
     return render_to_response(
@@ -132,7 +134,7 @@ def set_type(request):
         update = cid
 
     # student or athlete
-    if field == "stype":
+    if field == "athlete":
         switch = request.POST.get("switch")
     # sports
     if field == "sports":
