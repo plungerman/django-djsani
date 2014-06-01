@@ -1,17 +1,18 @@
-body {background-color: #FCFAEB;font-family: verdana,arial,sans-serif;}
+body {background-color: #fff;font-family: verdana,arial,sans-serif;}
 li.ctrlHolder div ul li {display:inline; padding-right:3px;}
 li.ctrlHolder div ul {margin-left:-30px;}
 .form .blockLabels label { display: inherit; font-weight: normal; }
 .form .blockLabels label.error {display:none !important;}
 .placeholder {color:#800;}
 h1,h2,h3 {font-weight:normal;}
-.nobull li {list-style-type: none;}
-.forms-container {
+li {list-style-type: none;}
+.slider-container {
     display:none;
     width: 795px;
 }
-form .ctrlHolder, .form .btnHolder { margin: 0 !important; }
-form textarea {width: 300px !important;height:50px !important;}
+ol{margin:0;padding:0;}
+.form fieldset.btnHolder {background-color:#fff; }
+form textarea {width: 300px !important;height:70px !important;}
 #profile h2 { margin-left: 2px; }
 .span-10 {margin-right:0px !important;}
 .prepend-1 { padding-left: 38px; }
@@ -25,3 +26,4 @@ padding:0; }
 .red {color:#800;}
 .green {color:#008000;}
 .selectpicker{width:400px !important;}
+#id_sports{background:none;}

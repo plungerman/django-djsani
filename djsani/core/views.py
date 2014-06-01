@@ -1,9 +1,10 @@
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from djsani.core import STUDENT_VITALS, SPORTS
 from djzbar.utils.informix import do_sql as do_esql
@@ -13,6 +14,12 @@ from djtools.fields import TODAY
 
 import logging
 logger = logging.getLogger(__name__)
+
+def is_member(user,group):
+    """
+    simple method to check if a user belongs to a group
+    """
+    return user.groups.filter(name=group)
 
 def get_data(table,cid,fields=None,date=None):
     """
@@ -85,21 +92,49 @@ def update_manager(field,cid):
         noquo=[field,"cid"]
     )
 
+@csrf_exempt
+def set_type(request):
+    field = request.POST.get("field")
+    cid = request.POST.get("cid")
+    table="cc_student_medical_manager"
+    # check for student manager record
+    student = get_data(table,cid).fetchone()
+    update = None
+    if student:
+        update = cid
+
+    # sports field is a list
+    if field == "sports":
+        switch = ','.join(request.POST.getlist("switch[]"))
+    else:
+        switch = request.POST.get("switch")
+
+    dic = {field:switch,"cid":cid}
+    noquo=["athlete","cid","cc_student_immunization"]
+    put_data( dic, table, cid = update, noquo=noquo )
+
+    return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
+
 @portal_login_required
 def home(request):
     cid = request.session["cid"]
     adult = False
     my_sports = ""
     # get student
-    obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
+    obj = do_esql("%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid))
     try:
         student = obj.fetchone()
     except:
         raise Http404
-    # adult or minor?
-    age = calculate_age(student.birth_date)
-    if age >= 18:
-        adult = True
+    # adult or minor? if we do not have a DOB, default to minor
+    if student.birth_date:
+        age = calculate_age(student.birth_date)
+        if age >= 18:
+            adult = True
+    # freshman/transfer?
+    first_year = False
+    if student.plan_enr_sess == "RA" and student.plan_enr_yr == TODAY.year:
+        first_year = True
     obj = get_data("cc_student_medical_manager",cid)
     # check for a manager
     manager = obj.fetchone()
@@ -117,34 +152,54 @@ def home(request):
             "manager":manager,
             "sports":SPORTS,
             "my_sports":my_sports,
-            "adult":adult
+            "adult":adult,
+            "first_year":first_year
         },
         context_instance=RequestContext(request)
     )
 
-@csrf_exempt
-def set_type(request):
-    field = request.POST.get("field")
-    cid = request.POST.get("cid")
-    table="cc_student_medical_manager"
-    # check for student manager record
-    student = get_data(table,cid).fetchone()
-    update = None
-    if student:
-        update = cid
-
-    # student or athlete
-    if field == "athlete":
-        switch = request.POST.get("switch")
-    # sports
-    if field == "sports":
-        switch = ','.join(request.POST.getlist("switch[]"))
-
-    dic = {field:switch,"cid":cid}
-    noquo=["athlete","cid"]
-    put_data( dic, table, cid = update, noquo=noquo )
-
-    return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
+@login_required
+def home_external(request):
+    adult = False
+    my_sports = ""
+    # get student
+    if settings.DEBUG:
+        uname = settings.DEFAULT_UID
+    else:
+        uname = request.user.username
+    obj = do_esql(
+        "%s WHERE cvid_rec.ldap_name = '%s'" % (STUDENT_VITALS,uname)
+    )
+    try:
+        student = obj.fetchone()
+        request.session["cid"] = student.id
+    except:
+        raise Http404
+    # adult or minor?
+    age = calculate_age(student.birth_date)
+    if age >= 18:
+        adult = True
+    obj = get_data("cc_student_medical_manager",student.id)
+    # check for a manager
+    manager = obj.fetchone()
+    if manager:
+        # sports needs a python list
+        if manager.sports:
+            my_sports = manager.sports.split(",")
+    if request.GET.get("minor"):
+        adult = False
+    return render_to_response(
+        "home_korra.html",
+        {
+            "switch_earl": reverse_lazy("set_type"),
+            "student":student,
+            "manager":manager,
+            "sports":SPORTS,
+            "my_sports":my_sports,
+            "adult":adult
+        },
+        context_instance=RequestContext(request)
+    )
 
 def responsive_switch(request,action):
     if action=="go":
@@ -152,11 +207,3 @@ def responsive_switch(request,action):
     elif action=="leave":
         request.session['desktop_mode']=False
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", ""))
-
-def is_member(user,group):
-    """
-    simple method to check if a user belongs to a group
-    """
-    return user.groups.filter(name=group)
-
-

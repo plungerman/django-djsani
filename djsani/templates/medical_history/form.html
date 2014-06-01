@@ -69,7 +69,6 @@ $(function() {
                 var e = form.elements[i];
                 if (e.name.match(/_2$/)) {
                     form.elements[i-1].value = e.value;
-                    alert(form.elements[i-1].name+"="+form.elements[i-1].value);
                 }
             }
             form.submit();
@@ -79,7 +78,7 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="span-21" style="background-color:#FCFAEB;">
+<div class="span-21 forms-container">
     <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
     <h1>
         Medical history
@@ -96,15 +95,13 @@ $(function() {
         by law, such as with court-ordered release or in reporting of
         certain communicable diseases to the Department of Health.
     </p>
-    {% if form.errors %}
-    <p class="error">There were errors with the data submitted, see below.</p>
-    {% endif %}
+    {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="profile">
         {% csrf_token %}
         <div id="medical-history">
             <div class="span-20">
                 <fieldset class="blockLabels">
-                    <ol>
+                    <ol class="nobull">
                         <li>
                             <input
                                 type="checkbox"

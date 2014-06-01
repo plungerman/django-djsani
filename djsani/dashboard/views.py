@@ -107,23 +107,28 @@ def student_detail(request,cid=None):
     main method for displaying student data
     """
     if not cid:
+        # search form
         cid = request.POST.get("cid")
     if cid:
         # get student
-        obj = do_esql("%s'%s'" % (STUDENT_VITALS,cid))
-        student = obj.fetchone()
-        age = calculate_age(student.birth_date)
-        ens = emergency_information(cid)
-        shi = panels(request,"cc_student_health_insurance",cid)
-        smh = panels(request,"cc_student_medical_history",cid)
-        amh = panels(request,"cc_athlete_medical_history",cid)
-        return render_to_response(
-            "dashboard/student_detail.html",
-            {
-                "student":student,"age":age,"ens":ens,
-                "shi":shi,"amh":amh,"smh":smh
-            },
-            context_instance=RequestContext(request)
-        )
+        obj = do_esql("%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid))
+        if obj:
+            student = obj.fetchone()
+            age = calculate_age(student.birth_date)
+            ens = emergency_information(cid)
+            shi = panels(request,"cc_student_health_insurance",cid)
+            smh = panels(request,"cc_student_medical_history",cid)
+            amh = panels(request,"cc_athlete_medical_history",cid)
+            return render_to_response(
+                "dashboard/student_detail.html",
+                {
+                    "student":student,"age":age,"ens":ens,
+                    "shi":shi,"amh":amh,"smh":smh
+                },
+                context_instance=RequestContext(request)
+            )
+        else:
+            raise Http404
     else:
         raise Http404
+

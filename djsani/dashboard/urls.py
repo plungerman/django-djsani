@@ -20,6 +20,11 @@ urlpatterns = patterns('djsani.dashboard.views',
         r'^get-students/$',
         'get_students', name="get_students"
     ),
+    # search
+    url(
+        r'^student/$',
+        'student_detail', name="student_search"
+    ),
     url(
         r'^student/(?P<cid>\d+)/$',
         'student_detail', name="student_detail"

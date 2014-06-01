@@ -3,6 +3,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Immun</th>
                 <th>Insurance</th>
                 <th>Meni/Hep B</th>
                 <th>Medical history</th>
@@ -24,6 +25,16 @@
                     <span style="float:right;">
                     <i class="fa fa-star green"></i>
                     </span>
+                    {% endif %}
+                </td>
+                <td class="center">
+                    {% if s.cc_student_immunization %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
+                    {% else %}
+                        <input type="checkbox" name="immun" class="immun"
+                            id="immun_{{s.id}}" value="{{s.id}}" />
                     {% endif %}
                 </td>
                 <td class="center">

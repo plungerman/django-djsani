@@ -47,12 +47,16 @@ urlpatterns = patterns('djsani.core.views',
     ),
     # override mobile first responsive UI
     url(
-        r'^responsive/(?P<action>[-\w]+)',
+        r'^responsive/(?P<action>[-\w]+)/',
         'responsive_switch', name="responsive_switch"
     ),
     # ajax post method to save various types characteristics to db and session
     url(
         r'^set-type/$', 'set_type', name="set_type"
+    ),
+    # home external
+    url(
+        r'^external/$', 'home_external', name="home_external"
     ),
     # home
     url(

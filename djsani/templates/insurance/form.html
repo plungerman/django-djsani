@@ -47,6 +47,13 @@ $(function() {
             $('#secondary-form').slideDown(200);
         }
     });
+    // for updates to the form
+    if ( $('#id_primary-policy_type').val() == "State Insurance") {
+        $('#id_primary-policy_state').addClass("required");
+    }
+    if ( $('#id_secondary-policy_type').val() == "State Insurance") {
+        $('#id_secondary-policy_state').addClass("required");
+    }
     $("#profile").validate();
     $("select[id$='policy_type']").on('change', function() {
         if( $(this).val() == "State Insurance") {
@@ -57,7 +64,7 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="span-21" style="background-color:#FCFAEB;">
+<div class="span-21 forms-container">
     <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
     <h1>Health Insurance Information</h1>
     <p>
@@ -67,15 +74,8 @@ $(function() {
         for Carthage College to release your insurance information to a
         healthcare provider in the event that treatment is needed off-campus.
     </p>
-    <p>
-        Fields marked with an asterisk
-        <img src="//www.carthage.edu/static/forms/img/icons/red_asterisk.png"
-        alt="asterisk" style="margin-bottom:-3px;" />
-        are required.
-    </p>
-    {% if form.errors %}
-    <p class="error">There were errors with the data submitted, see below.</p>
-    {% endif %}
+    {% include "includes/required_text.html" %}
+    {% include "includes/errors_text.html" %}
     <form method="post" action="." type="actionForm" class="form" id="profile">
         {% csrf_token %}
         {% for hidden in form1.hidden_fields %}
@@ -83,7 +83,7 @@ $(function() {
         {% endfor %}
         <input id="id_update" type="hidden"
             value="{{update}}" name="update">
-        <div class="append-bottom">
+        <div class="append-bottom" style="padding-top:10px;">
             <label for="id_opt_out">
                 <input id="id_opt_out" type="checkbox" value="1"
                     name="opt_out">
@@ -120,7 +120,7 @@ $(function() {
                 style="margin-left:10px;">
                 <h2>Secondary Insurance Policy</h2>
                 <fieldset class="blockLabels">
-                    <ol>
+                    <ol class="nobull">
                         {% for field in form2.visible_fields %}
                             {% include "form_field.inc.html" %}
                         {% endfor %}
