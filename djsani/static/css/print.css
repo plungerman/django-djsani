@@ -1,0 +1,36 @@
+@page {
+    margin: 0.5in;
+}
+
+*:before, *:after {
+    box-sizing: border-box;
+}
+*:before, *:after {
+    box-sizing: border-box;
+}
+
+* {
+    background: none          !important;
+    direction:  ltr           !important;
+    display:    none          !important;
+    font-size:  0             !important;
+    height:     0             !important;
+    line-height:-9999         !important;
+    margin:     0             !important;
+    padding:    0             !important;
+    position:   static        !important;
+    text-indent:-9999em       !important;
+    width:      0             !important;
+    white-space:normal        !important;
+}
+
+html, body, div, #specificimage {
+    display:    block         !important;
+    width:      100%;
+}
+
+#student-contact,#emergency_information,
+#primary_insurance,#secondary_insurance,
+#cc_student_medical_history,#cc_student_medical_history,
+.tab_content { display:block; width:100%; }
+.fade { opacity: 1; }

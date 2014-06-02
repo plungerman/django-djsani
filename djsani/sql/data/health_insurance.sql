@@ -32,7 +32,7 @@ VALUES (
 'company2',
 '343423566',
 '1979-02-04',
-1338012,
+xxxxxxx,
 '1313 mockingbird lane springfield MA 08003',
 'policy1',
 '333-555-6666',
@@ -53,7 +53,7 @@ secondary_group_no='3456772346',
 secondary_company='company2',
 primary_group_no='343423566',
 secondary_dob=TO_DATE('1974-05-01', '%Y-%m-%d'),
-cid=1338012,
+cid=xxxxxxx,
 primary_policy_address='1313 mockingbird lane
 suite 16
 Springfield, MA 08003',
@@ -66,4 +66,4 @@ primary_policy_type='PPO',
 secondary_policy_state='HI',
 primary_member_id='980808080',
 opt_out=0,
-secondary_policy_holder='policy2' WHERE cid=1338012
+secondary_policy_holder='policy2' WHERE cid=xxxxxxx

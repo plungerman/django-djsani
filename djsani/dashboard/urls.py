@@ -25,9 +25,17 @@ urlpatterns = patterns('djsani.dashboard.views',
         r'^student/$',
         'student_detail', name="student_search"
     ),
+    # student detail
     url(
         r'^student/(?P<cid>\d+)/$',
         'student_detail', name="student_detail"
+    ),
+    # student detail print
+    url(
+        r'^student/(?P<cid>\d+)/print/$',
+        'student_detail',
+        {"template":"dashboard/student_detail_print.html"},
+        name="student_detail_print"
     ),
     # home
     url(

@@ -42,13 +42,12 @@ def home(request):
     """
     dashboard home with a list of students
     """
-    template = "dashboard/home.html",
     sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
     objs = do_esql(sql)
     students = objs.fetchall()
 
     return render_to_response(
-        template,
+        "dashboard/home.html",
         {"students":students,"sports":SPORTS},
         context_instance=RequestContext(request)
     )
@@ -58,7 +57,6 @@ def get_students(request):
     ajax POST returns a list of students
     """
     if request.POST and (is_member(request.user,"Medical Staff") or request.user.is_superuser):
-        template = "dashboard/students_data.inc.html"
         sport = request.POST.get("sport")
         sql = " %s AND prog_enr_rec.cl IN (%s)" % (
             STUDENTS_ALPHA,request.POST["class"]
@@ -70,7 +68,7 @@ def get_students(request):
         objs = do_esql(sql)
         students = objs.fetchall()
         return render_to_response(
-            template,
+            "dashboard/students_data.inc.html",
             {"students":students,"sports":SPORTS,},
             context_instance=RequestContext(request)
         )
@@ -102,7 +100,7 @@ def panels(request,table,cid):
     return t.render(c)
 
 @group_required('Medical Staff')
-def student_detail(request,cid=None):
+def student_detail(request,cid=None,template="dashboard/student_detail.html"):
     """
     main method for displaying student data
     """
@@ -120,7 +118,7 @@ def student_detail(request,cid=None):
             smh = panels(request,"cc_student_medical_history",cid)
             amh = panels(request,"cc_athlete_medical_history",cid)
             return render_to_response(
-                "dashboard/student_detail.html",
+                template,
                 {
                     "student":student,"age":age,"ens":ens,
                     "shi":shi,"amh":amh,"smh":smh
