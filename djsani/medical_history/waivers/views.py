@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.waivers.forms import MeniForm
 from djsani.medical_history.waivers.forms import PrivacyForm
@@ -11,10 +12,11 @@ from djsani.medical_history.waivers.forms import RiskForm
 from djsani.medical_history.waivers.forms import SicklecellForm
 from djsani.core.views import get_data, put_data, update_manager
 
-from djzbar.utils.decorators import portal_login_required
+#from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NEXT_YEAR
 
-@portal_login_required
+#@portal_login_required
+@login_required
 def form(request,stype,wtype):
     cid = request.session["cid"]
     table = "cc_%s_%s_waiver" % (stype,wtype)

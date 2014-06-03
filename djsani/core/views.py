@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from djsani.core import STUDENT_VITALS, SPORTS
 from djzbar.utils.informix import do_sql as do_esql
-from djzbar.utils.decorators import portal_login_required
+#from djzbar.utils.decorators import portal_login_required
 from djtools.utils.date import calculate_age
 from djtools.fields import TODAY
 
@@ -115,7 +115,8 @@ def set_type(request):
 
     return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
 
-@portal_login_required
+#@portal_login_required
+@login_required
 def home(request):
     cid = request.session["cid"]
     adult = False

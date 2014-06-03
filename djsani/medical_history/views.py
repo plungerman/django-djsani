@@ -1,16 +1,18 @@
 from django.conf import settings
 from django.template import RequestContext
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.forms import StudentForm
 from djsani.medical_history.forms import AthleteForm
 from djsani.core.views import get_data, put_data, update_manager
 
-from djzbar.utils.decorators import portal_login_required
+#from djzbar.utils.decorators import portal_login_required
 
-@portal_login_required
+#@portal_login_required
+@login_required
 def form(request,stype):
     cid = request.session["cid"]
     table = "cc_%s_medical_history" % stype

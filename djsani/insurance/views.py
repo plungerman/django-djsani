@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 from djsani.insurance.forms import StudentForm
 from djsani.insurance.forms import AthleteForm
@@ -13,7 +14,8 @@ from djtools.fields import NOW
 
 from textwrap import fill
 
-@portal_login_required
+#@portal_login_required
+@login_required
 def form(request,stype):
     cid = request.session["cid"]
     # form name

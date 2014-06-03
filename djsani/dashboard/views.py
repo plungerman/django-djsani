@@ -17,6 +17,7 @@ from djtools.utils.date import calculate_age
 def emergency_information(cid):
     """
     returns all of the emergency contact information for any given student
+    OJO: Formating is shit. Needs a template but for now plain text will do.
     """
     FIELDS = [
         'beg_date','end_date','line1','line2','line3',
