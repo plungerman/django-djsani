@@ -18,7 +18,7 @@ from djtools.fields import NEXT_YEAR
 #@portal_login_required
 @login_required
 def form(request,stype,wtype):
-    cid = request.session["cid"]
+    cid = request.user.id
     table = "cc_%s_%s_waiver" % (stype,wtype)
     manager = get_data("cc_student_medical_manager",cid).fetchone()
     # check to see if they already submitted this form

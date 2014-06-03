@@ -54,10 +54,6 @@ urlpatterns = patterns('djsani.core.views',
     url(
         r'^set-type/$', 'set_type', name="set_type"
     ),
-    # home external
-    url(
-        r'^external/$', 'home_external', name="home_external"
-    ),
     # home
     url(
         r'^$', 'home', name="home"

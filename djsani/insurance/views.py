@@ -17,7 +17,7 @@ from textwrap import fill
 #@portal_login_required
 @login_required
 def form(request,stype):
-    cid = request.session["cid"]
+    cid = request.user.id
     # form name
     fname = "%sForm" % stype.capitalize()
     table = "cc_student_health_insurance"

@@ -31,8 +31,7 @@ $(function() {
     function setType(interruptor,field) {
         var $data = {
             "switch": interruptor,
-            "field": field,
-            "cid": "{{request.session.cid}}"
+            "field": field
         };
         $.ajax({
             type: "POST",

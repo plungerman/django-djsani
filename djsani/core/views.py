@@ -95,10 +95,13 @@ def update_manager(field,cid):
 @csrf_exempt
 def set_type(request):
     field = request.POST.get("field")
-    cid = request.POST.get("cid")
+    cid = request.user.id
     table="cc_student_medical_manager"
     # check for student manager record
-    student = get_data(table,cid).fetchone()
+    student = None
+    obj = get_data(table,cid)
+    if obj:
+        student = obj.fetchone()
     update = None
     if student:
         update = cid
@@ -118,7 +121,7 @@ def set_type(request):
 #@portal_login_required
 @login_required
 def home(request):
-    cid = request.session["cid"]
+    cid = request.user.id
     adult = False
     my_sports = ""
     # get student
@@ -155,49 +158,6 @@ def home(request):
             "my_sports":my_sports,
             "adult":adult,
             "first_year":first_year
-        },
-        context_instance=RequestContext(request)
-    )
-
-@login_required
-def home_external(request):
-    adult = False
-    my_sports = ""
-    # get student
-    if settings.DEBUG:
-        uname = settings.DEFAULT_UID
-    else:
-        uname = request.user.username
-    obj = do_esql(
-        "%s WHERE cvid_rec.ldap_name = '%s'" % (STUDENT_VITALS,uname)
-    )
-    try:
-        student = obj.fetchone()
-        request.session["cid"] = student.id
-    except:
-        raise Http404
-    # adult or minor?
-    age = calculate_age(student.birth_date)
-    if age >= 18:
-        adult = True
-    obj = get_data("cc_student_medical_manager",student.id)
-    # check for a manager
-    manager = obj.fetchone()
-    if manager:
-        # sports needs a python list
-        if manager.sports:
-            my_sports = manager.sports.split(",")
-    if request.GET.get("minor"):
-        adult = False
-    return render_to_response(
-        "home_korra.html",
-        {
-            "switch_earl": reverse_lazy("set_type"),
-            "student":student,
-            "manager":manager,
-            "sports":SPORTS,
-            "my_sports":my_sports,
-            "adult":adult
         },
         context_instance=RequestContext(request)
     )

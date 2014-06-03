@@ -14,7 +14,7 @@ from djsani.core.views import get_data, put_data, update_manager
 #@portal_login_required
 @login_required
 def form(request,stype):
-    cid = request.session["cid"]
+    cid = request.user.id
     table = "cc_%s_medical_history" % stype
     manager = get_data("cc_student_medical_manager",cid).fetchone()
     # check to see if they already submitted this form
