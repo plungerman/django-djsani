@@ -16,20 +16,17 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="span-21 forms-container">
-    <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
+<div class="forms-container">
     <h2>
         Carthage College Athletic Training &mdash;<br />
         Sickle Cell Trait Testing
     </h2>
-    {% if form.errors %}
-    <p class="error">There were errors with the data submitted, see below.</p>
-    {% endif %}
+    {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="profile">{% csrf_token %}
         <div id="medical-history">
             <div class="span-20">
                 <h3>About Sickle Cell Trait</h3>
-                <ul>
+                <ul class="bullets">
                     <li>
                         Sickle cell trait is an inherited condition of the
                         oxygen-carrying protein, hemoglobin, in the red blood
@@ -64,7 +61,7 @@ $(function() {
                     </li>
                 </ul>
                 <h3>Sickle Cell trait Testing</h3>
-                <ul>
+                <ul class="bullets">
                     <li>
                         The NCAA recommends that all NCAA Division III
                         student-athletes have knowledge of their sickle cell

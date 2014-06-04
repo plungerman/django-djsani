@@ -1,29 +1,21 @@
-body {background-color: #fff;font-family: verdana,arial,sans-serif;}
-li.ctrlHolder div ul li {display:inline; padding-right:3px;}
+li.ctrlHolder div ul li {display:inline;}
 li.ctrlHolder div ul {margin-left:-30px;}
 .form .blockLabels label { display: inherit; font-weight: normal; }
 .form .blockLabels label.error {display:none !important;}
 .placeholder {color:#800;}
 h1,h2,h3 {font-weight:normal;}
 li {list-style-type: none;}
-.slider-container {
-    display:none;
-    width: 795px;
-}
+.slider-container { display:none; width: 795px; }
 ol{margin:0;padding:0;}
 .form fieldset.btnHolder {background-color:#fff; }
 form textarea {width: 300px !important;height:70px !important;}
-#profile h2 { margin-left: 2px; }
-.span-10 {margin-right:0px !important;}
-.prepend-1 { padding-left: 38px; }
-.form fieldset { border: 0; }
 .help {margin-top:-2px;}
 .form select {width:200px;}
-li.error { background: no-repeat right center; border:0; margin-bottom:0;
-padding:0; }
+.form .bootstrap-select { width: 350px; }
+.form ul li.error { display:none !important;}
 .ui-datepicker-calendar { display: none; }
 .center{text-align:center;}
 .red {color:#800;}
 .green {color:#008000;}
-.selectpicker{width:400px !important;}
 #id_sports{background:none;}
+#primary-form{margin-right:20px;}

@@ -18,17 +18,15 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="span-21 forms-container">
-    <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
+<div class="forms-container">
     <h2>
         Student Athlete Authorization/Consent For <br />
         Disclosure of Protected Health Information (PHI)
     </h2>
-    {% if form.errors %}
-    <p class="error">There were errors with the data submitted, see below.</p>
-    {% endif %}
-    <form method="post" action="." class="form" id="profile">{% csrf_token %}
-        <div class="span-20">
+    {% include "includes/errors_text.html" %}
+    <form method="post" action="." class="form" id="profile">
+        {% csrf_token %}
+        <div class="large-12">
             <p>
                 I hereby authorize Carthage College and its physician
                 affiliates, athletic and other (student athlete) health
@@ -41,13 +39,13 @@ $(function() {
                 By checking the boxes below you agree to the release
                 of your (PHI) in each category:
             </h4>
-            <div class="span-1">
+            <div class="large-1">
                 <p>
                 <input id="id_ncaa_tool"
                     type="checkbox" name="ncaa_tool" value="1" />
                 </p>
             </div>
-            <div class="span-18">
+            <div class="large-11">
                 <label for="id_ncaa_tool">
                     <p>
                     <em>
@@ -71,13 +69,13 @@ $(function() {
                     </p>
                 </label>
             </div>
-            <div class="span-1">
+            <div class="large-1">
                 <p>
                 <input id="id_medical_insurance"
                     type="checkbox" name="medical_insurance" value="1" />
                 </p>
             </div>
-            <div class="span-18">
+            <div class="large-11">
                 <label for="id_medical_insurance">
                     <p>
                     <em>My Personal Medical Insurance</em>
@@ -91,13 +89,13 @@ $(function() {
                     </p>
                 </label>
             </div>
-            <div class="span-1">
+            <div class="large-1">
                 <p>
                 <input id="id_news_media"
                     type="checkbox" name="news_media" value="1" />
                 </p>
             </div>
-            <div class="span-18">
+            <div class="large-11">
                 <label for="id_news_media">
                     <p>
                     <em>The News Media</em>
@@ -107,13 +105,13 @@ $(function() {
                     </p>
                 </label>
             </div>
-            <div class="span-1">
+            <div class="large-1">
                 <p>
                 <input id="id_parents_guardians"
                     type="checkbox" name="parents_guardians" value="1" />
                 </p>
             </div>
-            <div class="span-18">
+            <div class="large-11">
                 <label for="id_parents_guardians">
                     <p>
                     <em>Parents/Guardian</em>
@@ -123,13 +121,13 @@ $(function() {
                     </p>
                 </label>
             </div>
-            <div class="span-1">
+            <div class="large-1">
                 <p>
                 <input id="id_disclose_records"
                     type="checkbox" name="disclose_records" value="1" />
                 </p>
             </div>
-            <div class="span-18">
+            <div class="large-11">
                 <label for="id_disclose_records">
                     <p>
                     I also allow any treating physicians or other medical
@@ -140,7 +138,7 @@ $(function() {
                     </p>
                 </label>
             </div>
-            <div class="span-20">
+            <div class="large-12">
                 <p>
                     I understand that my injury/illness information is
                     protected by federal regulations under either the Health

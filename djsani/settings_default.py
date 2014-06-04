@@ -126,6 +126,7 @@ LDAP_GROUPS = {"":"",}
 LDAP_OBJECT_CLASS = ""
 LDAP_OBJECT_CLASS_LIST = ["",""]
 LDAP_RETURN = []
+LDAP_ID_ATTR=""
 # auth backends
 AUTHENTICATION_BACKENDS = (
     'djauth.ldapBackend.LDAPBackend',

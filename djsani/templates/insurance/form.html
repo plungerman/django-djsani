@@ -5,6 +5,7 @@
     Carthage College
 {% endblock %}
 {% block extra_style %}
+{{block.super}}
 <link rel="stylesheet" href="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
 {% endblock %}
 {% block javascript %}
@@ -63,10 +64,12 @@ $(function() {
 });
 </script>
 {% endblock %}
+{% block left_nav %}{% endblock %}
+{% block page_content %}class="content large-12"{% endblock %}
 {% block content %}
-<div class="span-21 forms-container">
-    <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
-    <h1>Health Insurance Information</h1>
+<div id="spotlight-wrap">
+<div class="spotlight forms-container">
+    <div class="large-7 medium-7 small-7">
     <p>
         Carthage College requires every full-time undergraduate student to
         provide insurance and emergency contact information each academic
@@ -76,6 +79,8 @@ $(function() {
     </p>
     {% include "includes/required_text.html" %}
     {% include "includes/errors_text.html" %}
+    </div>
+    <p class="cf">&nbsp;</p>
     <form method="post" action="." type="actionForm" class="form" id="profile">
         {% csrf_token %}
         {% for hidden in form1.hidden_fields %}
@@ -83,7 +88,7 @@ $(function() {
         {% endfor %}
         <input id="id_update" type="hidden"
             value="{{update}}" name="update">
-        <div class="append-bottom" style="padding-top:10px;">
+        <div class="large-5 medium-5 small-5">
             <label for="id_opt_out">
                 <input id="id_opt_out" type="checkbox" value="1"
                     name="opt_out">
@@ -93,8 +98,8 @@ $(function() {
                 </span>
             </label>
         </div>
-        <div class="span-20">
-            <div id="secondary-box" class="fright" style="width:350px;">
+        <div class="large-5 medium-5 small-5">
+            <div id="secondary-box">
                 <label for="id_second" style="display:block;">
                     <input id="id_second" type="checkbox" value="1"
                         name="second_policy">
@@ -106,7 +111,7 @@ $(function() {
             </div>
         </div>
         <div id="insurance-policies">
-            <div class="span-10" id="primary-form">
+            <div class="large-5 medium-5 small-5" id="primary-form">
                 <h2>Primary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol>
@@ -116,8 +121,7 @@ $(function() {
                     </ol>
                 </fieldset>
             </div>
-            <div class="span-10 prepend-1" id="secondary-form"
-                style="margin-left:10px;">
+            <div class="large-5 medium-5 small-5" id="secondary-form">
                 <h2>Secondary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol class="nobull">
@@ -128,7 +132,7 @@ $(function() {
                 </fieldset>
             </div>
         </div>
-        <div class="span-20 clear">
+        <div class="large-12">
             {% include "form_submit.inc.html" %}
         </div>
     </form>
@@ -147,5 +151,6 @@ $(function() {
             <a href="javascript:$.fancybox.close();">Close</a>
         </p>
     </div>
+</div>
 </div>
 {% endblock %}

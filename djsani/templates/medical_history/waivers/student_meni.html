@@ -17,127 +17,122 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="span-21 forms-container">
-    <h3 class="fright"><a href="{% url 'home' %}">Return to main menu</a></h3>
+<div class="large-12 forms-container">
     <h2>
-        Important Information about Meningitis and Hepatitis B
+        Important Information about Meningitis<br /> and Hepatitis B
     </h2>
-    {% if form.errors %}
-    <p class="error">There were errors with the data submitted, see below.</p>
-    {% endif %}
+    {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="profile">{% csrf_token %}
-        <div class="span-20">
-            <p>
-                Carthage College would like to inform you of two potentially
-                serious diseases with special
-                implications for college students, and inform you that
-                vaccines are available to prevent them.
-            </p><p>
-                Studies have shown that college students are at an increased
-                risk of infection from meningitis and
-                hepatitis B. Meningitis is an infection that can lead to
-                dangerous swelling of the fluid surrounding
-                the brain and spinal cord, as well as severe and permanent
-                disabilities. This is a rare, but
-                potentially fatal infection that often begins with symptoms
-                that resemble the flu. Symptoms can
-                include high fever, severe headache, stiff neck, rash, nausea,
-                vomiting, lethargy, and confusion.
-                Meningitis is spread through the air via respiratory
-                secretions or close contact with an infected
-                person. This can include coughing, sneezing, kissing or
-                sharing items like utensils, cigarettes,
-                and drinking glasses. However, meningitis can be prevented
-                with safe and effective vaccines.
-            </p><p>
-                The Center for Disease Control (CDC) and the American College
-                Health Association (ACHA) has 
-                recommended that all first-year college students living in
-                residence halls should be immunized
-                against meningococcal disease with the meningococcal conjugate
-                vaccine (MCV4). In addition,
-                the CDC has further recommended that a booster vaccine be
-                given if the first vaccine was
-                received before age 16. Other college students under 22 years
-                of age who wish to reduce their
-                risk for disease may also choose to be vaccinated. The MCV4
-                vaccine protects against four of the
-                five types of bacteria that cause meningitis—Types A, C, Y and
-                W-135. These four types account
-                for nearly two-thirds of the meningitis cases among college
-                students in the United States. The
-                MCV4 vaccine is believed to be 85 to 100 percent effective at
-                preventing infection from Types A,
-                C, Y, and W-135. The vaccine does not protect against
-                serogroup B meningococcal disease. If
-                you are interested in receiving the meningitis vaccine,
-                please contact your healthcare provider to
-                discuss risks and benefits, and determine if the vaccine is
-                right for you.
-            </p><p>
-                Hepatitis B is a serious disease caused by a virus that
-                attacks the liver. Symptoms can include
-                fatigue, nausea, loss of appetite, and yellowing of the skin.
-                These symptoms can last for several
-                weeks, but hepatitis B can also cause a long-term illness
-                that may lead to scarring of the liver,
-                liver cancer, liver failure, or death. Each year 80,000
-                people get infected with hepatitis B, mostly
-                young people. Hepatitis B is spread through contact with
-                blood or other body fluids of an infected person. You can
-                catch the virus by having unprotected sex, sharing drug
-                needles, or by sharing personal items like razors and
-                toothbrushes with someone who is infected. Vaccination is
-                recommended for everyone age 18 or younger. Most incoming
-                college students will have already
-                had the vaccine series in childhood. The hepatitis B vaccine
-                is 95 percent effective in preventing
-                infection and its chronic consequences. If you have not been
-                vaccinated against hepatitis B and are interested in
-                receiving the vaccination series, please contact your
-                healthcare provider to discuss the risks and benefits,
-                and determine if the vaccine is right for you. Three doses
-                of the vaccine are needed for complete protection.
-            </p><p>
-                For more information about meningitis and hepatitis B and
-                the vaccines available for these diseases, please contact
-                the Campus Nurse at (262) 551-5710 or
-                <a href="mailto:rblut@carthage.edu">rblut@carthage.edu</a>.
-                You can also visit the websites of the
-                <a href="http://www.cdc.gov">CDC</a>
-                or the <a href="http://www.acha.org/">ACHA</a>.
-            <hr />
-            <h2>Meningococcal Meningitis/Hepatitis B Response</h2>
-            <p>
-                Wisconsin State Public Health Law, Act 61 requires all
-                colleges and universities in Wisconsin to
-                annually inform students about the risks associated
-                with meningococcal disease and hepatitis B,
-                and the availability and effectiveness of vaccines
-                against the diseases.
-            </p><p>
-                These vaccinations are not mandatory, but are recommended.
-                You can receive these
-                vaccinations through your local public health agency or
-                through your private physician. If you have questions
-                regarding meningococcal meningitis and/or hepatitis B,
-                please contact the Campus Nurse at (262) 551-5710 or
-                <a href="mailto:rblut@carthage.edu">rblut@carthage.edu</a>.
+        <p>
+            Carthage College would like to inform you of two potentially
+            serious diseases with special
+            implications for college students, and inform you that
+            vaccines are available to prevent them.
+        </p><p>
+            Studies have shown that college students are at an increased
+            risk of infection from meningitis and
+            hepatitis B. Meningitis is an infection that can lead to
+            dangerous swelling of the fluid surrounding
+            the brain and spinal cord, as well as severe and permanent
+            disabilities. This is a rare, but
+            potentially fatal infection that often begins with symptoms
+            that resemble the flu. Symptoms can
+            include high fever, severe headache, stiff neck, rash, nausea,
+            vomiting, lethargy, and confusion.
+            Meningitis is spread through the air via respiratory
+            secretions or close contact with an infected
+            person. This can include coughing, sneezing, kissing or
+            sharing items like utensils, cigarettes,
+            and drinking glasses. However, meningitis can be prevented
+            with safe and effective vaccines.
+        </p><p>
+            The Center for Disease Control (CDC) and the American College
+            Health Association (ACHA) has 
+            recommended that all first-year college students living in
+            residence halls should be immunized
+            against meningococcal disease with the meningococcal conjugate
+            vaccine (MCV4). In addition,
+            the CDC has further recommended that a booster vaccine be
+            given if the first vaccine was
+            received before age 16. Other college students under 22 years
+            of age who wish to reduce their
+            risk for disease may also choose to be vaccinated. The MCV4
+            vaccine protects against four of the
+            five types of bacteria that cause meningitis—Types A, C, Y and
+            W-135. These four types account
+            for nearly two-thirds of the meningitis cases among college
+            students in the United States. The
+            MCV4 vaccine is believed to be 85 to 100 percent effective at
+            preventing infection from Types A,
+            C, Y, and W-135. The vaccine does not protect against
+            serogroup B meningococcal disease. If
+            you are interested in receiving the meningitis vaccine,
+            please contact your healthcare provider to
+            discuss risks and benefits, and determine if the vaccine is
+            right for you.
+        </p><p>
+            Hepatitis B is a serious disease caused by a virus that
+            attacks the liver. Symptoms can include
+            fatigue, nausea, loss of appetite, and yellowing of the skin.
+            These symptoms can last for several
+            weeks, but hepatitis B can also cause a long-term illness
+            that may lead to scarring of the liver,
+            liver cancer, liver failure, or death. Each year 80,000
+            people get infected with hepatitis B, mostly
+            young people. Hepatitis B is spread through contact with
+            blood or other body fluids of an infected person. You can
+            catch the virus by having unprotected sex, sharing drug
+            needles, or by sharing personal items like razors and
+            toothbrushes with someone who is infected. Vaccination is
+            recommended for everyone age 18 or younger. Most incoming
+            college students will have already
+            had the vaccine series in childhood. The hepatitis B vaccine
+            is 95 percent effective in preventing
+            infection and its chronic consequences. If you have not been
+            vaccinated against hepatitis B and are interested in
+            receiving the vaccination series, please contact your
+            healthcare provider to discuss the risks and benefits,
+            and determine if the vaccine is right for you. Three doses
+            of the vaccine are needed for complete protection.
+        </p><p>
+            For more information about meningitis and hepatitis B and
+            the vaccines available for these diseases, please contact
+            the Campus Nurse at (262) 551-5710 or
+            <a href="mailto:rblut@carthage.edu">rblut@carthage.edu</a>.
+            You can also visit the websites of the
+            <a href="http://www.cdc.gov">CDC</a>
+            or the <a href="http://www.acha.org/">ACHA</a>.
+        <hr />
+        <h2>Meningococcal Meningitis/Hepatitis B Response</h2>
+        <p>
+            Wisconsin State Public Health Law, Act 61 requires all
+            colleges and universities in Wisconsin to
+            annually inform students about the risks associated
+            with meningococcal disease and hepatitis B,
+            and the availability and effectiveness of vaccines
+            against the diseases.
+        </p><p>
+            These vaccinations are not mandatory, but are recommended.
+            You can receive these
+            vaccinations through your local public health agency or
+            through your private physician. If you have questions
+            regarding meningococcal meningitis and/or hepatitis B,
+            please contact the Campus Nurse at (262) 551-5710 or
+            <a href="mailto:rblut@carthage.edu">rblut@carthage.edu</a>.
+        </p>
+        {% if form.errors %}
+            <p class="error">
+                Please check the box below.
             </p>
-            {% if form.errors %}
-                <p class="error">
-                    Please check the box below.
-                </p>
-            {% endif %}
-            <p>
-                <input id="id_agree" type="checkbox" name="agree" value="1" />
-                <label for="id_agree" style="display:inline;">
-                I have received and read (or had explained to me) the
-                information regarding meningococcal disease and hepatitis B.
-                </label>
-            </p>
-            {% include "form_submit.inc.html" %}
-        </div>
+        {% endif %}
+        <p>
+            <input id="id_agree" type="checkbox" name="agree" value="1" />
+            <label for="id_agree" style="display:inline;">
+            I have received and read (or had explained to me) the
+            information regarding meningococcal disease and hepatitis B.
+            </label>
+        </p>
+        {% include "form_submit.inc.html" %}
     </form>
 </div>
 {% endblock %}
