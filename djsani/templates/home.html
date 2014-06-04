@@ -154,7 +154,7 @@ $(function() {
             </p>
         </div>
         <h2 class="clear">Online forms</h2>
-        <ul class="nobull">
+        <ul>
             <li>
                 <a href="{% url 'insurance_form' 'student' %}">
                     Health insurance information
@@ -174,7 +174,7 @@ $(function() {
                 {% endif %}
             </li>
         </ul>
-        <ul class="nobull slider-container" id="adult_student">
+        <ul class="slider-container" id="adult_student">
             <li>
                 {% if manager.cc_student_medical_history %}
                     Meningococcal meningitis/Hepatitis B response
@@ -187,7 +187,7 @@ $(function() {
             </li>
         </ul>
         <h2>Printable forms</h2>
-        <ul class="nobull">
+        <ul>
             <li>
                 <a href="//www.carthage.edu/live/files/830-pdf">
                     Immunization history
@@ -198,16 +198,11 @@ $(function() {
                     Parent/Legal guardian consent form
                 </a>
             </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/832-pdf">
-                    Meningococcal meningitis/Hepatitis B response
-                </a>
-            </li>
         </ul>
     </div>
     <div id="athlete" class="clear slider-container">
         <h2 class="clear">Online forms</h2>
-        <ul class="nobull">
+        <ul>
             <li>
                 <a href="{% url 'insurance_form' 'athlete' %}">
                     Health insurance information
@@ -237,7 +232,7 @@ $(function() {
                 {% endif %}
             </li>
         </ul>
-        <ul class="nobull slider-container" id="adult_athlete">
+        <ul class="slider-container" id="adult_athlete">
             <li>
                 {% if manager.cc_student_meni_waiver %}
                     Meningococcal meningitis/Hepatitis B response
@@ -290,7 +285,7 @@ $(function() {
             </li>
         </ul>
         <h2>Printable forms</h2>
-        <ul class="nobull">
+        <ul>
             <li>
                 <a href="//www.carthage.edu/live/files/816-pdf">
                     Instructions and checklist
@@ -342,45 +337,37 @@ $(function() {
                     <a href="//www.carthage.edu/live/files/794-pdf">
                         Sickle cell waiver
                     </a>
-                    <ul>
-                        <li>
+                    <p>
                         Carthage College Athletic Training &mdash;
                         Sickle Cell Trait Testing.
-                        </li>
-                    </ul>
+                    </p>
                 </li>
                 <li>
                     <a href="//www.carthage.edu/live/files/795-pdf">
                         Assumption of risk waiver
                     </a>
-                    <ul>
-                        <li>
-                            Carthage college intercollegiate athletic program
-                            Release and waiver of liability, assumption of risk
-                            And indemnity agreement
-                        </li>
-                    </ul>
+                    <p>
+                        Carthage college intercollegiate athletic program
+                        Release and waiver of liability, assumption of risk
+                        And indemnity agreement
+                    </p>
                 </li>
                 <li>
                     <a href="//www.carthage.edu/live/files/796-pdf">
                         HIPAA and FERPA waiver
                     </a>
-                    <ul>
-                        <li>
-                            Student Athlete Authorization/Consent For Disclosure
-                            of Protected Health Information (PHI).
-                        </li>
-                    </ul>
+                    <p>
+                        Student Athlete Authorization/Consent For Disclosure
+                        of Protected Health Information (PHI).
+                    </p>
                 </li>
                 <li>
                     <a href="//www.carthage.edu/live/files/797-pdf">
                         CCIW injury and illness reporting acknowledgement waiver
                     </a>
-                    <ul>
-                        <li>
-                            College Conference Of Illinois And Wisconsin waiver
-                        </li>
-                    </ul>
+                    <p>
+                        College Conference Of Illinois And Wisconsin waiver
+                    </p>
                 </li>
                 <li>
                     <a href="//www.carthage.edu/live/files/832-pdf">
