@@ -6,6 +6,7 @@ SELECT UNIQUE
     cc_student_medical_manager.cc_student_medical_history,
     cc_student_medical_manager.cc_student_health_insurance,
     cc_student_medical_manager.cc_student_meni_waiver,
+    cc_student_medical_manager.cc_student_immunization,
     cc_student_medical_manager.cc_athlete_medical_history,
     cc_student_medical_manager.cc_athlete_privacy_waiver,
     cc_student_medical_manager.cc_athlete_reporting_waiver,
