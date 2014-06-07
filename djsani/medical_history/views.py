@@ -28,7 +28,7 @@ def form(request,stype):
         form = eval(fname)(request.POST)
         form.is_valid()
         data = form.cleaned_data
-        data["cid"] = cid
+        data["college_id"] = cid
         # chapuza to grab dynamic textfield values
         """
         for k,v in request.POST:
@@ -36,7 +36,7 @@ def form(request,stype):
                 data[-2:]= v
         """
         # insert
-        put_data(data,table,noquo=["cid"])
+        put_data(data,table,noquo=["college_id"])
         # update the manager
         update_manager(table,cid)
         return HttpResponseRedirect(

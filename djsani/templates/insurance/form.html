@@ -65,11 +65,11 @@ $(function() {
 </script>
 {% endblock %}
 {% block left_nav %}{% endblock %}
-{% block page_content %}class="content large-12"{% endblock %}
+{% block page_content %}class="content large-11"{% endblock %}
 {% block content %}
 <div id="spotlight-wrap">
 <div class="spotlight forms-container">
-    <div class="large-7 medium-7 small-7">
+    <div class="large-7 medium-7 small-12">
     <p>
         Carthage College requires every full-time undergraduate student to
         provide insurance and emergency contact information each academic
@@ -88,7 +88,7 @@ $(function() {
         {% endfor %}
         <input id="id_update" type="hidden"
             value="{{update}}" name="update">
-        <div class="large-5 medium-5 small-5">
+        <div class="large-5 medium-7 small-7">
             <label for="id_opt_out">
                 <input id="id_opt_out" type="checkbox" value="1"
                     name="opt_out">
@@ -98,7 +98,7 @@ $(function() {
                 </span>
             </label>
         </div>
-        <div class="large-5 medium-5 small-5">
+        <div class="large-5 medium-7 small-7">
             <div id="secondary-box">
                 <label for="id_second" style="display:block;">
                     <input id="id_second" type="checkbox" value="1"
@@ -111,7 +111,7 @@ $(function() {
             </div>
         </div>
         <div id="insurance-policies">
-            <div class="large-5 medium-5 small-5" id="primary-form">
+            <div class="large-5 medium-7 small-7" id="primary-form">
                 <h2>Primary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol>
@@ -121,7 +121,7 @@ $(function() {
                     </ol>
                 </fieldset>
             </div>
-            <div class="large-5 medium-5 small-5" id="secondary-form">
+            <div class="large-5 medium-7 small-7" id="secondary-form">
                 <h2>Secondary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol class="nobull">
@@ -132,7 +132,7 @@ $(function() {
                 </fieldset>
             </div>
         </div>
-        <div class="large-12">
+        <div class="large-11">
             {% include "form_submit.inc.html" %}
         </div>
     </form>

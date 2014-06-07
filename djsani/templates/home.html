@@ -77,6 +77,13 @@ $(function() {
 });
 </script>
 {% endblock %}
+{% block left_nav  %}
+{% load livewhale_api %}
+<h4>Health &amp; Counseling Center</h4>
+{% get_lw_content as nav blurbs 1357 %}
+{{nav.body}}
+{% endblock %}
+{% block sidebar %}{% endblock %}
 {% block content_head %}
 <div id="spotlight-intro" class="site-width cf">
     <div class="large-8 medium-8">

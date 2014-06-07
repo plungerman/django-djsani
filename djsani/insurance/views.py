@@ -39,7 +39,7 @@ def form(request,stype):
             if v == "None":
                 v = ""
             forms["secondary_%s" % k] = v
-        forms["cid"] = cid
+        forms["college_id"] = cid
         oo = request.POST.get("opt_out")
         if not oo:
             oo = 0
@@ -47,19 +47,26 @@ def form(request,stype):
             forms["primary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["primary_dob"]
             if forms.get("secondary_dob"):
                 forms["secondary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["secondary_dob"]
+            # strip \r\n addresses
+            paddress = forms.get("primary_policy_address")
+            saddress = forms.get("secondary_policy_address")
+            if paddress:
+                forms["primary_policy_address"] = paddress.replace('\r\n',' ')
+            if saddress:
+                forms["secondary_policy_address"] = saddress.replace('\r\n',' ')
         else:
             oo = 1
         forms["opt_out"] = oo
 
         # insert or update
         if not request.POST.get("update"):
-            forms["cid"] = cid
+            forms["college_id"] = cid
             # update the manager now so we can repurpose cid
             update_manager(table,cid)
             # no cid means insert
             cid = None
 
-        noquo = ["cid","opt_out","primary_dob","secondary_dob"]
+        noquo = ["college_id","opt_out","primary_dob","secondary_dob"]
         put_data(forms,table,cid=cid,noquo=noquo)
         return HttpResponseRedirect(
             reverse_lazy("insurance_success")

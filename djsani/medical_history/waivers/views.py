@@ -33,8 +33,8 @@ def form(request,stype,wtype):
         form.is_valid()
         data = form.cleaned_data
         # insert
-        data["cid"] = cid
-        put_data(data,table,noquo=["cid"])
+        data["college_id"] = cid
+        put_data(data,table,noquo=["college_id"])
         # update the manager
         update_manager(table,cid)
         return HttpResponseRedirect(

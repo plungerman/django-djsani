@@ -19,9 +19,9 @@ FROM
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
 LEFT JOIN
-    cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.cid
+    cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
 LEFT JOIN
-    cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.cid
+    cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 LEFT JOIN
     stu_acad_rec ON  id_rec.id = stu_acad_rec.id
 WHERE
@@ -51,7 +51,7 @@ LEFT JOIN
 LEFT JOIN
     cvid_rec     ON  id_rec.id = cvid_rec.cx_id
 LEFT JOIN
-    cc_student_medical_manager ON  id_rec.id = cc_student_medical_manager.cid
+    cc_student_medical_manager ON  id_rec.id = cc_student_medical_manager.college_id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 """

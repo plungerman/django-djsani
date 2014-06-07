@@ -33,7 +33,7 @@ def get_data(table,cid,fields=None,date=None):
         sql += ','.join(fields)
     else:
         sql += "*"
-    sql += " FROM %s WHERE cid=%s" % (table,cid)
+    sql += " FROM %s WHERE college_id=%s" % (table,cid)
     if date:
         sql += " AND created_at?"
     result = do_esql(sql)
@@ -59,7 +59,7 @@ def put_data(dic,table,cid=None,noquo=None):
                 prefix += "%s," % val
             else:
                 prefix += "'%s'," % val
-        sql = "%s WHERE cid=%s" % (prefix[:-1],cid)
+        sql = "%s WHERE college_id=%s" % (prefix[:-1],cid)
     else:
         prefix = "INSERT INTO %s" % table
         fields = "("
@@ -86,10 +86,10 @@ def update_manager(field,cid):
     which we use throughout the app
     """
     put_data(
-        {field:1,"cid":cid},
+        {field:1,"college_id":cid},
         "cc_student_medical_manager",
         cid=cid,
-        noquo=[field,"cid"]
+        noquo=[field,"college_id"]
     )
 
 @csrf_exempt
@@ -112,8 +112,8 @@ def set_type(request):
     else:
         switch = request.POST.get("switch")
 
-    dic = {field:switch,"cid":cid}
-    noquo=["athlete","cid","cc_student_immunization"]
+    dic = {field:switch,"college_id":cid}
+    noquo=["athlete","college_id","cc_student_immunization"]
     put_data( dic, table, cid = update, noquo=noquo )
 
     return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
