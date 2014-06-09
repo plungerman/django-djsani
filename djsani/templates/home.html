@@ -1,4 +1,5 @@
 {% extends "djkorra/base.html" %}
+{% load livewhale_api %}
 {% block title %}Medical Forms &mdash; Carthage College{% endblock %}
 {% block extra_style %}
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
@@ -77,7 +78,6 @@ $(function() {
 </script>
 {% endblock %}
 {% block left_nav  %}
-{% load livewhale_api %}
 <h4>Health &amp; Counseling Center</h4>
 {% get_lw_content as nav blurbs 1357 %}
 {{nav.body}}
