@@ -11,8 +11,8 @@
 }
 </style>
 {% endblock %}
-{% block extra_javascript %}{% endblock %}
 {% block content %}
+<div id="student-container">
     <div class="row">
         <div class="col-lg-8">
             <h1 class="page-header">
@@ -23,6 +23,18 @@
                     <i class="fa fa-print"></i>
                 </a>
             </h1>
+            <h3>
+                Immunization status:
+                {% if student.cc_student_immunization %}
+                    <i class="fa fa-check">
+                        <span style="display:none;">x</span>
+                    </i>
+                {% else %}
+                    <input type="checkbox" name="immun" class="immun"
+                        id="immun_{{student.id}}" value="{{student.id}}" />
+                {% endif %}
+            </h3>
+
         </div>
         <!-- /.col-lg-12 -->
         <div class="col-lg-4">
@@ -136,4 +148,5 @@
         <!-- /.col-lg-6 -->
     </div>
     <!-- /.row -->
+</div> <!-- /#student-container -->
 {% endblock content %}

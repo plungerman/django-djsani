@@ -44,6 +44,7 @@ SELECT
     id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name,
     adm_rec.plan_enr_sess,adm_rec.plan_enr_yr,
     cc_student_medical_manager.athlete,
+    cc_student_medical_manager.cc_student_immunization,
     profile_rec.birth_date
 FROM
     id_rec
