@@ -32,9 +32,20 @@ AND prog_enr_rec.lv_date IS NULL
 AND prog_enr_rec.acst
 IN ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
 AND stu_acad_rec.sess IN ("RA","RC","AM","GC","PC","TC")
-AND stu_acad_rec.reg_hrs > 0
 """
 
+# original WHERE clause
+'''
+WHERE
+    prog_enr_rec.subprog
+NOT IN ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
+AND prog_enr_rec.lv_date IS NULL
+AND prog_enr_rec.acst
+IN ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
+AND stu_acad_rec.sess IN ("RA","RC","AM","GC","PC","TC")
+AND stu_acad_rec.reg_hrs > 0
+'''
+# moved to view method
 #AND prog_enr_rec.cl IN  ("FF","FR","SO","JR","SR","GR","NM")
 
 STUDENT_VITALS = """

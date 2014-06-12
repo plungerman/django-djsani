@@ -6,14 +6,15 @@
 {% block javascript %}
 <script type="text/javascript" charset="utf-8">
 $(function() {
-    $('#id_submit').attr('disabled', 'disabled');
-    $('#id_agree').click(function() {
-        if ($(this).is(':checked')) {
-            $('#id_submit').removeAttr('disabled');
+    $('#reporting_waive').submit(function() {
+        if ($('#id_agree').is(':checked')) {
+            return true;
         } else {
-            $('#id_submit').attr('disabled', 'disabled');
+            alert('You must agree by checking the checkbox.');
+            return false;
         }
     });
+
 });
 </script>
 {% endblock %}
@@ -24,7 +25,7 @@ $(function() {
         Acknowledgement Form
     </h2>
     {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form" id="profile">{% csrf_token %}
+    <form method="post" action="." class="form" id="reporting_waive">{% csrf_token %}
         <p>
             I acknowledge that I have to be an active participant in my
             own healthcare.  As such, I have the direct responsibility

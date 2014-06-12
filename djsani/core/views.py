@@ -12,9 +12,6 @@ from djzbar.utils.informix import do_sql as do_esql
 from djtools.utils.date import calculate_age
 from djtools.fields import TODAY
 
-import logging
-logger = logging.getLogger(__name__)
-
 def is_member(user,group):
     """
     simple method to check if a user belongs to a group

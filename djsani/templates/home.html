@@ -79,6 +79,17 @@ $(function() {
 {% endblock %}
 {% block left_nav  %}
 <h4>Health &amp; Counseling Center</h4>
+<ul>
+    {% if not user.is_anonymous %}
+        <li>
+            <a href="{% url 'auth_logout' %}?next={{request.path}}">Logout</a>
+        </li>
+    {% else %}
+        <li>
+            <a href="{% url 'auth_login' %}?next={{request.path}}">Login</a>
+        </li>
+    {% endif %}
+</ul>
 {% get_lw_content as nav blurbs 1357 %}
 {{nav.body}}
 {% endblock %}
@@ -99,6 +110,11 @@ $(function() {
 {% block content %}
 <div>
     {% if student %}
+    <p>
+        <strong>NOTE:</strong>
+        If you encounter any problems with the forms, please contact
+        <a href="mailto:skirk@carthage.edu">Steve Kirk</a>.
+    </p>
     <p>Do you plan to participate in NCAA Intercollegiate Athletics?</p>
     <form id="profile" class="form">
     <ul class="nobull">
@@ -177,7 +193,7 @@ $(function() {
                 <a href="{% url 'medical_history_form' 'student' %}">
                     Medical history
                 </a>
-                {% endif %}
+                {% endif %}{{adult}}
             </li>
         </ul>
         <ul class="slider-container" id="adult_student">

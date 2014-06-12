@@ -12,7 +12,7 @@
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
 <script type="text/javascript" charset="utf-8">
-$(function() {
+$(document).ready(function() {
     options = {
         startYear: 1980,
         finalYear: 2014
@@ -34,7 +34,7 @@ $(function() {
         id = "id_" + nm + "_2";
         if ($(this).val() == "Yes") {
             html = '<li id="' + id + '" class="infield">';
-            html +='<label>&mdash;Explain:&nbsp;</label>';
+            html +='<label>&mdash;<strong class="red">Explain:</strong>&nbsp;</label>';
             html +='<input type="text" name="' + nm + '_2" maxlength="255"';
             if ( $(this).attr('name') == "chicken_pox"){
                 html +='class="dyntext required date-picker" />';
@@ -53,6 +53,7 @@ $(function() {
             $("li.error").remove();
         }
     });
+    /*
     var validator = $("#profile").validate({
         debug: true,
         errorElement: "li",
@@ -72,9 +73,11 @@ $(function() {
                     form.elements[i-1].value = e.value;
                 }
             }
-            form.submit();
+            alert("boo!");
+            //form.submit();
         }
     });
+    */
 });
 </script>
 {% endblock %}

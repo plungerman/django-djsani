@@ -12,6 +12,23 @@ $(function() {
     $('#proof').on('change', function() {
         $('input').not(this).prop('checked', false);
     });
+    $('#sickle_cell').submit(function() {
+        if ($('input:checkbox', this).is(':checked')) {
+            if ($('#proof').is(':checked')) {
+                if ($('input:radio', this).is(':checked')) {
+                    return true;
+                } else {
+                    alert('You must indicate "Positive or Negative" results');
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        } else {
+            alert('You must choose to waive or provide proof.');
+            return false;
+        }
+    });
 });
 </script>
 {% endblock %}
@@ -22,7 +39,8 @@ $(function() {
         Sickle Cell Trait Testing
     </h2>
     {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form" id="profile">{% csrf_token %}
+    <form method="post" action="." class="form" id="sickle_cell">
+        {% csrf_token %}
         <div id="medical-history">
             <div class="span-20">
                 <h3>About Sickle Cell Trait</h3>

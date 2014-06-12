@@ -113,7 +113,10 @@ def student_detail(request,cid=None,template="dashboard/student_detail.html"):
         obj = do_esql("%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid))
         if obj:
             student = obj.fetchone()
-            age = calculate_age(student.birth_date)
+            try:
+                age = calculate_age(student.birth_date)
+            except:
+                age = None
             ens = emergency_information(cid)
             shi = panels(request,"cc_student_health_insurance",cid)
             smh = panels(request,"cc_student_medical_history",cid)

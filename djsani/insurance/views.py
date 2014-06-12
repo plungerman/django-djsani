@@ -44,9 +44,12 @@ def form(request,stype):
         if not oo:
             oo = 0
             # convert python dates to informix date formats
-            forms["primary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["primary_dob"]
+            if forms.get("primary_dob"):
+                forms["primary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["primary_dob"]
             if forms.get("secondary_dob"):
                 forms["secondary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["secondary_dob"]
+            else:
+                forms.pop("secondary_dob")
             # strip \r\n addresses
             paddress = forms.get("primary_policy_address")
             saddress = forms.get("secondary_policy_address")
@@ -93,7 +96,7 @@ def form(request,stype):
     return render_to_response(
         "insurance/form.html", {
             "form1":form1,"form2":form2,"update":update,
-            "manager":manager
+            "manager":manager,"secondary":secondary.get("dob")
         },
         context_instance=RequestContext(request)
     )
