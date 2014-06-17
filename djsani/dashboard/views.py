@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
 from djsani.core import *
-from djsani.core.views import get_data, is_member
+from djsani.core.views import get_data, put_data, is_member
 from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
 
@@ -133,4 +133,14 @@ def student_detail(request,cid=None,template="dashboard/student_detail.html"):
             raise Http404
     else:
         raise Http404
+@csrf_exempt
+def xeditable(request):
+    field = request.POST.get("name")
+    value = request.POST.get("value")
+    pk = request.POST.get("pk")
+    table = request.POST.get("table")
+    dic = {field:value,"id":pk,"table":table}
+    noquo=["id",]
+    #put_data( dic, table, cid = update, noquo=noquo )
 
+    return HttpResponse(dic, mimetype="text/plain; charset=utf-8")
