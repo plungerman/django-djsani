@@ -49,7 +49,11 @@ def form(request,stype):
             if forms.get("secondary_dob"):
                 forms["secondary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["secondary_dob"]
             else:
-                forms.pop("secondary_dob")
+                # OJO: wtf?
+                try:
+                    forms.pop("secondary_dob")
+                except:
+                    pass
             # strip \r\n addresses
             paddress = forms.get("primary_policy_address")
             saddress = forms.get("secondary_policy_address")

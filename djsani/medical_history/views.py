@@ -18,10 +18,10 @@ def form(request,stype):
     table = "cc_%s_medical_history" % stype
     manager = get_data("cc_student_medical_manager",cid).fetchone()
     # check to see if they already submitted this form
-    if manager[table]:
-        return HttpResponseRedirect(
-            reverse_lazy("home")
-        )
+    #if manager[table]:
+    #    return HttpResponseRedirect(
+    #        reverse_lazy("home")
+    #    )
     # form name
     fname = "%sForm" % stype.capitalize()
     if request.method=='POST':
