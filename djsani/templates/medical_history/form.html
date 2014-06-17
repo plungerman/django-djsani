@@ -7,10 +7,12 @@
 {{block.super}}
 <link rel="stylesheet" type="text/css" media="screen"
     href="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" media="screen"
+    href="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/css/bootstrapValidator.min.css">
 {% endblock %}
 {% block javascript %}
-<script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
     options = {
@@ -53,31 +55,17 @@ $(document).ready(function() {
             $("li.error").remove();
         }
     });
-    /*
-    var validator = $("#profile").validate({
-        debug: true,
-        errorElement: "li",
-        errorPlacement: function (error, element) {
-            icon = '<img src="';
-            icon +='//www.carthage.edu/static/forms/img/icons/requiredx.png" />';
-            error.appendTo ( element.parents("ul:first") );
-            //offset = element.offset();
-            error.addClass('error');
-            error.css('width', 20);
-            error.html(icon);
-        },
-        submitHandler: function(form) {
-            for(var i=0;i<form.elements.length;i++){
-                var e = form.elements[i];
-                if (e.name.match(/_2$/)) {
-                    form.elements[i-1].value = e.value;
-                }
+    $('#medical-history').submit(function( event ) {
+        var elem = document.getElementById('medical-history').elements;
+        for(var i = 0; i < elem.length; i++) {
+            var e = elem[i];
+            if (e.name.match(/_2$/)) {
+                elem[i-1].value = e.value;
+                alert(elem[i-1].value);
             }
-            alert("boo!");
-            //form.submit();
         }
+        //event.preventDefault();
     });
-    */
 });
 </script>
 {% endblock %}
@@ -99,7 +87,7 @@ $(document).ready(function() {
         certain communicable diseases to the Department of Health.
     </p>
     {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form" id="profile">
+    <form method="post" action="." class="form" id="medical-history">
         {% csrf_token %}
         <div id="medical-history">
             <fieldset class="blockLabels">
