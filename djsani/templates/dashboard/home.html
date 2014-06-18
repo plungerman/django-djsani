@@ -110,7 +110,12 @@
         //pobject["table"] = $(this).attr("data-table");
         $('.jeditable').editable({
             url: '{% url "dashboard_xeditable" %}',
-            params: {'table':$(this).attr("data-table")},
+            params: function (params) {
+                params.table = $(this).attr("data-table");
+                ps = JSON.stringify(params);
+                alert(ps);
+                return JSON.stringify(params);
+            },
             success: function(response, newValue) {
                 console.log($(this).attr("data-table"));
             }
