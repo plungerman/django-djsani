@@ -1,14 +1,2 @@
-{% if data %}
-    <dl class="dl-horizontal">
-    {% for f in form %}
-        <dt class="widus">{{f.label}}</dt>
-        <dd{% if f.value != 'No' %} class="alert alert-danger yes"{% endif %}>
-            {{f.value|default_if_none:"&nbsp;"}}
-        </dd>
-    {% endfor %}
-    </dl>
-{% else %}
-<div class="alert alert-danger">
-    <h3>The student has not completed this form.</h3>
-</div>
-{% endif %}
+{% extends "dashboard/panels/cc_student_medical_history.html" %}
+{% block medical_table %}cc_athlete_medical_history{% endblock %}

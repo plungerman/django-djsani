@@ -137,10 +137,9 @@ def student_detail(request,cid=None,template="dashboard/student_detail.html"):
 def xeditable(request):
     field = request.POST.get("name")
     value = request.POST.get("value")
-    pk = request.POST.get("pk")
+    cid = request.POST.get("cid")
     table = request.POST.get("table")
-    dic = {field:value,"id":pk,"table":table}
-    noquo=["id",]
-    #put_data( dic, table, cid = update, noquo=noquo )
+    dic = {field:value}
+    put_data( dic, table, cid )
 
     return HttpResponse(dic, mimetype="text/plain; charset=utf-8")
