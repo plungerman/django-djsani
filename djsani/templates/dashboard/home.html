@@ -105,9 +105,8 @@
             });
             return false;
         });
+        /* x-editable jquery plugin */
         $.fn.editable.defaults.mode = 'inline';
-        //var pobject = new Object();
-        //pobject["table"] = $(this).attr("data-table");
         $('.jeditable').editable({
             url: '{% url "dashboard_xeditable" %}',
             params: function (params) {
