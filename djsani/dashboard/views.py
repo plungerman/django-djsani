@@ -133,6 +133,7 @@ def student_detail(request,cid=None,template="dashboard/student_detail.html"):
             raise Http404
     else:
         raise Http404
+
 @csrf_exempt
 def xeditable(request):
     field = request.POST.get("name")

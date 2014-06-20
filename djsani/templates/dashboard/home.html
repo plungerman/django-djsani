@@ -111,12 +111,7 @@
             url: '{% url "dashboard_xeditable" %}',
             params: function (params) {
                 params.table = $(this).attr("data-table");
-                params.cid = {{student.id}};
-                /*
-                ps = JSON.stringify(params);
-                return JSON.stringify(params);
-                */
-                alert(params);
+                params.cid = {{student.id|default:"0"}};
                 return params
             },
             success: function(response, newValue) {

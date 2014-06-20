@@ -15,6 +15,12 @@
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
+    $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+        }
+    });
     options = {
         startYear: 1980,
         finalYear: 2014
