@@ -36,7 +36,6 @@ def get_data(table,cid,fields=None,date=None):
     result = do_esql(sql)
     return result
 
-def escape_data(
 def put_data(dic,table,cid=None,noquo=None):
     """
     dic:    dictionary of data
