@@ -36,6 +36,7 @@ def get_data(table,cid,fields=None,date=None):
     result = do_esql(sql)
     return result
 
+def escape_data(
 def put_data(dic,table,cid=None,noquo=None):
     """
     dic:    dictionary of data
@@ -55,13 +56,15 @@ def put_data(dic,table,cid=None,noquo=None):
             if noquo and key in noquo:
                 prefix += "%s," % val
             else:
-                prefix += "'%s'," % val
+                prefix += '"%s",' % val
         sql = "%s WHERE college_id=%s" % (prefix[:-1],cid)
     else:
         prefix = "INSERT INTO %s" % table
         fields = "("
         values = "VALUES ("
-        for key,val in dic.items():
+        for key,v in dic.items():
+            # escape quotes
+            val = v.replace("'", r"\'").replace('"', r'\"')
             # informix expects 1 or 0
             if val == True:
                 val = 1
@@ -71,7 +74,7 @@ def put_data(dic,table,cid=None,noquo=None):
             if noquo and key in noquo:
                 values +="%s," % val
             else:
-                values +="'%s'," % val
+                values +='"%s",' % val
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
