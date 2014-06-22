@@ -12,6 +12,9 @@ from djzbar.utils.informix import do_sql as do_esql
 from djtools.utils.date import calculate_age
 from djtools.fields import TODAY
 
+import logging
+logger = logging.getLogger(__name__)
+
 def is_member(user,group):
     """
     simple method to check if a user belongs to a group
@@ -45,7 +48,12 @@ def put_data(dic,table,cid=None,noquo=None):
     """
     if cid:
         prefix = "UPDATE %s SET " % table
-        for key,val in dic.items():
+        for key,v in dic.items():
+            # strip quotes
+            try:
+                val = v.replace("'", "").replace('"', '')
+            except:
+                val = v
             # informix expects 1 or 0
             if val == True:
                 val = 1
@@ -62,8 +70,11 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "("
         values = "VALUES ("
         for key,v in dic.items():
-            # escape quotes
-            val = v.replace("'", r"\'").replace('"', r'\"')
+            # strip quotes
+            try:
+                val = v.replace("'", "").replace('"', '')
+            except:
+                val = v
             # informix expects 1 or 0
             if val == True:
                 val = 1
@@ -77,6 +88,7 @@ def put_data(dic,table,cid=None,noquo=None):
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
+    logger.debug("sql = %s" % sql)
     do_esql(sql,key=settings.INFORMIX_DEBUG)
 
 def update_manager(field,cid):
