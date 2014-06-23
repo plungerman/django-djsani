@@ -48,12 +48,13 @@ def put_data(dic,table,cid=None,noquo=None):
     """
     if cid:
         prefix = "UPDATE %s SET " % table
-        for key,v in dic.items():
+        for key,val in dic.items():
             # strip quotes
-            try:
-                val = v.replace("'", "").replace('"', '')
-            except:
-                val = v
+            if key not in noquo:
+               try:
+                   val = val.replace("'", "").replace('"', '')
+               except:
+                   pass
             # informix expects 1 or 0
             if val == True:
                 val = 1
@@ -69,12 +70,13 @@ def put_data(dic,table,cid=None,noquo=None):
         prefix = "INSERT INTO %s" % table
         fields = "("
         values = "VALUES ("
-        for key,v in dic.items():
+        for key,val in dic.items():
             # strip quotes
-            try:
-                val = v.replace("'", "").replace('"', '')
-            except:
-                val = v
+            if key not in noquo:
+                try:
+                    val = val.replace("'", "").replace('"', '')
+                except:
+                    pass
             # informix expects 1 or 0
             if val == True:
                 val = 1
