@@ -63,7 +63,7 @@ def put_data(dic,table,cid=None,noquo=None):
             if noquo and key in noquo:
                 prefix += "%s," % val
             else:
-                prefix += '"%s",' % val
+                prefix += "'%s'," % val
         sql = "%s WHERE college_id=%s" % (prefix[:-1],cid)
     else:
         prefix = "INSERT INTO %s" % table
@@ -84,7 +84,7 @@ def put_data(dic,table,cid=None,noquo=None):
             if noquo and key in noquo:
                 values +="%s," % val
             else:
-                values +='"%s",' % val
+                values +="'%s'," % val
         fields = "%s)" % fields[:-1]
         values = "%s)" % values[:-1]
         sql = "%s %s %s" % (prefix,fields,values)
