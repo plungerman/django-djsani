@@ -50,7 +50,7 @@ def put_data(dic,table,cid=None,noquo=None):
         prefix = "UPDATE %s SET " % table
         for key,val in dic.items():
             # strip quotes
-            if key not in noquo:
+            if noquo and key not in noquo:
                try:
                    val = val.replace("'", "").replace('"', '')
                except:
@@ -72,7 +72,7 @@ def put_data(dic,table,cid=None,noquo=None):
         values = "VALUES ("
         for key,val in dic.items():
             # strip quotes
-            if key not in noquo:
+            if noquo and key not in noquo:
                 try:
                     val = val.replace("'", "").replace('"', '')
                 except:
