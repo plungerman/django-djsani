@@ -43,9 +43,11 @@ def home(request):
     """
     dashboard home with a list of students
     """
+    students = None
     sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
     objs = do_esql(sql)
-    students = objs.fetchall()
+    if objs:
+        students = objs.fetchall()
 
     return render_to_response(
         "dashboard/home.html",
