@@ -118,7 +118,7 @@
                 console.log($(this).attr("data-table"));
             }
         });
-        {% if not students %}
+        {% if not students and not student %}
             alert("There was a problem fetching the student data.\nPlease reload the page.");
         {% endif %}
     });

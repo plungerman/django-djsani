@@ -50,6 +50,6 @@ LEFT JOIN
 LEFT JOIN
     cc_student_medical_manager ON  id_rec.id = cc_student_medical_manager.college_id
 WHERE
-    cc_student_medical_manager.cc_student_medical_history = 1
+    cc_student_medical_manager.cc_athlete_medical_history = 1
 ORDER BY
     id_rec.lastname
