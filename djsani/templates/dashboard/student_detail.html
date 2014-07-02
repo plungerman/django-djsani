@@ -23,7 +23,7 @@
                 {{student.firstname}} {{student.lastname}}
                 <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
                 {% if student.athlete %}<small>Athlete</small><br />{% endif %}
-                <a href="{% url 'student_detail_print' student.id %}">
+                <a href="{% url 'student_detail_print' cid %}">
                     <i class="fa fa-print"></i>
                 </a>
             </h1>

@@ -115,19 +115,22 @@ def student_detail(request,cid=None,template="dashboard/student_detail.html"):
         obj = do_esql("%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid))
         if obj:
             student = obj.fetchone()
-            try:
-                age = calculate_age(student.birth_date)
-            except:
-                age = None
-            ens = emergency_information(cid)
-            shi = panels(request,"cc_student_health_insurance",cid)
-            smh = panels(request,"cc_student_medical_history",cid)
-            amh = panels(request,"cc_athlete_medical_history",cid)
+            if student:
+                try:
+                    age = calculate_age(student.birth_date)
+                except:
+                    age = None
+                ens = emergency_information(cid)
+                shi = panels(request,"cc_student_health_insurance",cid)
+                smh = panels(request,"cc_student_medical_history",cid)
+                amh = panels(request,"cc_athlete_medical_history",cid)
+            else:
+                age=ens=shi=smh=amh=student=None
             return render_to_response(
                 template,
                 {
                     "student":student,"age":age,"ens":ens,
-                    "shi":shi,"amh":amh,"smh":smh
+                    "shi":shi,"amh":amh,"smh":smh,"cid":cid
                 },
                 context_instance=RequestContext(request)
             )
