@@ -1,6 +1,6 @@
 STUDENTS_ALPHA = """
 SELECT UNIQUE
-    id_rec.lastname, id_rec.firstname, id_rec.id,
+    id_rec.lastname,id_rec.firstname,id_rec.id,
     cc_student_medical_manager.athlete,
     cc_student_medical_manager.sports,
     cc_student_medical_manager.cc_student_medical_history,
@@ -26,12 +26,15 @@ LEFT JOIN
 LEFT JOIN
     stu_acad_rec ON  id_rec.id = stu_acad_rec.id
 WHERE
-    prog_enr_rec.subprog
-NOT IN ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
-AND prog_enr_rec.lv_date IS NULL
-AND prog_enr_rec.acst
-IN ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
-AND stu_acad_rec.sess IN ("RA","RC","AM","GC","PC","TC")
+    prog_enr_rec.acst
+IN
+    ("WD","GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
+AND
+    stu_acad_rec.sess
+IN
+    ("RA","RC","AM","GC","PC","TC")
+AND
+    stu_acad_rec.reg_hrs > 0
 """
 
 # original WHERE clause
@@ -39,7 +42,6 @@ AND stu_acad_rec.sess IN ("RA","RC","AM","GC","PC","TC")
 WHERE
     prog_enr_rec.subprog
 NOT IN ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
-AND prog_enr_rec.lv_date IS NULL
 AND prog_enr_rec.acst
 IN ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
 AND stu_acad_rec.sess IN ("RA","RC","AM","GC","PC","TC")

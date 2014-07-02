@@ -184,6 +184,13 @@
                         <i class="fa fa-dashboard fa-fw"></i> Dashboard
                     </a>
                 </li>
+                {% if user.is_superuser %}
+                <li>
+                    <a href="/campus-life/medical/forms/admin/">
+                        <i class="fa fa-gears"></i> Administration
+                    </a>
+                </li>
+                {% endif %}
                 <li>
                     <a href="{% url 'home' %}">
                         <i class="fa fa-edit"></i> Medical Forms

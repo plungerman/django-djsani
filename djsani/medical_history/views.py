@@ -16,12 +16,14 @@ from djsani.core.views import get_data, put_data, update_manager
 def form(request,stype):
     cid = request.user.id
     table = "cc_%s_medical_history" % stype
-    manager = get_data("cc_student_medical_manager",cid).fetchone()
-    # check to see if they already submitted this form
-    if manager[table]:
-        return HttpResponseRedirect(
-            reverse_lazy("home")
-        )
+    obj = get_data("cc_student_medical_manager",cid)
+    if obj:
+        manager = obj.fetchone()
+        # check to see if they already submitted this form
+        if manager[table]:
+            return HttpResponseRedirect(
+                reverse_lazy("home")
+            )
     # form name
     fname = "%sForm" % stype.capitalize()
     if request.method=='POST':
