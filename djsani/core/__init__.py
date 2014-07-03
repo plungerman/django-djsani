@@ -26,13 +26,9 @@ LEFT JOIN
 LEFT JOIN
     stu_acad_rec ON  id_rec.id = stu_acad_rec.id
 WHERE
-    prog_enr_rec.acst
-IN
-    ("WD","GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
-AND
     stu_acad_rec.sess
 IN
-    ("RA","RC","AM","GC","PC","TC")
+    ("RB","RA","RC","AM","GC","PC","TC")
 AND
     stu_acad_rec.reg_hrs > 0
 """
