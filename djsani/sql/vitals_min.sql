@@ -6,4 +6,4 @@ FROM
 LEFT JOIN
     cvid_rec     ON  id_rec.id = cvid_rec.cx_id
 WHERE
-    id_rec.id = 
+    id_rec.id = 28233
