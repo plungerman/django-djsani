@@ -1,7 +1,7 @@
 {% if data %}
     <dl class="dl-horizontal">
     {% for f in form %}
-        <dt class="widus">{{f.label}}</dt>
+        <dt class="widus" title="{{f.label}}">{{f.label}}</dt>
         <dd{% if f.value != 'No' %} class="alert alert-danger yes"{% endif %}>
             <a href="#" id="{{f.name}}" data-type="text" data-pk="{{data.id}}"
                  data-table="{% block medical_table %}cc_student_medical_history{% endblock %}"
