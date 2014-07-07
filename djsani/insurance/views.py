@@ -14,6 +14,9 @@ from djtools.fields import NOW
 
 from textwrap import fill
 
+import logging
+logger = logging.getLogger(__name__)
+
 #@portal_login_required
 @login_required
 def form(request,stype):
@@ -21,6 +24,8 @@ def form(request,stype):
     # form name
     fname = "%sForm" % stype.capitalize()
     table = "cc_student_health_insurance"
+    # opt out
+    oo = None
     if request.method=='POST':
         # primary
         form1 = eval(fname)(request.POST,prefix="primary")
@@ -63,6 +68,9 @@ def form(request,stype):
                 forms["secondary_policy_address"] = saddress.replace('\r\n',' ')
         else:
             oo = 1
+            forms.pop("primary_dob")
+            forms.pop("secondary_dob")
+
         forms["opt_out"] = oo
 
         # insert or update
@@ -87,6 +95,8 @@ def form(request,stype):
         secondary = {}
         try:
             data = obj.fetchone()
+            oo = data.opt_out
+            logger.debug("oo = %s" % oo)
             for k,v in data.items():
                 if k.startswith("primary_"):
                     primary[k[8:]] = v
@@ -99,7 +109,7 @@ def form(request,stype):
         form2 = eval(fname)(prefix="secondary",initial=secondary)
     return render_to_response(
         "insurance/form.html", {
-            "form1":form1,"form2":form2,"update":update,
+            "form1":form1,"form2":form2,"update":update,"oo":oo,
             "manager":manager,"secondary":secondary.get("dob")
         },
         context_instance=RequestContext(request)

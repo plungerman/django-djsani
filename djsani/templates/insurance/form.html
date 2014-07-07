@@ -61,10 +61,16 @@ $(function() {
             $(this).closest('li').next().find('select').addClass("required");
         }
     });
-    {% if not secondary and update %}
-        $("#id_second").prop("checked", true);
-        $("input[id^='id_secondary']").removeClass("error required");
-        $('#secondary-form').slideUp(200);
+    {% if oo %}
+        $('#insurance-policies').slideUp(200);
+        $('#secondary-box').slideUp(200);
+        $("#id_opt_out").prop("checked", true);
+    {% else %}
+        {% if not secondary and update %}
+            $("#id_second").prop("checked", true);
+            $("input[id^='id_secondary']").removeClass("error required");
+            $('#secondary-form').slideUp(200);
+        {% endif %}
     {% endif %}
 });
 </script>
@@ -75,7 +81,7 @@ $(function() {
 <div id="spotlight-wrap">
 <div class="spotlight forms-container">
     <div class="large-7 medium-7 small-12">
-    <p>
+    <p>{{oo}}
         Carthage College requires every full-time undergraduate student to
         provide insurance and emergency contact information each academic
         year. By completing this form, you are providing your permission
