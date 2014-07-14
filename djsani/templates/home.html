@@ -247,6 +247,10 @@ $(function() {
             <li>
                 {% if manager.cc_student_medical_history %}
                     Medical history
+                    {{manager.cc_student_medical_history}}
+                    {{student.lastname}}
+                    {{student.firstname}}
+                    {{student.id}}
                     <i class="fa fa-check green"></i>
                 {% else %}
                 <a href="{% url 'medical_history_form' 'student' %}">

@@ -20,7 +20,7 @@ def form(request,stype):
     if obj:
         manager = obj.fetchone()
         # check to see if they already submitted this form
-        if manager[table]:
+        if manager and manager[table]:
             return HttpResponseRedirect(
                 reverse_lazy("home")
             )
