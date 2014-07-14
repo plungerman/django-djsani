@@ -64,16 +64,20 @@ $(document).ready(function() {
     $('#medical-history').submit(function( event ) {
         var elem = document.getElementById('medical-history').elements;
         var error = false;
-        for(var i = 0; i < elem.length; i++) {
-            var e = elem[i];
-            var yes = e.name.match(/_2$/);
-            if (yes) {
-                if (!e.value) {
-                    error = true;
-                } else {
-                    elem[i-1].value = e.value;
+        if($('input:radio:checked').length > 0){
+            for(var i = 0; i < elem.length; i++) {
+                var e = elem[i];
+                var yes = e.name.match(/_2$/);
+                if (yes) {
+                    if (!e.value) {
+                        error = true;
+                    } else {
+                        elem[i-1].value = e.value;
+                    }
                 }
             }
+        }else{
+            error = true;
         }
         if (error) {
             event.preventDefault();
@@ -259,18 +263,29 @@ $(document).ready(function() {
         </div>
     </form>
 </div>
-<div id="errorModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div id="errorModal" class="modal fade bs-example-modal-sm" tabindex="-1"
+    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">
+                Close
+            </span>
+        </button>
         <h1 class="modal-title">Error</h1>
       </div>
       <div class="modal-body">
-        <p>You responsed "Yes" to one of the questions but did not provide an explanation.</p>
+        <p>
+            You did not respond with a "Yes" or "No" to all of the questions,
+            or you responsed "Yes" to one of the questions but did not provide
+            an explanation.
+        </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+        </button>
       </div>
     </div><!-- /.modal-content -->
   </div>
