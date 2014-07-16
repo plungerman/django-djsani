@@ -47,34 +47,34 @@ def put_data(dic,table,cid=None,noquo=[]):
     noquo:  a list of field names that do not require quotes
     """
     if cid:
-        prefix = "UPDATE %s SET " % table
+        prefix = 'UPDATE %s SET ' % table
         for key,val in dic.items():
             # strip quotes
             if key not in noquo:
-               try:
-                   val = val.replace("'", "").replace('"', '')
-               except:
-                   pass
+                try:
+                    val = val.replace('"', '')
+                except:
+                    pass
             # informix expects 1 or 0
             if val == True:
                 val = 1
             if val == False:
                 val = 0
-            prefix += "%s=" % key
+            prefix += '%s=' % key
             if noquo and key in noquo:
-                prefix += "%s," % val
+                prefix += '%s,' % val
             else:
-                prefix += "'%s'," % val
-        sql = "%s WHERE college_id=%s" % (prefix[:-1],cid)
+                prefix += '"%s",' % val
+        sql = '%s WHERE college_id=%s' % (prefix[:-1],cid)
     else:
-        prefix = "INSERT INTO %s" % table
-        fields = "("
-        values = "VALUES ("
+        prefix = 'INSERT INTO %s' % table
+        fields = '('
+        values = 'VALUES ('
         for key,val in dic.items():
             # strip quotes
-            if noquo and key not in noquo:
+            if key not in noquo:
                 try:
-                    val = val.replace("'", "").replace('"', '')
+                    val = val.replace('"', '')
                 except:
                     pass
             # informix expects 1 or 0
@@ -84,13 +84,12 @@ def put_data(dic,table,cid=None,noquo=[]):
                 val = 0
             fields +='%s,' % key
             if noquo and key in noquo:
-                values +="%s," % val
+                values +='%s,' % val
             else:
-                values +="'%s'," % val
-        fields = "%s)" % fields[:-1]
-        values = "%s)" % values[:-1]
-        sql = "%s %s %s" % (prefix,fields,values)
-    logger.debug("sql = %s" % sql)
+                values +='"%s",' % val
+        fields = '%s)' % fields[:-1]
+        values = '%s)' % values[:-1]
+        sql = '%s %s %s' % (prefix,fields,values)
     do_esql(sql,key=settings.INFORMIX_DEBUG)
 
 def update_manager(field,cid):
