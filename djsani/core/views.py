@@ -39,7 +39,7 @@ def get_data(table,cid,fields=None,date=None):
     result = do_esql(sql)
     return result
 
-def put_data(dic,table,cid=None,noquo=None):
+def put_data(dic,table,cid=None,noquo=[]):
     """
     dic:    dictionary of data
     table:  the name of the table in the database
@@ -50,7 +50,7 @@ def put_data(dic,table,cid=None,noquo=None):
         prefix = "UPDATE %s SET " % table
         for key,val in dic.items():
             # strip quotes
-            if noquo and key not in noquo:
+            if key not in noquo:
                try:
                    val = val.replace("'", "").replace('"', '')
                except:
