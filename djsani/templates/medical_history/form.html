@@ -63,8 +63,21 @@ $(document).ready(function() {
     });
     $('#medical-history').submit(function( event ) {
         var elem = document.getElementById('medical-history').elements;
-        var error = false;
-        if($('input:radio:checked').length > 0){
+        var radios = {};
+        $(':radio').each(function() {
+            radios[$(this).attr('name')] = true;
+        });
+        var count = 0;
+        $.each(radios, function() {
+            count++;
+        });
+        if ($(':radio:checked').length === count) {
+            error = false;
+        }else{
+            error = true;
+        }
+
+        if(!error){
             for(var i = 0; i < elem.length; i++) {
                 var e = elem[i];
                 var yes = e.name.match(/_2$/);
@@ -76,8 +89,6 @@ $(document).ready(function() {
                     }
                 }
             }
-        }else{
-            error = true;
         }
         if (error) {
             event.preventDefault();
@@ -110,14 +121,6 @@ $(document).ready(function() {
         <div id="medical-history">
             <fieldset class="blockLabels">
                 <ol class="nobull">
-                    <li>
-                        <input
-                            type="checkbox"
-                            name="toggle_no" id="toggle_no" />
-                        <label for="toggle_no" style="display:inline;">
-                            Mark all as "No"
-                        </label>
-                    </li>
                     {% if stype == "athlete" %}
                         {% for field in form %}
                             {% if field.name == "concussion" %}
