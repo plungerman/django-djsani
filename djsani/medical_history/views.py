@@ -14,29 +14,35 @@ from djsani.core.views import get_data, put_data, update_manager
 #@portal_login_required
 @login_required
 def form(request,stype):
+    # dictionary for initial values if "update"
+    innit = {}
+    # student id
     cid = request.user.id
+    # form name
+    fname = "%sForm" % stype.capitalize()
+    template = "medical_history/form.html"
+    # check for student record(s)
+    update = False
     table = "cc_%s_medical_history" % stype
     obj = get_data("cc_student_medical_manager",cid)
     if obj:
         manager = obj.fetchone()
         # check to see if they already submitted this form
         if manager and manager[table]:
-            return HttpResponseRedirect(
-                reverse_lazy("home")
-            )
-    # form name
-    fname = "%sForm" % stype.capitalize()
+            obj = get_data(table,cid)
+            if obj:
+                data = obj.fetchone()
+                if data:
+                    update = True
+                    for k,v in data.items():
+                        innit[k] = v
+
+            template = "medical_history/form_update.html"
     if request.method=='POST':
         form = eval(fname)(request.POST)
         form.is_valid()
         data = form.cleaned_data
         data["college_id"] = cid
-        # chapuza to grab dynamic textfield values
-        """
-        for k,v in request.POST:
-            if k[-2:] == "_2":
-                data[-2:]= v
-        """
         # insert
         put_data(data,table,noquo=["college_id"])
         # update the manager
@@ -45,11 +51,12 @@ def form(request,stype):
             reverse_lazy("medical_history_success")
         )
     else:
-        form = eval(fname)
+        form = eval(fname)(initial=innit)
     return render_to_response(
-        "medical_history/form.html",
+        template,
         {
-            "form":form,"stype":stype
+            "form":form,"stype":stype,"table":table,"cid":cid,
+            "update":update
         },
         context_instance=RequestContext(request)
     )

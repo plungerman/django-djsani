@@ -197,13 +197,11 @@ $(function() {
                 {% endif %}
             </li>
             <li>
-                {% if manager.cc_student_medical_history %}
-                    Medical history
-                    <i class="fa fa-check green"></i>
-                {% else %}
                 <a href="{% url 'medical_history_form' 'student' %}">
                     Medical history
                 </a>
+                {% if manager.cc_student_medical_history %}
+                    <i class="fa fa-check green"></i>
                 {% endif %}
             </li>
         </ul>
@@ -245,23 +243,19 @@ $(function() {
                 {% endif %}
             </li>
             <li>
-                {% if manager.cc_student_medical_history %}
-                    Medical history
-                    <i class="fa fa-check green"></i>
-                {% else %}
                 <a href="{% url 'medical_history_form' 'student' %}">
                     Medical history
                 </a>
+                {% if manager.cc_student_medical_history %}
+                    <i class="fa fa-check green"></i>
                 {% endif %}
             </li>
             <li>
-                {% if manager.cc_athlete_medical_history %}
-                    Medical history for athletes only
-                    <i class="fa fa-check green"></i>
-                {% else %}
                 <a href="{% url 'medical_history_form' 'athlete' %}">
                     Medical history for athletes only
                 </a>
+                {% if manager.cc_athlete_medical_history %}
+                    <i class="fa fa-check green"></i>
                 {% endif %}
             </li>
         </ul>
