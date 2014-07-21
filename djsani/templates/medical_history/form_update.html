@@ -16,6 +16,12 @@
 .btn-primary:hover {
     background-color: #cacaca;
 }
+blockquote {
+    border-left: 0;
+}
+#page-content-wrap .content h4 {
+    font-weight: bold;
+}
 </style>
 {% endblock %}
 {% block javascript %}
@@ -197,6 +203,9 @@ $(document).ready(function() {
                                 data-title="{{field.label}}" class="jeditable">
                                 {{field.value|default_if_none:"&nbsp;"}}
                             </a>
+                            {% if field.help_text %}
+                                <p class="help">{{field.help_text}}</p>
+                            {% endif %}
                             </li>
                         {% endfor %}
                     {% else %}
@@ -236,6 +245,9 @@ $(document).ready(function() {
                                 data-title="{{field.label}}" class="jeditable">
                                 {{field.value|default_if_none:"&nbsp;"}}
                             </a>
+                            {% if field.help_text %}
+                                <p class="help">{{field.help_text}}</p>
+                            {% endif %}
                             </li>
                         {% endfor %}
                     {% endif %}
