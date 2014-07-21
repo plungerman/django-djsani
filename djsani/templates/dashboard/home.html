@@ -143,6 +143,22 @@
                 console.log($(this).attr("data-table"));
             }
         });
+        /*
+        var panelList = $('.draggablePanelList');
+
+        panelList.sortable({
+            // Only make the .panel-heading child elements support dragging.
+            // Omit this to make then entire <li>...</li> draggable.
+            update: function() {
+                $('.panel', panelList).each(function(index, elem) {
+                     var $listItem = $(elem),
+                         newIndex = $listItem.index();
+
+                     // Persist the new indices.
+                });
+            }
+        });
+        */
         {% if not students and not student %}
             alert("There was a problem fetching the student data.\nPlease reload the page or try your search again.");
         {% endif %}

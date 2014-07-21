@@ -14,6 +14,8 @@
 .center{text-align:center;}
 .red {color:#800;}
 .green {color:#008000;}
+/* show the move cursor as the user moves the mouse over the panel header.*/
+#draggablePanelList .panel-heading { cursor: move; }
 </style>
 {% endblock %}
 {% block content %}
@@ -67,7 +69,7 @@
         </div> <!-- /.col-lg-4 -->
     </div>
     <!-- /.row -->
-    <div class="row">
+    <div class="row" class="draggablePanelList">
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -109,7 +111,7 @@
         <!-- /.col-lg-6 -->
     </div>
     <!-- /.row -->
-    <div class="row">
+    <div class="row" class="draggablePanelList">
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">

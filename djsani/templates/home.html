@@ -1,5 +1,6 @@
 {% extends "djkorra/base.html" %}
 {% load livewhale_api %}
+{% load ifusergroup %}
 {% block title %}Medical Forms &mdash; Carthage College{% endblock %}
 {% block extra_style %}
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
@@ -84,6 +85,11 @@ $(function() {
         <li>
             <a href="{% url 'auth_logout' %}?next={{request.path}}">Logout</a>
         </li>
+        {% ifusergroup Staff %}
+        <li>
+            <a href="{% url 'dashboard_home' %}">Dashboard</a>
+        </li>
+        {% endifusergroup %}
         {% if user.is_superuser %}
         <li>
             <a href="/campus-life/medical/forms/admin/">Administration</a>
