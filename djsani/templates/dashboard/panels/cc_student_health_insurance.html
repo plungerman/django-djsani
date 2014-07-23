@@ -25,54 +25,154 @@
         <h3>Primary Health Insurance</h3>
         <dl class="dl-horizontal">
             <dt>Policy holder</dt>
-            <dd>{{data.primary_policy_holder}}</dd>
+            <dd>
+                <a href="#" id="primary_policy_holder" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy holder" class="jeditable">
+                {{data.primary_policy_holder|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Date of birth</dt>
-            <dd>{{data.primary_dob}}</dd>
+            <dd>
+                <a href="#" id="primary_dob" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Date of birth" class="jeditable">
+                {{data.primary_dob|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Company</dt>
-            <dd>{{data.primary_company}}</dd>
+            <dd>
+                <a href="#" id="primary_company" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Company" class="jeditable">
+                {{data.primary_company|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Phone</dt>
-            <dd>{{data.primary_phone}}</dd>
+            <dd>
+                <a href="#" id="primary_phone" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Phone" class="jeditable">
+                {{data.primary_phone|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Member ID</dt>
-            <dd>{{data.primary_member_id}}</dd>
+            <dd>
+                <a href="#" id="primary_member_id" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Member ID" class="jeditable">
+                {{data.primary_member_id|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Group number</dt>
-            <dd>{{data.primary_group_no}}</dd>
+            <dd>
+                <a href="#" id="primary_group_no" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Group number" class="jeditable">
+                {{data.primary_group_no|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Policy type</dt>
-            <dd>{{data.primary_policy_type}}</dd>
-            {% if data.primary_policy_state %}
+            <dd>
+                <a href="#" id="primary_policy_type" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy type" class="jeditable">
+                {{data.primary_policy_type|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Policy state</dt>
-            <dd>{{data.primary_policy_state}}</dd>
-            {% endif %}
-            {% if data.primary_policy_address %}
+            <dd>
+                <a href="#" id="primary_policy_state" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy state" class="jeditable">
+                {{data.primary_policy_state|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Address</dt>
-            <dd>{{data.primary_policy_address}}</dd>
-            {% endif %}
+            <dd>
+                <a href="#" id="primary_policy_address" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy address" class="jeditable">
+                {{data.primary_policy_address|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
         </dl>
     </div>
     <div id="secondary_insurance" class="tab-pane fade"> 
         <h3>Secondary Health Insurance</h3>
         <dl class="dl-horizontal">
             <dt>Policy holder</dt>
-            <dd>{{data.secondary_policy_holder}}</dd>
+            <dd>
+                <a href="#" id="secondary_policy_holder" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy holder" class="jeditable">
+                {{data.secondary_policy_holder|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Date of birth</dt>
-            <dd>{{data.secondary_dob}}</dd>
+            <dd>
+                <a href="#" id="secondary_dob" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Date of birth" class="jeditable">
+                {{data.secondary_dob|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Company</dt>
-            <dd>{{data.secondary_company}}</dd>
+            <dd>
+                <a href="#" id="secondary_company" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Company" class="jeditable">
+                {{data.secondary_company|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Phone</dt>
-            <dd>{{data.secondary_phone}}</dd>
+            <dd>
+                <a href="#" id="secondary_phone" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Phone" class="jeditable">
+                {{data.secondary_phone|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Member ID</dt>
-            <dd>{{data.secondary_member_id}}</dd>
+            <dd>
+                <a href="#" id="secondary_member_id" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Member ID" class="jeditable">
+                {{data.secondary_member_id|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Group number</dt>
-            <dd>{{data.secondary_group_no}}</dd>
+            <dd>
+                <a href="#" id="secondary_group_no" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Group number" class="jeditable">
+                {{data.secondary_group_no|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Policy type</dt>
-            <dd>{{data.secondary_policy_type}}</dd>
-            {% if data.secondary_policy_state %}
+            <dd>
+                <a href="#" id="secondary_policy_type" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy type" class="jeditable">
+                {{data.secondary_policy_type|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Policy state</dt>
-            <dd>{{data.secondary_policy_state}}</dd>
-            {% endif %}
-            {% if data.secondary_policy_address %}
+            <dd>
+                <a href="#" id="secondary_policy_state" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy state" class="jeditable">
+                {{data.secondary_policy_state|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
             <dt>Address</dt>
-            <dd>{{data.secondary_policy_address}}</dd>
-            {% endif %}
+            <dd>
+                <a href="#" id="secondary_policy_address" data-type="text"
+                 data-pk="{{data.id}}" data-table="cc_student_health_insurance"
+                 data-title="Policy address" class="jeditable">
+                {{data.secondary_policy_address|default_if_none:"&nbsp;"}}
+                </a>
+            </dd>
         </dl>
     </div>
 </div>

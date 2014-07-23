@@ -11,7 +11,6 @@ POLICY_CHOICES = (
     ('PPO', 'PPO'),
     ('POS', 'POS'),
     ('State Insurance', 'State Insurance'),
-    ('Other', 'Other'),
 )
 
 class StudentForm(forms.Form):
