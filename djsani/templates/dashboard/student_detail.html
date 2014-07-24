@@ -3,6 +3,8 @@
 {{block.super}}
 <link href="/static/djsani/css/print.css"
     rel="stylesheet" type="text/css" media="print" />
+<link href="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.css"
+    rel="stylesheet" type="text/css" />
 <style>
 .dl-horizontal dt.widus {
     width: 300px;
@@ -11,12 +13,58 @@
 .dl-horizontal dd.yes {
     margin-left: 0;
 }
+.bootstrap-select {
+    width: 300px !important;
+}
+
 .center{text-align:center;}
 .red {color:#800;}
 .green {color:#008000;}
 /* show the move cursor as the user moves the mouse over the panel header.*/
 #draggablePanelList .panel-heading { cursor: move; }
 </style>
+{% endblock %}
+{% block extra_javascript %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script src="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.js"></script>
+    <script>
+    $(function() {
+        // set student types
+        function setType(interruptor,field) {
+            var $data = {
+                "switch": interruptor,
+                "field": field,
+                "college_id":{{student.id}}
+            };
+            $.ajax({
+                type: "POST",
+                async: true,
+                url:  '{{switch_earl}}',
+                dataType: 'html',
+                data: $data
+            });
+        }
+        /* x-editable jquery plugin */
+        $.fn.editable.defaults.mode = 'inline';
+        $('.jeditable').editable({
+            url: '{% url "dashboard_xeditable" %}',
+            params: function (params) {
+                params.table = $(this).attr("data-table");
+                params.cid = {{student.id|default:"0"}};
+                return params
+            },
+            success: function(response, newValue) {
+                //console.log($(this).attr("data-table"));
+            }
+        });
+        // multiple select picker
+        $('#id_sports').selectpicker();
+        $('#id_sports').on('change', function(){
+            $this = $(this).val();
+            setType($this,"sports");
+        });
+    });
+    </script>
 {% endblock %}
 {% block content %}
 <div id="student-container">
@@ -25,10 +73,30 @@
             <h1 class="page-header">
                 {{student.firstname}} {{student.lastname}}
                 <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
-                {% if student.athlete %}<small>Athlete</small><br />{% endif %}
-                <a href="{% url 'student_detail_print' cid %}">
-                    <i class="fa fa-print"></i>
-                </a>
+                {% if student.athlete %}
+                    <form id="profile" class="form">
+                        <select name="sports" class="selectpicker"
+                            id="id_sports" size="5"
+                            multiple="multiple"
+                            title="Choose your sport(s)&hellip;">
+                            {% for s in sports %}
+                            {% if not forloop.first %}
+                            <option
+                            {% if not s.0 %}
+                                disabled
+                            {% else %} value="{{s.0}}"
+                                {% if s.0 in my_sports %}
+                                    selected="selected"
+                                {% endif %}
+                            {% endif %}
+                            >
+                            {{s.1}}
+                            </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </form>
+                {% endif %}
             </h1>
             <h3>
                 Immunization status:
@@ -48,8 +116,8 @@
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-globe fa-5x"></i>
+                        <div class="col-xs-2">
+                            <i class="fa fa-globe fa-4x"></i>
                         </div>
                         <div class="col-xs-8" id="student-contact">
                             <address>
@@ -62,6 +130,11 @@
                                 {{student.ldap_name}}@carthage.edu
                             </a>
                             </address>
+                        </div>
+                        <div class="col-xs-1">
+                            <a href="{% url 'student_detail_print' cid %}">
+                                <i class="fa fa-print fa-4x"></i>
+                            </a>
                         </div>
                     </div> <!-- /.row -->
                 </div> <!--/.panel-heading -->

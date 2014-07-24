@@ -1,0 +1,46 @@
+{% extends "djcher/accounts/login.html" %}
+{% block content %}
+    {% if user.is_anonymous %}
+        <p>
+            Please use your Carthage username to log in.
+            Do not include @carthage.edu as part of your username.
+        </p>
+        {% if form.errors or errors %}
+            <p class="error">
+                Please enter a correct username and password.
+                Both fields are case-sensitive.
+                <br /><br />
+                Do not include @carthage.edu
+                as part of your username.
+                <br /><br />
+                NOTE: Your password expires every 6 months,
+                so if you have not used your Carthage account in over
+                6 months, you will have to
+                <a href="https://password.carthage.edu/" target="_blank">
+                    change your password
+                </a>.
+            </p>
+        {% endif %}
+        {% include "accounts/login_form.inc.html" %}
+    {% else %}
+        <h2>You are already logged in</h2>
+        <p>Where do  you want to go?</p>
+        <ul>
+            <li>
+                <a href="{% url 'home' %}">
+                    Forms Home
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'dashboard_home' %}">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="../logout/">
+                    Do you want to log out and log in as a new user?
+                    </a>
+            </li>
+        </ul>
+    {% endif %}
+{% endblock %}
