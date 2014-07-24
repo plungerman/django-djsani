@@ -107,6 +107,7 @@ def student_detail(request,cid=None,template="dashboard/student_detail.html"):
     """
     main method for displaying student data
     """
+    my_sports = None
     if not cid:
         # search form
         cid = request.POST.get("cid")
