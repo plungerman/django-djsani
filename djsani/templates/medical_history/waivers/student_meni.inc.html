@@ -95,3 +95,19 @@
             please contact the Campus Nurse at (262) 551-5710 or
             <a href="mailto:rblut@carthage.edu">rblut@carthage.edu</a>.
         </p>
+        {% if form.errors %}
+            <p class="error">
+                Please check the box below.
+            </p>
+        {% endif %}
+        <p>
+            {% if student.cc_student_meni_waiver %}
+                <i class="fa fa-check fa-2x green"></i>
+            {% else %}
+            <input id="id_agree" type="checkbox" name="agree" value="1" />
+            {% endif %}
+            <label for="id_agree" style="display:inline;">
+            I have received and read (or had explained to me) the
+            information regarding meningococcal disease and hepatitis B.
+            </label>
+        </p>

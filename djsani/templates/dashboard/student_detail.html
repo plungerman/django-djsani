@@ -251,7 +251,7 @@
                                     Privacy
                                 </a>
                             </li>
-                            <li{% if not student.cc_athlete_sickle_waiver %}
+                            <li{% if not student.cc_athlete_sicklecell_waiver %}
                                 class="disabled"{% endif %}>
                                 <a href="#cc_athlete_sickle_waiver"
                                     data-toggle="tab">
@@ -279,12 +279,16 @@
                                 {% include "medical_history/waivers/student_meni.inc.html" %}
                             </div>
                             <div id="cc_athlete_privacy_waiver" class="tab-pane fade">
+                                {% include "medical_history/waivers/athlete_privacy.inc.html" %}
                             </div>
                             <div id="cc_athlete_sickle_waiver" class="tab-pane fade">
+                                {% include "medical_history/waivers/athlete_sicklecell.inc.html" %}
                             </div>
                             <div id="cc_athlete_reporting_waiver" class="tab-pane fade">
+                                {% include "medical_history/waivers/athlete_reporting.inc.html" %}
                             </div>
                             <div id="cc_athlete_risk_waiver" class="tab-pane fade">
+                                {% include "medical_history/waivers/athlete_risk.inc.html" %}
                             </div>
                         </div>
                         <!-- /.tab-content -->

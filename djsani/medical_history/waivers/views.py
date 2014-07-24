@@ -45,7 +45,7 @@ def form(request,stype,wtype):
     return render_to_response(
         "medical_history/waivers/%s_%s.html" % (stype,wtype),
         {
-            "form":form,"next_year":NEXT_YEAR,
+            "form":form,"next_year":NEXT_YEAR
         },
         context_instance=RequestContext(request)
     )

@@ -1,0 +1,41 @@
+<p>
+    I acknowledge that I have to be an active participant in my
+    own healthcare.  As such, I have the direct responsibility
+    for reporting all of my injuries and illnesses to the sports
+    medicine staff of my institution (e.g., team physician,
+    athletic training staff).  I recognize that my true physical
+    condition is dependent upon an accurate medical history and a
+    full disclosure of any symptoms, complaints, prior injuries
+    and/or disabilities experienced.  I hereby affirm that I have
+    fully disclosed in writing any prior medical conditions and
+    will also disclose any future conditions to the sports
+    medicine staff at my institution.
+</p><p>
+    I further understand that there is a possibility that
+    participation in my sport may result in a head injury and/or
+    concussion.  I have been provided with education on head
+    injuries and understand the importance of immediately
+    reporting symptoms of a head injury/concussion to my sports
+    medicine staff.
+</p><p>
+    By checking the box below, I acknowledge that my institution
+    has provided me with specific educational materials on what
+    a concussion is and given me an opportunity to ask questions
+    about areas and issues that are not clear to me on this issue.
+</p>
+{% if form.errors %}
+    <p class="error">
+        Please check the box below.
+    </p>
+{% endif %}
+<p>
+    {% if student.cc_athlete_reporting_waiver %}
+        <i class="fa fa-check fa-2x green"></i>
+    {% else %}
+        <input id="id_agree" type="checkbox" name="agree" value="1" />
+    {% endif %}
+    <label for="id_agree" style="display:inline;">
+    I have read the above and agree that the statements are
+    accurate.
+    </label>
+</p>

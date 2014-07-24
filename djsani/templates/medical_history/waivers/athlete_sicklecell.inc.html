@@ -1,0 +1,157 @@
+<div id="medical-history">
+    <div class="large-12">
+        <h3>About Sickle Cell Trait</h3>
+        <ul class="bullets">
+            <li>
+                Sickle cell trait is an inherited condition of the
+                oxygen-carrying protein, hemoglobin, in the red blood
+                cells
+            </li>
+            <li>
+                Sickle cell trait is a common condition (more than
+               three million Americans)
+            </li>
+            <li>
+                Although sickle cell trait is most predominant in
+                African-Americans and those of Mediterranean, Middle
+                Eastern, Indian, Caribbean, and South and Central
+                American ancestry, persons of all races and
+                ancestry may test positive for sickle cell trait.
+            </li>
+            <li>
+                Sickle cell trait has been associated with a condition
+                known as exertional rhabdomyolysis, renal failure and
+                death. Complicating factors include extreme exertion,
+                increased heat, altitude and dehydration.
+            </li>
+            <li>
+                Sickle cell trait is usually benign, but during
+                intense, sustained exercise, hypoxia (lack of oxygen)
+                in the muscles may cause sickling of red blood cells
+                (red blood cells changing from a normal disc shape to
+                a crescent or "sickle" shape), which can accumulate in
+                the bloodstream and "logjam" blood vessels, leading to
+                a collapse from the rapid breakdown of muscle starved
+                of blood.
+            </li>
+        </ul>
+        <h3>Sickle Cell trait Testing</h3>
+        <ul class="bullets">
+            <li>
+                The NCAA recommends that all NCAA Division III
+                student-athletes have knowledge of their sickle cell
+                trait status
+            </li>
+            <li>
+                Carthage College recommends that all student-athletes
+                who are unable to confirm their sickle cell trait
+                status undergo sickle cell trait testing prior to
+                participation in any intercollegiate athlete activity.
+            </li>
+            <li>
+                Sickle cell trait testing in the form of a blood test
+                can be done by the student-athlete's personal primary
+                care physician or by the United Hospital Kenosha Campus
+                Laboratory.  Testing generally costs between $25-75
+                depending on the testing site. THIS EXPENSE IS THE
+                RESPONSIBILITY OF THE STUDENT-ATHLETE.
+            </li>
+        </ul>
+        <h3>Test Results or Sickle Cell Trait Testing Waiver</h3>
+        <p>
+            I have read this document with full knowledge
+            of its significance. I further state that I am at least
+            18 years of age and competent to sign this waiver.
+        </p>
+        <p>
+            After reviewing the above information and the NCAA
+            Fact Sheet for Student-Athletes I have elected to:
+        </p>
+        {% if form.errors %}
+            <p class="error">
+                {% if form.data.proof %}
+                Please indicate whether your test results were
+                "positive or "negative".
+                {% else %}
+                Please check one of the checkboxes below.
+                {% endif %}
+            </p>
+        {% endif %}
+        <div class="large-1">
+            {% if student.cc_athlete_sicklecell_waiver and student.proof %}
+                <i class="fa fa-check fa-2x green"></i>
+            {% else %}
+                <input id="proof" type="checkbox" name="proof" value="1"
+                    {% if form.data.proof %}checked="checked"{% endif %} />
+            {% endif %}
+        </div>
+        <div class="large-11">
+            <label for="proof">
+                <p>
+                I will provide documented proof of my Sickle Cell Trait
+                status from previous testing to the athletic training
+                staff (as well as answer below):
+                </p>
+            </label>
+            <p>
+            <strong>Test Results:</strong>
+            {% if student.cc_athlete_sicklecell_waiver and student.proof %}
+                {% if student.results == "Positive" %}
+                    <i class="green">Positive</i>
+                {% else %}
+                    <i class="green">Negative</i>
+                {% endif %}
+            {% else %}
+                <ul class="inline">
+                    <li>
+                        <input id="results_1" type="radio" name="results"
+                            value="Positive" />
+                        <label for="results_1">Positive</label>
+                    </li>
+                    <li>
+                        <input id="results_0" type="radio" name="results"
+                            value="Negative" />
+                        <label for="results_0">Negative</label>
+                    </li>
+                </ul>
+            {% endif %}
+            </p>
+        </div>
+        <div class="large-1">
+            {% if student.cc_athlete_sicklecell_waiver and student.cc_athlete_sicklecell_waiver.waive %}
+                <i class="fa fa-check fa-2x green"></i>
+            {% else %}
+                <input id="waive" type="checkbox" name="waive" value="1" />
+            {% endif %}
+        </div>
+        <div class="large-11">
+            <label for="waive">
+            <p>
+            I understand and acknowledge that the NCAA and
+            Carthage College Department of Athletics recommends that
+            all student-athletes have knowledge of their sickle cell
+            trait status. Additionally, I have read and fully
+            understand the aforementioned facts about sickle cell
+            trait testing.
+            </p><p>
+            Recognizing that my true physical condition is dependent
+            upon an accurate medical history and a full disclosure
+            of any symptoms, complaints, prior injuries, ailments
+            and/or disabilities experienced, I hereby affirm that I
+            have fully disclosed in writing any prior medical history
+            and/or knowledge of sickle cell trait status to the
+            Carthage College Athletic Training Staff.
+            </p><p>
+            I do not wish to undergo sickle cell trait testing and I
+            voluntarily agree to release, discharge, indemnify, and
+            hold harmless Carthage College, its officers, employees,
+            and agents from any and all costs, liabilities, expenses,
+            claims demands, or causes of action on account of any
+            loss or personal injury that might result from my
+            non-compliance with the recommendation of the NCAA and
+            the Carthage College Department of Athletics.
+            </p>
+            </label>
+        </div>
+    </div>
+</div>

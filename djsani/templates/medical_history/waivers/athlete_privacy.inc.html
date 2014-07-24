@@ -1,0 +1,142 @@
+<div class="large-12">
+    <p>
+        I hereby authorize Carthage College and its physician
+        affiliates, athletic and other (student athlete) health
+        care personnel to disclose my protected health information
+        and any related information regarding any injury or illness
+        during my training for and participation in intercollegiate
+        athletics to the following:
+    </p>
+    <h4>
+        By checking the boxes below you agree to the release
+        of your (PHI) in each category:
+    </h4>
+    <div class="large-1">
+        {% if student.cc_athlete_privacy_waiver %}
+            <i class="fa fa-check fa-2x green"></i>
+        {% else %}
+            <input id="id_ncaa_tool"
+                type="checkbox" name="ncaa_tool" value="1" />
+        {% endif %}
+    </div>
+    <div class="large-11">
+        <label for="id_ncaa_tool">
+            <p>
+            <em>
+                National Collegiate Athletic Association (NCAA)
+                Datalys Injury Surveillance Tool
+            </em><br />
+            I understand that my name will be removed and the records
+            coded before being transmitted from my institution to the
+            NCAA or Datalys and that neither the NCAA nor Datalys will
+            identify me personally in any publication or disclosure of
+            research results. Data will be stored on a secure server
+            at Datalys Center in Grand Rapids, MI. I understand that
+            my signing this portion of this authorization/consent is
+            voluntary and that my institution will not condition any
+            health care treatment or payment, enrollment in a health
+            plan or receipt of any benefits (if applicable) on whether
+            I provide the consent or authorization requested for this
+            disclosure.  I also understand that I am not required to
+            initial this portion of this authorization/consent in
+            order to be eligible for participation in NCAA athletics.
+            </p>
+        </label>
+    </div>
+    <div class="large-1">
+        {% if student.cc_athlete_privacy_waiver %}
+            <i class="fa fa-check fa-2x green"></i>
+        {% else %}
+            <input id="id_medical_insurance"
+                type="checkbox" name="medical_insurance" value="1" />
+        {% endif %}
+    </div>
+    <div class="large-11">
+        <label for="id_medical_insurance">
+            <p>
+            <em>My Personal Medical Insurance</em>
+            For the use of electronic transmission, US post mail, or
+            facsimile involving billing, reimbursement, benefits
+            eligibility and plan-eligibility issues.
+            <strong>
+                Authorization in this category is required to
+                participate in athletics at Carthage College.
+            </strong>
+            </p>
+        </label>
+    </div>
+    <div class="large-1">
+        {% if student.cc_athlete_privacy_waiver %}
+            <i class="fa fa-check fa-2x green"></i>
+        {% else %}
+            <input id="id_news_media"
+                type="checkbox" name="news_media" value="1" />
+        {% endif %}
+    </div>
+    <div class="large-11">
+        <label for="id_news_media">
+            <p>
+            <em>The News Media</em>
+            Should the media inquire as to the extent of an injury or
+            illness, you are allowing Carthage College athletics
+            representatives to discuss your condition.
+            </p>
+        </label>
+    </div>
+    <div class="large-1">
+        {% if student.cc_athlete_privacy_waiver %}
+            <i class="fa fa-check fa-2x green"></i>
+        {% else %}
+            <input id="id_parents_guardians"
+                type="checkbox" name="parents_guardians" value="1" />
+        {% endif %}
+    </div>
+    <div class="large-11">
+        <label for="id_parents_guardians">
+            <p>
+            <em>Parents/Guardian</em>
+            Should the parents/guardian inquire as to the extent of an
+            injury or illness, you are allowing Carthage College
+            athletics representatives to discuss your condition.
+            </p>
+        </label>
+    </div>
+    <div class="large-1">
+        {% if student.cc_athlete_privacy_waiver %}
+            <i class="fa fa-check fa-2x green"></i>
+        {% else %}
+            <input id="id_disclose_records"
+                type="checkbox" name="disclose_records" value="1" />
+        {% endif %}
+    </div>
+    <div class="large-11">
+        <label for="id_disclose_records">
+            <p>
+            I also allow any treating physicians or other medical
+            facilities to disclose my medical records to the Carthage
+            College Athletic Training staff for purposes of continued
+            quality of care during my athletic participation at that
+            institution.  Fax to: 262-551-5809
+            </p>
+        </label>
+    </div>
+    <div class="large-12">
+        <p>
+            I understand that my injury/illness information is
+            protected by federal regulations under either the Health
+            Information Portability and Accountability Act (HIPAA) or
+            the Family Educational Rights and Privacy Act (FERPA) of
+            1974 (the Buckley Amendment) and may not be disclosed
+            without either my authorization under HIPAA or my consent
+            under the Buckley Amendment.
+        </p><p>
+            This authorization/consent expires 380 days from the date
+            of submitting this form, but I have the right to revoke it
+            in writing at any time by sending written notification to
+            the athletic director at my institution.  I understand that
+            a revocation is not effective to the extent action has
+            already been taken in reliance on this
+            authorization/consent.
+        </p>
+    </div>
+</div>

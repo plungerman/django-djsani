@@ -54,6 +54,14 @@ SELECT
     adm_rec.plan_enr_sess,adm_rec.plan_enr_yr,
     cc_student_medical_manager.athlete, cc_student_medical_manager.sports,
     cc_student_medical_manager.cc_student_immunization,
+    cc_student_medical_manager.cc_student_meni_waiver,
+    cc_student_medical_manager.cc_athlete_privacy_waiver,
+    cc_student_medical_manager.cc_athlete_reporting_waiver,
+    cc_student_medical_manager.cc_athlete_risk_waiver,
+    cc_student_medical_manager.cc_athlete_sicklecell_waiver,
+    cc_athlete_sicklecell_waiver.waive,
+    cc_athlete_sicklecell_waiver.proof,
+    cc_athlete_sicklecell_waiver.results,
     profile_rec.birth_date
 FROM
     id_rec
@@ -63,6 +71,8 @@ LEFT JOIN
     cvid_rec     ON  id_rec.id = cvid_rec.cx_id
 LEFT JOIN
     cc_student_medical_manager ON  id_rec.id = cc_student_medical_manager.college_id
+LEFT JOIN
+    cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 """
