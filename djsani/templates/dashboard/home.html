@@ -50,8 +50,13 @@
         var spinner = new Spinner(opts).spin(target);
         spinner.stop(target);
 
-        <!-- Initialise the DataTables -->
-        $('#students-data').dataTable({
+        /*  Initialise the DataTables:
+            we assign it to variable 'table' so that we can use it for
+            the 'on change' event handler below. if we do not do it this
+            way, then the 'on change' event does not work for items after
+            page 1 or for items returned by search.
+        */
+        var table = $('#students-data').dataTable({
             "sDom": 'T<"clear">lfrtip',
             "oTableTools": {
                 "sSwfPath": "//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
@@ -67,7 +72,7 @@
                 [100, 250, 500, 1000, 2000, "All"]
             ]
         });
-        $('.immun').on('change', function() {
+        $(table).on( 'change', 'input', function () {
             var $cb = $(this);
             $.ajax({
                 type: "POST",
