@@ -68,6 +68,7 @@
             ]
         });
         $('.immun').on('change', function() {
+            var $cb = $(this);
             $.ajax({
                 type: "POST",
                 url: "{% url 'set_type' %}",
@@ -82,10 +83,8 @@
                 },
                 success: function(data) {
                     spinner.stop(target);
-                    check ='<i class="fa fa-check">';
-                    check+='<span style="display:none;">x</span>';
-                    check+='</i>';
-                    $(this).html(check);
+                    check ='<i class="fa fa-check"></i>';
+                    $cb.replaceWith(check);
                 }
             });
         });

@@ -89,6 +89,7 @@
             setType($this,"sports");
         });
         $('.immun').on('change', function() {
+            var $cb = $(this);
             $.ajax({
                 type: "POST",
                 url: "{% url 'set_type' %}",
@@ -97,16 +98,15 @@
                     'switch':1,
                     'field':'cc_student_immunization'
                 },
+                dataType: 'json',
                 cache: false,
                 beforeSend: function(){
                     spinner.spin(target);
                 },
                 success: function(data) {
                     spinner.stop(target);
-                    check ='<i class="fa fa-check">';
-                    check+='<span style="display:none;">x</span>';
-                    check+='</i>';
-                    $(this).html(check);
+                    check ='<i class="fa fa-check"></i>';
+                    $cb.replaceWith(check);
                 }
             });
         });
