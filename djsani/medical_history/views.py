@@ -43,6 +43,9 @@ def form(request,stype):
         form.is_valid()
         data = form.cleaned_data
         data["college_id"] = cid
+        for n,v in data.items():
+            if v == "Yes":
+                data[n] = request.POST["%s_2" % n]
         # insert
         put_data(data,table,noquo=["college_id"])
         # update the manager

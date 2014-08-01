@@ -91,7 +91,11 @@ $(document).ready(function() {
             }
         }
         if (error) {
-            event.preventDefault();
+            if(event.preventDefault) {
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
             $('#errorModal').modal('show');
         }
     });
