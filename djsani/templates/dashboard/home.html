@@ -72,6 +72,68 @@
                 [100, 250, 500, 1000, 2000, "All"]
             ]
         });
+        $( "#students-toggle" ).submit(function( event ) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_students' %}",
+                data: $("#students-toggle").serialize(),
+                cache: false,
+                beforeSend: function(){
+                // disable form submit button
+                    $('#submit-toggle').attr('disabled', 'disabled');
+                    spinner.spin(target);
+                },
+                success: function(data) {
+                    spinner.stop(target);
+                    // enable form submit button
+                    $('#submit-toggle').removeAttr('disabled');
+                    if (data != "error") {
+                        $("#students-data-panel").html(data);
+                        // initialise the datatable
+                        var table = $('#students-data').dataTable({
+                            "sDom": 'T<"clear">lfrtip',
+                            "oTableTools": {
+                                "sSwfPath": "//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                                "aButtons": [
+                                    "print", "xls", {
+                                        "sExtends": "pdf",
+                                        "sPdfOrientation": "landscape"
+                                    },
+                                ],
+                            },
+                            "lengthMenu": [
+                                [100, 250, 500, 1000, 2000, -1],
+                                [100, 250, 500, 1000, 2000, "All"]
+                            ]
+                        });
+                        $(table).on( 'change', 'input', function () {
+                            var $cb = $(this);
+                            $.ajax({
+                                type: "POST",
+                                url: "{% url 'set_type' %}",
+                                data: {
+                                    'college_id':$(this).val(),
+                                    'switch':1,
+                                    'field':'cc_student_immunization'
+                                },
+                                cache: false,
+                                beforeSend: function(){
+                                    spinner.spin(target);
+                                },
+                                success: function(data) {
+                                    spinner.stop(target);
+                                    check ='<i class="fa fa-check"></i>';
+                                    $cb.replaceWith(check);
+                                }
+                            });
+                        });
+                    } else {
+                        alert("Please login again to execute your search.");
+                    }
+                }
+            });
+            return false;
+        });
         $(table).on( 'change', 'input', function () {
             var $cb = $(this);
             $.ajax({
@@ -92,47 +154,6 @@
                     $cb.replaceWith(check);
                 }
             });
-        });
-        $( "#students-toggle" ).submit(function( event ) {
-            $.ajax({
-                type: "POST",
-                url: "{% url 'get_students' %}",
-                data: $("#students-toggle").serialize(),
-                cache: false,
-                beforeSend: function(){
-                // disable form submit button
-                    $('#submit-toggle').attr('disabled', 'disabled');
-                    spinner.spin(target);
-                },
-                success: function(data) {
-                    spinner.stop(target);
-                    // enable form submit button
-                    $('#submit-toggle').removeAttr('disabled');
-                    if (data != "error") {
-                        $("#students-data-panel").html(data);
-                        // initialise the datatable
-                        $('#students-data').dataTable({
-                            "sDom": 'T<"clear">lfrtip',
-                            "oTableTools": {
-                                "sSwfPath": "//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-                                "aButtons": [
-                                    "print", "xls", {
-                                        "sExtends": "pdf",
-                                        "sPdfOrientation": "landscape"
-                                    },
-                                ],
-                            },
-                            "lengthMenu": [
-                                [100, 250, 500, 1000, 2000, -1],
-                                [100, 250, 500, 1000, 2000, "All"]
-                            ]
-                        });
-                    } else {
-                        alert("Please login again to execute your search.");
-                    }
-                }
-            });
-            return false;
         });
         /* x-editable jquery plugin */
         $.fn.editable.defaults.mode = 'inline';

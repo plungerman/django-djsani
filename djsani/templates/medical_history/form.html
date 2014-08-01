@@ -121,7 +121,6 @@ $(document).ready(function() {
         <div id="medical-history">
             <fieldset class="blockLabels">
                 <ol class="nobull">
-                    <!--
                     <li>
                         <input
                             type="checkbox"
@@ -130,7 +129,6 @@ $(document).ready(function() {
                             Mark all as "No"
                         </label>
                     </li>
-                    -->
                     {% if stype == "athlete" %}
                         {% for field in form %}
                             {% if field.name == "concussion" %}
