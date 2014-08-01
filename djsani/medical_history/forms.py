@@ -248,9 +248,19 @@ class StudentForm(forms.Form):
         required=False
     )
 
-    def __init__(self,*args,**kwargs):
-        super(StudentForm,self).__init__(*args,**kwargs)
-        #self.fields.keyOrder = []
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        for field in cleaned_data:
+            if cleaned_data[field] == "Yes":
+                self._errors[field] = self.error_class(
+                    ["Explain your 'Yes' response"]
+                )
+            elif cleaned_data[field] == "":
+                self._errors[field] = self.error_class(
+                    ["Required"]
+                )
+        return self.cleaned_data
+
 
 class AthleteForm(forms.Form):
     """
@@ -564,3 +574,15 @@ class AthleteForm(forms.Form):
         required=False
     )
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        for field in cleaned_data:
+            if cleaned_data[field] == "Yes":
+                self._errors[field] = self.error_class(
+                    ["Explain your 'Yes' response"]
+                )
+            if cleaned_data[field] == "":
+                self._errors[field] = self.error_class(
+                    ["Required"]
+                )
+        return self.cleaned_data

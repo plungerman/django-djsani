@@ -39,20 +39,25 @@ def form(request,stype):
 
             template = "medical_history/form_update.html"
     if request.method=='POST':
-        form = eval(fname)(request.POST)
-        form.is_valid()
-        data = form.cleaned_data
-        data["college_id"] = cid
-        for n,v in data.items():
-            if v == "Yes":
-                data[n] = request.POST["%s_2" % n]
-        # insert
-        put_data(data,table,noquo=["college_id"])
-        # update the manager
-        update_manager(table,cid)
-        return HttpResponseRedirect(
-            reverse_lazy("medical_history_success")
-        )
+        post = request.POST.copy()
+        for field in post:
+            if post[field] == "Yes":
+                if post["%s_2" % field]:
+                    post[field] = post["%s_2" % field]
+        form = eval(fname)(post)
+        if form.is_valid():
+            data = form.cleaned_data
+            data["college_id"] = cid
+            #for n,v in data.items():
+            #    if v == "Yes":
+            #        data[n] = request.POST["%s_2" % n]
+            # insert
+            put_data(data,table,noquo=["college_id"])
+            # update the manager
+            update_manager(table,cid)
+            return HttpResponseRedirect(
+                reverse_lazy("medical_history_success")
+            )
     else:
         form = eval(fname)(initial=innit)
     return render_to_response(

@@ -40,17 +40,17 @@ $(document).ready(function() {
     $("input:radio").on('change', function() {
         nm = $(this).attr('name');
         id = "id_" + nm + "_2";
+        yes_input = '<li id="' + id + '" class="infield">';
+        yes_input +='<label>&mdash;<strong class="red">Explain:</strong>&nbsp;</label>';
+        yes_input +='<input type="text" name="' + nm + '_2" maxlength="255"';
         if ($(this).val() == "Yes") {
-            html = '<li id="' + id + '" class="infield">';
-            html +='<label>&mdash;<strong class="red">Explain:</strong>&nbsp;</label>';
-            html +='<input type="text" name="' + nm + '_2" maxlength="255"';
             if ( $(this).attr('name') == "chicken_pox"){
-                html +='class="dyntext required date-picker" />';
+                yes_input +='class="dyntext required date-picker" />';
             } else {
-                html +='class="dyntext required xlarge" />';
+                yes_input +='class="dyntext required xlarge" />';
             }
-            html +='</li>';
-            $(this).closest('ul').append(html);
+            yes_input +='</li>';
+            $(this).closest('ul').append(yes_input);
             if ( $(this).attr('name') == "chicken_pox"){
                 $('.date-picker').monthpicker(options);
                 $('.date-picker').monthpicker('show');
@@ -61,6 +61,32 @@ $(document).ready(function() {
             $("li.error").remove();
         }
     });
+    {% if form.errors %}
+    $(':radio:checked').each(function() {
+        val = $(this).val();
+        //if ($(this).val() == "Yes") {
+        if (val != "No" &&  val != "") {
+            nm = $(this).attr('name');
+            id = "id_" + nm + "_2";
+            yes_input = '<li id="' + id + '" class="infield">';
+            yes_input +='<label>&mdash;<strong class="red">Explain:</strong>';
+            yes_input +='&nbsp;</label><input type="text" name="' + nm + '_2"';
+            yes_input +=' value="' + val + '" maxlength="255"';
+            if ( $(this).attr('name') == "chicken_pox"){
+                yes_input +='class="dyntext required date-picker" />';
+            } else {
+                yes_input +='class="dyntext required xlarge" />';
+            }
+            yes_input +='</li>';
+            $(this).closest('ul').append(yes_input);
+            if ( $(this).attr('name') == "chicken_pox"){
+                $('.date-picker').monthpicker(options);
+                $('.date-picker').monthpicker('show');
+            }
+        }
+    });
+    {% endif %}
+    /*
     $('#medical-history').submit(function( event ) {
         var elem = document.getElementById('medical-history').elements;
         var radios = {};
@@ -99,6 +125,7 @@ $(document).ready(function() {
             $('#errorModal').modal('show');
         }
     });
+    */
 });
 </script>
 {% endblock %}
@@ -125,7 +152,6 @@ $(document).ready(function() {
         <div id="medical-history">
             <fieldset class="blockLabels">
                 <ol class="nobull">
-                    <!--
                     <li>
                         <input
                             type="checkbox"
@@ -134,7 +160,6 @@ $(document).ready(function() {
                             Mark all as "No"
                         </label>
                     </li>
-                    -->
                     {% if stype == "athlete" %}
                         {% for field in form %}
                             {% if field.name == "concussion" %}
