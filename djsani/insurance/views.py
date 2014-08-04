@@ -14,9 +14,6 @@ from djtools.fields import NOW
 
 from textwrap import fill
 
-import logging
-logger = logging.getLogger(__name__)
-
 #@portal_login_required
 @login_required
 def form(request,stype):
@@ -96,7 +93,6 @@ def form(request,stype):
         try:
             data = obj.fetchone()
             oo = data.opt_out
-            logger.debug("oo = %s" % oo)
             for k,v in data.items():
                 if k.startswith("primary_"):
                     primary[k[8:]] = v

@@ -16,6 +16,8 @@ from djsani.core.views import get_data, put_data, update_manager
 def form(request,stype):
     # dictionary for initial values if "update"
     innit = {}
+    # dictionary for 'yes' answer values
+    data = {}
     # student id
     cid = request.user.id
     # form name
@@ -40,17 +42,18 @@ def form(request,stype):
             template = "medical_history/form_update.html"
     if request.method=='POST':
         post = request.POST.copy()
-        for field in post:
-            if post[field] == "Yes":
-                if post["%s_2" % field]:
-                    post[field] = post["%s_2" % field]
         form = eval(fname)(post)
         if form.is_valid():
             data = form.cleaned_data
             data["college_id"] = cid
-            #for n,v in data.items():
-            #    if v == "Yes":
-            #        data[n] = request.POST["%s_2" % n]
+            # update 'yes' responses with value from temp field
+            for n,v in data.items():
+                if v == "Yes":
+                    data[n] = post["%s_2" % n]
+            # remove temp fields
+            for n,v in data.items():
+                if n[-2:] == "_2":
+                    data.pop(n)
             # insert
             put_data(data,table,noquo=["college_id"])
             # update the manager
@@ -58,13 +61,18 @@ def form(request,stype):
             return HttpResponseRedirect(
                 reverse_lazy("medical_history_success")
             )
+        else:
+            # for use at template level with dictionary filter
+            for n,v in post.items():
+                if n[-2:] == "_2" and v:
+                    data[n[:-2]] = v
     else:
         form = eval(fname)(initial=innit)
     return render_to_response(
         template,
         {
             "form":form,"stype":stype,"table":table,"cid":cid,
-            "update":update
+            "update":update,"data":data
         },
         context_instance=RequestContext(request)
     )

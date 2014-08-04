@@ -1,6 +1,6 @@
 {% if data %}
     <dl class="dl-horizontal">
-    {% for f in form %}
+    {% for f in form.visible_fields %}
         <dt class="widus" title="{{f.label}}">{{f.label}}</dt>
         <dd{% if f.value != 'No' %} class="alert alert-danger yes"{% endif %}>
             <a href="#" id="{{f.name}}" data-type="text" data-pk="{{data.id}}"

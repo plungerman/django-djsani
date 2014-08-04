@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load filters %}
 {% block title %}
     Medical History &mdash;
     Health and Counseling &mdash; Carthage College
@@ -64,14 +65,15 @@ $(document).ready(function() {
     {% if form.errors %}
     $(':radio:checked').each(function() {
         val = $(this).val();
-        //if ($(this).val() == "Yes") {
-        if (val != "No" &&  val != "") {
+        if (val != "No" &&  val != "" ) {
             nm = $(this).attr('name');
+            console.log("val = " + val);
+            console.log(nm);
             id = "id_" + nm + "_2";
             yes_input = '<li id="' + id + '" class="infield">';
             yes_input +='<label>&mdash;<strong class="red">Explain:</strong>';
             yes_input +='&nbsp;</label><input type="text" name="' + nm + '_2"';
-            yes_input +=' value="' + val + '" maxlength="255"';
+            yes_input +=' " id="' + nm + '" maxlength="255"';
             if ( $(this).attr('name') == "chicken_pox"){
                 yes_input +='class="dyntext required date-picker" />';
             } else {
@@ -85,8 +87,10 @@ $(document).ready(function() {
             }
         }
     });
+    {% for n,v in data.items %}
+    $("#{{n}}").val("{{v}}");
+    {% endfor %}
     {% endif %}
-    /*
     $('#medical-history').submit(function( event ) {
         var elem = document.getElementById('medical-history').elements;
         var radios = {};
@@ -125,7 +129,6 @@ $(document).ready(function() {
             $('#errorModal').modal('show');
         }
     });
-    */
 });
 </script>
 {% endblock %}
@@ -149,6 +152,9 @@ $(document).ready(function() {
     {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="medical-history">
         {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
         <div id="medical-history">
             <fieldset class="blockLabels">
                 <ol class="nobull">
@@ -161,7 +167,7 @@ $(document).ready(function() {
                         </label>
                     </li>
                     {% if stype == "athlete" %}
-                        {% for field in form %}
+                        {% for field in form.visible_fields %}
                             {% if field.name == "concussion" %}
                             </li></ol></fieldset>
                             <fieldset class="blockLabels">
@@ -276,7 +282,7 @@ $(document).ready(function() {
                             {% include "form_field.inc.html" %}
                         {% endfor %}
                     {% else %}
-                        {% for field in form %}
+                        {% for field in form.visible_fields %}
                             {% if forloop.first %}
                             <li>
                                 <p>
