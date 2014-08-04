@@ -67,8 +67,6 @@ $(document).ready(function() {
         val = $(this).val();
         if (val != "No" &&  val != "" ) {
             nm = $(this).attr('name');
-            console.log("val = " + val);
-            console.log(nm);
             id = "id_" + nm + "_2";
             yes_input = '<li id="' + id + '" class="infield">';
             yes_input +='<label>&mdash;<strong class="red">Explain:</strong>';
@@ -111,7 +109,7 @@ $(document).ready(function() {
             for(var i = 0; i < elem.length; i++) {
                 var e = elem[i];
                 var yes = e.name.match(/_2$/);
-                if (yes) {
+                if (yes && e.type != "hidden") {
                     if (!e.value) {
                         error = true;
                     } else {
@@ -158,6 +156,7 @@ $(document).ready(function() {
         <div id="medical-history">
             <fieldset class="blockLabels">
                 <ol class="nobull">
+                    <!--
                     <li>
                         <input
                             type="checkbox"
@@ -166,6 +165,7 @@ $(document).ready(function() {
                             Mark all as "No"
                         </label>
                     </li>
+                    -->
                     {% if stype == "athlete" %}
                         {% for field in form.visible_fields %}
                             {% if field.name == "concussion" %}
