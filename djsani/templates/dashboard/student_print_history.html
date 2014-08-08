@@ -1,0 +1,43 @@
+{% extends "blank.html" %}
+{% block css %}
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+        rel="stylesheet">
+    <link href="//www.carthage.edu/static/vendor/dashboard/font-awesome/css/font-awesome.min.css"
+        rel="stylesheet">
+{% endblock %}
+{% block extra_style %}
+<style>
+.dl-horizontal dt.widus {
+    overflow: auto;
+    width: 300px;
+    margin-right:9px;
+}
+.dl-horizontal dd.yes {
+    margin-left: 0;
+}
+.nav-tabs{display:none;}
+.tab-content > .tab-pane {
+    display: block;
+}
+.fade {
+    opacity: 1;
+}
+</style>
+{% endblock %}
+{% block extra_javascript %}{% endblock %}
+{% block body_tag %} onload="window.print()"{% endblock %}
+{% block content %}
+<div id="student-contact">
+    <h1 class="page-header">
+    {{student.firstname}} {{student.lastname}}
+    <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
+    </h1>
+</div>
+<div id="student-medical-history">
+    <h2>Medical History</h2>
+    <h3>Student</h3>
+    {{smh}}
+    <h3>Athlete</h3>
+    {{amh}}
+</div>
+{% endblock content %}
