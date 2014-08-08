@@ -1,0 +1,12 @@
+SELECT
+    college_id
+FROM
+    cc_student_medical_manager
+WHERE
+    cc_student_health_insurance=1
+AND
+    cc_student_medical_history=1
+AND
+    cc_athlete_medical_history=1
+AND
+    athlete=1;
