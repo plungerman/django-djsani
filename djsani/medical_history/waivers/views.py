@@ -20,12 +20,15 @@ from djtools.fields import NEXT_YEAR
 def form(request,stype,wtype):
     cid = request.user.id
     table = "cc_%s_%s_waiver" % (stype,wtype)
-    manager = get_data("cc_student_medical_manager",cid).fetchone()
-    # check to see if they already submitted this form
-    if manager[table]:
-        return HttpResponseRedirect(
-            reverse_lazy("home")
-        )
+    try:
+        manager = get_data("cc_student_medical_manager",cid).fetchone()
+        # check to see if they already submitted this form
+        if manager.get(table):
+            return HttpResponseRedirect(
+                reverse_lazy("home")
+            )
+    except:
+        pass
     # form name
     fname = "%sForm" % wtype.capitalize()
     if request.method=='POST':

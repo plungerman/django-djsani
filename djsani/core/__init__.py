@@ -1,5 +1,5 @@
 STUDENTS_ALPHA = """
-SELECT UNIQUE
+SELECT
     id_rec.lastname,id_rec.firstname,id_rec.id,
     cc_student_medical_manager.athlete,
     cc_student_medical_manager.sports,
@@ -26,11 +26,26 @@ LEFT JOIN
 LEFT JOIN
     stu_acad_rec ON  id_rec.id = stu_acad_rec.id
 WHERE
-    stu_acad_rec.sess
-IN
-    ("RB","RA","RC","AM","GC","PC","TC")
+( (stu_acad_rec.sess    = "RA" ) OR
+(stu_acad_rec.sess  = "RB" ) OR
+(stu_acad_rec.sess  = "RC" ) OR
+(stu_acad_rec.sess  = "AM" ) OR
+(stu_acad_rec.sess  = "GC" ) OR
+(stu_acad_rec.sess  = "PC" ) OR
+(stu_acad_rec.sess  = "TC" )
+)
 AND
     stu_acad_rec.reg_hrs > 0
+"""
+
+GROUP_BY = """
+GROUP BY
+    lastname, firstname, id_rec.id, athlete, sports,
+    cc_student_medical_history, cc_student_health_insurance,
+    cc_student_meni_waiver, cc_student_immunization,
+    cc_athlete_medical_history, cc_athlete_privacy_waiver,
+    cc_athlete_reporting_waiver, cc_athlete_risk_waiver,
+    cc_athlete_sicklecell_waiver, waive, proof, results
 """
 
 # original WHERE clause

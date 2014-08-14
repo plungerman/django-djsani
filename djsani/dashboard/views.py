@@ -44,10 +44,12 @@ def home(request):
     dashboard home with a list of students
     """
     students = None
-    sql = '%s AND prog_enr_rec.cl IN ("FF","FR")' % STUDENTS_ALPHA
+    sql = '%s AND prog_enr_rec.cl IN ("FF","FR") %s' % (STUDENTS_ALPHA,GROUP_BY)
+    #sql = '%s AND prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
     objs = do_esql(sql)
     if objs:
         students = objs.fetchall()
+        #students = dict(result=[{zip(objs._metadata.keys, row)} for row in objs.fetchall()])
 
     return render_to_response(
         "dashboard/home.html",
@@ -68,6 +70,7 @@ def get_students(request):
             sql += """
                 AND cc_student_medical_manager.sports like '%%%s%%'
             """ % sport
+        sql += GROUP_BY
         objs = do_esql(sql)
         students = objs.fetchall()
         return render_to_response(

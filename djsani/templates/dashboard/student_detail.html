@@ -120,30 +120,28 @@
             <h1 class="page-header">
                 {{student.firstname}} {{student.lastname}}
                 <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
-                {% if student.athlete %}
-                    <form id="profile" class="form">
-                        <select name="sports" class="selectpicker"
-                            id="id_sports" size="5"
-                            multiple="multiple"
-                            title="Choose your sport(s)&hellip;">
-                            {% for s in sports %}
-                            {% if not forloop.first %}
-                            <option
-                            {% if not s.0 %}
-                                disabled
-                            {% else %} value="{{s.0}}"
-                                {% if s.0 in my_sports %}
-                                    selected="selected"
-                                {% endif %}
+                <form id="profile" class="form">
+                    <select name="sports" class="selectpicker"
+                        id="id_sports" size="5"
+                        multiple="multiple"
+                        title="Choose sport(s)&hellip;">
+                        {% for s in sports %}
+                        {% if not forloop.first %}
+                        <option
+                        {% if not s.0 %}
+                            disabled
+                        {% else %} value="{{s.0}}"
+                            {% if s.0 in my_sports %}
+                                selected="selected"
                             {% endif %}
-                            >
-                            {{s.1}}
-                            </option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                    </form>
-                {% endif %}
+                        {% endif %}
+                        >
+                        {{s.1}}
+                        </option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </form>
             </h1>
             <h3>
                 Immunization status:
