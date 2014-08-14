@@ -8,7 +8,6 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from djsani.core import STUDENT_VITALS, SPORTS
 from djzbar.utils.informix import do_sql as do_esql
-#from djzbar.utils.decorators import portal_login_required
 from djtools.utils.date import calculate_age
 from djtools.fields import TODAY
 
@@ -36,7 +35,7 @@ def get_data(table,cid,fields=None,date=None):
     sql += " FROM %s WHERE college_id=%s" % (table,cid)
     if date:
         sql += " AND created_at?"
-    result = do_esql(sql)
+    result = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
     return result
 
 def put_data(dic,table,cid=None,noquo=[]):
@@ -90,7 +89,7 @@ def put_data(dic,table,cid=None,noquo=[]):
         fields = '%s)' % fields[:-1]
         values = '%s)' % values[:-1]
         sql = '%s %s %s' % (prefix,fields,values)
-    do_esql(sql,key=settings.INFORMIX_DEBUG)
+    do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
 
 def update_manager(field,cid):
     """
@@ -139,7 +138,10 @@ def home(request):
     adult = False
     my_sports = ""
     # get student
-    obj = do_esql("%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid))
+    obj = do_esql(
+        "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid),
+        key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
+    )
     try:
         student = obj.fetchone()
     except:

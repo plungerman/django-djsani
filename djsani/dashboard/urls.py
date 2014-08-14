@@ -38,9 +38,8 @@ urlpatterns = patterns('djsani.dashboard.views',
     ),
     # student detail print
     url(
-        r'^student/(?P<cid>\d+)/print/$',
+        r'^student/(?P<cid>\d+)/print/(?P<content>[-\w]+)/$',
         'student_detail',
-        {"template":"dashboard/student_detail_print.html"},
         name="student_detail_print"
     ),
     # home

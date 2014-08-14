@@ -29,7 +29,9 @@ def emergency_information(cid):
     for c in CODES:
         sql = "SELECT * FROM aa_rec WHERE aa = '%s' AND id='%s'" % (c,cid)
         try:
-            result = do_esql(sql).fetchone()
+            result = do_esql(
+                sql,key=settings.INFORMIX_DEBUG,
+                earl=settings.INFORMIX_EARL).fetchone()
             ens +=  "++%s++++++++++++++++++++++\n" % c
             for f in FIELDS:
                 if result[f]:
@@ -46,7 +48,8 @@ def home(request):
     students = None
     sql = '%s AND prog_enr_rec.cl IN ("FF","FR") %s' % (STUDENTS_ALPHA,GROUP_BY)
     #sql = '%s AND prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
-    objs = do_esql(sql)
+    objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
+
     if objs:
         students = objs.fetchall()
         #students = dict(result=[{zip(objs._metadata.keys, row)} for row in objs.fetchall()])
@@ -61,7 +64,8 @@ def get_students(request):
     """
     ajax POST returns a list of students
     """
-    if request.POST and (is_member(request.user,"Medical Staff") or request.user.is_superuser):
+    if request.POST and (is_member(request.user,"Medical Staff") \
+    or request.user.is_superuser):
         sport = request.POST.get("sport")
         sql = " %s AND prog_enr_rec.cl IN (%s)" % (
             STUDENTS_ALPHA,request.POST["class"]
@@ -71,7 +75,9 @@ def get_students(request):
                 AND cc_student_medical_manager.sports like '%%%s%%'
             """ % sport
         sql += GROUP_BY
-        objs = do_esql(sql)
+        objs = do_esql(
+            sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
+        )
         students = objs.fetchall()
         return render_to_response(
             "dashboard/students_data.inc.html",
@@ -106,17 +112,23 @@ def panels(request,table,cid):
     return t.render(c)
 
 @group_required('Medical Staff')
-def student_detail(request,cid=None,template="dashboard/student_detail.html"):
+def student_detail(request,cid=None,content=None):
     """
     main method for displaying student data
     """
+    template = "dashboard/student_detail.html"
+    if content:
+        template = "dashboard/student_print_%s.html" % content
     my_sports = None
     if not cid:
         # search form
         cid = request.POST.get("cid")
     if cid:
         # get student
-        obj = do_esql("%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid))
+        obj = do_esql(
+            "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid),
+            key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
+        )
         if obj:
             student = obj.fetchone()
             if student:

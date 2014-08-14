@@ -177,7 +177,8 @@
                             </address>
                         </div>
                         <div class="col-xs-1">
-                            <a href="{% url 'student_detail_print' cid %}">
+                            <a href="{% url 'student_detail_print' cid 'travel' %}"
+                                title="Print travel kit">
                                 <i class="fa fa-print fa-4x"></i>
                             </a>
                         </div>
@@ -194,6 +195,10 @@
                     <h3 class="panel-title">
                         <i class="fa fa-ambulance"></i>
                         Emergency Contact Information
+                        <a href="{% url 'student_detail_print' cid 'emergency' %}"
+                            title="Print emergency contact">
+                            <i class="fa fa-print"></i>
+                        </a>
                     </h3>
                 </div>
                 <!-- /.panel-heading -->
@@ -213,6 +218,10 @@
                     <h3 class="panel-title">
                         <i class="fa fa-umbrella"></i>
                         Health Insurance
+                        <a href="{% url 'student_detail_print' cid 'insurance' %}"
+                            title="Print health insurance">
+                            <i class="fa fa-print"></i>
+                        </a>
                     </h3>
                 </div>
                 <!-- /.panel-heading -->
@@ -236,6 +245,10 @@
                     <h3 class="panel-title">
                         <i class="fa fa-plus-square"></i>
                         Medical History
+                        <a href="{% url 'student_detail_print' cid 'history' %}"
+                            title="Print medical history">
+                            <i class="fa fa-print"></i>
+                        </a>
                     </h3>
                 </div>
                 <!-- /.panel-heading -->
@@ -277,7 +290,8 @@
                     <h3 class="panel-title">
                         <i class="fa fa-edit"></i>
                         Waivers
-                        <a href="#" id="print-waivers">
+                        <a href="{% url 'student_detail_print' cid 'waivers' %}"
+                            title="Print waivers">
                             <i class="fa fa-print"></i>
                         </a>
                     </h3>
