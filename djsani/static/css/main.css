@@ -21,6 +21,7 @@ form textarea {width: 300px !important;height:90px !important;}
 .center{text-align:center;}
 .red, .glyphicon {color:#800;}
 .green, .glyphicon-ok {color:#008000;}
+.hidden {display:none;}
 #id_sports{background:none;}
 #primary-form{margin-right:20px;}
 .error-message { padding:3px; font-weight:900; background: #fbe3e4; border: 2px solid #fbc2c4 ; color: #8a1f11; }

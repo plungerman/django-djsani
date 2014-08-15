@@ -1,4 +1,9 @@
 <div class="large-12 col-lg-12">
+    {% if form.errors %}
+    <p class="error">
+        All checkboxes are required except for "The News Media".
+    </p>
+    {% endif %}
     <p>
         I hereby authorize Carthage College and its physician
         affiliates, athletic and other (student athlete) health

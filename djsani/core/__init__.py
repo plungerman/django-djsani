@@ -14,7 +14,8 @@ SELECT
     cc_student_medical_manager.cc_athlete_sicklecell_waiver,
     cc_athlete_sicklecell_waiver.waive,
     cc_athlete_sicklecell_waiver.proof,
-    cc_athlete_sicklecell_waiver.results
+    cc_athlete_sicklecell_waiver.results,
+    profile_rec.birth_date
 FROM
     id_rec
 INNER JOIN
@@ -25,6 +26,8 @@ LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 LEFT JOIN
     stu_acad_rec ON  id_rec.id = stu_acad_rec.id
+LEFT JOIN
+    profile_rec  ON  id_rec.id = profile_rec.id
 WHERE
 ( (stu_acad_rec.sess    = "RA" ) OR
 (stu_acad_rec.sess  = "RB" ) OR
@@ -40,7 +43,7 @@ AND
 
 GROUP_BY = """
 GROUP BY
-    lastname, firstname, id_rec.id, athlete, sports,
+    lastname, firstname, id_rec.id, birth_date, athlete, sports,
     cc_student_medical_history, cc_student_health_insurance,
     cc_student_meni_waiver, cc_student_immunization,
     cc_athlete_medical_history, cc_athlete_privacy_waiver,

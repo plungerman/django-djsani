@@ -3,35 +3,15 @@
     Student Athlete Authorization/Consent For
     Disclosure of Protected Health Information (PHI)
 {% endblock %}
-{% block javascript %}
-<script type="text/javascript" charset="utf-8">
-$(function() {
-    $('#profile').submit(function() {
-        if ($('input:checkbox', this).length == $('input:checked', this).length ) {
-            return true;
-        } else {
-            alert('You must check each box before proceeding.');
-            return false;
-        }
-    });
-});
-</script>
-{% endblock %}
 {% block content %}
 <div class="forms-container">
     <h2>
         Student Athlete Authorization/Consent For <br />
         Disclosure of Protected Health Information (PHI)
     </h2>
-    {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="profile">
         {% csrf_token %}
         {% include "medical_history/waivers/athlete_privacy.inc.html" %}
-        {% if form.errors %}
-            <p class="error">
-                Please check the box below.
-            </p>
-        {% endif %}
         {% include "form_submit.inc.html" %}
     </form>
 </div>

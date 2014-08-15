@@ -26,10 +26,13 @@ $(document).ready(function() {
         startYear: 1980,
         finalYear: 2014
     };
-    $("#toggle_no").click(function() {
+    // hide all text fields
+    $("li[id$='_2']").hide();
+    // set all radios to 'no' or not
+    $("#toggle_no").on('click', function() {
         /* we need 'prop' to manage the UI selecting of 'no' button */
         $("input[id$='_0']").prop('checked', this.checked);
-        /* we need 'attr' to set checked="checked for POST value */
+        /* we need 'attr' to set checked="checked" for POST value */
         if ($(this).is(':checked')) {
             $("input[id$='_0']").attr("checked", "checked");
             $("li[id$='_2']").remove();
@@ -40,26 +43,12 @@ $(document).ready(function() {
     });
     $("input:radio").on('change', function() {
         nm = $(this).attr('name');
-        id = "id_" + nm + "_2";
-        yes_input = '<li id="' + id + '" class="infield">';
-        yes_input +='<label>&mdash;<strong class="red">Explain:</strong>&nbsp;</label>';
-        yes_input +='<input type="text" name="' + nm + '_2" maxlength="255"';
+        id = nm + "_2";
         if ($(this).val() == "Yes") {
-            if ( $(this).attr('name') == "chicken_pox"){
-                yes_input +='class="dyntext required date-picker" />';
-            } else {
-                yes_input +='class="dyntext required xlarge" />';
-            }
-            yes_input +='</li>';
-            $(this).closest('ul').append(yes_input);
-            if ( $(this).attr('name') == "chicken_pox"){
-                $('.date-picker').monthpicker(options);
-                $('.date-picker').monthpicker('show');
-            }
+            $("#" + id).show();
         }
         if ($(this).val() == "No") {
-            $("#" + id).remove();
-            $("li.error").remove();
+            $("#" + id).hide();
         }
     });
     {% if form.errors %}
@@ -67,22 +56,8 @@ $(document).ready(function() {
         val = $(this).val();
         if (val != "No" &&  val != "" ) {
             nm = $(this).attr('name');
-            id = "id_" + nm + "_2";
-            yes_input = '<li id="' + id + '" class="infield">';
-            yes_input +='<label>&mdash;<strong class="red">Explain:</strong>';
-            yes_input +='&nbsp;</label><input type="text" name="' + nm + '_2"';
-            yes_input +=' " id="' + nm + '" maxlength="255"';
-            if ( $(this).attr('name') == "chicken_pox"){
-                yes_input +='class="dyntext required date-picker" />';
-            } else {
-                yes_input +='class="dyntext required xlarge" />';
-            }
-            yes_input +='</li>';
-            $(this).closest('ul').append(yes_input);
-            if ( $(this).attr('name') == "chicken_pox"){
-                $('.date-picker').monthpicker(options);
-                $('.date-picker').monthpicker('show');
-            }
+            id = nm + "_2";
+            $("#" + id).show();
         }
     });
     {% for n,v in data.items %}
@@ -109,7 +84,7 @@ $(document).ready(function() {
             for(var i = 0; i < elem.length; i++) {
                 var e = elem[i];
                 var yes = e.name.match(/_2$/);
-                if (yes && e.type != "hidden") {
+                if (yes && e.type != "hidden" && $("#" + yes).is(":visible") ) {
                     if (!e.value) {
                         error = true;
                     } else {
@@ -123,6 +98,7 @@ $(document).ready(function() {
                 event.preventDefault();
             } else {
                 event.returnValue = false;
+                return false;
             }
             $('#errorModal').modal('show');
         }
@@ -303,6 +279,24 @@ $(document).ready(function() {
                             <ol>
                             {% endif %}
                             {% include "form_field.inc.html" %}
+                            <li class="form-group" id="{{field.name}}_2">
+                                <ul>
+                                <li class="infield">
+                                    <label>
+                                        &mdash;
+                                        <strong class="red">Explain:</strong>
+                                        &nbsp;
+                                    </label>
+                                    <input type="text" name="{{field.name}}_2"
+                                        maxlength="255" id="id_{{field.name}}_2"
+                                        {% if field.name == "chicken_pox" %}
+                                        class="dyntext required date-picker" />
+                                        {% else %}
+                                        class="dyntext required xlarge" />
+                                        {% endif %}
+                                </li>
+                                </ul>
+                            </li>
                         {% endfor %}
                     {% endif %}
                 </ol>

@@ -45,7 +45,7 @@ class SicklecellForm(forms.Form):
 class PrivacyForm(forms.Form):
     ncaa_tool = forms.BooleanField()
     medical_insurance = forms.BooleanField()
-    news_media = forms.BooleanField()
+    news_media = forms.BooleanField(required=False)
     parents_guardians = forms.BooleanField()
     disclose_records = forms.BooleanField()
 
