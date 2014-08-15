@@ -110,6 +110,28 @@
                 }
             });
         });
+        $('#opt_out').on('change', function() {
+            var $cb = $(this);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'set_type' %}",
+                data: {
+                    'college_id':$(this).val(),
+                    'switch':0,
+                    'field':'opt_out',
+                    'table':'cc_student_health_insurance'
+                },
+                dataType: 'json',
+                cache: false,
+                beforeSend: function(){
+                    spinner.spin(target);
+                },
+                success: function(data) {
+                    spinner.stop(target);
+                    location.reload();
+                }
+            });
+        });
     });
     </script>
 {% endblock %}

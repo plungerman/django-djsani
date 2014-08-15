@@ -1,7 +1,11 @@
 {% if data %}{% if data.opt_out %}
 <div class="alert alert-danger">
     <h3>Opt out</h3>
+    <form style="float:left;">
+        <input type="checkbox" id="opt_out" checked="checked" value="{{data.college_id}}">
+    </form>
     <p>
+        &nbsp;&nbsp;
         I attest that I do <strong><u>NOT</u></strong>
         have health insurance.
     </p>

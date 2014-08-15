@@ -106,13 +106,15 @@ def update_manager(field,cid):
 @csrf_exempt
 def set_type(request):
     field = request.POST.get("field")
+    table = request.POST.get("table")
+    if not table:
+        table="cc_student_medical_manager"
     cid = request.POST.get("college_id")
     if not cid:
         cid = request.user.id
-    table="cc_student_medical_manager"
     # check for student manager record
     student = None
-    obj = get_data(table,cid)
+    obj = get_data("cc_student_medical_manager",cid)
     if obj:
         student = obj.fetchone()
     update = None
