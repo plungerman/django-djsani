@@ -256,6 +256,24 @@ $(document).ready(function() {
                             <ol>
                             {% endif %}
                             {% include "form_field.inc.html" %}
+                            <li class="form-group" id="{{field.name}}_2">
+                                <ul>
+                                <li class="infield">
+                                    <label>
+                                        &mdash;
+                                        <strong class="red">Explain:</strong>
+                                        &nbsp;
+                                    </label>
+                                    <input type="text" name="{{field.name}}_2"
+                                        maxlength="255" id="id_{{field.name}}_2"
+                                        {% if field.name == "chicken_pox" %}
+                                        class="dyntext required date-picker" />
+                                        {% else %}
+                                        class="dyntext required xlarge" />
+                                        {% endif %}
+                                </li>
+                                </ul>
+                            </li>
                         {% endfor %}
                     {% else %}
                         {% for field in form.visible_fields %}
