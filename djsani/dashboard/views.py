@@ -46,8 +46,9 @@ def home(request):
     dashboard home with a list of students
     """
     students = None
-    sql = '%s AND prog_enr_rec.cl IN ("FF","FR") %s' % (STUDENTS_ALPHA,GROUP_BY)
-    #sql = '%s AND prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
+    #sql = '%s AND prog_enr_rec.cl IN ("FF","FR") %s' % (STUDENTS_ALPHA,GROUP_BY)
+    sql = '%s AND prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
+    #sql += "ORDER BY lastname"
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
 
     if objs:
@@ -74,7 +75,7 @@ def get_students(request):
             sql += """
                 AND cc_student_medical_manager.sports like '%%%s%%'
             """ % sport
-        sql += GROUP_BY
+        #sql += GROUP_BY
         objs = do_esql(
             sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
         )
