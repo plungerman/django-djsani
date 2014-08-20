@@ -46,14 +46,19 @@ def home(request):
     dashboard home with a list of students
     """
     students = None
-    #sql = '%s AND prog_enr_rec.cl IN ("FF","FR") %s' % (STUDENTS_ALPHA,GROUP_BY)
     sql = '%s WHERE prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
-    #sql += "ORDER BY lastname"
+    sql += "ORDER BY lastname"
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
 
     if objs:
-        students = objs.fetchall()
-        #students = dict(result=[{zip(objs._metadata.keys, row)} for row in objs.fetchall()])
+        students = [dict(row) for row in objs.fetchall()]
+        for s in students:
+            adult = "minor"
+            if s["birth_date"]:
+                age = calculate_age(s["birth_date"])
+                if age > 17:
+                    adult = "adult"
+            s["adult"] = adult
 
     return render_to_response(
         "dashboard/home.html",
@@ -66,7 +71,7 @@ def get_students(request):
     ajax POST returns a list of students
     """
     if request.POST and (is_member(request.user,"Medical Staff") \
-    or request.user.is_superuser):
+      or request.user.is_superuser):
         sport = request.POST.get("sport")
         sql = " %s WHERE prog_enr_rec.cl IN (%s)" % (
             STUDENTS_ALPHA,request.POST["class"]

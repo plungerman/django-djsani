@@ -17,7 +17,7 @@
         <tbody>
         {% for s in students %}
             <tr>
-                <td>
+                <td class="{{s.adult}}" style="text-align:left;">
                     <a href="{% url 'student_detail' s.id %}">
                         {{s.lastname}}, {{s.firstname}}
                     </a>
@@ -27,7 +27,7 @@
                     </span>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_student_immunization %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -37,7 +37,7 @@
                             id="immun_{{s.id}}" value="{{s.id}}" />
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_student_health_insurance %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -46,7 +46,7 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_student_meni_waiver %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -55,7 +55,7 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_student_medical_history %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -64,7 +64,7 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_athlete_medical_history %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -73,7 +73,7 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_athlete_privacy_waiver %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -82,7 +82,7 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_athlete_sicklecell_waiver %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -99,7 +99,7 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_athlete_reporting_waiver %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
@@ -108,7 +108,7 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="center">
+                <td class="{{s.adult}}">
                     {% if s.cc_athlete_risk_waiver %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>

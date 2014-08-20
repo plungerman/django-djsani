@@ -8,7 +8,12 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
         rel="stylesheet"/>
     <style>
-    .center{text-align:center;}
+    .adult, .minor {text-align:center;}
+    .minor {background-color:#ccf;}
+    .table-hover > tbody > tr:hover > td.minor { background-color: #ccf; }
+    .table-striped > tbody > tr:nth-child(2n+1) > td.minor {
+        background-color: #ccf;
+    }
     .red {color:#800;}
     .green {color:#080;}
     div.DTTT {
@@ -286,7 +291,8 @@
             <h1 class="page-header">
                 Student Medical Information
                 <small>
-                    (<i class="fa fa-star green"></i> = Athlete)
+                    <span class="minor">Lavener rows are minors</span>
+                    <i class="fa fa-star green"></i> = Athlete
                 </small>
             </h1>
         </div>
