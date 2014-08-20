@@ -136,8 +136,8 @@ def set_type(request):
 #@portal_login_required
 @login_required
 def home(request):
+    staff = is_member(request.user,"Medical Staff")
     cid = request.user.id
-    adult = False
     my_sports = ""
     # get student
     obj = do_esql(
@@ -149,6 +149,9 @@ def home(request):
     except:
         raise Http404
     # adult or minor? if we do not have a DOB, default to minor
+    adult = False
+    if staff:
+        adult = True
     if student.birth_date:
         age = calculate_age(student.birth_date)
         if age >= 18:

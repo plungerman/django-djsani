@@ -75,7 +75,8 @@ SELECT
     cc_athlete_sicklecell_waiver.waive,
     cc_athlete_sicklecell_waiver.proof,
     cc_athlete_sicklecell_waiver.results,
-    profile_rec.birth_date
+    profile_rec.birth_date,
+    mobile_rec.phone as mobile
 FROM
     id_rec
 LEFT JOIN
@@ -88,6 +89,9 @@ LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
+LEFT JOIN
+    aa_rec as mobile_rec on
+    (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
 """
 
 # IDs must be unique pattern that does not repeat in any other

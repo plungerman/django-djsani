@@ -47,7 +47,7 @@ def home(request):
     """
     students = None
     #sql = '%s AND prog_enr_rec.cl IN ("FF","FR") %s' % (STUDENTS_ALPHA,GROUP_BY)
-    sql = '%s AND prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
+    sql = '%s WHERE prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
     #sql += "ORDER BY lastname"
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
 
@@ -68,7 +68,7 @@ def get_students(request):
     if request.POST and (is_member(request.user,"Medical Staff") \
     or request.user.is_superuser):
         sport = request.POST.get("sport")
-        sql = " %s AND prog_enr_rec.cl IN (%s)" % (
+        sql = " %s WHERE prog_enr_rec.cl IN (%s)" % (
             STUDENTS_ALPHA,request.POST["class"]
         )
         if sport and sport != '0':
