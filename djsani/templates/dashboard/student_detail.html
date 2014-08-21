@@ -1,4 +1,5 @@
 {% extends "dashboard/home.html" %}
+{% block title %}{{student.lastname}}, {{student.firstname}}{% endblock %}
 {% block extra_style %}
 {{block.super}}
 <link href="/static/djsani/css/print.css"
