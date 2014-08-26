@@ -106,17 +106,13 @@ $(function() {
 {% endblock %}
 {% block sidebar %}{% endblock %}
 {% block content_head %}
-<div id="spotlight-intro" class="cf">
-    <div class="large-12 medium-12">
-        <h1 id="page_title">
-        Medical Information Forms
-        <small class="fright" style="margin-right:20px;">
-            <a href="{% url 'home' %}"><i class="fa fa-home fa-2x green"></i></a>
-        </small>
-        <span id="secondary-dropdown"></span>
-        </h1>
-    </div>
-</div>
+    <h1 id="page_title">
+    Medical Information Forms
+    <small class="fright" style="margin-right:20px;">
+        <a href="{% url 'home' %}"><i class="fa fa-home fa-2x green"></i></a>
+    </small>
+    <span id="secondary-dropdown"></span>
+    </h1>
 {% endblock %}
 {% block content %}
 <div>
