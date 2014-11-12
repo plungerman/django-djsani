@@ -1,4 +1,9 @@
 {% extends "djcher/accounts/login.html" %}
+{% block content_head %}
+<h1 id="page_title">
+    Medical Information Login<span id="secondary-dropdown"></span>
+</h1>
+{% endblock %}
 {% block content %}
     {% if user.is_anonymous %}
         <p>

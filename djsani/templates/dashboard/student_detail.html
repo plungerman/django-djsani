@@ -1,5 +1,11 @@
 {% extends "dashboard/home.html" %}
-{% block title %}{{student.lastname}}, {{student.firstname}}{% endblock %}
+{% block title %}
+    {% if student %}
+        {{student.lastname}}, {{student.firstname}}
+    {% else %}
+        Not found:{{cid}}
+    {% endif %}
+{% endblock %}
 {% block extra_style %}
 {{block.super}}
 <link href="/static/djsani/css/print.css"
@@ -138,6 +144,7 @@
 {% endblock %}
 {% block content %}
 <div id="student-container">
+    {% if student %}
     <div class="row">
         <div class="col-lg-8">
             <h1 class="page-header">
@@ -246,6 +253,9 @@
                         <a href="{% url 'student_detail_print' cid 'insurance' %}"
                             title="Print health insurance">
                             <i class="fa fa-print"></i>
+                        </a>
+                        <a href="{% url 'insurance_form_dashboard' stype cid %}">
+                            <i class="fa fa-edit"></i>
                         </a>
                     </h3>
                 </div>
@@ -374,5 +384,8 @@
         </div>
         <!-- /.col-lg-6 -->
     </div>
+    {% else %}
+    <h1>No student found with the ID: {{cid}}</h1>
+    {% endif %}
 </div> <!-- /#student-container -->
 {% endblock content %}

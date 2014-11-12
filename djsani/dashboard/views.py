@@ -146,10 +146,14 @@ def student_detail(request,cid=None,content=None):
                 shi = panels(request,"cc_student_health_insurance",cid)
                 smh = panels(request,"cc_student_medical_history",cid)
                 amh = panels(request,"cc_athlete_medical_history",cid)
+                # used for staff who update info on the dashboard
+                stype = "student"
+                if student.athlete:
+                    stype = "athlete"
                 if student.sports:
                     my_sports = student.sports.split(",")
             else:
-                age=ens=shi=smh=amh=student=None
+                age=ens=shi=smh=amh=student=stype=None
             return render_to_response(
                 template,
                 {
@@ -157,6 +161,7 @@ def student_detail(request,cid=None,content=None):
                     "shi":shi,"amh":amh,"smh":smh,"cid":cid,
                     "switch_earl": reverse_lazy("set_type"),
                     "sports":SPORTS, "my_sports":my_sports,
+                    "stype":stype
                 },
                 context_instance=RequestContext(request)
             )

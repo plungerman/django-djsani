@@ -10,6 +10,10 @@ urlpatterns = patterns('djsani.insurance.views',
         name='insurance_success'
     ),
     url(
+        r'^(?P<stype>[a-zA-Z0-9_-]+)/(?P<cid>\d+)/$',
+        'form', name="insurance_form_dashboard"
+    ),
+    url(
         r'^(?P<stype>[a-zA-Z0-9_-]+)/$',
         'form', name="insurance_form"
     ),
