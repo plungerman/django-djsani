@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from djsani.insurance.forms import StudentForm
 from djsani.insurance.forms import AthleteForm
-from djsani.core.views import get_data, put_data, update_manager
+from djsani.core.views import get_data, put_data, update_manager, is_member
 
 from djzbar.utils.decorators import portal_login_required
 from djtools.fields import NOW
@@ -16,8 +16,14 @@ from textwrap import fill
 
 #@portal_login_required
 @login_required
-def form(request,stype):
-    cid = request.user.id
+def form(request,stype,cid=None):
+    if not cid:
+        cid = request.user.id
+    else:
+        if not is_member(request.user, "Medical Staff"):
+            return HttpResponseRedirect(
+                reverse_lazy("home")
+            )
     # form name
     fname = "%sForm" % stype.capitalize()
     table = "cc_student_health_insurance"
