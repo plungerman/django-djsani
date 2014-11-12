@@ -9,9 +9,6 @@ BINARY_CHOICES = (
     ('Yes', 'Yes'),
 )
 
-import logging
-logger = logging.getLogger(__name__)
-
 class StudentForm(forms.Form):
     """
     Medical history for all students
@@ -255,7 +252,6 @@ class StudentForm(forms.Form):
         cd = self.cleaned_data
         for field in cd:
             if cd[field] == "Yes" and not cd.get("%s_2" % field):
-                logger.debug("cd = %s" % cd)
                 self._errors[field] = self.error_class(
                     ["Explain your 'Yes' response"]
                 )
@@ -629,7 +625,6 @@ class AthleteForm(forms.Form):
         cd = self.cleaned_data
         for field in cd:
             if cd[field] == "Yes" and not cd.get("%s_2" % field):
-                logger.debug("cd = %s" % cd)
                 self._errors[field] = self.error_class(
                     ["Explain your 'Yes' response"]
                 )

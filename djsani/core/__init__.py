@@ -27,8 +27,6 @@ AND
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
 LEFT JOIN
-    cvid_rec     ON  id_rec.id = cvid_rec.cx_id
-LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN
     cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
