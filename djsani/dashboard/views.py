@@ -182,4 +182,4 @@ def xeditable(request):
     dic = {field:value}
     put_data( dic, table, cid )
 
-    return HttpResponse(dic, mimetype="text/plain; charset=utf-8")
+    return HttpResponse(dic, content_type="text/plain; charset=utf-8")
