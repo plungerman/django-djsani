@@ -85,7 +85,7 @@ $(function() {
         <li>
             <a href="{% url 'auth_logout' %}?next={{request.path}}">Logout</a>
         </li>
-        {% ifusergroup Staff %}
+        {% ifusergroup carthageStaffStatus %}
         <li>
             <a href="{% url 'dashboard_home' %}">Dashboard</a>
         </li>
