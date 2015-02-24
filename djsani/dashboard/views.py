@@ -84,7 +84,9 @@ def get_students(request):
         objs = do_esql(
             sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
         )
-        students = objs.fetchall()
+        students = None
+        if objs:
+            students = objs.fetchall()
         return render_to_response(
             "dashboard/students_data.inc.html",
             {"students":students,"sports":SPORTS,},
