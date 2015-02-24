@@ -93,7 +93,7 @@ def get_students(request):
             context_instance=RequestContext(request)
         )
     else:
-        return HttpResponse("error", mimetype="text/plain; charset=utf-8")
+        return HttpResponse("error", content_type="text/plain; charset=utf-8")
 
 def panels(request,table,cid):
     """
