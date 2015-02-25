@@ -14,7 +14,6 @@ from djtools.fields import NOW
 
 from textwrap import fill
 
-#@portal_login_required
 @login_required
 def form(request,stype,cid=None):
     if not cid:
@@ -48,6 +47,7 @@ def form(request,stype,cid=None):
                 v = ""
             forms["secondary_%s" % k] = v
         forms["college_id"] = cid
+        # opt out of insurance
         oo = request.POST.get("opt_out")
         if not oo:
             oo = 0

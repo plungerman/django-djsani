@@ -87,14 +87,11 @@
         </div>
         <div class="large-11 col-lg-11">
             <label for="proof">
-                <p>
                 I will provide documented proof of my Sickle Cell Trait
                 status from previous testing to the athletic training
                 staff (as well as answer below):
-                </p>
             </label>
-            <p>
-            <strong>Test Results:</strong>
+            <h4>Test Results:</h4>
             {% if student.cc_athlete_sicklecell_waiver and student.proof %}
                 {% if student.results == "Positive" %}
                     <i class="green">Positive</i>
@@ -102,20 +99,21 @@
                     <i class="green">Negative</i>
                 {% endif %}
             {% else %}
-                <ul class="inline">
+                <ul>
                     <li>
                         <input id="results_1" type="radio" name="results"
                             value="Positive" />
-                        <label for="results_1">Positive</label>
+                        <label for="results_1">
+                            <i class="fa green fa-plus"></i>
+                        </label>
                     </li>
                     <li>
                         <input id="results_0" type="radio" name="results"
                             value="Negative" />
-                        <label for="results_0">Negative</label>
+                        <label for="results_0"><i class="fa green fa-minus"></i></label>
                     </li>
                 </ul>
             {% endif %}
-            </p>
         </div>
         <div class="large-1 col-lg-1">
             {% if student.cc_athlete_sicklecell_waiver and student.waive %}

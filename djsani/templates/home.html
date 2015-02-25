@@ -275,10 +275,7 @@ $(function() {
                 {% endif %}
             </li>
             <li>
-                {% if manager.cc_athlete_sicklecell_waiver %}
-                    Sickle cell waiver
-                    <i class="fa fa-check green"></i>
-                {% else %}
+                {% if not manager.cc_athlete_sicklecell_waiver %}
                     <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
                         Sickle cell waiver
                     </a>
