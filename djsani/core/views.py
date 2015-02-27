@@ -131,9 +131,8 @@ def set_type(request):
     noquo=["athlete","college_id","cc_student_immunization"]
     put_data( dic, table, cid = update, noquo=noquo )
 
-    return HttpResponse(switch, mimetype="text/plain; charset=utf-8")
+    return HttpResponse(switch, conten_type="text/plain; charset=utf-8")
 
-#@portal_login_required
 @login_required
 def home(request):
     staff = is_member(request.user,"Medical Staff")

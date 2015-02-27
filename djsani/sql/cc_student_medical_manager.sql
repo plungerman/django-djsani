@@ -4,7 +4,7 @@ CREATE TABLE cc_student_medical_manager
 (
     /* core */
     id                          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    cid                         INT(11) NOT NULL,
+    college_id                  INT(11) NOT NULL,
     created_at                  DATETIME NOT NULL,
     athlete                     TINYINT(1),
     sports                      VARCHAR(255),

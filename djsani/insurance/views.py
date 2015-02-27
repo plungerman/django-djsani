@@ -5,13 +5,18 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from djsani.insurance.forms import StudentForm
-from djsani.insurance.forms import AthleteForm
-from djsani.core.views import get_data, put_data, update_manager, is_member
+from djsani.core.models import StudentMedicalManager
+from djsani.core.views import is_member
+from djsani.insurance.models import StudentHealthInsurance
+from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
+from djsani.insurance.forms import StudentForm, AthleteForm
 
-from djzbar.utils.decorators import portal_login_required
+from djzbar.utils.informix import get_engine
+from djtools.utils.database import row2dict
 from djtools.fields import NOW
 
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 from textwrap import fill
 
 @login_required
@@ -23,96 +28,71 @@ def form(request,stype,cid=None):
             return HttpResponseRedirect(
                 reverse_lazy("home")
             )
+    # get our engine and create the session
+    engine = get_engine()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # get our student medical manager
+    manager = session.query(StudentMedicalManager).\
+                filter_by(college_id=cid).first()
+
     # form name
     fname = "%sForm" % stype.capitalize()
-    table = "cc_student_health_insurance"
     # opt out
     oo = None
     if request.method=='POST':
-        # primary
-        form1 = eval(fname)(request.POST,prefix="primary")
-        form1.is_valid()
-        form1 = form1.cleaned_data
-        # secondary
-        form2 = eval(fname)(request.POST,prefix="secondary")
-        form2.is_valid()
-        form2 = form2.cleaned_data
-        forms = {}
-        for k,v in form1.items():
-            if v == "None":
-                v = ""
-            forms["primary_%s" % k] = v
-        for k,v in form2.items():
-            if v == "None":
-                v = ""
-            forms["secondary_%s" % k] = v
-        forms["college_id"] = cid
         # opt out of insurance
         oo = request.POST.get("opt_out")
-        if not oo:
-            oo = 0
-            # convert python dates to informix date formats
-            if forms.get("primary_dob"):
-                forms["primary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["primary_dob"]
-            if forms.get("secondary_dob"):
-                forms["secondary_dob"] = "TO_DATE('%s', '%%Y-%%m-%%d')" % forms["secondary_dob"]
-            else:
-                # OJO: wtf?
-                try:
-                    forms.pop("secondary_dob")
-                except:
-                    pass
-            # strip \r\n addresses
-            paddress = forms.get("primary_policy_address")
-            saddress = forms.get("secondary_policy_address")
-            if paddress:
-                forms["primary_policy_address"] = paddress.replace('\r\n',' ')
-            if saddress:
-                forms["secondary_policy_address"] = saddress.replace('\r\n',' ')
+        if oo:
+            # empty table
+            forms = STUDENT_HEALTH_INSURANCE
         else:
-            oo = 1
-            forms.pop("primary_dob")
-            forms.pop("secondary_dob")
-
-        forms["opt_out"] = oo
-
+            forms = eval(fname)(request.POST)
+            forms.is_valid()
+            forms = forms.cleaned_data
+            forms["college_id"] = cid
+            forms["opt_out"] = False
         # insert or update
         if not request.POST.get("update"):
             forms["college_id"] = cid
-            # update the manager now so we can repurpose cid
-            update_manager(table,cid)
-            # no cid means insert
-            cid = None
-
-        noquo = ["college_id","opt_out","primary_dob","secondary_dob"]
-        put_data(forms,table,cid=cid,noquo=noquo)
+            s = StudentHealthInsurance(**forms)
+            session.add(s)
+            # update the manager
+            manager.cc_student_health_insurance=True
+        else:
+            session.query(StudentHealthInsurance).\
+                filter_by(college_id=cid).\
+                update(forms)
+        # lastly, commit and redirect
+        session.commit()
         return HttpResponseRedirect(
             reverse_lazy("insurance_success")
         )
     else:
-        obj = get_data("cc_student_medical_manager",cid)
-        # student must have a record at this point
-        manager = obj.fetchone()
-        obj = get_data(table,cid)
-        primary = {}
-        secondary = {}
-        try:
-            data = obj.fetchone()
-            oo = data.opt_out
-            for k,v in data.items():
-                if k.startswith("primary_"):
-                    primary[k[8:]] = v
-                else:
-                    secondary[k[10:]] = v
+        obj = session.query(StudentHealthInsurance).\
+            filter_by(college_id=cid).first()
+        ins = {}
+        update = ""
+        data = row2dict(obj)
+        if data:
+            oo = data["opt_out"]
             update = cid
-        except:
-            update = ""
-        form1 = eval(fname)(prefix="primary",initial=primary)
-        form2 = eval(fname)(prefix="secondary",initial=secondary)
+        form = eval(fname)(initial=data)
+    # close database session
+    session.close()
     return render_to_response(
         "insurance/form.html", {
-            "form1":form1,"form2":form2,"update":update,"oo":oo,
-            "manager":manager,"secondary":secondary.get("dob")
+            "form":form,"update":update,"oo":oo,
+            "manager":manager,"secondary":data.get("secondary_dob")
         },
         context_instance=RequestContext(request)
     )
+
+'''
+from djsani.insurance.models import StudentHealthInsurance
+from sqlalchemy import inspect
+mapper = inspect(StudentHealthInsurance)
+for column in mapper.attrs:
+    print column.key
+'''

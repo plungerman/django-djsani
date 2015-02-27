@@ -11,14 +11,15 @@ sys.path.append('/data2/django_third/')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
 
 from djsani.insurance.models import StudentHealthInsurance
+from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 
 from djzbar.settings import INFORMIX_EARL_TEST as INFORMIX_EARL
-
+from djzbar.utils.informix import get_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import NullPool
-from sqlalchemy import create_engine
 
 from optparse import OptionParser
+
+from datetime import datetime
 
 """
 Grabs a student's health insurance profile
@@ -43,12 +44,26 @@ def main():
 
     print "Student's college ID = {}".format(cid)
 
-    engine = create_engine(INFORMIX_EARL, poolclass=NullPool)
+    engine = get_engine(INFORMIX_EARL)
+
     Session = sessionmaker(bind=engine)
     session = Session()
-    shi = session.query(StudentHealthInsurance).filter_by(college_id=cid).first()
+    #session.query(StudentHealthInsurance).\
+    shi = session.query(StudentHealthInsurance).\
+        filter_by(college_id=cid).first()
+    #    update(STUDENT_HEALTH_INSURANCE)
+
+    #shi.secondary_policy_holder = "Lauren Hansen"
+    #dob = "1974-12-03"
+
+    #dob = datetime.strptime("1974-12-03", "%Y-%m-%d")
+
+    #shi.secondary_dob = "TO_DATE('{}', '%%Y-%%m-%%d')".format(dob)
+    #shi.secondary_dob = dob
 
     print shi.__dict__
+
+    #session.commit()
 
     session.close()
 

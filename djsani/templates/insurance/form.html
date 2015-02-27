@@ -42,19 +42,24 @@ $(function() {
     });
     $('#id_second').change(function() {
         if($(this).is(":checked")) {
-            $("input[id^='id_secondary']").removeClass("error required");
+            $("[id^='id_secondary']").removeClass("error required");
+            $("[id^='id_secondary']").val("");
             $('#secondary-form').slideUp(200);
         }else{
-            $("input[id^='id_secondary']").addClass("required");
+            $("[id^='id_secondary']").addClass("required");
+            // state is not required unless policy type is "state"
+            $('#id_secondary_policy_state').removeClass("required");
+            // address is not required
+            $('#id_secondary_policy_address').removeClass("required");
             $('#secondary-form').slideDown(200);
         }
     });
     // for updates to the form
-    if ( $('#id_primary-policy_type').val() == "State Insurance") {
-        $('#id_primary-policy_state').addClass("required");
+    if ( $('#id_primary_policy_type').val() == "State Insurance") {
+        $('#id_primary_policy_state').addClass("required");
     }
-    if ( $('#id_secondary-policy_type').val() == "State Insurance") {
-        $('#id_secondary-policy_state').addClass("required");
+    if ( $('#id_secondary_policy_type').val() == "State Insurance") {
+        $('#id_secondary_policy_state').addClass("required");
     }
     $("#profile").validate();
     $("select[id$='policy_type']").on('change', function() {
@@ -62,7 +67,7 @@ $(function() {
             $(this).closest('li').next().find('select').addClass("required");
         }
     });
-    {% if oo %}
+    {% if oo == "True" %}
         $('#insurance-policies').slideUp(200);
         $('#secondary-box').slideUp(200);
         $("#id_opt_out").prop("checked", true);
@@ -73,6 +78,13 @@ $(function() {
             $('#secondary-form').slideUp(200);
         {% endif %}
     {% endif %}
+    // stupid informix
+    if ( $('#id_primary_dob').val() == "None") {
+        $('#id_primary_dob').val("");
+    }
+    if ($('#id_secondary_dob').val() == "None") {
+        $('#id_secondary_dob').val("");
+    }
 });
 </script>
 {% endblock %}
@@ -95,9 +107,6 @@ $(function() {
     <p class="cf">&nbsp;</p>
     <form method="post" action="." type="actionForm" class="form" id="profile">
         {% csrf_token %}
-        {% for hidden in form1.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
         <input id="id_update" type="hidden"
             value="{{update}}" name="update">
         <div class="large-5 medium-7 small-7">
@@ -125,18 +134,15 @@ $(function() {
                 <h2>Primary Insurance Policy</h2>
                 <fieldset class="blockLabels">
                     <ol>
-                        {% for field in form1.visible_fields %}
+                        {% for field in form.visible_fields %}
                             {% include "form_field.inc.html" %}
-                        {% endfor %}
-                    </ol>
-                </fieldset>
-            </div>
-            <div class="large-5 medium-7 small-7" id="secondary-form">
-                <h2>Secondary Insurance Policy</h2>
-                <fieldset class="blockLabels">
-                    <ol class="nobull">
-                        {% for field in form2.visible_fields %}
-                            {% include "form_field.inc.html" %}
+                            {% if field.name == "primary_policy_state" %}
+                                </ol></fieldset></div>
+                                <div class="large-5 medium-7 small-7" id="secondary-form">
+                                <h2>Secondary Insurance Policy</h2>
+                                <fieldset class="blockLabels">
+                                    <ol>
+                            {% endif %}
                         {% endfor %}
                     </ol>
                 </fieldset>
