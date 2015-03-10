@@ -2,6 +2,10 @@
 Django settings for project.
 """
 
+from djzbar.settings import INFORMIX_EARL_TEST as INFORMIX_EARL
+#from djzbar.settings import INFORMIX_EARL
+from djtools.fields import NOW
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 

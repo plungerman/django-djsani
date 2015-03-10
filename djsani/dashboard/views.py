@@ -14,6 +14,8 @@ from djzbar.utils.informix import do_sql as do_esql
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
 
+EARL = settings.INFORMIX_EARL
+
 def emergency_information(cid):
     """
     returns all of the emergency contact information for any given student
@@ -31,7 +33,7 @@ def emergency_information(cid):
         try:
             result = do_esql(
                 sql,key=settings.INFORMIX_DEBUG,
-                earl=settings.INFORMIX_EARL).fetchone()
+                earl=EARL).fetchone()
             ens +=  "++%s++++++++++++++++++++++\n" % c
             for f in FIELDS:
                 if result[f]:
@@ -48,7 +50,7 @@ def home(request):
     students = None
     sql = '%s WHERE prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
     sql += "ORDER BY lastname"
-    objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
+    objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
 
     if objs:
         students = [dict(row) for row in objs.fetchall()]
@@ -82,7 +84,7 @@ def get_students(request):
             """ % sport
         #sql += GROUP_BY
         objs = do_esql(
-            sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
+            sql,key=settings.INFORMIX_DEBUG,earl=EARL
         )
         students = None
         if objs:
@@ -102,6 +104,7 @@ def panels(request,table,cid):
     student detail view.
     """
     form = None
+    data = None
     obj = get_data(table,cid)
     if obj:
         data = obj.fetchone()
@@ -135,7 +138,7 @@ def student_detail(request,cid=None,content=None):
         # get student
         obj = do_esql(
             "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid),
-            key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
+            key=settings.INFORMIX_DEBUG,earl=EARL
         )
         if obj:
             student = obj.fetchone()

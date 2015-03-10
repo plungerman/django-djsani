@@ -6,19 +6,44 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
-from djsani.core import STUDENT_VITALS, SPORTS
-from djzbar.utils.informix import do_sql as do_esql
+from djsani.core.models import StudentMedicalManager
+from djsani.insurance.models import StudentHealthInsurance
+from djsani.core import SPORTS, STUDENT_VITALS
+from djzbar.utils.informix import do_sql as do_esql, get_engine, get_session
 from djtools.utils.date import calculate_age
 from djtools.fields import TODAY
+
+from sqlalchemy.orm import sessionmaker
+
+"""
+table names are the key, base model classes are the value
+"""
+BASES = {
+    "cc_student_medical_manager": StudentMedicalManager,
+    "cc_student_health_insurance": StudentHealthInsurance,
+}
+EARL = settings.INFORMIX_EARL
 
 import logging
 logger = logging.getLogger(__name__)
 
-def is_member(user,group):
+def is_member(user, group):
     """
     simple method to check if a user belongs to a group
     """
+
     return user.groups.filter(name=group)
+
+def get_manager(session, cid):
+    """
+    returns the current student medical manager based on the date
+    it was created in relation to the medical forms collection
+    process start date.
+    """
+
+    return session.query(StudentMedicalManager).\
+        filter_by(college_id=cid).\
+        filter(StudentMedicalManager.current(settings.START_DATE)).first()
 
 def get_data(table,cid,fields=None,date=None):
     """
@@ -26,6 +51,7 @@ def get_data(table,cid,fields=None,date=None):
     fields  = list of database fields to return
     key     = dict with unique identifier and value
     """
+
     status = False
     sql = "SELECT "
     if fields:
@@ -35,7 +61,7 @@ def get_data(table,cid,fields=None,date=None):
     sql += " FROM %s WHERE college_id=%s" % (table,cid)
     if date:
         sql += " AND created_at?"
-    result = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
+    result = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
     return result
 
 def put_data(dic,table,cid=None,noquo=[]):
@@ -89,7 +115,7 @@ def put_data(dic,table,cid=None,noquo=[]):
         fields = '%s)' % fields[:-1]
         values = '%s)' % values[:-1]
         sql = '%s %s %s' % (prefix,fields,values)
-    do_esql(sql,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
+    do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
 
 def update_manager(field,cid):
     """
@@ -107,19 +133,21 @@ def update_manager(field,cid):
 def set_type(request):
     field = request.POST.get("field")
     table = request.POST.get("table")
+
     if not table:
-        table="cc_student_medical_manager"
+        table = StudentMedicalManager
+    else:
+        table = BASES[table]
+
     cid = request.POST.get("college_id")
     if not cid:
         cid = request.user.id
+
+    # create database session
+    session = get_session(EARL)
+
     # check for student manager record
-    student = None
-    obj = get_data("cc_student_medical_manager",cid)
-    if obj:
-        student = obj.fetchone()
-    update = None
-    if student:
-        update = cid
+    manager = get_manager(session, cid)
 
     # sports field is a list
     if field == "sports":
@@ -128,46 +156,66 @@ def set_type(request):
         switch = request.POST.get("switch")
 
     dic = {field:switch,"college_id":cid}
-    noquo=["athlete","college_id","cc_student_immunization"]
-    put_data( dic, table, cid = update, noquo=noquo )
 
-    return HttpResponse(switch, conten_type="text/plain; charset=utf-8")
+    if manager:
+        session.query(table).\
+                filter_by(college_id=cid).\
+                update(dic)
+    else:
+        s = table(**dic)
+        session.add(s)
+
+    session.commit()
+    session.close()
+
+    return HttpResponse(switch, content_type="text/plain; charset=utf-8")
 
 @login_required
 def home(request):
     staff = is_member(request.user,"Medical Staff")
     cid = request.user.id
     my_sports = ""
+    student = None
+    adult = False
+
+    engine = get_engine(EARL)
     # get student
-    obj = do_esql(
-        "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid),
-        key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
+    obj = engine.execute(
+        "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid)
     )
     try:
         student = obj.fetchone()
     except:
-        raise Http404
-    # adult or minor? if we do not have a DOB, default to minor
-    adult = False
-    if staff:
-        adult = True
-    if student.birth_date:
-        age = calculate_age(student.birth_date)
-        if age >= 18:
+        manager=sport=my_sports=first_year = None
+
+    if student:
+        # adult or minor? if we do not have a DOB, default to minor
+        if staff:
             adult = True
-    # freshman/transfer?
-    first_year = False
-    if student.plan_enr_sess == "RA" and student.plan_enr_yr == TODAY.year:
-        first_year = True
-    obj = get_data("cc_student_medical_manager",cid)
-    # check for a manager
-    manager = obj.fetchone()
-    if manager:
-        # sports needs a python list
-        if manager.sports:
-            my_sports = manager.sports.split(",")
-    if request.GET.get("minor"):
-        adult = False
+        if student.birth_date:
+            age = calculate_age(student.birth_date)
+            if age >= 18:
+                adult = True
+        # freshman/transfer?
+        first_year = False
+        if student.plan_enr_sess == "RA" and student.plan_enr_yr == TODAY.year:
+            first_year = True
+
+        # create database session
+        session = get_session()
+
+        # check for a manager
+        manager = get_manager(session, cid)
+
+        if manager:
+            # sports needs a python list
+            if manager.sports:
+                my_sports = manager.sports.split(",")
+
+        # quick switch for minor age students
+        if request.GET.get("minor"):
+            adult = False
+
     return render_to_response(
         "home.html",
         {

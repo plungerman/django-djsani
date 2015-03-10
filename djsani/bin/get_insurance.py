@@ -13,8 +13,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 
-from djzbar.settings import INFORMIX_EARL_TEST as INFORMIX_EARL
-from djzbar.utils.informix import get_engine
+from djzbar.utils.informix import get_session
 from sqlalchemy.orm import sessionmaker
 
 from optparse import OptionParser
@@ -24,17 +23,24 @@ from datetime import datetime
 """
 Grabs a student's health insurance profile
 """
+EARL = settings.INFORMIX_EARL
 
 # set up command-line options
 desc = """
-Accepts as input a student's college ID
+Accepts as input a student's college ID and
+optional True/False for opting out of insurance
 """
 
 parser = OptionParser(description=desc)
 parser.add_option(
     "-i", "--ID",
-    help="Studnet's college ID.",
+    help="Student's college ID.",
     dest="cid"
+)
+parser.add_option(
+    "-o", "--OPT_OUT",
+    help="True or false.",
+    dest="opt_out"
 )
 
 def main():
@@ -44,26 +50,28 @@ def main():
 
     print "Student's college ID = {}".format(cid)
 
-    engine = get_engine(INFORMIX_EARL)
+    # create database session
+    session = get_session(EARL)
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    #session.query(StudentHealthInsurance).\
     shi = session.query(StudentHealthInsurance).\
         filter_by(college_id=cid).first()
-    #    update(STUDENT_HEALTH_INSURANCE)
-
-    #shi.secondary_policy_holder = "Lauren Hansen"
-    #dob = "1974-12-03"
-
-    #dob = datetime.strptime("1974-12-03", "%Y-%m-%d")
-
-    #shi.secondary_dob = "TO_DATE('{}', '%%Y-%%m-%%d')".format(dob)
-    #shi.secondary_dob = dob
 
     print shi.__dict__
 
+    # empty the table for opt_out
+    if opt_out:
+        session.query(StudentHealthInsurance).\
+            filter_by(college_id=cid).\
+            update(STUDENT_HEALTH_INSURANCE)
+
+        session.commit()
+        print shi.__dict__
+
+    # test setting a date
+    #dob = datetime.strptime("1974-12-03", "%Y-%m-%d")
+    #shi.secondary_dob = dob
     #session.commit()
+    #print shi.__dict__
 
     session.close()
 
@@ -74,6 +82,7 @@ def main():
 if __name__ == "__main__":
     (options, args) = parser.parse_args()
     cid = options.cid
+    opt_out = options.opt_out
 
     mandatories = ['cid',]
     for m in mandatories:

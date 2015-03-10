@@ -5,19 +5,20 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from djsani.core.models import StudentMedicalManager
-from djsani.core.views import is_member
+from djsani.core.views import get_manager, is_member
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 from djsani.insurance.forms import StudentForm, AthleteForm
 
-from djzbar.utils.informix import get_engine
+from djzbar.utils.informix import get_session
 from djtools.utils.database import row2dict
 from djtools.fields import NOW
 
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from textwrap import fill
+
+EARL = settings.INFORMIX_EARL
 
 @login_required
 def form(request,stype,cid=None):
@@ -28,14 +29,12 @@ def form(request,stype,cid=None):
             return HttpResponseRedirect(
                 reverse_lazy("home")
             )
-    # get our engine and create the session
-    engine = get_engine()
-    Session = sessionmaker(bind=engine)
-    session = Session()
+
+    # create database session
+    session = get_session(EARL)
 
     # get our student medical manager
-    manager = session.query(StudentMedicalManager).\
-                filter_by(college_id=cid).first()
+    manager = get_manager(session, cid)
 
     # form name
     fname = "%sForm" % stype.capitalize()

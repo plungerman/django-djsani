@@ -17,6 +17,10 @@
 <script src="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    {% if not student %}
+        alert("There was a problem retrieving the data.\n\
+        Please reload the page.");
+    {% endif %}
     // set student types
     function setType(interruptor,field) {
         var $data = {
@@ -36,7 +40,6 @@ $(function() {
     //$('#id_sports').selectpicker('val', ['Mustard','Relish']);
     $('#id_sports').on('change', function(){
         $this = $(this).val();
-        //alert($this);
         setType($this,"sports");
     });
 

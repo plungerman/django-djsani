@@ -11,8 +11,7 @@
 <link rel="stylesheet" type="text/css" media="screen"
     href="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/css/bootstrapValidator.min.css">
 {% endblock %}
-{% block javascript %}
-{{block.super}}
+{% block extra_javascript %}
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -25,7 +24,7 @@ $(document).ready(function() {
     });
     options = {
         startYear: 1980,
-        finalYear: 2014
+        finalYear: new Date().getFullYear();
     };
     // hide all text fields
     $("li[id$='_2']").hide();

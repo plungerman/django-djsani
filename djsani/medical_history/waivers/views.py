@@ -5,48 +5,75 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from djsani.medical_history.waivers.forms import MeniForm
-from djsani.medical_history.waivers.forms import PrivacyForm
-from djsani.medical_history.waivers.forms import ReportingForm
-from djsani.medical_history.waivers.forms import RiskForm
-from djsani.medical_history.waivers.forms import SicklecellForm
-from djsani.core.views import get_data, put_data, update_manager
+from djsani.medical_history.waivers.forms import *
+from djsani.medical_history.waivers.models import *
+from djsani.core.views import get_data, get_manager, put_data, update_manager
 
-#from djzbar.utils.decorators import portal_login_required
+from djzbar.utils.informix import get_session
 from djtools.fields import NEXT_YEAR
+from djtools.utils.convert import str_to_class
 
-#@portal_login_required
+from sqlalchemy.orm import sessionmaker
+
+import os
+
+EARL = settings.INFORMIX_EARL
+
 @login_required
 def form(request,stype,wtype):
     cid = request.user.id
     table = "cc_%s_%s_waiver" % (stype,wtype)
-    obj = get_data("cc_student_medical_manager",cid)
-    if obj:
-        manager = obj.fetchone()
-        # check to see if they already submitted this form
-        if manager and manager[table]:
-            return HttpResponseRedirect(
-                reverse_lazy("home")
-            )
 
+    # create database session
+    session = get_session(EARL)
+
+    # check for student manager record
+    manager = get_manager(session, cid)
     # form name
-    fname = "%sForm" % wtype.capitalize()
+    fname = str_to_class(
+        "djsani.medical_history.waivers.forms",
+        "{}Form".format(wtype.capitalize())
+    )
+    # check to see if they already submitted this form
+    if (manager and getattr(manager, table, None)) or not fname:
+        return HttpResponseRedirect( reverse_lazy("home") )
+
     if request.method=='POST':
-        form = eval(fname)(request.POST)
+        form = fname(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             # insert
             data["college_id"] = cid
-            put_data(data,table,noquo=["college_id"])
+
+            model = str_to_class(
+                "djsani.medical_history.waivers.models",
+                wtype.capitalize()
+            )
+
+            s = model(**data)
+            session.add(s)
             # update the manager
-            update_manager(table,cid)
+            setattr(manager, table, True)
+
+            session.commit()
+
             return HttpResponseRedirect(
                 reverse_lazy("waiver_success")
             )
     else:
-        form = eval(fname)
+        form = fname
+
+    session.close()
+
+    # check for a valid template or redirect home
+    try:
+        template = "medical_history/waivers/%s_%s.html" % (stype,wtype)
+        os.stat(os.path.join(settings.ROOT_DIR, "templates", template))
+    except:
+        return HttpResponseRedirect( reverse_lazy("home"))
+
     return render_to_response(
-        "medical_history/waivers/%s_%s.html" % (stype,wtype),
+        template,
         {
             "form":form,"next_year":NEXT_YEAR
         },

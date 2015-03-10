@@ -1,11 +1,9 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import BigInteger, Boolean, Column, Date, DateTime
+from sqlalchemy import BigInteger, Boolean, Column, DateTime
 from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
-import datetime
-
-def _get_date():
-    return datetime.datetime.now()
+from djtools.fields import NOW
 
 Base = declarative_base()
 
@@ -15,7 +13,7 @@ class StudentMedicalManager(Base):
     # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=_get_date, nullable=False)
+    created_at = Column(DateTime, default=NOW, nullable=False)
     athlete = Column(Boolean)
     sports = Column(String)
     # forms and waivers
@@ -30,3 +28,10 @@ class StudentMedicalManager(Base):
 
     def __repr__(self):
         return str(self.college_id)
+
+    #@hybrid_property
+    @hybrid_method
+    def current(self, day):
+        """Is this the current manager for academic year?"""
+        return self.created_at > day
+    #current = property(_get_current)
