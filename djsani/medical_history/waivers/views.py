@@ -17,15 +17,13 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 
-EARL = settings.INFORMIX_EARL
-
 @login_required
 def form(request,stype,wtype):
     cid = request.user.id
     table = "cc_%s_%s_waiver" % (stype,wtype)
 
     # create database session
-    session = get_session(EARL)
+    session = get_session(settings.INFORMIX_EARL)
 
     # check for student manager record
     manager = get_manager(session, cid)

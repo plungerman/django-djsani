@@ -5,33 +5,32 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from djsani.core.views import get_manager, is_member
+from djsani.core.views import get_manager
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 from djsani.insurance.forms import StudentForm, AthleteForm
 
 from djzbar.utils.informix import get_session
 from djtools.utils.database import row2dict
+from djtools.utils.users import in_group
 from djtools.fields import NOW
 
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from textwrap import fill
 
-EARL = settings.INFORMIX_EARL
-
 @login_required
 def form(request,stype,cid=None):
     if not cid:
         cid = request.user.id
     else:
-        if not is_member(request.user, "Medical Staff"):
+        if not in_group(request.user, "Medical Staff"):
             return HttpResponseRedirect(
                 reverse_lazy("home")
             )
 
     # create database session
-    session = get_session(EARL)
+    session = get_session(settings.INFORMIX_EARL)
 
     # get our student medical manager
     manager = get_manager(session, cid)

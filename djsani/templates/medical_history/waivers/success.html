@@ -1,9 +1,13 @@
 {% extends "medical_history/success.html" %}
-{% block title %}Waiver Form Success &mdash; Health and Counseling &mdash; Carthage College{% endblock %}
-{% block columns %}<link href="http://www.carthage.edu/media/css/douglasfir/3_column.css" rel="stylesheet" type="text/css" />{% endblock %}
+{% block title %}
+    Waiver Form Success
+    &mdash;
+    Health and Counseling &mdash;
+    Carthage College
+{% endblock %}
 {% block content %}
-<div class="buffer">
-    <h1>Waiver Form: Success</h1>
-    <p><a href="{% url 'home' %}">Return to Medical Information Forms</a></p>
-</div>
+    <h2>Waiver Form: Success</h2>
+    <p>
+        <a href="{% url 'home' %}">Return to Medical Information Forms</a>
+    </p>
 {% endblock %}

@@ -20,16 +20,18 @@ FROM
     id_rec
 INNER JOIN
     stu_serv_rec  ON  id_rec.id = stu_serv_rec.id
-AND
-    stu_serv_rec.yr   =   2014
-AND
-    stu_serv_rec.sess =   'RA'
+    AND
+        stu_serv_rec.yr   =   2014
+    AND
+        stu_serv_rec.sess =   'RA'
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN
     cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
+    AND
+        cc_student_medical_manager.created_at > "2015-03-01 00:00:00"
 LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 """

@@ -11,6 +11,7 @@ from djsani.insurance.models import StudentHealthInsurance
 from djsani.core import SPORTS, STUDENT_VITALS
 from djzbar.utils.informix import do_sql as do_esql, get_engine, get_session
 from djtools.utils.date import calculate_age
+from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
 from sqlalchemy.orm import sessionmaker
@@ -24,32 +25,24 @@ BASES = {
 }
 EARL = settings.INFORMIX_EARL
 
-import logging
-logger = logging.getLogger(__name__)
-
-def is_member(user, group):
-    """
-    simple method to check if a user belongs to a group
-    """
-
-    return user.groups.filter(name=group)
 
 def get_manager(session, cid):
     """
     returns the current student medical manager based on the date
     it was created in relation to the medical forms collection
     process start date.
+
+    Accepts a session object and the student's college ID.
     """
 
     return session.query(StudentMedicalManager).\
         filter_by(college_id=cid).\
         filter(StudentMedicalManager.current(settings.START_DATE)).first()
 
-def get_data(table,cid,fields=None,date=None):
+def get_data(table,cid,fields=None):
     """
     table   = name of database table
     fields  = list of database fields to return
-    key     = dict with unique identifier and value
     """
 
     status = False
@@ -59,8 +52,6 @@ def get_data(table,cid,fields=None,date=None):
     else:
         sql += "*"
     sql += " FROM %s WHERE college_id=%s" % (table,cid)
-    if date:
-        sql += " AND created_at?"
     result = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
     return result
 
@@ -172,7 +163,7 @@ def set_type(request):
 
 @login_required
 def home(request):
-    staff = is_member(request.user,"Medical Staff")
+    staff = in_group(request.user, "Medical Staff")
     cid = request.user.id
     my_sports = ""
     student = None

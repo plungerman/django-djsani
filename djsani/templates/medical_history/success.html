@@ -1,9 +1,12 @@
 {% extends "medical_history/form.html" %}
-{% block title %}Medical History Success &mdash; Health and Counseling &mdash; Carthage College{% endblock %}
-{% block columns %}<link href="http://www.carthage.edu/media/css/douglasfir/3_column.css" rel="stylesheet" type="text/css" />{% endblock %}
+{% block title %}
+    Medical History Success &mdash;
+    Health and Counseling &mdash;
+    Carthage College
+{% endblock %}
 {% block content %}
-<div class="buffer">
-    <h1>Medical History: Success</h1>
-    <p><a href="{% url 'home' %}">Return to Medical Information Forms</a></p>
-</div>
+    <h2>Medical History: Success</h2>
+    <p>
+        <a href="{% url 'home' %}">Return to Medical Information Forms</a>
+    </p>
 {% endblock %}

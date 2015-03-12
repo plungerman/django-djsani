@@ -1,9 +1,13 @@
 {% extends "home.html" %}
-{% block title %}Health Insurance Information Success &mdash; Health and Counseling &mdash; Carthage College{% endblock %}
-{% block columns %}<link href="http://www.carthage.edu/media/css/douglasfir/3_column.css" rel="stylesheet" type="text/css" />{% endblock %}
+{% block title %}
+    Health Insurance Information Success &mdash;
+    Health and Counseling &mdash;
+    Carthage College
+{% endblock %}
+{% block extra_javascript %}{% endblock %}
 {% block content %}
-<div class="buffer">
-    <h1>Health Insurance Information: Success</h1>
-    <p><a href="{% url 'home' %}">Return to Medical Information Forms</a></p>
-</div>
+    <h2>Health Insurance Information: Success</h2>
+    <p>
+        <a href="{% url 'home' %}">Return to Medical Information Forms</a>
+    </p>
 {% endblock %}

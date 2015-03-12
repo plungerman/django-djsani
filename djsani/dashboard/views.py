@@ -6,13 +6,14 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
 from djsani.core import *
-from djsani.core.views import get_data, put_data, is_member
+from djsani.core.views import get_data, put_data
 from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
 
 from djzbar.utils.informix import do_sql as do_esql
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
+from djtools.utils.users import in_group
 
 EARL = settings.INFORMIX_EARL
 
@@ -48,7 +49,7 @@ def home(request):
     dashboard home with a list of students
     """
     students = None
-    sql = '%s WHERE prog_enr_rec.cl IN ("FF","FR") ' % STUDENTS_ALPHA
+    sql = '{} WHERE prog_enr_rec.cl IN ("FF","FR") '.format(STUDENTS_ALPHA)
     sql += "ORDER BY lastname"
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
 
@@ -72,7 +73,7 @@ def get_students(request):
     """
     ajax POST returns a list of students
     """
-    if request.POST and (is_member(request.user,"Medical Staff") \
+    if request.POST and (in_group(request.user,"Medical Staff") \
       or request.user.is_superuser):
         sport = request.POST.get("sport")
         sql = " %s WHERE prog_enr_rec.cl IN (%s)" % (

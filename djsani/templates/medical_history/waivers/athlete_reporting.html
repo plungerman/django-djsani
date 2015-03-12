@@ -1,7 +1,8 @@
 {% extends "home.html" %}
 {% block title %}
-    CCIW Injury and Illness Reporting
-    Acknowledgement Form
+    CCIW Injury and Illness Reporting Acknowledgement Form &mdash;
+    Health and Counseling &mdash;
+    Carthage College
 {% endblock %}
 {% block extra_javascript %}
 <script type="text/javascript" charset="utf-8">
@@ -25,7 +26,8 @@ $(function() {
         Acknowledgement Form
     </h2>
     {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form" id="reporting_waive">{% csrf_token %}
+    <form method="post" action="." class="form" id="reporting_waive">
+        {% csrf_token %}
         {% include "medical_history/waivers/athlete_reporting.inc.html" %}
         {% include "form_submit.inc.html" %}
     </form>
