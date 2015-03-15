@@ -61,25 +61,10 @@
         var spinner = new Spinner(opts).spin(target);
         spinner.stop(target);
 
-        // set student types
-        function setType(interruptor,field) {
-            var $data = {
-                "switch": interruptor,
-                "field": field,
-                "college_id":{{student.id}}
-            };
-            $.ajax({
-                type: "POST",
-                async: true,
-                url:  '{{switch_earl}}',
-                dataType: 'html',
-                data: $data
-            });
-        }
         /* x-editable jquery plugin */
         $.fn.editable.defaults.mode = 'inline';
         $('.jeditable').editable({
-            url: '{% url "dashboard_xeditable" %}',
+            url: '{% url "dashboard_jeditable" %}',
             params: function (params) {
                 params.table = $(this).attr("data-table");
                 params.cid = {{student.id|default:"0"}};
@@ -89,22 +74,27 @@
                 //console.log($(this).attr("data-table"));
             }
         });
-        // multiple select picker
-        $('#id_sports').selectpicker();
-        $('#id_sports').on('change', function(){
-            $this = $(this).val();
-            setType($this,"sports");
-        });
-        $('.immun').on('change', function() {
-            var $cb = $(this);
+
+        /* multiple select picker */
+        $('#sports').selectpicker();
+
+        /* generic function to update various models */
+        $('.set-type').on('change', function() {
+            var $dis = $(this);
+            var $did = $dis.attr("id");
+            var $val = $dis.val();
+            dict = {
+                'college_id': {{student.id}},
+                'switch': $val,
+                'field': $did
+            }
+            if ( $did == "opt_out" ) {
+                dict["table"] = "cc_student_health_insurance";
+            }
             $.ajax({
                 type: "POST",
                 url: "{% url 'set_type' %}",
-                data: {
-                    'college_id':$(this).val(),
-                    'switch':1,
-                    'field':'cc_student_immunization'
-                },
+                data: dict,
                 dataType: 'json',
                 cache: false,
                 beforeSend: function(){
@@ -112,30 +102,9 @@
                 },
                 success: function(data) {
                     spinner.stop(target);
-                    check ='<i class="fa fa-check"></i>';
-                    $cb.replaceWith(check);
-                }
-            });
-        });
-        $('#opt_out').on('change', function() {
-            var $cb = $(this);
-            $.ajax({
-                type: "POST",
-                url: "{% url 'set_type' %}",
-                data: {
-                    'college_id':$(this).val(),
-                    'switch':0,
-                    'field':'opt_out',
-                    'table':'cc_student_health_insurance'
-                },
-                dataType: 'json',
-                cache: false,
-                beforeSend: function(){
-                    spinner.spin(target);
-                },
-                success: function(data) {
-                    spinner.stop(target);
-                    location.reload();
+                    if ( $did == "athlete" || $did == "opt_out" ) {
+                        location.reload();
+                    }
                 }
             });
         });
@@ -149,10 +118,15 @@
         <div class="col-lg-8">
             <h1 class="page-header">
                 {{student.firstname}} {{student.lastname}}
-                <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
+                <small>
+                    DOB: {{student.birth_date}} &mdash;
+                    Age: {{age}} &mdash;
+                    Gender: {{student.sex}}
+                </small>
                 <form id="profile" class="form">
-                    <select name="sports" class="selectpicker"
-                        id="id_sports" size="5"
+                    {% if student.athlete %}
+                    <select name="sports" class="selectpicker set-type"
+                        id="sports" size="5"
                         multiple="multiple"
                         title="Choose sport(s)&hellip;">
                         {% for s in sports %}
@@ -166,25 +140,36 @@
                             {% endif %}
                         {% endif %}
                         >
-                        {{s.1}}
+                        {{s.1|safe}}
                         </option>
                         {% endif %}
                         {% endfor %}
                     </select>
+                    {% endif %}
+                    <small> Athlete: </small>
+                    <input type="checkbox" name="athlete" class="set-type"
+                        id="athlete"
+                    {% if student.athlete %}
+                        value="0"
+                        checked="checked"
+                    {% else %}
+                        value="1"
+                    {% endif %}
+                    />
                 </form>
             </h1>
             <h3>
                 Immunization status:
+                <input type="checkbox" name="immun" class="set-type"
+                        id="cc_student_immunization"
                 {% if student.cc_student_immunization %}
-                    <i class="fa fa-check green">
-                        <span></span>
-                    </i>
+                        value="0"
+                        checked="checked"
                 {% else %}
-                    <input type="checkbox" name="immun" class="immun"
-                        id="immun_{{student.id}}" value="{{student.id}}" />
+                        value="1"
                 {% endif %}
+                    />
             </h3>
-
         </div>
         <!-- /.col-lg-12 -->
         <div class="col-lg-4">

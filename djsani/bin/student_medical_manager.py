@@ -46,19 +46,29 @@ def main():
     # create database session
     session = get_session(EARL)
 
-    man = session.query(StudentMedicalManager).\
+    manager = session.query(StudentMedicalManager).\
         filter_by(college_id=cid).\
         filter(StudentMedicalManager.current(settings.START_DATE)).first()
 
-    if not man:
-        man = StudentMedicalManager(college_id=cid)
-        session.add(man)
+    if not manager:
+        # see if we have a past manager with immunization set
+        immunization = False
+        obj = session.query(StudentMedicalManager).filter_by(college_id=cid).\
+            filter_by(cc_student_immunization=1).first()
+        if obj:
+            immunization = True
+        # create new manager
+        manager = StudentMedicalManager(
+            college_id=cid, cc_student_immunization=immunization
+        )
+
+        session.add(manager)
         session.commit()
 
     print "entire object as dictionary:\n"
-    print man.__dict__
+    print manager.__dict__
 
-    for m in man:
+    for m in manager:
         if m.current:
             print m.__dict__
         else:

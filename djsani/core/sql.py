@@ -76,6 +76,7 @@ SELECT
     cc_athlete_sicklecell_waiver.proof,
     cc_athlete_sicklecell_waiver.results,
     profile_rec.birth_date,
+    profile_rec.sex,
     mobile_rec.phone as mobile
 FROM
     id_rec
@@ -84,7 +85,13 @@ LEFT JOIN
 LEFT JOIN
     cvid_rec     ON  id_rec.id = cvid_rec.cx_id
 LEFT JOIN
-    cc_student_medical_manager ON  id_rec.id = cc_student_medical_manager.college_id
+    cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
+    AND
+        cc_student_medical_manager.created_at > "2015-03-01 00:00:00"
+LEFT JOIN
+    cc_athlete_privacy_waiver ON id_rec.id = cc_athlete_privacy_waiver.college_id
+    AND
+        cc_athlete_privacy_waiver.created_at > "2015-03-01 00:00:00"
 LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 LEFT JOIN
@@ -93,33 +100,3 @@ LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
 """
-
-# IDs must be unique pattern that does not repeat in any other
-# item e.g 25 & 250 will not work.
-SPORTS = (
-    ("0","----Select Sport----"),
-    ("","----Men's sports----"),
-    ("15","Men's Baseball"),
-    ("25","Men's Basketball"),
-    ("35","Men's Cross Country"),
-    ("45","Men's Football"),
-    ("55","Men's Golf"),
-    ("65","Men's Lacrosse"),
-    ("75","Men's Soccer"),
-    ("85","Men's Swimming"),
-    ("95","Men's Tennis"),
-    ("105","Men's Track &amp; Field"),
-    ("120","Men's Volleyball"),
-    ("","----Women's sports----"),
-    ("200","Women's Basketball"),
-    ("210","Women's Cross Country"),
-    ("220","Women's Golf"),
-    ("230","Women's Lacrosse"),
-    ("240","Women's Soccer"),
-    ("260","Women's Softball"),
-    ("270","Women's Swimming"),
-    ("280","Women's Tennis"),
-    ("290","Women's Track &amp; Field"),
-    ("300","Women's Volleyball"),
-    ("305","Women's Water Polo")
-)

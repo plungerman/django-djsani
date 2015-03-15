@@ -56,12 +56,13 @@ def form(request,stype,cid=None):
             forms["college_id"] = cid
             s = StudentHealthInsurance(**forms)
             session.add(s)
-            # update the manager
-            manager.cc_student_health_insurance=True
         else:
             session.query(StudentHealthInsurance).\
                 filter_by(college_id=cid).\
                 update(forms)
+
+        # update the manager
+        manager.cc_student_health_insurance=True
         # lastly, commit and redirect
         session.commit()
         return HttpResponseRedirect(

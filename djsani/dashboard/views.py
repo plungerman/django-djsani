@@ -5,7 +5,8 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
-from djsani.core import *
+from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
+from djsani.core.sql import *
 from djsani.core.views import get_data, put_data
 from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
@@ -138,7 +139,7 @@ def student_detail(request,cid=None,content=None):
     if cid:
         # get student
         obj = do_esql(
-            "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid),
+            "{} WHERE id_rec.id = '{}'".format(STUDENT_VITALS,cid),
             key=settings.INFORMIX_DEBUG,earl=EARL
         )
         if obj:
@@ -158,15 +159,19 @@ def student_detail(request,cid=None,content=None):
                     stype = "athlete"
                 if student.sports:
                     my_sports = student.sports.split(",")
+                if student.sex == "F":
+                    sports = SPORTS_WOMEN
+                else:
+                    sports = SPORTS_MEN
             else:
-                age=ens=shi=smh=amh=student=stype=None
+                age=ens=shi=smh=amh=student=sports=stype=None
             return render_to_response(
                 template,
                 {
                     "student":student,"age":age,"ens":ens,
                     "shi":shi,"amh":amh,"smh":smh,"cid":cid,
                     "switch_earl": reverse_lazy("set_type"),
-                    "sports":SPORTS, "my_sports":my_sports,
+                    "sports":sports, "my_sports":my_sports,
                     "stype":stype
                 },
                 context_instance=RequestContext(request)
@@ -178,7 +183,7 @@ def student_detail(request,cid=None,content=None):
 
 
 @csrf_exempt
-def xeditable(request):
+def jeditable(request):
     field = request.POST.get("name")
     value = request.POST.get("value")
     cid = request.POST.get("cid")

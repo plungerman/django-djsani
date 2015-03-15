@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.waivers.forms import *
 from djsani.medical_history.waivers.models import *
-from djsani.core.views import get_data, get_manager, put_data, update_manager
+from djsani.core.views import get_data, get_manager, put_data
 
 from djzbar.utils.informix import get_session
 from djtools.fields import NEXT_YEAR

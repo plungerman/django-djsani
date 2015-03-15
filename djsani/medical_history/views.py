@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.forms import StudentForm
 from djsani.medical_history.forms import AthleteForm
-from djsani.core.views import get_data, put_data, update_manager
+from djsani.core.views import get_data, put_data
 
 #from djzbar.utils.decorators import portal_login_required
 
@@ -57,7 +57,7 @@ def form(request,stype):
             # insert
             put_data(data,table,noquo=["college_id"])
             # update the manager
-            update_manager(table,cid)
+            #update_manager(table,cid)
             return HttpResponseRedirect(
                 reverse_lazy("medical_history_success")
             )
