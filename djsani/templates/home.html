@@ -85,14 +85,14 @@ $(function() {
 <h4>Health &amp; Counseling Center</h4>
 <ul>
     {% if not user.is_anonymous %}
-        <li>
-            <a href="{% url 'auth_logout' %}?next={{request.path}}">Logout</a>
-        </li>
-        {% ifusergroup carthageStaffStatus %}
+        {% ifusergroup MedicalStaff %}
         <li>
             <a href="{% url 'dashboard_home' %}">Dashboard</a>
         </li>
         {% endifusergroup %}
+        <li>
+            <a href="{% url 'auth_logout' %}?next={{request.path}}">Logout</a>
+        </li>
         {% if user.is_superuser %}
         <li>
             <a href="/campus-life/medical/forms/admin/">Administration</a>
@@ -278,10 +278,13 @@ $(function() {
                 {% endif %}
             </li>
             <li>
-                {% if not manager.cc_athlete_sicklecell_waiver %}
+                {% if not manager.cc_athlete_sicklecell_waiver or student.waive %}
                     <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
                         Sickle cell waiver
                     </a>
+                {% endif %}
+                {% if manager.cc_athlete_sicklecell_waiver and student.waive %}
+                    <i class="fa fa-check green"></i>
                 {% endif %}
             </li>
             <li>

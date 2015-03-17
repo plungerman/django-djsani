@@ -28,7 +28,6 @@ BASES = {
 
 EARL = settings.INFORMIX_EARL
 
-
 def get_manager(session, cid):
     """
     returns the current student medical manager based on the date
@@ -57,6 +56,23 @@ def get_manager(session, cid):
         )
         session.add(manager)
         session.commit()
+    else:
+        manager.status = False
+        if manager.cc_student_medical_history\
+        and manager.cc_student_health_insurance\
+        and manager.cc_student_immunization\
+        and manager.cc_student_meni_waiver:
+            manager.status = True
+            if manager.athlete:
+                if manager.cc_athlete_medical_history\
+                and manager.cc_athlete_privacy_waiver\
+                and manager.cc_athlete_reporting_waiver\
+                and manager.cc_athlete_risk_waiver\
+                and manager.cc_athlete_sicklecell_waiver:
+                    manager.status = True
+                else:
+                    manager.status = False
+
     return manager
 
 def get_data(table, cid, fields=None):

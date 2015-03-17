@@ -2,12 +2,13 @@
     <table class="table table-striped table-bordered table-hover" id="students-data">
         <thead>
             <tr>
+                <th><i class="fa fa-thumbs-o-up green"></i></th>
                 <th>Name</th>
                 <th>Immun</th>
-                <th>Insurance</th>
+                <th>Insur</th>
                 <th>Meni/Hep B</th>
-                <th>Medical history</th>
-                <th>Athlete medical history</th>
+                <th>Med hist</th>
+                <th>Ath med hist</th>
                 <th>Privacy</th>
                 <th>Sickle cell</th>
                 <th>Reporting</th>
@@ -17,6 +18,15 @@
         <tbody>
         {% for s in students %}
             <tr>
+                <td class="{{s.adult}}">
+                    {% if s.status %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
+                    {% else %}
+                        <i class="fa fa-times red"></i>
+                    {% endif %}
+                </td>
                 <td class="{{s.adult}}" style="text-align:left;">
                     <a href="{% url 'student_detail' s.id %}">
                         {{s.lastname}}, {{s.firstname}}

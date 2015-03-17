@@ -17,6 +17,9 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 
+import logging
+logger = logging.getLogger(__name__)
+
 @login_required
 def form(request,stype,wtype):
     cid = request.user.id
@@ -32,8 +35,16 @@ def form(request,stype,wtype):
         "djsani.medical_history.waivers.forms",
         "{}Form".format(wtype.capitalize())
     )
+    waive = True
+    if wtype == "sicklecell":
+        student = session.query(Sicklecell).\
+        filter_by(college_id=cid).first()
+        if student:
+            waive = student.waive
+
     # check to see if they already submitted this form
-    if (manager and getattr(manager, table, None)) or not fname:
+    # except for those who waived sicklecell test
+    if (manager and getattr(manager, table, None) and not waive) or not fname:
         return HttpResponseRedirect( reverse_lazy("home") )
 
     if request.method=='POST':
@@ -43,15 +54,18 @@ def form(request,stype,wtype):
             # insert
             data["college_id"] = cid
 
-            model = str_to_class(
-                "djsani.medical_history.waivers.models",
-                wtype.capitalize()
-            )
-
-            s = model(**data)
-            session.add(s)
-            # update the manager
-            setattr(manager, table, True)
+            if student:
+                for key, value in data.iteritems():
+                    setattr(student, key, value)
+            else:
+                model = str_to_class(
+                    "djsani.medical_history.waivers.models",
+                    wtype.capitalize()
+                )
+                s = model(**data)
+                session.add(s)
+                # update the manager
+                setattr(manager, table, True)
 
             session.commit()
 
@@ -73,7 +87,7 @@ def form(request,stype,wtype):
     return render_to_response(
         template,
         {
-            "form":form,"next_year":NEXT_YEAR
+            "form":form,"next_year":NEXT_YEAR,"student":student
         },
         context_instance=RequestContext(request)
     )

@@ -40,6 +40,7 @@ $(document).ready(function() {
     $.fn.editable.defaults.mode = 'inline';
     $('.jeditable').editable({
         url: '{% url "dashboard_xeditable" %}',
+        emptytext: "Click to edit",
         params: function (params) {
             params.table = $(this).attr("data-table");
             params.cid = {{cid|default:"0"}};

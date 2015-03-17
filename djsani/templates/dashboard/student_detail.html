@@ -63,8 +63,9 @@
 
         /* x-editable jquery plugin */
         $.fn.editable.defaults.mode = 'inline';
-        $('.jeditable').editable({
-            url: '{% url "dashboard_jeditable" %}',
+        $('.xeditable').editable({
+            url: '{% url "dashboard_xeditable" %}',
+            emptytext: "Click to edit",
             params: function (params) {
                 params.table = $(this).attr("data-table");
                 params.cid = {{student.id|default:"0"}};
@@ -81,6 +82,7 @@
         /* generic function to update various models */
         $('.set-type').on('change', function() {
             var $dis = $(this);
+            // DOM id is the field name
             var $did = $dis.attr("id");
             var $val = $dis.val();
             dict = {

@@ -31,7 +31,7 @@ $(function() {
             $('#secondary-box').slideUp(200);
             {% if manager.athlete == 1 %}
             $.fancybox.open([{
-                href : '#warning'
+                href : '#athlete-warning'
             }]);
             {% endif %}
         }else{
@@ -151,7 +151,7 @@ $(function() {
             {% include "form_submit.inc.html" %}
         </div>
     </form>
-    <div id="warning" style="display:none;width:500px;">
+    <div id="athlete-warning" style="display:none;width:500px;">
         <h2>Primary Insurance Required</h2>
         <p>
             All student-athletes must maintain primary insurance

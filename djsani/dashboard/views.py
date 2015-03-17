@@ -7,11 +7,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
 from djsani.core.sql import *
-from djsani.core.views import get_data, put_data
+from djsani.core.views import get_data, get_manager, put_data
 from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
 
-from djzbar.utils.informix import do_sql as do_esql
+from djzbar.utils.informix import do_sql as do_esql, get_session
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
 from djtools.utils.users import in_group
@@ -44,7 +44,7 @@ def emergency_information(cid):
             pass
     return ens
 
-@group_required('Medical Staff')
+@group_required('MedicalStaff')
 def home(request):
     """
     dashboard home with a list of students
@@ -53,7 +53,7 @@ def home(request):
     sql = '{} WHERE prog_enr_rec.cl IN ("FF","FR") '.format(STUDENTS_ALPHA)
     sql += "ORDER BY lastname"
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
-
+    session = get_session(EARL)
     if objs:
         students = [dict(row) for row in objs.fetchall()]
         for s in students:
@@ -62,8 +62,9 @@ def home(request):
                 age = calculate_age(s["birth_date"])
                 if age > 17:
                     adult = "adult"
+            s["status"] = get_manager(session, s["id"]).status
             s["adult"] = adult
-
+    session.close()
     return render_to_response(
         "dashboard/home.html",
         {"students":students,"sports":SPORTS},
@@ -74,7 +75,7 @@ def get_students(request):
     """
     ajax POST returns a list of students
     """
-    if request.POST and (in_group(request.user,"Medical Staff") \
+    if request.POST and (in_group(request.user,"MedicalStaff") \
       or request.user.is_superuser):
         sport = request.POST.get("sport")
         sql = " %s WHERE prog_enr_rec.cl IN (%s)" % (
@@ -124,7 +125,7 @@ def panels(request,table,cid):
     c = RequestContext(request, {'data':data,'form':form})
     return t.render(c)
 
-@group_required('Medical Staff')
+@group_required('MedicalStaff')
 def student_detail(request,cid=None,content=None):
     """
     main method for displaying student data
@@ -183,7 +184,7 @@ def student_detail(request,cid=None,content=None):
 
 
 @csrf_exempt
-def jeditable(request):
+def xeditable(request):
     field = request.POST.get("name")
     value = request.POST.get("value")
     cid = request.POST.get("cid")
