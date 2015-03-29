@@ -366,15 +366,16 @@ class AthleteForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
-    sickle_cell_trait_2 = forms.CharField(
+    # Head and Neck Injury
+    head_injuries_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
-    sickle_cell_trait = forms.CharField(
+    head_injuries = forms.CharField(
+        label='Multiple head injuries',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
     )
-    # Head and Neck Injury
     concussion_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
@@ -389,15 +390,6 @@ class AthleteForm(forms.Form):
     )
     suspected_concussion = forms.CharField(
         label='Suspected, unreported concussion (#)',
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
-    )
-    head_injuries_2 = forms.CharField(
-        widget=forms.HiddenInput(),required=False
-    )
-    head_injuries = forms.CharField(
-        label='Multiple head injuries',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         required=False
@@ -741,15 +733,6 @@ class AthleteForm(forms.Form):
     # Additional Medical Information
     previous_year_change_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
-    )
-    previous_year_change = forms.CharField(
-        label='''
-            Any change in current medications or allergies
-            from previous year?
-        ''',
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     physician_prohibition_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False

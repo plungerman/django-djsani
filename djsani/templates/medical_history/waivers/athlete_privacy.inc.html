@@ -1,7 +1,7 @@
 <div class="large-12 col-lg-12">
     {% if form.errors %}
     <p class="error">
-        All checkboxes are required except for "The News Media".
+        The last two checkboxes are required.
     </p>
     {% endif %}
     <p>
@@ -49,28 +49,6 @@
         </label>
     </div>
     <div class="large-1 col-lg-1">
-        {% if student.cc_athlete_privacy_waiver %}
-            <i class="fa fa-check fa-2x green"></i>
-        {% else %}
-            <input id="id_medical_insurance"
-                type="checkbox" name="medical_insurance" value="1" />
-        {% endif %}
-    </div>
-    <div class="large-11 col-lg-11">
-        <label for="id_medical_insurance">
-            <p>
-            <em>My Personal Medical Insurance</em>
-            For the use of electronic transmission, US post mail, or
-            facsimile involving billing, reimbursement, benefits
-            eligibility and plan-eligibility issues.
-            <strong>
-                Authorization in this category is required to
-                participate in athletics at Carthage College.
-            </strong>
-            </p>
-        </label>
-    </div>
-    <div class="large-1 col-lg-1">
         {% if student.news_media %}
             <i class="fa fa-check fa-2x green"></i>
         {% else %}
@@ -103,6 +81,28 @@
             Should the parents/guardian inquire as to the extent of an
             injury or illness, you are allowing Carthage College
             athletics representatives to discuss your condition.
+            </p>
+        </label>
+    </div>
+    <div class="large-1 col-lg-1">
+        {% if student.cc_athlete_privacy_waiver %}
+            <i class="fa fa-check fa-2x green"></i>
+        {% else %}
+            <input id="id_medical_insurance"
+                type="checkbox" name="medical_insurance" value="1" />
+        {% endif %}
+    </div>
+    <div class="large-11 col-lg-11">
+        <label for="id_medical_insurance">
+            <p>
+            <em>My Personal Medical Insurance</em>
+            For the use of electronic transmission, US post mail, or
+            facsimile involving billing, reimbursement, benefits
+            eligibility and plan-eligibility issues.
+            <strong>
+                Authorization in this category is required to
+                participate in athletics at Carthage College.
+            </strong>
             </p>
         </label>
     </div>

@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, StudentMedicalManager
 from djsani.insurance.models import StudentHealthInsurance
+from djsani.medical_history.waivers.models import Sicklecell
 from djsani.core.sql import STUDENT_VITALS
 from djzbar.utils.informix import do_sql as do_esql, get_engine, get_session
 from djtools.utils.date import calculate_age
@@ -22,6 +23,7 @@ table names are the key, base model classes are the value
 
 BASES = {
     "cc_student_health_insurance": StudentHealthInsurance,
+    "cc_athlete_sicklecell_waiver": Sicklecell
 }
 #    "cc_athlete_medical_history": ,
 #    "cc_student_medical_history":
@@ -148,6 +150,20 @@ def put_data(dic,table,cid=None,noquo=[]):
 @csrf_exempt
 @login_required
 def set_type(request):
+    """
+    Locations in use:
+
+    student home
+        1) choose student or athlete
+        2) if athlete, choose sport(s)
+    dashboard home
+        1) immunization
+    dashboard student detail
+        1) student or athlete
+        2) if athlete, choose sport(s)
+        3) insurance opt-out
+        4) sicklecell waiver
+    """
     field = request.POST.get("field")
     table = request.POST.get("table")
 
@@ -155,27 +171,42 @@ def set_type(request):
     if not cid:
         cid = request.user.id
 
-    # create database session
-    session = get_session(EARL)
-
-    if not table:
-        # retrieve student manager record
-        obj = get_manager(session, cid)
-    else:
-        # retrieve the object based on table name
-        obj = session.query(BASES[table]).filter_by(college_id=cid).first()
-
     switch = request.POST.get("switch")
 
     # sports field is a list
     if field == "sports":
         switch = ','.join(request.POST.getlist("switch[]"))
 
+    # create our dictionary to hold name/value pairs
     dic = {field:switch,"college_id":cid}
 
     # if we switch from athlete then remove sports
     if field == "athlete" and switch == "0":
         dic["sports"] = ""
+
+    # if student has sickle cell test results then
+    # proof is True and waive is False
+    if field == "results":
+        dic["proof"] = 1
+        dic["waive"] = 0
+
+    # create database session
+    session = get_session(EARL)
+
+    # retrieve student manager record
+    man = get_manager(session, cid)
+
+    if table:
+        # retrieve the object based on table name
+        obj = session.query(BASES[table]).filter_by(college_id=cid).first()
+
+        if not obj:
+            obj = BASES[table](**dic)
+            session.add(obj)
+            dic = {table:1,"college_id":cid}
+            obj = man
+    else:
+        obj = man
 
     for key, value in dic.iteritems():
         setattr(obj, key, value)

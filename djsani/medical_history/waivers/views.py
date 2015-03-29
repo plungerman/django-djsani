@@ -7,18 +7,13 @@ from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.waivers.forms import *
 from djsani.medical_history.waivers.models import *
-from djsani.core.views import get_data, get_manager, put_data
+from djsani.core.views import get_manager
 
 from djzbar.utils.informix import get_session
 from djtools.fields import NEXT_YEAR
 from djtools.utils.convert import str_to_class
 
-from sqlalchemy.orm import sessionmaker
-
 import os
-
-import logging
-logger = logging.getLogger(__name__)
 
 @login_required
 def form(request,stype,wtype):
@@ -35,6 +30,7 @@ def form(request,stype,wtype):
         "djsani.medical_history.waivers.forms",
         "{}Form".format(wtype.capitalize())
     )
+    student = None
     waive = True
     if wtype == "sicklecell":
         student = session.query(Sicklecell).\

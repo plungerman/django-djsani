@@ -7,7 +7,7 @@
 {% block extra_javascript %}
 <script type="text/javascript" charset="utf-8">
 $(function() {
-    $('#reporting_waive').submit(function() {
+    $('#reporting-waiver').submit(function() {
         if ($('#id_agree').is(':checked')) {
             return true;
         } else {
@@ -26,7 +26,7 @@ $(function() {
         Acknowledgement Form
     </h2>
     {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form" id="reporting_waive">
+    <form method="post" action="." class="form" id="reporting-waiver">
         {% csrf_token %}
         {% include "medical_history/waivers/athlete_reporting.inc.html" %}
         {% include "form_submit.inc.html" %}

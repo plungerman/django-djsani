@@ -1,0 +1,154 @@
+{
+ Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
+ -------------------------------------------------------------------------
+ $Header: CCStudentMedicalManager,v 8.0.17100.1 2014/05/23 13:36:34 ronl Released $
+ -------------------------------------------------------------------------
+}
+
+table cc_student_medical_manager
+    desc            "Collection of flags and information denoting completeness"
+                    "of a student's record"
+    location        "DBS_STUDENT"
+    lockmode        row
+    prefix          ""        { Used by makedef }
+    rowlimits       ??:??
+    status          "Active"
+    text            "Table text, 31 characters"
+    track           "STUDENT"
+
+column id           serial not null
+    comments        ""
+    desc            "System generated sequential number uniquely identifying this record"
+    heading         "Medical Manager ID"
+    text            "Medical Manager ID"
+    attributes
+        (
+        )
+
+column college_id   integer default 0 not null
+    comments        ""
+    desc            "College ID"
+    heading         "College ID"
+    text            "College ID"
+    attributes
+        (
+        )
+
+column created_at    datetime year to second default current year to second not null
+    comments        ""
+    desc            "The date when the record was created"
+    heading         "Created At"
+    text            "Created At"
+    attributes
+        (
+        )
+
+column athlete      smallint
+    comments        ""
+    desc            "Is the student an athlete?"
+    heading         "Athlete"
+    text            "Athlete"
+    attributes
+        (
+        )
+
+column sports       varchar(255)
+    comments        ""
+    desc            "The sports that the student is involved in"
+    heading         "Sports"
+    text            "Sports"
+    attributes
+        (
+        )
+
+column cc_student_medical_history   smallint
+    comments        ""
+    desc            "Has the student completed their medical history form?"
+    heading         "Student Medical History"
+    text            "Student Medical History"
+    attributes
+        (
+        )
+
+column cc_athlete_medical_history   smallint
+    comments        ""
+    desc            "Has the student completed their athletic medical history form?"
+    heading         "Athlete Medical History"
+    text            "Athlete Medical History"
+    attributes
+        (
+        )
+
+column cc_student_health_insurance  smallint
+    comments        ""
+    desc            "Has the student completed their health insurance form?"
+    heading         "Health Insurance"
+    text            "Health Insurance"
+    attributes
+        (
+        )
+
+column cc_student_immunization  smallint
+    comments        ""
+    desc            "Has the student completed the immunization form?"
+    heading         "Immunization"
+    text            "Immunization"
+    attributes
+        (
+        )
+
+column cc_student_meni_waiver   smallint
+    comments        ""
+    desc            "Has the student completed their meni waiver?"
+    heading         "Meni Waiver"
+    text            "Meni Waiver"
+    attributes
+        (
+        )
+
+column cc_athlete_sicklecell_waiver smallint
+    comments        ""
+    desc            "Has the student completed their sickle cell waiver form?"
+    heading         "Sickle Cell"
+    text            "Sickle Cell"
+    attributes
+        (
+        )
+
+column cc_athlete_privacy_waiver smallint
+    comments        ""
+    desc            "Has the student completed their athletic privacy waiver?"
+    heading         "Privacy Waiver"
+    text            "Privacy Waiver"
+    attributes
+        (
+        )
+
+column cc_athlete_risk_waiver smallint
+    comments        ""
+    desc            "Has the student completed their athletic risk waiver?"
+    heading         "Risk Waiver"
+    text            "Risk Waiver"
+    attributes
+        (
+        )
+
+column cc_athlete_reporting_waiver smallint
+    comments        ""
+    desc            "Has the student completed their athletic reporting waiver?"
+    heading         "Reporting Waiver"
+    text            "Reporting Waiver"
+    attributes
+        (
+        )
+
+index               { Index names must be unique across database }
+                    cc_student_medical_manager01 on (id)
+
+grant
+    select  to (group carsprog, group registrar, group student)
+    update  to (group carsprog, group registrar, group student)
+    insert  to (group carsprog, group registrar, group student)
+    delete  to (group carsprog)
+    control to (group carsprog)
+

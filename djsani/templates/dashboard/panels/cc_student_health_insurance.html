@@ -1,34 +1,40 @@
-{% if data %}
-    {% if data.opt_out %}
+{% if not data %}
+    <div class="alert alert-danger">
+        <h3>
+            The student has not completed this form.
+        </h3>
+    </div>
+{% endif %}
+{% if data.opt_out %}
     <div class="alert alert-danger">
     <h3>Opt out</h3>
-    {% else %}
+{% else %}
     <div>
-    {% endif %}
-    <form style="float:left;">
-        <input type="checkbox" id="opt_out" class="set-type"
-            {% if data.opt_out %}
-            value="0"
-            checked="checked"
-            {% else %}
-            value="1"
-            {% endif %}
-            >
-    </form>
-    <p>
-        &nbsp;&nbsp;
-        I attest that I do <strong><u>NOT</u></strong>
-        have health insurance.
-    </p>
-    </div>
-    {% if not data.opt_out %}
+{% endif %}
+<form style="float:left;">
+    <input type="checkbox" id="opt_out" class="set-type"
+        {% if data.opt_out %}
+        value="0"
+        checked="checked"
+        {% else %}
+        value="1"
+        {% endif %}
+        >
+</form>
+<p>
+    &nbsp;&nbsp;
+    I attest that I do <strong><u>NOT</u></strong>
+    have health insurance.
+</p>
+</div>
+{% if not data.opt_out %}
     <ul style="margin-bottom: 15px;clear:both;" class="nav nav-tabs">
     <li class="active">
         <a data-toggle="tab" href="#primary_insurance">
             Primary
         </a>
     </li>
-    <li{% if not data.secondary_company %} class="disabled"{% endif %}>
+    <li>
         <a data-toggle="tab" href="#secondary_insurance">
             Secondary
         </a>
@@ -44,7 +50,7 @@
                 <a href="#" id="primary_policy_holder" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy holder" class="xeditable">
-                {{data.primary_policy_holder|default_if_none:"&nbsp;"}}
+                {{data.primary_policy_holder|default_if_none:""}}
                 </a>
             </dd>
             <dt>Date of birth</dt>
@@ -52,7 +58,7 @@
                 <a href="#" id="primary_dob" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Date of birth" class="xeditable">
-                {{data.primary_dob|default_if_none:"Click to edit"}}
+                {{data.primary_dob|default_if_none:""}}
                 </a>
             </dd>
             <dt>Company</dt>
@@ -60,7 +66,7 @@
                 <a href="#" id="primary_company" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Company" class="xeditable">
-                {{data.primary_company|default_if_none:"&nbsp;"}}
+                {{data.primary_company|default_if_none:""}}
                 </a>
             </dd>
             <dt>Phone</dt>
@@ -68,7 +74,7 @@
                 <a href="#" id="primary_phone" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Phone" class="xeditable">
-                {{data.primary_phone|default_if_none:"&nbsp;"}}
+                {{data.primary_phone|default_if_none:""}}
                 </a>
             </dd>
             <dt>Member ID</dt>
@@ -76,7 +82,7 @@
                 <a href="#" id="primary_member_id" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Member ID" class="xeditable">
-                {{data.primary_member_id|default_if_none:"&nbsp;"}}
+                {{data.primary_member_id|default_if_none:""}}
                 </a>
             </dd>
             <dt>Group number</dt>
@@ -84,7 +90,7 @@
                 <a href="#" id="primary_group_no" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Group number" class="xeditable">
-                {{data.primary_group_no|default_if_none:"&nbsp;"}}
+                {{data.primary_group_no|default_if_none:""}}
                 </a>
             </dd>
             <dt>Policy type</dt>
@@ -92,7 +98,7 @@
                 <a href="#" id="primary_policy_type" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy type" class="xeditable">
-                {{data.primary_policy_type|default_if_none:"&nbsp;"}}
+                {{data.primary_policy_type|default_if_none:""}}
                 </a>
             </dd>
             <dt>Policy state</dt>
@@ -100,7 +106,7 @@
                 <a href="#" id="primary_policy_state" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy state" class="xeditable">
-                {{data.primary_policy_state|default_if_none:"&nbsp;"}}
+                {{data.primary_policy_state|default_if_none:""}}
                 </a>
             </dd>
             <dt>Address</dt>
@@ -108,7 +114,7 @@
                 <a href="#" id="primary_policy_address" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy address" class="xeditable">
-                {{data.primary_policy_address|default_if_none:"&nbsp;"}}
+                {{data.primary_policy_address|default_if_none:""}}
                 </a>
             </dd>
         </dl>
@@ -121,7 +127,7 @@
                 <a href="#" id="secondary_policy_holder" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy holder" class="xeditable">
-                {{data.secondary_policy_holder|default_if_none:"&nbsp;"}}
+                {{data.secondary_policy_holder|default_if_none:""}}
                 </a>
             </dd>
             <dt>Date of birth</dt>
@@ -129,7 +135,7 @@
                 <a href="#" id="secondary_dob" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Date of birth" class="xeditable">
-                {{data.secondary_dob|default_if_none:"&nbsp;"}}
+                {{data.secondary_dob|default_if_none:""}}
                 </a>
             </dd>
             <dt>Company</dt>
@@ -137,7 +143,7 @@
                 <a href="#" id="secondary_company" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Company" class="xeditable">
-                {{data.secondary_company|default_if_none:"&nbsp;"}}
+                {{data.secondary_company|default_if_none:""}}
                 </a>
             </dd>
             <dt>Phone</dt>
@@ -145,7 +151,7 @@
                 <a href="#" id="secondary_phone" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Phone" class="xeditable">
-                {{data.secondary_phone|default_if_none:"&nbsp;"}}
+                {{data.secondary_phone|default_if_none:""}}
                 </a>
             </dd>
             <dt>Member ID</dt>
@@ -153,7 +159,7 @@
                 <a href="#" id="secondary_member_id" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Member ID" class="xeditable">
-                {{data.secondary_member_id|default_if_none:"&nbsp;"}}
+                {{data.secondary_member_id|default_if_none:""}}
                 </a>
             </dd>
             <dt>Group number</dt>
@@ -161,7 +167,7 @@
                 <a href="#" id="secondary_group_no" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Group number" class="xeditable">
-                {{data.secondary_group_no|default_if_none:"&nbsp;"}}
+                {{data.secondary_group_no|default_if_none:""}}
                 </a>
             </dd>
             <dt>Policy type</dt>
@@ -169,7 +175,7 @@
                 <a href="#" id="secondary_policy_type" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy type" class="xeditable">
-                {{data.secondary_policy_type|default_if_none:"&nbsp;"}}
+                {{data.secondary_policy_type|default_if_none:""}}
                 </a>
             </dd>
             <dt>Policy state</dt>
@@ -177,7 +183,7 @@
                 <a href="#" id="secondary_policy_state" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy state" class="xeditable">
-                {{data.secondary_policy_state|default_if_none:"&nbsp;"}}
+                {{data.secondary_policy_state|default_if_none:""}}
                 </a>
             </dd>
             <dt>Address</dt>
@@ -185,18 +191,11 @@
                 <a href="#" id="secondary_policy_address" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Policy address" class="xeditable">
-                {{data.secondary_policy_address|default_if_none:"&nbsp;"}}
+                {{data.secondary_policy_address|default_if_none:""}}
                 </a>
             </dd>
         </dl>
     </div>
     </div>
     <!-- /.tab-content -->
-    {% endif %}
-{% else %}
-<div class="alert alert-danger">
-    <h3>
-        The student has not completed this form.
-    </h3>
-</div>
 {% endif %}

@@ -1,0 +1,82 @@
+{
+ Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
+ -------------------------------------------------------------------------
+ $Header: CCAthleteSickleCellWaiver,v 8.0.17100.1 2014/05/23 13:23:07 ronl Released $
+ -------------------------------------------------------------------------
+}
+
+table cc_athlete_sicklecell_waiver
+    desc            "Denotes whether student athlete signed sickle cell waiver"
+    location        "DBS_STUDENT"
+    lockmode        row
+    prefix          ""        { Used by makedef }
+    rowlimits       ??:??
+    status          "Active"
+    text            "Table text, 31 characters"
+    track           "STUDENT"
+
+column id           serial not null
+    comments        ""
+    desc            "System generated sequential number uniquely identifying this record"
+    heading         "Waiver ID"
+    text            "Waiver ID"
+    attributes
+        (
+        )
+
+column college_id   integer default 0 not null
+    comments        ""
+    desc            "College ID"
+    heading         "College ID"
+    text            "College ID"
+    attributes
+        (
+        )
+
+column created_at   datetime year to second default current year to second not null
+    comments        ""
+    desc            "The date when the record was created"
+    heading         "Created At"
+    text            "Created At"
+    attributes
+        (
+        )
+
+column waive        smallint
+    comments        ""
+    desc            "Waive"
+    heading         "Waive"
+    text            "Waive"
+    attributes
+        (
+        )
+
+column proof        smallint
+    comments        ""
+    desc            "Provided Proof"
+    heading         "Proof"
+    text            "Proof"
+    attributes
+        (
+        )
+
+column results      varchar(64)
+    comments        ""
+    desc            "Results"
+    heading         "Results"
+    text            "Results"
+    attributes
+        (
+        )
+
+
+index               { Index names must be unique across database }
+                    cc_athlete_sicklecell_waiver01 on (id)
+
+grant
+    select  to (group carsprog, group registrar, group student)
+    update  to (group carsprog, group registrar, group student)
+    insert  to (group carsprog, group registrar, group student)
+    delete  to (group carsprog)
+    control to (group carsprog)
+

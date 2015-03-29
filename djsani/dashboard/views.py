@@ -21,27 +21,18 @@ EARL = settings.INFORMIX_EARL
 def emergency_information(cid):
     """
     returns all of the emergency contact information for any given student
-    OJO: Formating is shit. Needs a template but for now plain text will do.
     """
-    FIELDS = [
-        'beg_date','end_date','line1','line2','line3',
-        'phone','phone_ext','opt_out'
-    ]
-    CODES = ['ICE','ICE2']
 
-    ens = ""
-    for c in CODES:
-        sql = "SELECT * FROM aa_rec WHERE aa = '%s' AND id='%s'" % (c,cid)
-        try:
-            result = do_esql(
-                sql,key=settings.INFORMIX_DEBUG,
-                earl=EARL).fetchone()
-            ens +=  "++%s++++++++++++++++++++++\n" % c
-            for f in FIELDS:
-                if result[f]:
-                    ens += "%s = %s\n" % (f,result[f])
-        except:
-            pass
+    # ORM
+    # ens = session.query(AARec).filter(AARec.aa.in_(('ICE','ICE2'))).all()
+    ens = None
+    sql = "SELECT * FROM aa_rec WHERE aa in ('ICE','ICE2') AND id='{}'".format(
+        cid
+    )
+    try:
+        ens = do_esql( sql,key=settings.INFORMIX_DEBUG, earl=EARL)
+    except:
+        pass
     return ens
 
 @group_required('MedicalStaff')
@@ -50,7 +41,7 @@ def home(request):
     dashboard home with a list of students
     """
     students = None
-    sql = '{} WHERE prog_enr_rec.cl IN ("FF","FR") '.format(STUDENTS_ALPHA)
+    sql = '{} AND prog_enr_rec.cl IN ("FF","FR") '.format(STUDENTS_ALPHA)
     sql += "ORDER BY lastname"
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
     session = get_session(EARL)

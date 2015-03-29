@@ -1,0 +1,405 @@
+{
+ Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
+ -------------------------------------------------------------------------
+ $Header: CCStudentMedicalHistory,v 8.0.17100.1 2014/05/23 13:33:32 ronl Released $
+ -------------------------------------------------------------------------
+}
+
+table cc_student_medical_history
+    desc            "Overview of the student's medical history"
+    location        "DBS_STUDENT"
+    lockmode        row
+    prefix          ""        { Used by makedef }
+    rowlimits       ??:??
+    status          "Active"
+    text            "Table text, 31 characters"
+    track           "STUDENT"
+
+column id           serial not null
+    comments        ""
+    desc            "System generated sequential number uniquely identifying this record"
+    heading         "Medical History ID"
+    text            "Medical History ID"
+    attributes
+        (
+        )
+
+column college_id   integer default 0 not null
+    comments        ""
+    desc            "College ID"
+    heading         "College ID"
+    text            "College ID"
+    attributes
+        (
+        )
+
+column created_at   datetime year to second default current year to second not null
+    comments        ""
+    desc            "The date when the record was created"
+    heading         "Created At"
+    text            "Created At"
+    attributes
+        (
+        )
+
+column allergies_medical    varchar(255)
+    comments        ""
+    desc            "Allergies to medicine"
+    heading         "Medical Allergies"
+    text            "Medical Allergies"
+    attributes
+        (
+        )
+
+column allergies_other      varchar(255)
+    comments        ""
+    desc            "Allergies to non-medicine"
+    heading         "Other Allergies"
+    text            "Other Allergies"
+    attributes
+        (
+        )
+
+column anemia       varchar(255)
+    comments        ""
+    desc            "Anemia"
+    heading         "Anemia"
+    text            "Anemia"
+    attributes
+        (
+        )
+
+column anxiety      varchar(255)
+    comments        ""
+    desc            "Anxiety"
+    heading         "Anxiety"
+    text            "Anxiety"
+    attributes
+        (
+        )
+
+column bronchospasm varchar(255)
+    comments        ""
+    desc            "Bronchospasm"
+    heading         "Bronchospasm"
+    text            "Bronchospasm"
+    attributes
+        (
+        )
+
+column adhd_add     varchar(255)
+    comments        ""
+    desc            "ADHD"
+    heading         "ADHD"
+    text            "ADHD"
+    attributes
+        (
+        )
+
+column birth_defect varchar(255)
+    comments        ""
+    desc            "Birth Defect"
+    heading         "Birth Defect"
+    text            "Birth Defect"
+    attributes
+        (
+        )
+
+column blood_disorder   varchar(255)
+    comments        ""
+    desc            "Blood Disorder"
+    heading         "Blood Disorder"
+    text            "Blood Disorder"
+    attributes
+        (
+        )
+
+column bronchitis   varchar(255)
+    comments        ""
+    desc            "Bronchitis"
+    heading         "Bronchitis"
+    text            "Bronchitis"
+    attributes
+        (
+        )
+
+column cancer       varchar(255)
+    comments        ""
+    desc            "Cancer"
+    heading         "Cancer"
+    text            "Cancer"
+    attributes
+        (
+        )
+
+column chicken_pox  varchar(255)
+    comments        ""
+    desc            "Chicken Pox"
+    heading         "Chicken Pox"
+    text            "Chicken Pox"
+    attributes
+        (
+        )
+
+column counseling   varchar(255)
+    comments        ""
+    desc            "Counseling"
+    heading         "Counseling"
+    text            "Counseling"
+    attributes
+        (
+        )
+
+column depression   varchar(255)
+    comments        ""
+    desc            "Depression"
+    heading         "Depression"
+    text            "Depression"
+    attributes
+        (
+        )
+
+column diabetes     varchar(255)
+    comments        ""
+    desc            "Diabetes"
+    heading         "Diabetes"
+    text            "Diabetes"
+    attributes
+        (
+        )
+
+column eating_disorder  varchar(255)
+    comments        ""
+    desc            "Eating Disorder"
+    heading         "Eating Disorder"
+    text            "Eating Disorder"
+    attributes
+        (
+        )
+
+column ent_disorder varchar(255)
+    comments        ""
+    desc            "Ent Disorder"
+    heading         "Ent Disorder"
+    text            "Ent Disorder"
+    attributes
+        (
+        )
+
+column headaches    varchar(255)
+    comments        ""
+    desc            "Headaches"
+    heading         "Headaches"
+    text            "Headaches"
+    attributes
+        (
+        )
+
+column head_injury  varchar(255)
+    comments        ""
+    desc            "Head Injury"
+    heading         "Head Injury"
+    text            "Head Injury"
+    attributes
+        (
+        )
+
+column heart_condition  varchar(255)
+    comments        ""
+    desc            "Heart Condition"
+    heading         "Heart Condition"
+    text            "Heart Condition"
+    attributes
+        (
+        )
+
+column hepatitis    varchar(255)
+    comments        ""
+    desc            "Hepatitis"
+    heading         "Hepatitis"
+    text            "Hepatitis"
+    attributes
+        (
+        )
+
+column hernia       varchar(255)
+    comments        ""
+    desc            "Hernia"
+    heading         "Hernia"
+    text            "Hernia"
+    attributes
+        (
+        )
+
+column hyper_tension    varchar(255)
+    comments        ""
+    desc            "Hyper Tension"
+    heading         "Hyper Tension"
+    text            "Hyper Tension"
+    attributes
+        (
+        )
+
+column hiv_aids     varchar(255)
+    comments        ""
+    desc            "HIV Aids"
+    heading         "HIV Aids"
+    text            "HIV Aids"
+    attributes
+        (
+        )
+
+column hospitalizations varchar(255)
+    comments        ""
+    desc            "Hospitalizations"
+    heading         "Hospitalizations"
+    text            "Hospitalizations"
+    attributes
+        (
+        )
+
+column ibd          varchar(255)
+    comments        ""
+    desc            "IBD"
+    heading         "IBD"
+    text            "IBD"
+    attributes
+        (
+        )
+
+column kidney_urinary   varchar(255)
+    comments        ""
+    desc            "Kidney/Urinary"
+    heading         "Kidney/Urinary"
+    text            "Kidney/Urinary"
+    attributes
+        (
+        )
+
+column medications  varchar(255)
+    comments        ""
+    desc            "Medications"
+    heading         "Medications"
+    text            "Medications"
+    attributes
+        (
+        )
+
+column meningitis   varchar(255)
+    comments        ""
+    desc            "Meningitis"
+    heading         "Meningitis"
+    text            "Meningitis"
+    attributes
+        (
+        )
+
+column mononucleosis    varchar(255)
+    comments        ""
+    desc            "Mononucleosis"
+    heading         "Mononucleosis"
+    text            "Mononucleosis"
+    attributes
+        (
+        )
+
+column mrsa         varchar(255)
+    comments        ""
+    desc            "MRSA"
+    heading         "MRSA"
+    text            "MRSA"
+    attributes
+        (
+        )
+
+column organ_loss   varchar(255)
+    comments        ""
+    desc            "Organ loss"
+    heading         "Organ loss"
+    text            "Organ loss"
+    attributes
+        (
+        )
+
+column pneumonia    varchar(255)
+    comments        ""
+    desc            "Pneumonia"
+    heading         "Pneumonia"
+    text            "Pneumonia"
+    attributes
+        (
+        )
+
+column rheumatic_fever  varchar(255)
+    comments        ""
+    desc            "Rheumatic fever"
+    heading         "Rheumatic fever"
+    text            "Rheumatic fever"
+    attributes
+        (
+        )
+
+column seizure_disorder varchar(255)
+    comments        ""
+    desc            "Seizure disorder"
+    heading         "Seizure disorder"
+    text            "Seizure disorder"
+    attributes
+        (
+        )
+
+column stroke       varchar(255)
+    comments        ""
+    desc            "Stroke"
+    heading         "Stroke"
+    text            "Stroke"
+    attributes
+        (
+        )
+
+column substance_abuse  varchar(255)
+    comments        ""
+    desc            "Substance abuse"
+    heading         "Substance abuse"
+    text            "Substance abuse"
+    attributes
+        (
+        )
+
+column thyroid_disorder varchar(255)
+    comments        ""
+    desc            "Thyroid disorder"
+    heading         "Thyroid disorder"
+    text            "Thyroid disorder"
+    attributes
+        (
+        )
+
+column tuberculosis varchar(255)
+    comments        ""
+    desc            "Tuberculosis"
+    heading         "Tuberculosis"
+    text            "Tuberculosis"
+    attributes
+        (
+        )
+
+column other_condition  varchar(255)
+    comments        ""
+    desc            "Other Condition"
+    heading         "Other Condition"
+    text            "Other Condition"
+    attributes
+        (
+        )
+
+index               { Index names must be unique across database }
+                    cc_student_medical_history01 on (id)
+
+grant
+    select  to (group carsprog, group registrar, group student)
+    update  to (group carsprog, group registrar, group student)
+    insert  to (group carsprog, group registrar, group student)
+    delete  to (group carsprog)
+    control to (group carsprog)
+

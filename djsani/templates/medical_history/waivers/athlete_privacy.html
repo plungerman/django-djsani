@@ -5,14 +5,29 @@
     Health and Counseling &mdash;
     Carthage College
 {% endblock %}
-{% block extra_javascript %}{% endblock %}
+{% block extra_javascript %}
+<script type="text/javascript" charset="utf-8">
+$(function() {
+    $('#privacy-waiver').submit(function() {
+        if ( $('#id_medical_insurance').is(':checked') &&
+             $('#id_disclose_records').is(':checked') ) {
+            return true;
+        } else {
+            alert('You must check the last two boxes in order to proceed.')
+            return false;
+        }
+    });
+
+});
+</script>
+{% endblock %}
 {% block content %}
 <div class="forms-container">
     <h2>
         Student Athlete Authorization/Consent For <br />
         Disclosure of Protected Health Information (PHI)
     </h2>
-    <form method="post" action="." class="form" id="profile">
+    <form method="post" action="." class="form" id="privacy-waiver">
         {% csrf_token %}
         {% include "medical_history/waivers/athlete_privacy.inc.html" %}
         {% include "form_submit.inc.html" %}

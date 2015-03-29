@@ -13,6 +13,7 @@ from djsani.insurance.forms import StudentForm, AthleteForm
 from djzbar.utils.informix import get_session
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
+from djtools.utils.mail import send_mail
 from djtools.fields import NOW
 
 from sqlalchemy.orm import sessionmaker
@@ -45,6 +46,23 @@ def form(request,stype,cid=None):
         if oo:
             # empty table
             forms = STUDENT_HEALTH_INSURANCE
+
+            # alert email to staff
+            if settings.DEBUG:
+                TO_LIST = [settings.SERVER_EMAIL,]
+            else:
+                TO_LIST = [
+                    "jdinaurer@carthage.edu","jlindloff@carthage.edu",
+                ]
+            send_mail(
+                request, TO_LIST,
+                "[Health Insurance] Opt Out: {} {} ({})".format(
+                    request.user.first_name, request.user.last_name, cid
+                ), request.user.email,
+                "insurance/email.html",
+                request, settings.MANAGERS
+            )
+
         else:
             forms = eval(fname)(request.POST)
             forms.is_valid()

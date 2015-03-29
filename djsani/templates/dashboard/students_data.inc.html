@@ -2,7 +2,7 @@
     <table class="table table-striped table-bordered table-hover" id="students-data">
         <thead>
             <tr>
-                <th><i class="fa fa-thumbs-o-up green"></i></th>
+                <th><i class="fa fa-thumbs-up green"></i></th>
                 <th>Name</th>
                 <th>Immun</th>
                 <th>Insur</th>
@@ -92,22 +92,24 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                <td class="{{s.adult}}">
-                    {% if s.waive or s.proof %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                        {% if s.proof %}
-                            <strong>/</strong>
-                            {% if s.results == "Positive" %}
-                                <i class="fa fa-plus"></i>
-                            {% else %}
-                                <i class="fa fa-minus"></i>
-                            {% endif %}
+                {% if s.waive or s.proof %}
+                    <td class="{{s.adult}}" style="background-color:#cacaca;">
+                    <i class="fa fa-check">
+                        <span style="display:none;">x</span>
+                    </i>
+                    {% if s.proof %}
+                        <strong>/</strong>
+                        {% if s.results == "Positive" %}
+                            <i class="fa fa-plus"></i>
+                        {% else %}
+                            <i class="fa fa-minus"></i>
                         {% endif %}
-                    {% else %}
-                        <i class="fa fa-times red"></i>
+                        {{s.created_at|date:"Y"}}
                     {% endif %}
+                {% else %}
+                    <td class="{{s.adult}}">
+                    <i class="fa fa-times red"></i>
+                {% endif %}
                 </td>
                 <td class="{{s.adult}}">
                     {% if s.cc_athlete_reporting_waiver %}
