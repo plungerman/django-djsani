@@ -2,23 +2,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import BigInteger, Boolean, Column, Date, DateTime
 from sqlalchemy import ForeignKey, Integer, String
 
-from djtools.fields import NOW
-
-"""
-Reminder for sqlalchemy and informix with Django:
-
-Informix Boolean uses SMALLINT on the DDL side (0 or 1)
-and on the Python side we deal in True or False. For
-Django templates you have to use explicit comparisons:
-
-{% if oo == "True" %}
-
-whereas the following will resolve to true:
-
-{% if oo %}
-
-if oo has a value of "False".
-"""
+import datetime
+NOW = datetime.datetime.now()
 
 Base = declarative_base()
 

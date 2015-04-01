@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, StudentMedicalManager
+from djsani.core.models import ADDITION, CHANGE, CONTENT_TYPE, StudentMedicalLogEntry
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.waivers.models import Sicklecell
 from djsani.core.sql import STUDENT_VITALS
@@ -15,7 +16,7 @@ from djtools.utils.date import calculate_age
 from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
-from sqlalchemy.orm import sessionmaker
+import datetime
 
 """
 table names are the key, base model classes are the value
@@ -23,7 +24,8 @@ table names are the key, base model classes are the value
 
 BASES = {
     "cc_student_health_insurance": StudentHealthInsurance,
-    "cc_athlete_sicklecell_waiver": Sicklecell
+    "cc_athlete_sicklecell_waiver": Sicklecell,
+    "cc_student_medical_manager": StudentMedicalManager
 }
 #    "cc_athlete_medical_history": ,
 #    "cc_student_medical_history":
@@ -151,7 +153,7 @@ def put_data(dic,table,cid=None,noquo=[]):
 @login_required
 def set_type(request):
     """
-    Locations in use:
+    Ajax POST mostly. Locations in use:
 
     student home
         1) choose student or athlete
@@ -164,6 +166,7 @@ def set_type(request):
         3) insurance opt-out
         4) sicklecell waiver
     """
+    staff = in_group(request.user, "Medical Staff")
     field = request.POST.get("field")
     table = request.POST.get("table")
 
@@ -189,6 +192,7 @@ def set_type(request):
     if field == "results":
         dic["proof"] = 1
         dic["waive"] = 0
+        dic["updated_at"] = datetime.datetime.now()
 
     # create database session
     session = get_session(EARL)
@@ -196,25 +200,53 @@ def set_type(request):
     # retrieve student manager record
     man = get_manager(session, cid)
 
+    # default action is a database update
+    action_flag = CHANGE
     if table:
         # retrieve the object based on table name
         obj = session.query(BASES[table]).filter_by(college_id=cid).first()
-
         if not obj:
+            # insert/create new object
+            action_flag = ADDITION
             obj = BASES[table](**dic)
             session.add(obj)
+            session.flush()
+        else:
+            # update existing object
+            for key, value in dic.iteritems():
+                setattr(obj, key, value)
+
+        # update the log entry for staff modifications
+        if staff:
+            log = {
+                "college_id": request.user.id,
+                "content_type_id": CONTENT_TYPE[table],
+                "object_id": obj.id,
+                "object_repr": obj,
+                "action_flag": action_flag,
+                "change_message": dic
+            }
+            obj = StudentMedicalLogEntry(**log)
+            session.add(obj)
+        if action_flag == ADDITION:
+            # new data for the student medical manager
             dic = {table:1,"college_id":cid}
             obj = man
+        else:
+            obj = None
     else:
         obj = man
 
-    for key, value in dic.iteritems():
-        setattr(obj, key, value)
+    # update the student medical manager
+    if obj:
+        for key, value in dic.iteritems():
+            setattr(obj, key, value)
 
     session.commit()
     session.close()
 
     return HttpResponse(switch, content_type="text/plain; charset=utf-8")
+
 
 @login_required
 def home(request):

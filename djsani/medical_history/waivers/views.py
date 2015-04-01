@@ -38,8 +38,9 @@ def form(request,stype,wtype):
         if student:
             waive = student.waive
 
-    # check to see if they already submitted this form
-    # except for those who waived sicklecell test
+    # check to see if they already submitted this form.
+    # redirect except for those who waived sicklecell test
+    # or wtype does not return a form class (fname)
     if (manager and getattr(manager, table, None) and not waive) or not fname:
         return HttpResponseRedirect( reverse_lazy("home") )
 
@@ -51,6 +52,7 @@ def form(request,stype,wtype):
             data["college_id"] = cid
 
             if student:
+                data["updated_at"] = datetime.datetime.now()
                 for key, value in data.iteritems():
                     setattr(student, key, value)
             else:

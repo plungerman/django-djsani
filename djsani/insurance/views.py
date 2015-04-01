@@ -14,7 +14,6 @@ from djzbar.utils.informix import get_session
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
 from djtools.utils.mail import send_mail
-from djtools.fields import NOW
 
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime

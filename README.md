@@ -43,13 +43,30 @@ Django apps for the Health and Counseling Centre
 
     /opt/carsi/schema/development/
 
-    CCHEALTHINSURANCE
-    CCATHLETEMEDICALHISTORY
-    CCSTUDENTMEDICALHISTORY
-    CCATHLETEPRIVACYWAIVER
-    CCATHLETEREPORTINGWAIVER
-    CCATHLETERISKWAIVER
-    CCATHLETESICKLECELLWAIVER
-    CCSTUDENTHEALTHINSURANCE
-    CCSTUDENTMENIWAIVER
-    CCSTUDENTMEDICALMANAGER
+    CCAthleteMedicalHistory
+    CCAthletePrivacyWaiver
+    CCAthleteReportingWaiver
+    CCAthleteRiskWaiver
+    CCAthleteSickleCellWaiver
+    CCStudentHealthInsurance
+    CCStudentMedicalContentType
+    CCStudentMedicalHistory
+    CCStudentMedicalLogEntry
+    CCStudentMedicalManager
+    CCStudentMeniWaiver
+
+# Notes
+
+Reminder for sqlalchemy and informix with Django:
+
+Informix Boolean uses SMALLINT on the DDL side (0 or 1)
+and on the Python side we deal in True or False. For
+Django templates you have to use explicit comparisons:
+
+{% if oo == "True" %}
+
+whereas the following will resolve to true:
+
+{% if oo %}
+
+if oo has a value of "False".

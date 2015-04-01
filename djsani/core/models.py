@@ -1,11 +1,73 @@
+from django.utils.encoding import smart_text
+
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import BigInteger, Boolean, Column, DateTime
+from sqlalchemy import BigInteger, SmallInteger, Boolean, Column, DateTime, Text
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
-from djtools.fields import NOW
+import datetime
+NOW = datetime.datetime.now()
+
+ADDITION = 1
+CHANGE = 2
+DELETION = 3
+
+# temporary dictionary until content_type table and data are ready
+CONTENT_TYPE = {
+    "cc_student_medical_manager": 1,
+    "cc_student_health_insurance": 2,
+    "cc_student_medical_history": 3,
+    "cc_student_meni_waiver": 4,
+    "cc_athlete_medical_history": 5,
+    "cc_athlete_privacy_waiver": 6,
+    "cc_athlete_reporting_waiver": 7,
+    "cc_athlete_risk_waiver": 8,
+    "cc_athlete_sicklecell_waiver": 9,
+}
 
 Base = declarative_base()
+
+class StudentMedicalLogEntry(Base):
+    __tablename__ = 'cc_student_medical_log_entry'
+
+    # core
+    id = Column(BigInteger, primary_key=True)
+    college_id = Column(Integer, nullable=False)
+    action_time = Column(DateTime, default=NOW, nullable=False)
+    content_type_id = Column(Integer)
+    object_id = Column(Integer)
+    object_repr = Column(String)
+    action_flag = Column(SmallInteger)
+    change_message = Column(Text)
+
+    def __name__(self):
+        return self.__tablename
+
+    def __repr__(self):
+        return smart_text(self.action_time)
+
+    def __str__(self):
+        if self.action_flag == ADDITION:
+            return ('Added "%(object)s".') % {'object': self.object_repr}
+        elif self.action_flag == CHANGE:
+            return ('Changed "%(object)s" - %(changes)s') % {
+                'object': self.object_repr,
+                'changes': self.change_message,
+            }
+        elif self.action_flag == DELETION:
+            return ('Deleted "%(object)s."') % {'object': self.object_repr}
+
+        return ugettext('LogEntry Object')
+
+    def is_addition(self):
+        return self.action_flag == ADDITION
+
+    def is_change(self):
+        return self.action_flag == CHANGE
+
+    def is_deletion(self):
+        return self.action_flag == DELETION
+
 
 class StudentMedicalManager(Base):
     __tablename__ = 'cc_student_medical_manager'
