@@ -12,6 +12,11 @@ handler404 = 'djtools.views.errors.four_oh_four_error'
 handler500 = 'djtools.views.errors.server_error'
 
 urlpatterns = patterns('djsani.core.views',
+    # we don't want users created through django admin
+    url(
+        r'^admin/auth/user/add/$',
+        RedirectView.as_view(url=reverse_lazy("auth_login"))
+    ),
     url(r'^admin/', include(admin.site.urls)),
     # auth
     url(

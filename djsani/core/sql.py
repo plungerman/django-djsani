@@ -73,6 +73,11 @@ SELECT
     cc_athlete_sicklecell_waiver.waive,
     cc_athlete_sicklecell_waiver.proof,
     cc_athlete_sicklecell_waiver.results,
+    cc_athlete_privacy_waiver.ncaa_tool,
+    cc_athlete_privacy_waiver.medical_insurance,
+    cc_athlete_privacy_waiver.news_media,
+    cc_athlete_privacy_waiver.parents_guardians,
+    cc_athlete_privacy_waiver.disclose_records,
     profile_rec.birth_date,
     profile_rec.sex,
     mobile_rec.phone as mobile
@@ -87,11 +92,9 @@ LEFT JOIN
     AND
         cc_student_medical_manager.created_at > "2015-03-01 00:00:00"
 LEFT JOIN
-    cc_athlete_privacy_waiver ON id_rec.id = cc_athlete_privacy_waiver.college_id
-    AND
-        cc_athlete_privacy_waiver.created_at > "2015-03-01 00:00:00"
-LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
+LEFT JOIN
+    cc_athlete_privacy_waiver ON id_rec.id = cc_athlete_privacy_waiver.college_id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN

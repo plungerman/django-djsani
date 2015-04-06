@@ -12,25 +12,22 @@ ADDITION = 1
 CHANGE = 2
 DELETION = 3
 
-# temporary dictionary until content_type table and data are ready
-CONTENT_TYPE = {
-    "cc_student_medical_manager": 1,
-    "cc_student_health_insurance": 2,
-    "cc_student_medical_history": 3,
-    "cc_student_meni_waiver": 4,
-    "cc_athlete_medical_history": 5,
-    "cc_athlete_privacy_waiver": 6,
-    "cc_athlete_reporting_waiver": 7,
-    "cc_athlete_risk_waiver": 8,
-    "cc_athlete_sicklecell_waiver": 9,
-}
-
 Base = declarative_base()
+
+class StudentMedicalContentType(Base):
+    __tablename__ = 'cc_student_medical_content_type'
+
+    id = Column(BigInteger, primary_key=True)
+    name = Column(String)
+    app_label = Column(String)
+    model = Column(String)
+
+    def __repr__(self):
+        return self.model
 
 class StudentMedicalLogEntry(Base):
     __tablename__ = 'cc_student_medical_log_entry'
 
-    # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
     action_time = Column(DateTime, default=NOW, nullable=False)
@@ -38,10 +35,7 @@ class StudentMedicalLogEntry(Base):
     object_id = Column(Integer)
     object_repr = Column(String)
     action_flag = Column(SmallInteger)
-    change_message = Column(Text)
-
-    def __name__(self):
-        return self.__tablename
+    action_message = Column(Text)
 
     def __repr__(self):
         return smart_text(self.action_time)

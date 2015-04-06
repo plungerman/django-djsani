@@ -67,11 +67,14 @@ li {
         /* x-editable jquery plugin */
         $.fn.editable.defaults.mode = 'inline';
         $('.xeditable').editable({
-            url: '{% url "dashboard_xeditable" %}',
+            url: "{% url 'set_type' %}",
             emptytext: "Click to edit",
             params: function (params) {
                 params.table = $(this).attr("data-table");
-                params.cid = {{student.id|default:"0"}};
+                params.college_id = {{student.id|default:"0"}};
+                params.switch = params.value;
+                params.field = params.name;
+                console.log(params);
                 return params
             },
             success: function(response, newValue) {
@@ -96,6 +99,11 @@ li {
             if ( $did == "opt_out" ) {
                 dict["table"] = "cc_student_health_insurance";
             }
+            if ( $did.substring(0,7) == "privacy" ) {
+                dict["table"] = "cc_athlete_privacy_waiver";
+                dict['field'] = $did.substring(8,$did.length);
+                console.log(dict['field']);
+            }
             console.log($did.substring(0,7));
             console.log($val);
             if ( $did == "proof" || $did == "waive" || $did.substring(0,7) == "results" ) {
@@ -115,7 +123,7 @@ li {
                 },
                 success: function(data) {
                     spinner.stop(target);
-                    if ( $did == "athlete" || $did == "opt_out" ) {
+                    if ( $did == "athlete" || $did == "opt_out" || $did == "proof" || $did == "waive" ) {
                         location.reload();
                     }
                 }

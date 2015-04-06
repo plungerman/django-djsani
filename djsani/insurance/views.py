@@ -24,7 +24,7 @@ def form(request,stype,cid=None):
     if not cid:
         cid = request.user.id
     else:
-        if not in_group(request.user, "Medical Staff"):
+        if not in_group(request.user, "MedicalStaff"):
             return HttpResponseRedirect(
                 reverse_lazy("home")
             )

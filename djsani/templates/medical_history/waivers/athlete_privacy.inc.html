@@ -17,15 +17,16 @@
         of your (PHI) in each category:
     </h4>
     <div class="large-1 col-lg-1">
-        {% if student.cc_athlete_privacy_waiver %}
-            <i class="fa fa-check fa-2x green"></i>
+        <input id="privacy_ncaa_tool" type="checkbox" name="ncaa_tool"
+        {% if student.ncaa_tool %}
+            checked="checked" value="0"
         {% else %}
-            <input id="id_ncaa_tool"
-                type="checkbox" name="ncaa_tool" value="1" />
+            value="1"
         {% endif %}
+        class="set-type" />
     </div>
     <div class="large-11 col-lg-11">
-        <label for="id_ncaa_tool">
+        <label for="privacy_ncaa_tool">
             <p>
             <em>
                 National Collegiate Athletic Association (NCAA)
@@ -49,15 +50,16 @@
         </label>
     </div>
     <div class="large-1 col-lg-1">
+        <input id="privacy_news_media" type="checkbox" name="news_media"
         {% if student.news_media %}
-            <i class="fa fa-check fa-2x green"></i>
+            checked="checked" value="0"
         {% else %}
-            <input id="id_news_media"
-                type="checkbox" name="news_media" value="1" />
+            value="1"
         {% endif %}
+        class="set-type" />
     </div>
     <div class="large-11 col-lg-11">
-        <label for="id_news_media">
+        <label for="privacy_news_media">
             <p>
             <em>The News Media</em>
             Should the media inquire as to the extent of an injury or
@@ -67,15 +69,16 @@
         </label>
     </div>
     <div class="large-1 col-lg-1">
-        {% if student.cc_athlete_privacy_waiver %}
-            <i class="fa fa-check fa-2x green"></i>
+        <input id="privacy_parents_guardians" type="checkbox" name="parents_guardians"
+        {% if student.parents_guardians %}
+            checked="checked" value="0"
         {% else %}
-            <input id="id_parents_guardians"
-                type="checkbox" name="parents_guardians" value="1" />
+            value="1"
         {% endif %}
+        class="set-type" />
     </div>
     <div class="large-11 col-lg-11">
-        <label for="id_parents_guardians">
+        <label for="privacy_parents_guardians">
             <p>
             <em>Parents/Guardian</em>
             Should the parents/guardian inquire as to the extent of an
@@ -85,15 +88,16 @@
         </label>
     </div>
     <div class="large-1 col-lg-1">
-        {% if student.cc_athlete_privacy_waiver %}
-            <i class="fa fa-check fa-2x green"></i>
+        <input id="privacy_medical_insurance" type="checkbox" name="medical_insurance"
+        {% if student.medical_insurance %}
+            checked="checked" value="0"
         {% else %}
-            <input id="id_medical_insurance"
-                type="checkbox" name="medical_insurance" value="1" />
+            value="1"
         {% endif %}
+        class="set-type" />
     </div>
     <div class="large-11 col-lg-11">
-        <label for="id_medical_insurance">
+        <label for="privacy_medical_insurance">
             <p>
             <em>My Personal Medical Insurance</em>
             For the use of electronic transmission, US post mail, or
@@ -107,15 +111,16 @@
         </label>
     </div>
     <div class="large-1 col-lg-1">
-        {% if student.cc_athlete_privacy_waiver %}
-            <i class="fa fa-check fa-2x green"></i>
+        <input id="privacy_disclose_records" type="checkbox" name="disclose_records"
+        {% if student.disclose_records %}
+            checked="checked" value="0"
         {% else %}
-            <input id="id_disclose_records"
-                type="checkbox" name="disclose_records" value="1" />
+            value="1"
         {% endif %}
+        class="set-type" />
     </div>
     <div class="large-11 col-lg-11">
-        <label for="id_disclose_records">
+        <label for="privacy_disclose_records">
             <p>
             I also allow any treating physicians or other medical
             facilities to disclose my medical records to the Carthage

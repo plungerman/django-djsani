@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import cache
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
@@ -7,9 +8,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, StudentMedicalManager
-from djsani.core.models import ADDITION, CHANGE, CONTENT_TYPE, StudentMedicalLogEntry
+from djsani.core.models import StudentMedicalContentType, StudentMedicalLogEntry
+from djsani.core.models import ADDITION, CHANGE
 from djsani.insurance.models import StudentHealthInsurance
-from djsani.medical_history.waivers.models import Sicklecell
+from djsani.medical_history.waivers.models import Privacy, Sicklecell
 from djsani.core.sql import STUDENT_VITALS
 from djzbar.utils.informix import do_sql as do_esql, get_engine, get_session
 from djtools.utils.date import calculate_age
@@ -18,19 +20,37 @@ from djtools.fields import TODAY
 
 import datetime
 
+import logging
+logger = logging.getLogger(__name__)
+
 """
 table names are the key, base model classes are the value
 """
-
 BASES = {
     "cc_student_health_insurance": StudentHealthInsurance,
     "cc_athlete_sicklecell_waiver": Sicklecell,
-    "cc_student_medical_manager": StudentMedicalManager
+    "cc_student_medical_manager": StudentMedicalManager,
+    "cc_athlete_privacy_waiver": Privacy
 }
+
 #    "cc_athlete_medical_history": ,
 #    "cc_student_medical_history":
 
 EARL = settings.INFORMIX_EARL
+
+def get_content_type(session, name):
+    """
+    simple function to return a content type from cache
+    or get and set it if it does not exist in cache.
+    default is never to expire.
+    """
+    ct = cache.get(name)
+    if not ct:
+        ct = session.query(StudentMedicalContentType).\
+                filter_by(name=name).first()
+        cache.set(name, ct, None)
+    return ct
+
 
 def get_manager(session, cid):
     """
@@ -166,15 +186,13 @@ def set_type(request):
         3) insurance opt-out
         4) sicklecell waiver
     """
-    staff = in_group(request.user, "Medical Staff")
+    staff = in_group(request.user, "MedicalStaff")
     field = request.POST.get("field")
     table = request.POST.get("table")
-
+    switch = request.POST.get("switch")
     cid = request.POST.get("college_id")
     if not cid:
         cid = request.user.id
-
-    switch = request.POST.get("switch")
 
     # sports field is a list
     if field == "sports":
@@ -218,14 +236,19 @@ def set_type(request):
 
         # update the log entry for staff modifications
         if staff:
+            message = ""
+            for n,v in dic.items():
+                message += "{} = {}\n".format(n,v)
+            logger.debug("message = {}".format(message))
             log = {
                 "college_id": request.user.id,
-                "content_type_id": CONTENT_TYPE[table],
+                "content_type_id": get_content_type(session, table).id,
                 "object_id": obj.id,
-                "object_repr": obj,
+                "object_repr": "{}".format(obj),
                 "action_flag": action_flag,
-                "change_message": dic
+                "action_message": message
             }
+            logger.debug("log = {}".format(log))
             obj = StudentMedicalLogEntry(**log)
             session.add(obj)
         if action_flag == ADDITION:
@@ -250,7 +273,7 @@ def set_type(request):
 
 @login_required
 def home(request):
-    staff = in_group(request.user, "Medical Staff")
+    staff = in_group(request.user, "MedicalStaff")
     cid = request.user.id
     my_sports = ""
     student = None
