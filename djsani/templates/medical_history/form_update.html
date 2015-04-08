@@ -38,16 +38,18 @@ $(document).ready(function() {
     });
     /* x-editable jquery plugin */
     $.fn.editable.defaults.mode = 'inline';
-    $('.jeditable').editable({
-        url: '{% url "dashboard_xeditable" %}',
+    $('.xeditable').editable({
+        url: "{% url 'set_type' %}",
         emptytext: "Click to edit",
         params: function (params) {
             params.table = $(this).attr("data-table");
-            params.cid = {{cid|default:"0"}};
+            params.college_id = {{student.id|default:"0"}};
+            params.switch = params.value;
+            params.field = params.name;
             return params
         },
         success: function(response, newValue) {
-            //console.log($(this).attr("data-table"));
+            $.growlUI('Saved');
         }
     });
 });

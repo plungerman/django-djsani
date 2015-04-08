@@ -12,26 +12,20 @@
     rel="stylesheet" type="text/css" media="print" />
 <link href="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.css"
     rel="stylesheet" type="text/css" />
-<style>
-.dl-horizontal dt.widus {
-    width: 300px;
-    margin-right:9px;
-}
-.dl-horizontal dd.yes {
-    margin-left: 0;
-}
-.bootstrap-select {
-    width: 300px !important;
-}
-
-.center{text-align:center;}
-.red {color:#800;}
-.green {color:#008000;}
-/* show the move cursor as the user moves the mouse over the panel header.*/
-#draggablePanelList .panel-heading { cursor: move; }
-li {
-    list-style: none;
-}
+<style type="text/css">
+    div.growlUI { background: url(//www.carthage.edu/themes/shared/img/ico/check48.png) no-repeat 10px 10px }
+    div.growlUI h1, div.growlUI h2 {
+    color: white; padding: 5px 5px 5px 75px; text-align: left;
+    font-size:1.4em;}
+    .dl-horizontal dt.widus { width: 300px; margin-right:9px; }
+    .dl-horizontal dd.yes { margin-left: 0; }
+    .bootstrap-select { width: 300px !important; }
+    .center{text-align:center;}
+    .red {color:#800;}
+    .green {color:#008000;}
+    /* show the move cursor as the user moves the mouse over the panel header.*/
+    #draggablePanelList .panel-heading { cursor: move; }
+    li { list-style: none; }
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -60,11 +54,11 @@ li {
             top: '50px', // Top position relative to parent in px
             left: 'auto' // Left position relative to parent in px
         };
-        var target = document.getElementById("students-data-panel");
+        var target = document.getElementById("student-container");
         var spinner = new Spinner(opts).spin(target);
         spinner.stop(target);
 
-        /* x-editable jquery plugin */
+        /* x-editable jquery plugin: pronounced 'sheditable' */
         $.fn.editable.defaults.mode = 'inline';
         $('.xeditable').editable({
             url: "{% url 'set_type' %}",
@@ -74,11 +68,10 @@ li {
                 params.college_id = {{student.id|default:"0"}};
                 params.switch = params.value;
                 params.field = params.name;
-                console.log(params);
                 return params
             },
             success: function(response, newValue) {
-                //console.log($(this).attr("data-table"));
+                $.growlUI('Saved');
             }
         });
 
@@ -110,8 +103,8 @@ li {
                     spinner.spin(target);
                 },
                 success: function(data) {
-                    console.log($did);
                     spinner.stop(target);
+                    $.growlUI('Saved');
                     if ( $did == "athlete" || $did == "opt_out" || $did == "proof" || $did == "waive" ) {
                         window.location.reload(true);
                     }
@@ -231,8 +224,8 @@ li {
                             <a href="mailto:{{student.ldap_name}}@carthage.edu">
                                 {{student.ldap_name}}@carthage.edu
                             </a><br>
+                            Residency Status:
                             <strong>
-                                Residency Status:
                                 {{student.residency_status}}
                             </strong>
                             </address>

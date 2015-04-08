@@ -130,6 +130,9 @@ def student_detail(request,cid=None,content=None):
         # search form
         cid = request.POST.get("cid")
     if cid:
+        # get manager, just to be certain it exists
+        session = get_session(EARL)
+        man = get_manager(session, cid)
         # get student
         obj = do_esql(
             "{} WHERE id_rec.id = '{}'".format(STUDENT_VITALS,cid),
@@ -174,14 +177,3 @@ def student_detail(request,cid=None,content=None):
     else:
         raise Http404
 
-
-@csrf_exempt
-def xeditable(request):
-    field = request.POST.get("name")
-    value = request.POST.get("value")
-    cid = request.POST.get("cid")
-    table = request.POST.get("table")
-    dic = {field:value}
-    put_data( dic, table, cid )
-
-    return HttpResponse(dic, content_type="text/plain; charset=utf-8")

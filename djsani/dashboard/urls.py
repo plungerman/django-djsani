@@ -14,12 +14,6 @@ urlpatterns = patterns('djsani.dashboard.views',
         r'^panels/$',
         'panels', name="dashboard_panels"
     ),
-    # ajax communication for x-editable jquery plugin
-    # pronounced 'sheditable' :-)
-    url(
-        r'^xeditable/$',
-        'xeditable', name="dashboard_xeditable"
-    ),
     # ajax returns students because using home view is a
     # pain in the ass with security involved & spinner
     url(

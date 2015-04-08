@@ -87,7 +87,7 @@ def get_manager(session, cid):
             filter_by(cc_student_immunization=1).first()
         if obj:
             immunization = True
-        # check if sicklecell waiver is set
+            # check if sicklecell waiver is set
             if obj.cc_athlete_sicklecell_waiver:
                 sicklecell = True
 

@@ -121,25 +121,3 @@ LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
 """.format(START_DATE, START_DATE)
-
-'''
-SELECT
-    FIRST
-        1
-    CASE NVL(UPPER(stu_serv_rec.bldg), '')
-        WHEN
-            'CMTR'
-        THEN
-            'Commuter'
-        ELSE
-            'Resident'
-        END
-    AS
-        residencyStatus
-FROM
-    stu_serv_rec
-WHERE
-    stu_serv_rec.id = [student_id]
-ORDER BY
-    stusv_no DESC
-'''
