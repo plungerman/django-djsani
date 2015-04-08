@@ -24,6 +24,7 @@ $(function() {
     // set student types
     function setType(interruptor,field) {
         var $data = {
+            "college_id": {{request.user.id}},
             "switch": interruptor,
             "field": field
         };
@@ -131,19 +132,19 @@ $(function() {
         <li>
             <label for="id_athlete_no">
                 <input id="id_athlete_no" type="radio" value="0"
-                    class="sTypes" name="athlete"
                     {% if manager.athlete == 0 %}
                         checked="checked"
-                    {% endif %}/> No
+                    {% endif %}
+                    class="sTypes" name="athlete" /> No
             </label>
         </li>
         <li>
             <label for="id_athlete_yes">
                 <input id="id_athlete_yes" type="radio" value="1"
-                    class="sTypes" name="athlete"
                     {% if manager.athlete == 1 %}
                         checked="checked"
-                    {% endif %}/> Yes
+                    {% endif %}
+                    class="sTypes" name="athlete" /> Yes
             </label>
         </li>
         <li id="sports-container">
@@ -212,6 +213,7 @@ $(function() {
                 {% endif %}
             </li>
         </ul>
+        {% if student.residency_status == "Resident" %}
         <ul class="slider-container" id="adult_student">
             <li>
                 {% if manager.cc_student_meni_waiver %}
@@ -224,7 +226,8 @@ $(function() {
                 {% endif %}
             </li>
         </ul>
-        <h2>Printable forms</h2>
+        {% endif %}
+        <h2>Printable forms for Campus Nurse</h2>
         <ul>
             <li>
                 <a href="//www.carthage.edu/live/files/830-pdf">
@@ -267,6 +270,7 @@ $(function() {
             </li>
         </ul>
         <ul class="slider-container" id="adult_athlete">
+            {% if student.residency_status == "Resident" %}
             <li>
                 {% if manager.cc_student_meni_waiver %}
                     Meningococcal meningitis/Hepatitis B response
@@ -277,6 +281,7 @@ $(function() {
                 </a>
                 {% endif %}
             </li>
+            {% endif %}
             <li>
                 {% if not manager.cc_athlete_sicklecell_waiver or student.waive %}
                     <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
@@ -318,7 +323,7 @@ $(function() {
                 {% endif %}
             </li>
         </ul>
-        <h2>Printable forms</h2>
+        <h2>Printable forms for Sports Medicine Staff</h2>
         <ul>
             <li>
                 <a href="//www.carthage.edu/live/files/816-pdf">
@@ -348,6 +353,9 @@ $(function() {
                     (only if prescribed ADHD stimulant meds)
                 </span>
             </li>
+        </ul>
+        <h2>Printable forms for Campus Nurse</h2>
+        <ul>
             <li>
                 <a href="//www.carthage.edu/live/files/830-pdf">
                     Immunization history
@@ -403,11 +411,13 @@ $(function() {
                         College Conference Of Illinois And Wisconsin waiver
                     </p>
                 </li>
+                {% if student.residency_status == "Resident" %}
                 <li>
                     <a href="//www.carthage.edu/live/files/832-pdf">
                         Meningococcal meningitis/Hepatitis B response
                     </a>
                 </li>
+                {% endif %}
             </ul>
         </div> <!-- ./minor -->
     </div>

@@ -35,6 +35,12 @@
 </div>
 <div id="emergency_information">
     <h2>Emergency Contact Information</h2>
-    <pre>{{ens}}</pre>
+    {% for e in ens %}
+    <h4>Contact {{forloop.counter}}</h4>
+    <ul>
+        <li>{{e.line1}}</li>
+        <li>{{e.phone}}</li>
+    </ul>
+    {% endfor %}
 </div>
 {% endblock content %}

@@ -88,29 +88,17 @@ li {
         /* generic function to update various models */
         $('.set-type').on('change', function() {
             var $dis = $(this);
+            // database table name
+            var $table = $dis.attr("data-table");
             // DOM id is the field name
             var $did = $dis.attr("id");
+            // value of the input field
             var $val = $dis.val();
             dict = {
                 'college_id': {{student.id}},
                 'switch': $val,
-                'field': $did
-            }
-            if ( $did == "opt_out" ) {
-                dict["table"] = "cc_student_health_insurance";
-            }
-            if ( $did.substring(0,7) == "privacy" ) {
-                dict["table"] = "cc_athlete_privacy_waiver";
-                dict['field'] = $did.substring(8,$did.length);
-                console.log(dict['field']);
-            }
-            console.log($did.substring(0,7));
-            console.log($val);
-            if ( $did == "proof" || $did == "waive" || $did.substring(0,7) == "results" ) {
-                dict["table"] = "cc_athlete_sicklecell_waiver";
-                if ( $did.substring(0,7) == "results" ) {
-                    dict['field'] = $did.substring(0,7);
-                }
+                'field': $did,
+                'table': $table
             }
             $.ajax({
                 type: "POST",
@@ -122,9 +110,10 @@ li {
                     spinner.spin(target);
                 },
                 success: function(data) {
+                    console.log($did);
                     spinner.stop(target);
                     if ( $did == "athlete" || $did == "opt_out" || $did == "proof" || $did == "waive" ) {
-                        location.reload();
+                        window.location.reload(true);
                     }
                 }
             });
@@ -241,7 +230,11 @@ li {
                             {{student.mobile}}<br>
                             <a href="mailto:{{student.ldap_name}}@carthage.edu">
                                 {{student.ldap_name}}@carthage.edu
-                            </a>
+                            </a><br>
+                            <strong>
+                                Residency Status:
+                                {{student.residency_status}}
+                            </strong>
                             </address>
                         </div>
                         <div class="col-xs-1">

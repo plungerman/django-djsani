@@ -53,6 +53,15 @@ $(function() {
             $('#secondary-form').slideDown(200);
         }
     });
+
+    $("[id$='policy_type']").change(function() {
+        if( $(this).val()=="State Insurance" ) {
+            $.fancybox.open([{
+                href : '#state-insurance'
+            }]);
+        }
+    });
+
     // for updates to the form
     if ( $('#id_primary_policy_type').val() == "State Insurance") {
         $('#id_primary_policy_state').addClass("required");
@@ -151,6 +160,22 @@ $(function() {
             {% include "form_submit.inc.html" %}
         </div>
     </form>
+    <div id="state-insurance" style="display:none;width:500px;">
+        <h2>State Insurance</h2>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+            ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit
+            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+            occaecat cupidatat non proident, sunt in culpa qui officia
+            deserunt mollit anim id est laborum.
+        </p>
+        <p>
+            <a href="javascript:$.fancybox.close();">Close</a>
+        </p>
+    </div>
     <div id="athlete-warning" style="display:none;width:500px;">
         <h2>Primary Insurance Required</h2>
         <p>

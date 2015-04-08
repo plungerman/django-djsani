@@ -40,13 +40,19 @@
     <abbr title="Phone">P:</abbr>
     {{student.phone}}<br>
     {{student.mobile}}<br>
-    {{student.ldap_name}}@carthage.edu
-    </a>
+    {{student.ldap_name}}@carthage.edu<br>
+    <strong>Residency Status: {{student.residency_status}}</strong>
     </address>
 </div>
 <div id="emergency_information">
     <h2>Emergency Contact Information</h2>
-    <pre>{{ens}}</pre>
+    {% for e in ens %}
+    <h4>Contact {{forloop.counter}}</h4>
+    <ul>
+        <li>{{e.line1}}</li>
+        <li>{{e.phone}}</li>
+    </ul>
+    {% endfor %}
 </div>
 <div id="cc_student_health_insurance">
     <h2>Health Insurance</h2>

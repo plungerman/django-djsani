@@ -782,6 +782,12 @@ class AthleteForm(forms.Form):
         required=False
     )
 
+    def __init__(self, gender, *args, **kwargs):
+        super(AthleteForm, self).__init__(*args, **kwargs)
+        if gender == "M":
+            del self.fields["menstrual_cycle"]
+            del self.fields["menstrual_cycle_2"]
+
     def clean(self):
         cd = self.cleaned_data
         for field in cd:

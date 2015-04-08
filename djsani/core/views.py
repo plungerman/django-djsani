@@ -11,7 +11,10 @@ from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, StudentMedicalManager
 from djsani.core.models import StudentMedicalContentType, StudentMedicalLogEntry
 from djsani.core.models import ADDITION, CHANGE
 from djsani.insurance.models import StudentHealthInsurance
-from djsani.medical_history.waivers.models import Privacy, Sicklecell
+from djsani.medical_history.waivers.models import Meni, Privacy, Reporting
+from djsani.medical_history.waivers.models import Risk, Sicklecell
+#from djsani.medical_history.models import AthleteMedicalHistory
+#from djsani.medical_history.models import StudentMedicalHistory
 from djsani.core.sql import STUDENT_VITALS
 from djzbar.utils.informix import do_sql as do_esql, get_engine, get_session
 from djtools.utils.date import calculate_age
@@ -28,13 +31,22 @@ table names are the key, base model classes are the value
 """
 BASES = {
     "cc_student_health_insurance": StudentHealthInsurance,
-    "cc_athlete_sicklecell_waiver": Sicklecell,
     "cc_student_medical_manager": StudentMedicalManager,
-    "cc_athlete_privacy_waiver": Privacy
+#    "cc_student_medical_history": StudentMedicalHistory,
+#    "cc_athlete_medical_history": AthleteMedicalHistory,
+    "cc_student_meni_waiver": Meni,
+    "cc_athlete_privacy_waiver": Privacy,
+    "cc_athlete_reporting_waiver": Reporting,
+    "cc_athlete_risk_waiver": Risk,
+    "cc_athlete_sicklecell_waiver": Sicklecell,
 }
 
-#    "cc_athlete_medical_history": ,
-#    "cc_student_medical_history":
+PERSISTENT_TABLES = (
+    "cc_athlete_sicklecell_waiver",
+    "cc_student_health_insurance",
+    "cc_student_medical_history",
+    "cc_athlete_medical_history"
+)
 
 EARL = settings.INFORMIX_EARL
 
@@ -68,18 +80,26 @@ def get_manager(session, cid):
         filter(StudentMedicalManager.current(settings.START_DATE)).first()
 
     if not manager:
-        # see if we have a past manager with immunization set
         immunization = False
+        sicklecell = False
+        # do we have a past manager with immunization set?
         obj = session.query(StudentMedicalManager).filter_by(college_id=cid).\
             filter_by(cc_student_immunization=1).first()
         if obj:
             immunization = True
+        # check if sicklecell waiver is set
+            if obj.cc_athlete_sicklecell_waiver:
+                sicklecell = True
+
         # create new manager
         manager = StudentMedicalManager(
-            college_id=cid, cc_student_immunization=immunization
+            college_id=cid, cc_student_immunization=immunization,
+            cc_athlete_sicklecell_waiver=sicklecell
         )
         session.add(manager)
         session.commit()
+        # new manager means the student's profile is incomplete
+        manager.status = False
     else:
         manager.status = False
         if manager.cc_student_medical_history\
@@ -173,44 +193,54 @@ def put_data(dic,table,cid=None,noquo=[]):
 @login_required
 def set_type(request):
     """
-    Ajax POST mostly. Locations in use:
+    Ajax POST. Locations in use:
 
-    student home
+    Student home
         1) choose student or athlete
         2) if athlete, choose sport(s)
-    dashboard home
+    Dashboard home
         1) immunization
-    dashboard student detail
+    Dashboard student detail
         1) student or athlete
         2) if athlete, choose sport(s)
         3) insurance opt-out
-        4) sicklecell waiver
+        4) all waivers
     """
     staff = in_group(request.user, "MedicalStaff")
+
+    # we need a college ID and insure no funny stuff
+    cid = request.POST.get("college_id")
+    if not cid:
+        return HttpResponse("Error")
+    if not staff and int(cid) != request.user.id:
+        return HttpResponse("Not staff")
+
     field = request.POST.get("field")
     table = request.POST.get("table")
     switch = request.POST.get("switch")
-    cid = request.POST.get("college_id")
-    if not cid:
-        cid = request.user.id
+
+    # create our dictionary to hold name/value pairs
+    dic = {}
+
+    # if student has sickle cell test results then
+    # proof is True and waive is False
+    if field[0:7] == "results":
+        field = "results"
+        dic["proof"] = 1
+        dic["waive"] = 0
+        dic["updated_at"] = datetime.datetime.now()
 
     # sports field is a list
     if field == "sports":
         switch = ','.join(request.POST.getlist("switch[]"))
 
-    # create our dictionary to hold name/value pairs
-    dic = {field:switch,"college_id":cid}
 
     # if we switch from athlete then remove sports
     if field == "athlete" and switch == "0":
         dic["sports"] = ""
 
-    # if student has sickle cell test results then
-    # proof is True and waive is False
-    if field == "results":
-        dic["proof"] = 1
-        dic["waive"] = 0
-        dic["updated_at"] = datetime.datetime.now()
+    # set name/value
+    dic[field] = switch
 
     # create database session
     session = get_session(EARL)
@@ -222,8 +252,15 @@ def set_type(request):
     action_flag = CHANGE
     if table:
         # retrieve the object based on table name
-        obj = session.query(BASES[table]).filter_by(college_id=cid).first()
+        if table in PERSISTENT_TABLES:
+            obj = session.query(BASES[table]).filter_by(college_id=cid).first()
+        else:
+            obj = session.query(BASES[table]).\
+                filter_by(college_id=cid).\
+                filter(BASES[table].current(settings.START_DATE)).first()
+
         if not obj:
+            dic["college_id"] = cid
             # insert/create new object
             action_flag = ADDITION
             obj = BASES[table](**dic)
@@ -251,8 +288,8 @@ def set_type(request):
             logger.debug("log = {}".format(log))
             obj = StudentMedicalLogEntry(**log)
             session.add(obj)
+        # new data for the student medical manager
         if action_flag == ADDITION:
-            # new data for the student medical manager
             dic = {table:1,"college_id":cid}
             obj = man
         else:
@@ -285,10 +322,9 @@ def home(request):
         "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid)
     )
     student = obj.fetchone()
-    #try:
-    #    student = obj.fetchone()
     if student:
-
+        # save some things to Django session:
+        request.session['gender'] = student.sex
         # create database session
         session = get_session()
         # retrieve student manager

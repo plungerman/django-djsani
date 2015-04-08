@@ -22,7 +22,7 @@
             with safe and effective vaccines.
         </p><p>
             The Center for Disease Control (CDC) and the American College
-            Health Association (ACHA) has 
+            Health Association (ACHA) has
             recommended that all first-year college students living in
             residence halls should be immunized
             against meningococcal disease with the meningococcal conjugate
@@ -101,11 +101,13 @@
             </p>
         {% endif %}
         <p>
+            <input id="agree" type="checkbox" name="agree"
             {% if student.cc_student_meni_waiver %}
-                <i class="fa fa-check fa-2x green"></i>
+                checked="checked" value="0"
             {% else %}
-            <input id="id_agree" type="checkbox" name="agree" value="1" />
+                value="1"
             {% endif %}
+            data-table="cc_student_meni_waiver" class="set-type" />
             <label for="id_agree" style="display:inline;">
             I have received and read (or had explained to me) the
             information regarding meningococcal disease and hepatitis B.

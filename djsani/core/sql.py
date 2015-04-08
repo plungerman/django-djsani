@@ -1,3 +1,10 @@
+from django.conf import settings
+
+# e.g. 2015-05-01 00:00:00
+START_DATE = settings.START_DATE.strftime("%Y-%m-%d %H:%M:%S")
+
+#stu_serv_rec.yr   =   YEAR(TODAY)
+
 STUDENTS_ALPHA = """
 SELECT UNIQUE
     id_rec.lastname, id_rec.firstname, id_rec.id,
@@ -23,9 +30,7 @@ FROM
 INNER JOIN
     stu_serv_rec  ON  id_rec.id = stu_serv_rec.id
     AND
-        stu_serv_rec.yr   =   2014
-    AND
-        stu_serv_rec.sess =   'RA'
+        stu_serv_rec.yr   =  {}
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
 LEFT JOIN
@@ -35,7 +40,7 @@ LEFT JOIN
 LEFT JOIN
     cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
     AND
-        cc_student_medical_manager.created_at > "2015-03-01 00:00:00"
+        cc_student_medical_manager.created_at > "{}"
 LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 WHERE
@@ -44,7 +49,7 @@ WHERE
     AND prog_enr_rec.acst   IN  ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC")
     AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
     AND stu_acad_rec.reg_hrs    >   0
-"""
+""".format(settings.ACADEMIC_YEAR, START_DATE)
 
 GROUP_BY = """
 GROUP BY
@@ -58,6 +63,17 @@ GROUP BY
 
 STUDENT_VITALS = """
 SELECT
+    UNIQUE
+    CASE NVL(UPPER(stu_serv_rec.bldg), '')
+        WHEN
+            'CMTR'
+        THEN
+            'Commuter'
+        ELSE
+            'Resident'
+        END
+    AS
+        residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
     id_rec.addr_line1, id_rec.addr_line2, id_rec.city, id_rec.st,
     id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name,
@@ -90,17 +106,21 @@ LEFT JOIN
 LEFT JOIN
     cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
     AND
-        cc_student_medical_manager.created_at > "2015-03-01 00:00:00"
+        cc_student_medical_manager.created_at > "{}"
 LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
 LEFT JOIN
     cc_athlete_privacy_waiver ON id_rec.id = cc_athlete_privacy_waiver.college_id
+    AND
+        cc_athlete_privacy_waiver.created_at > "{}"
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN
+    stu_serv_rec  ON  id_rec.id = stu_serv_rec.id
+LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
-"""
+""".format(START_DATE, START_DATE)
 
 '''
 SELECT

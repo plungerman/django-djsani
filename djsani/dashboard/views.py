@@ -91,7 +91,7 @@ def get_students(request):
     else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
 
-def panels(request,table,cid):
+def panels(request,table,student):
     """
     Takes database table and student ID.
     Returns the template data that paints the panels in the
@@ -99,7 +99,8 @@ def panels(request,table,cid):
     """
     form = None
     data = None
-    obj = get_data(table,cid)
+    gender = student.sex
+    obj = get_data(table,student.id)
     if obj:
         data = obj.fetchone()
         if data:
@@ -111,7 +112,7 @@ def panels(request,table,cid):
             if table == "cc_athlete_medical_history":
                 for k,v in data.items():
                     innit[k] = v
-                form = AmedForm(initial=innit)
+                form = AmedForm(gender=gender, initial=innit)
     t = loader.get_template("dashboard/panels/%s.html" % table)
     c = RequestContext(request, {'data':data,'form':form})
     return t.render(c)
@@ -142,9 +143,9 @@ def student_detail(request,cid=None,content=None):
                 except:
                     age = None
                 ens = emergency_information(cid)
-                shi = panels(request,"cc_student_health_insurance",cid)
-                smh = panels(request,"cc_student_medical_history",cid)
-                amh = panels(request,"cc_athlete_medical_history",cid)
+                shi = panels(request,"cc_student_health_insurance",student)
+                smh = panels(request,"cc_student_medical_history",student)
+                amh = panels(request,"cc_athlete_medical_history",student)
                 # used for staff who update info on the dashboard
                 stype = "student"
                 if student.athlete:

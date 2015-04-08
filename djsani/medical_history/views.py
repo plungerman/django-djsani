@@ -67,7 +67,7 @@ def form(request,stype):
                 if n[-2:] == "_2" and v:
                     data[n[:-2]] = v
     else:
-        form = eval(fname)(initial=innit)
+        form = eval(fname)(initial=innit, gender=request.session['gender'])
     return render_to_response(
         template,
         {

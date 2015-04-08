@@ -29,11 +29,13 @@
     </p>
 {% endif %}
 <p>
+    <input id="agree" type="checkbox" name="agree"
     {% if student.cc_athlete_reporting_waiver %}
-        <i class="fa fa-check fa-2x green"></i>
+        checked="checked" value="0"
     {% else %}
-        <input id="id_agree" type="checkbox" name="agree" value="1" />
+        value="1"
     {% endif %}
+    data-table="cc_athlete_reporting_waiver" class="set-type" />
     <label for="id_agree" style="display:inline;">
     I have read the above and agree that the statements are
     accurate.

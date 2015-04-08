@@ -154,6 +154,12 @@ EMAIL_FAIL_SILENTLY = False
 DEFAULT_FROM_EMAIL = ''
 SERVER_EMAIL = ''
 SERVER_MAIL=''
+# app settings
+INSURANCE_RECIPIENTS = []
+DEFAULT_HASH = ""
+DEFAULT_CID = ""
+START_DATE = datetime.datetime(NOW.year, 3, 1)
+ACADEMIC_YEAR = 2015
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(__file__), "logs/")
 LOG_FILENAME = LOG_FILEPATH + "debug.log"

@@ -38,6 +38,11 @@ class Meni(Base):
     def __repr__(self):
         return str(self.college_id)
 
+    @hybrid_method
+    def current(self, day):
+        """Is this the current waiver for academic year?"""
+        return self.created_at > day
+
 
 class Risk(Base):
     __tablename__ = 'cc_athlete_risk_waiver'
@@ -52,6 +57,11 @@ class Risk(Base):
     def __repr__(self):
         return str(self.college_id)
 
+    @hybrid_method
+    def current(self, day):
+        """Is this the current waiver for academic year?"""
+        return self.created_at > day
+
 
 class Reporting(Base):
     __tablename__ = 'cc_athlete_reporting_waiver'
@@ -65,6 +75,11 @@ class Reporting(Base):
 
     def __repr__(self):
         return str(self.college_id)
+
+    @hybrid_method
+    def current(self, day):
+        """Is this the current waiver for academic year?"""
+        return self.created_at > day
 
 
 class Privacy(Base):
@@ -82,4 +97,10 @@ class Privacy(Base):
 
     def __repr__(self):
         return str(self.college_id)
+
+    @hybrid_method
+    def current(self, day):
+        """Is this the current waiver for academic year?"""
+        return self.created_at > day
+
 
