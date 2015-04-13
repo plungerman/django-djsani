@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from djsani.core.views import get_manager
+from djsani.core.utils import get_manager
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 from djsani.insurance.forms import StudentForm, AthleteForm

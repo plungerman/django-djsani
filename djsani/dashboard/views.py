@@ -7,9 +7,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
 from djsani.core.sql import *
-from djsani.core.views import get_data, get_manager, put_data
+from djsani.core.utils import get_data, get_manager, put_data
 from djsani.medical_history.forms import StudentForm as SmedForm
 from djsani.medical_history.forms import AthleteForm as AmedForm
+from djsani.emergency.models import AARec
 
 from djzbar.utils.informix import do_sql as do_esql, get_session
 from djtools.decorators.auth import group_required
@@ -18,21 +19,12 @@ from djtools.utils.users import in_group
 
 EARL = settings.INFORMIX_EARL
 
-def emergency_information(cid):
+def emergency_information(cid, session):
     """
     returns all of the emergency contact information for any given student
     """
-
-    # ORM
-    # ens = session.query(AARec).filter(AARec.aa.in_(('ICE','ICE2'))).all()
-    ens = None
-    sql = "SELECT * FROM aa_rec WHERE aa in ('ICE','ICE2') AND id='{}'".format(
-        cid
-    )
-    try:
-        ens = do_esql( sql,key=settings.INFORMIX_DEBUG, earl=EARL)
-    except:
-        pass
+    ens = session.query(AARec).filter_by(id=cid).\
+        filter(AARec.aa.in_(['ICE','ICE2'])).all()
     return ens
 
 @group_required('MedicalStaff')
@@ -53,7 +45,6 @@ def home(request):
                 age = calculate_age(s["birth_date"])
                 if age > 17:
                     adult = "adult"
-            s["status"] = get_manager(session, s["id"]).status
             s["adult"] = adult
     session.close()
     return render_to_response(
@@ -145,7 +136,7 @@ def student_detail(request,cid=None,content=None):
                     age = calculate_age(student.birth_date)
                 except:
                     age = None
-                ens = emergency_information(cid)
+                ens = emergency_information(cid, session)
                 shi = panels(request,"cc_student_health_insurance",student)
                 smh = panels(request,"cc_student_medical_history",student)
                 amh = panels(request,"cc_athlete_medical_history",student)

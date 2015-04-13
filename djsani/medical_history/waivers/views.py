@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.waivers.forms import *
 from djsani.medical_history.waivers.models import *
-from djsani.core.views import get_manager
+from djsani.core.utils import get_manager
 
 from djzbar.utils.informix import get_session
 from djtools.fields import NEXT_YEAR
@@ -52,7 +52,8 @@ def form(request,stype,wtype):
             data["college_id"] = cid
 
             if student:
-                data["updated_at"] = datetime.datetime.now()
+                if wtype == "sicklecell":
+                    data["updated_at"] = datetime.datetime.now()
                 for key, value in data.iteritems():
                     setattr(student, key, value)
             else:

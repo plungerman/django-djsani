@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCAthleteSickleCellWaiver,v 8.0.17100.1 2014/05/23 13:23:07 ronl Released $
+ $Header: CCAthleteSickleCellWaiver,v 8.0.17100.1 2015/05/01 16:20:00 skirk Released $
  -------------------------------------------------------------------------
 }
 
@@ -38,6 +38,15 @@ column created_at   datetime year to second default current year to second not n
     desc            "The date when the record was created"
     heading         "Created At"
     text            "Created At"
+    attributes
+        (
+        )
+
+column updated_at   datetime year to second default current year to second not null
+    comments        ""
+    desc            "The date when the record was updated"
+    heading         "Updated at"
+    text            "Updated at"
     attributes
         (
         )

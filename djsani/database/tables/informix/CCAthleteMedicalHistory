@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCAthleteMedicalHistory,v 8.0.17100.2 2014/06/07 12:05:52 mkishlin Released $
+ $Header: CCAthleteMedicalHistory,v 8.0.17100.2 2015/05/01 16:20:00 skirk Released $
  -------------------------------------------------------------------------
 }
 
@@ -57,8 +57,8 @@ column heat_illness         varchar(255)
     heading         "Heat Illness"
     text            "Heat Illness"
     attributes
-                (
-                )
+        (
+        )
 
 column intense_chest_pain   varchar(255)
     comments        ""
@@ -66,8 +66,8 @@ column intense_chest_pain   varchar(255)
     heading         "Intense Chest Pain"
     text            "Intense Chest Pain"
     attributes
-                (
-                )
+        (
+        )
 
 column sickle_cell_trait    varchar(255)
     comments        ""

@@ -19,12 +19,13 @@
         {% for s in students %}
             <tr>
                 <td class="{{s.adult}}">
-                    {% if s.status %}
+                    {% if s.sitrep %}
                         <i class="fa fa-check">
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
-                        <i class="fa fa-times red"></i>
+                        <input type="checkbox" name="sitrep" class="set-type"
+                            id="sitrep_{{s.id}}" value="{{s.id}}" />
                     {% endif %}
                 </td>
                 <td class="{{s.adult}}" style="text-align:left;">
@@ -43,7 +44,7 @@
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
-                        <input type="checkbox" name="immun" class="immun"
+                        <input type="checkbox" name="cc_student_immunization" class="immun"
                             id="immun_{{s.id}}" value="{{s.id}}" />
                     {% endif %}
                 </td>

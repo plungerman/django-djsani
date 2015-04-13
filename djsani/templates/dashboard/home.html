@@ -120,14 +120,14 @@
                             ]
                         });
                         $(table).on( 'change', 'input', function () {
-                            var $cb = $(this);
+                            var $dis = $(this);
                             $.ajax({
                                 type: "POST",
                                 url: "{% url 'set_type' %}",
                                 data: {
-                                    'college_id':$(this).val(),
+                                    'college_id':$dis.val(),
                                     'switch':1,
-                                    'field':'cc_student_immunization'
+                                    'field':$dis.attr("name")
                                 },
                                 cache: false,
                                 beforeSend: function(){
@@ -136,7 +136,7 @@
                                 success: function(data) {
                                     spinner.stop(target);
                                     check ='<i class="fa fa-check"></i>';
-                                    $cb.replaceWith(check);
+                                    $dis.replaceWith(check);
                                 }
                             });
                         });
@@ -149,14 +149,14 @@
             return false;
         });
         $(table).on( 'change', 'input', function () {
-            var $cb = $(this);
+            var $dis = $(this);
             $.ajax({
                 type: "POST",
                 url: "{% url 'set_type' %}",
                 data: {
-                    'college_id':$(this).val(),
+                    'college_id':$dis.val(),
                     'switch':1,
-                    'field':'cc_student_immunization'
+                    'field':$dis.attr("name")
                 },
                 cache: false,
                 beforeSend: function(){
@@ -165,7 +165,7 @@
                 success: function(data) {
                     spinner.stop(target);
                     check ='<i class="fa fa-check"></i>';
-                    $cb.replaceWith(check);
+                    $dis.replaceWith(check);
                 }
             });
         });
@@ -185,7 +185,6 @@
                 $.growlUI('Saved');
             }
         });
-        */
         {% if not students and not student %}
             alert("There was a problem fetching the student data.\nPlease reload the page or try your search again.");
         {% endif %}
@@ -308,7 +307,7 @@
                                     Freshman and Transfers
                                 </option>
                                 <option value="'SO','JR','SR','GD'">
-                                    Sophmores, Juniors, Seniors
+                                    Sophomores, Juniors, Seniors
                                 </option>
                                 <option value="'FF','FR','SO','JR','SR','GD'">
                                     All Current Students

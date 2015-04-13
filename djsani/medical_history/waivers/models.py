@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import BigInteger, Boolean, Column, DateTime
 from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy.ext.hybrid import hybrid_method
 
 import datetime
 NOW = datetime.datetime.now()

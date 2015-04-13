@@ -11,7 +11,7 @@ class AARec(Base):
     __tablename__ = 'aa_rec'
 
     # core
-    id  = Column(BigInteger, primary_key=True)
+    id = Column(Integer)
     aa = Column(String)
     beg_date = Column(DateTime)
     end_date = Column(DateTime)
@@ -28,9 +28,9 @@ class AARec(Base):
     phone_ext = Column(String)
     ofc_add_by = Column(String)
     cass_cert_date = Column(DateTime)
-    aa_no = Column(Integer)
+    aa_no = Column(Integer, primary_key=True)
     cell_carrier = Column(String)
-    opt_out = Column(Boolean)
+    opt_out = Column(String)
 
     def __repr__(self):
         return str(self.id)

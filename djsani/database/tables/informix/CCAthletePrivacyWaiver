@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCAthletePrivacyWaiver,v 8.0.17100.2 2014/06/07 12:05:15 mkishlin Released $
+ $Header: CCAthletePrivacyWaiver,v 8.0.17100.2 2015/05/01 16:20:00 skirk Released $
  -------------------------------------------------------------------------
 }
 
@@ -31,8 +31,17 @@ column college_id   integer default 0 not null
     heading         "College ID"
     text            "College ID"
     attributes
-            (
-            )
+        (
+        )
+
+column created_at   datetime year to second default current year to second not null
+    comments        ""
+    desc            "The date when the record was created"
+    heading         "Created At"
+    text            "Created At"
+    attributes
+        (
+        )
 
 column ncaa_tool    smallint
     comments        ""

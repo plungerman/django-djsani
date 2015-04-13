@@ -10,7 +10,7 @@ POLICY_CHOICES = (
     ('HMO', 'HMO'),
     ('PPO', 'PPO'),
     ('POS', 'POS'),
-    ('State Insurance', 'State Insurance'),
+    ('Gov', 'Medicaid'),
 )
 
 class StudentForm(forms.Form):
@@ -52,6 +52,7 @@ class StudentForm(forms.Form):
         widget=forms.Select(choices=POLICY_CHOICES,attrs=REQ_CSS)
     )
     primary_policy_state = forms.CharField(
+        label="If Medicaid, in which state?",
         widget=forms.Select(choices=STATE_CHOICES),
         required=False
     )
@@ -94,6 +95,7 @@ class StudentForm(forms.Form):
         widget=forms.Select(choices=POLICY_CHOICES,attrs=REQ_CSS)
     )
     secondary_policy_state = forms.CharField(
+        label="If Medicaid, in which state?",
         widget=forms.Select(choices=STATE_CHOICES),
         required=False
     )

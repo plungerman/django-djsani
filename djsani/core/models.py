@@ -70,6 +70,7 @@ class StudentMedicalManager(Base):
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
+    sitrep = Column(Boolean)
     athlete = Column(Boolean)
     sports = Column(String)
     # forms and waivers

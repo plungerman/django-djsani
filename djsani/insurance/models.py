@@ -1,6 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import BigInteger, Boolean, Column, Date, DateTime
 from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.ext.hybrid import hybrid_method
 
 import datetime
 NOW = datetime.datetime.now()
@@ -72,9 +73,15 @@ class StudentHealthInsurance(Base):
         self.secondary_policy_address=''
         self.secondary_phone=''
 
+    @hybrid_method
+    def current(self, day):
+        """Is this the current object for academic year?"""
+        return self.created_at > day
+
 """
 Used to empty the table when a student opts out
 after previously having submitted insurance info.
+There must be a better way to do this.
 """
 
 STUDENT_HEALTH_INSURANCE = {

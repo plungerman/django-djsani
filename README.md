@@ -3,6 +3,8 @@ django-djsani
 
 Django apps for the Health and Counseling Centre
 
+Start of the academic year is June 1st.
+
 # Apache Configuration
 
     # Health & Counceling medical forms app
@@ -41,7 +43,7 @@ Django apps for the Health and Counseling Centre
 
 # Informix schemas
 
-    /opt/carsi/schema/development/
+    /opt/carsi/schema/student/
 
     CCAthleteMedicalHistory
     CCAthletePrivacyWaiver

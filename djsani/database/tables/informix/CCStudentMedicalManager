@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalManager,v 8.0.17100.1 2014/05/23 13:36:34 ronl Released $
+ $Header: CCStudentMedicalManager,v 8.0.17100.1 2015/05/01 16:20:00 skirk Released $
  -------------------------------------------------------------------------
 }
 
@@ -34,11 +34,20 @@ column college_id   integer default 0 not null
         (
         )
 
-column created_at    datetime year to second default current year to second not null
+column created_at   datetime year to second default current year to second not null
     comments        ""
     desc            "The date when the record was created"
     heading         "Created At"
     text            "Created At"
+    attributes
+        (
+        )
+
+column sitrep       smallint
+    comments        "Can't use 'status' since it is a keyword"
+    desc            "Is the student profile complete?"
+    heading         "Sitrep"
+    text            "Sitrep"
     attributes
         (
         )
