@@ -22,12 +22,19 @@ blockquote {
 #page-content-wrap .content h4 {
     font-weight: bold;
 }
+div.growlUI { background: url(//www.carthage.edu/themes/shared/img/ico/check48.png) no-repeat 10px 10px }
+div.growlUI h1, div.growlUI h2 {
+    color: white; padding: 5px 5px 5px 75px; text-align: left;
+    font-size:1.4em;
+}
 </style>
 {% endblock %}
-{% block javascript %}
+{% block extra_javascript %}
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script src="https://malsup.github.io/min/jquery.blockUI.min.js"
+    type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
     $(window).keydown(function(event){
@@ -43,7 +50,7 @@ $(document).ready(function() {
         emptytext: "Click to edit",
         params: function (params) {
             params.table = $(this).attr("data-table");
-            params.college_id = {{student.id|default:"0"}};
+            params.college_id = {{cid|default:"0"}};
             params.switch = params.value;
             params.field = params.name;
             return params
@@ -80,186 +87,6 @@ $(document).ready(function() {
             </p>
         </div>
     {% endif %}
-    <form method="post" action="." class="form" id="medical-history">
-        {% csrf_token %}
-        <div id="medical-history">
-            <fieldset class="blockLabels">
-                <ol class="nobull">
-                    {% if stype == "athlete" %}
-                        {% for field in form.visible_fields %}
-                            {% if field.name == "concussion" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <h3>Head and Neck Injury</h3>
-                            <p>
-                                A "Yes" answer will require an explanation,
-                                including the severity, the year of
-                                occurrence(s), and the number of diagnosed
-                                and suspected concussions.
-                            </p>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "abdomen_injury" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <h3>Torso Injury</h3>
-                            <p>
-                                A "Yes" answer will require an explanation.
-                            </p>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "shoulder_fracture" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <h3>Upper Extremity Injury</h3>
-                            <p>
-                                A "Yes" answer will require an explanation:
-                                Right or Left; History of surgery
-                            </p>
-                            <h4 style="margin-bottom:-30px;margin-left:9px;">
-                                Shoulder/Clavicle
-                            </h4>
-                            <blockquote>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "labrum_injury" %}
-                            </ol>
-                            </blockquote>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "hip_pelvis" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <h3>Lower Extremity Injury</h3>
-                            <p style="margin-bottom:-5px;">
-                                A "Yes" answer will require an explanation:
-                                Right or Left; History of surgery
-                            </p>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "hamstring" %}
-                            </ol>
-                            <h4 style="margin-bottom:-30px;margin-left:9px;">
-                                <p>&nbsp;<p/>
-                                Thigh
-                            </h4>
-                            <blockquote>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "knee_ligaments" %}
-                            </ol>
-                            </blockquote>
-                            <h4 style="margin-bottom:-30px;margin-left:9px;">
-                                Knee
-                            </h4>
-                            <blockquote>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "shin_spints" %}
-                            </ol>
-                            </blockquote>
-                            <h4 style="margin-bottom:-30px;margin-left:9px;">
-                                <p>&nbsp;<p/>
-                                Lower leg
-                            </h4>
-                            <blockquote>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "ankle_fracture" %}
-                            </ol>
-                            </blockquote>
-                            <h4 style="margin-bottom:-30px;margin-left:9px;">
-                                <p>&nbsp;<p/>
-                                Ankle
-                            </h4>
-                            <blockquote>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "foot" %}
-                            </ol>
-                            </blockquote>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "glasses" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <h3>Ears, Eyes, Dental</h3>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "previous_year_change" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <h3>Additional Medical Information</h3>
-                            <ol>
-                            {% endif %}
-                            {% if field.name == "menstrual_cycle" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <h3>Female Athletes Only</h3>
-                            <ol>
-                            {% endif %}
-                            <li class="form-group ctrlHolder">
-                            <h3>{{ field.label_tag }}</h3>
-                            <a href="#" id="{{field.name}}" data-type="text"
-                                data-pk="{{cid}}"
-                                data-table="{{table}}"
-                                data-title="{{field.label}}" class="jeditable">
-                                {{field.value|default_if_none:"&nbsp;"}}
-                            </a>
-                            {% if field.help_text %}
-                                <p class="help">{{field.help_text}}</p>
-                            {% endif %}
-                            </li>
-                        {% endfor %}
-                    {% else %}
-                        {% for field in form.visible_fields %}
-                            {% if forloop.first %}
-                            <li>
-                                <p>
-                                    Any item to which you answer "Yes",
-                                    please provide an explanation.
-                                </p>
-                            </li>
-                            {% endif %}
-                            {% if field.name == "organ_loss" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            {% if not update %}
-                            <p>
-                                Please check "yes" for any conditions with
-                                which you have been diagnosed. Please
-                                provide an explanation for item with a
-                                "yes" response.
-                            </p>
-                            {% else %}
-                            <p>
-                                Please
-                                provide an explanation for item with a
-                                "yes" response.
-                            </p>
-                            {% endif %}
-                            <ol>
-                            {% endif %}
-                            <li class="form-group ctrlHolder">
-                            <h3>{{ field.label_tag }}</h3>
-                            <a href="#" id="{{field.name}}" data-type="text"
-                                data-pk="{{cid}}"
-                                data-table="{{table}}"
-                                data-title="{{field.label}}" class="jeditable">
-                                {{field.value|default_if_none:"&nbsp;"}}
-                            </a>
-                            {% if field.help_text %}
-                                <p class="help">{{field.help_text}}</p>
-                            {% endif %}
-                            </li>
-                        {% endfor %}
-                    {% endif %}
-                </ol>
-            </fieldset>
-            {% if not update %}
-                {% include "form_submit.inc.html" %}
-            {% endif %}
-        </div>
-    </form>
+    {% include "medical_history/form_update.inc.html" %}
 </div>
 {% endblock %}

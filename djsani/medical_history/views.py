@@ -8,8 +8,10 @@ from django.contrib.auth.decorators import login_required
 from djsani.medical_history.forms import StudentForm, AthleteForm
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
-from djzbar.utils.informix import get_session
 from djsani.core.utils import get_manager
+
+from djzbar.utils.informix import get_session
+from djtools.utils.database import row2dict
 
 BASES = {
     "cc_student_medical_history": StudentMedicalHistory,
@@ -22,8 +24,8 @@ EARL = settings.INFORMIX_EARL
 
 @login_required
 def form(request,stype):
-    # dictionary for initial values if "update"
-    innit = {}
+    # dictionary for initial values if "update" else empty
+    init = {}
     # dictionary for 'yes' answer values
     data = {}
     # student id
@@ -45,16 +47,21 @@ def form(request,stype):
     # have data from previous years
     obj = session.query(BASES[table]).filter_by(college_id=cid).\
         filter(BASES[table].current(settings.START_DATE)).first()
-    #if getattr(manager, table):
     if obj:
-        update = True
-        # might not need this innit bit
-        for k,v in obj.items():
-            innit[k] = v
-        template = "medical_history/form_update.html"
+        # if current update use the xeditable form
+        # otherwise we have data from the previous year but
+        # the student needs to verify it
+        if getattr(manager, table):
+            update = True
+            template = "medical_history/form_update.html"
+        else:
+            template = "medical_history/form_update.html"
+            #template = "medical_history/form_verify.html"
+        # put it in a dict
+        init = row2dict(obj)
     if request.method=='POST':
         post = request.POST.copy()
-        form = eval(fname)(post)
+        form = BASES[fname](post)
         if form.is_valid():
             data = form.cleaned_data
             data["college_id"] = cid
@@ -81,7 +88,7 @@ def form(request,stype):
                 if n[-2:] == "_2" and v:
                     data[n[:-2]] = v
     else:
-        form = BASES[fname](initial=obj, gender=request.session['gender'])
+        form = BASES[fname](initial=init, gender=request.session['gender'])
     return render_to_response(
         template,
         {

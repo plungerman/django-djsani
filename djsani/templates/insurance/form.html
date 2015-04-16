@@ -73,6 +73,8 @@ $(function() {
     $("select[id$='policy_type']").on('change', function() {
         if( $(this).val() == "Gov") {
             $(this).closest('li').next().find('select').addClass("required");
+        } else {
+            $(this).closest('li').next().find('select').removeClass("required");
         }
     });
     {% if oo == "True" %}
@@ -80,7 +82,7 @@ $(function() {
         $('#secondary-box').slideUp(200);
         $("#id_opt_out").prop("checked", true);
     {% else %}
-        {% if not secondary and update %}
+        {% if secondary == "None" and update %}
             $("#id_second").prop("checked", true);
             $("input[id^='id_secondary']").removeClass("error required");
             $('#secondary-form').slideUp(200);

@@ -1,16 +1,5 @@
 {% if data %}
-    <dl class="dl-horizontal">
-    {% for f in form.visible_fields %}
-        <dt class="widus" title="{{f.label}}">{{f.label}}</dt>
-        <dd{% if f.value != 'No' and f.value %} class="alert alert-danger yes"{% endif %}>
-            <a href="#" id="{{f.name}}" data-type="text" data-pk="{{data.id}}"
-                 data-table="{% block medical_table %}cc_student_medical_history{% endblock %}"
-                 data-title="{{f.label}}" class="jeditable">
-                {{f.value|default_if_none:"&nbsp;"}}
-            </a>
-        </dd>
-    {% endfor %}
-    </dl>
+    {% include "medical_history/form_update.inc.html" %}
 {% else %}
 <div class="alert alert-danger">
     <h3>The student has not completed this form.</h3>

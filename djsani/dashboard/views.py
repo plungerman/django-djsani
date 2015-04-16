@@ -5,19 +5,22 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
+from djsani.medical_history.models import StudentMedicalHistory
+from djsani.medical_history.models import AthleteMedicalHistory
+from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
-from djsani.core.sql import *
-from djsani.core.utils import get_data, get_manager, put_data
-from djsani.medical_history.forms import StudentForm as SmedForm
-from djsani.medical_history.forms import AthleteForm as AmedForm
+from djsani.core.sql import STUDENT_VITALS
+from djsani.core.utils import get_manager
 from djsani.emergency.models import AARec
 
 from djzbar.utils.informix import do_sql as do_esql, get_session
 from djtools.decorators.auth import group_required
 from djtools.utils.date import calculate_age
+from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
 
 EARL = settings.INFORMIX_EARL
+
 
 def emergency_information(cid, session):
     """
@@ -82,29 +85,25 @@ def get_students(request):
     else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
 
-def panels(request,table,student):
+def panels(request, session, mod, student):
     """
-    Takes database table and student ID.
+    Accepts data model class and student ID.
     Returns the template data that paints the panels in the
     student detail view.
     """
     form = None
     data = None
     gender = student.sex
-    obj = get_data(table,student.id)
+    obj = session.query(mod).filter_by(college_id=student.id).\
+        filter(mod.current(settings.START_DATE)).first()
     if obj:
-        data = obj.fetchone()
         if data:
-            innit = {}
-            if table == "cc_student_medical_history":
-                for k,v in data.items():
-                    innit[k] = v
-                form = SmedForm(initial=innit)
-            if table == "cc_athlete_medical_history":
-                for k,v in data.items():
-                    innit[k] = v
-                form = AmedForm(gender=gender, initial=innit)
-    t = loader.get_template("dashboard/panels/%s.html" % table)
+            init = row2dict(obj)
+            if  mod == StudentMedicalHistory:
+                form = SmedForm(initial=init, gender=gender)
+            if table == AthleteMedicalHistory:
+                form = AmedForm(initial=init, gender=gender)
+    t = loader.get_template("dashboard/panels/{}.html".format(mod.__name__)
     c = RequestContext(request, {'data':data,'form':form})
     return t.render(c)
 
@@ -137,9 +136,15 @@ def student_detail(request,cid=None,content=None):
                 except:
                     age = None
                 ens = emergency_information(cid, session)
-                shi = panels(request,"cc_student_health_insurance",student)
-                smh = panels(request,"cc_student_medical_history",student)
-                amh = panels(request,"cc_athlete_medical_history",student)
+                shi = panels(
+                    request, session, StudentHealthInsurance, student
+                )
+                smh = panels(
+                    request, session, StudentMedicalHistory, student
+                )
+                amh = panels(
+                    request, session, AthleteMedicalHistory, student
+                )
                 # used for staff who update info on the dashboard
                 stype = "student"
                 if student.athlete:

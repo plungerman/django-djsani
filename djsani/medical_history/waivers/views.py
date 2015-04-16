@@ -16,9 +16,9 @@ from djtools.utils.convert import str_to_class
 import os
 
 @login_required
-def form(request,stype,wtype):
+def form(request, stype, wtype):
     cid = request.user.id
-    table = "cc_%s_%s_waiver" % (stype,wtype)
+    table = "cc_{}_{}_waiver".format(stype, wtype)
 
     # create database session
     session = get_session(settings.INFORMIX_EARL)
@@ -34,7 +34,10 @@ def form(request,stype,wtype):
     waive = True
     if wtype == "sicklecell":
         student = session.query(Sicklecell).\
-        filter_by(college_id=cid).first()
+            filter_by(college_id=cid).filter(\
+                (Sicklecell.proof == 1) | \
+                (Sicklecell.created_at > settings.START_DATE)\
+            ).first()
         if student:
             waive = student.waive
 
@@ -67,6 +70,7 @@ def form(request,stype,wtype):
                 setattr(manager, table, True)
 
             session.commit()
+            session.close()
 
             return HttpResponseRedirect(
                 reverse_lazy("waiver_success")
@@ -78,10 +82,10 @@ def form(request,stype,wtype):
 
     # check for a valid template or redirect home
     try:
-        template = "medical_history/waivers/%s_%s.html" % (stype,wtype)
+        template = "medical_history/waivers/{}_{}.html".format(stype, wtype)
         os.stat(os.path.join(settings.ROOT_DIR, "templates", template))
     except:
-        return HttpResponseRedirect( reverse_lazy("home"))
+        return HttpResponseRedirect( reverse_lazy("home") )
 
     return render_to_response(
         template,

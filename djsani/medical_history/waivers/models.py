@@ -24,6 +24,11 @@ class Sicklecell(Base):
     def __repr__(self):
         return str(self.college_id)
 
+    @hybrid_method
+    def current(self, day):
+        """Is this the current waiver for academic year?"""
+        return self.created_at > day
+
 
 class Meni(Base):
     __tablename__ = 'cc_student_meni_waiver'

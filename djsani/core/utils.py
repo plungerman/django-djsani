@@ -40,7 +40,6 @@ def _doop(session, mod, cid):
     obj = session.query(mod).filter_by(college_id=cid).\
         order_by(desc(mod.id)).first()
 
-    logger.debug("old obj = {}".format(obj.__dict__))
     if obj:
         # copy the previous object to new
         session.expunge(obj)
@@ -50,7 +49,6 @@ def _doop(session, mod, cid):
         session.add(obj)
         # is this necessary?
         session.flush()
-        logger.debug("new obj = {}".format(obj.__dict__))
     return obj
 
 def get_manager(session, cid):
@@ -68,34 +66,40 @@ def get_manager(session, cid):
     manager = session.query(StudentMedicalManager).\
         filter_by(college_id=cid).\
         filter(StudentMedicalManager.current(settings.START_DATE)).first()
-    # if no current manager, create the new student profile by
-    # copying some things from the previous manager, in addition to
-    # copying the insurance and medical histories.
+    # if we don't have a current manager:
+    #    (could be a first time returning student or new FR or transfer)
+    # create the new student profile by copying some things from
+    # the previous manager, in addition to copying the insurance,
+    # medical histories, sicklecell waiver if they exists.
     if not manager:
         immunization = False
         sicklecell = False
-        # do we have a past manager with immunization set?
+        # do we have a past manager?
         obj = session.query(StudentMedicalManager).filter_by(college_id=cid).\
-            filter_by(cc_student_immunization=1).first()
+            order_by(desc(StudentMedicalManager.id)).first()
         if obj:
-            immunization = True
-            # check if sicklecell waiver is set
+            # returning student
+            if obj.cc_student_immunization:
+                immunization = True
             if obj.cc_athlete_sicklecell_waiver:
-                sc = session.query(Sicklecell).filter_by(college_id=cid).first()
-                if sc.proof == True:
+                # fetch the latest sicklecell waiver
+                sc = session.query(Sicklecell).filter_by(college_id=cid).\
+                    order_by(desc(Sicklecell.id)).first()
+                if sc.proof:
                     sicklecell = True
+
+            # check for insurance object
+            ins = _doop(session, StudentHealthInsurance, cid)
+            # check for student medical history
+            smh = _doop(session, StudentMedicalHistory, cid)
+            # check for athlete medical history
+            amh = _doop(session, AthleteMedicalHistory, cid)
+
         # create new manager
         manager = StudentMedicalManager(
             college_id=cid, cc_student_immunization=immunization,
             cc_athlete_sicklecell_waiver=sicklecell, sitrep=False
         )
-        # check for insurance object
-        ins = _doop(session, StudentHealthInsurance, cid)
-        # check for student medical history
-        smh = _doop(session, StudentMedicalHistory, cid)
-        # check for athlete medical history
-        amh = _doop(session, AthleteMedicalHistory, cid)
-
         # copy health insurance and medical histories
         session.add(manager)
         session.commit()

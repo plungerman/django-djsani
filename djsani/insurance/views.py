@@ -11,6 +11,8 @@ from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 from djsani.insurance.forms import StudentForm, AthleteForm
 
 from djzbar.utils.informix import get_session
+
+from djtools.utils.convert import str_to_class
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
 from djtools.utils.mail import send_mail
@@ -19,8 +21,12 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from textwrap import fill
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 @login_required
-def form(request,stype,cid=None):
+def form(request, stype, cid=None):
     if not cid:
         cid = request.user.id
     else:
@@ -44,14 +50,14 @@ def form(request,stype,cid=None):
         oo = request.POST.get("opt_out")
         if oo:
             # empty table
-            forms = STUDENT_HEALTH_INSURANCE
+            form = STUDENT_HEALTH_INSURANCE
 
             # alert email to staff
             if settings.DEBUG:
                 TO_LIST = [settings.SERVER_EMAIL,]
             else:
                 TO_LIST = [
-                    "jdinaurer@carthage.edu","jlindloff@carthage.edu",
+                    settings.INSURANCE_RECIPIENTS
                 ]
             send_mail(
                 request, TO_LIST,
@@ -63,20 +69,22 @@ def form(request,stype,cid=None):
             )
 
         else:
-            forms = eval(fname)(request.POST)
-            forms.is_valid()
-            forms = forms.cleaned_data
-            forms["college_id"] = cid
-            forms["opt_out"] = False
+            form = str_to_class("djsani.insurance.forms", fname)(request.POST)
+            form.is_valid()
+            form = form.cleaned_data
+            form["opt_out"] = False
         # insert or update
         if not request.POST.get("update"):
-            forms["college_id"] = cid
-            s = StudentHealthInsurance(**forms)
+            # insert
+            form["college_id"] = cid
+            s = StudentHealthInsurance(**form)
             session.add(s)
         else:
-            session.query(StudentHealthInsurance).\
+            # fetch our insurance object
+            obj = session.query(StudentHealthInsurance).\
                 filter_by(college_id=cid).\
-                update(forms)
+                filter(StudentHealthInsurance.current(settings.START_DATE))
+            obj.update(form)
 
         # update the manager
         manager.cc_student_health_insurance=True
@@ -87,16 +95,19 @@ def form(request,stype,cid=None):
         )
     else:
         obj = session.query(StudentHealthInsurance).\
-            filter_by(college_id=cid).first()
-        ins = {}
+            filter_by(college_id=cid).\
+            filter(StudentHealthInsurance.current(settings.START_DATE)).first()
+
         update = ""
         data = row2dict(obj)
         if data:
             oo = data["opt_out"]
             update = cid
-        form = eval(fname)(initial=data)
+
+        form = str_to_class("djsani.insurance.forms", fname)(initial=data)
     # close database session
     session.close()
+    #logger.debug("date = {}".format(data))
     return render_to_response(
         "insurance/form.html", {
             "form":form,"update":update,"oo":oo,

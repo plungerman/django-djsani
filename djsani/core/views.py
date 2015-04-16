@@ -45,8 +45,6 @@ BASES = {
 PERSISTENT_TABLES = (
     "cc_athlete_sicklecell_waiver",
     "cc_student_health_insurance",
-    "cc_student_medical_history",
-    "cc_athlete_medical_history"
 )
 
 EARL = settings.INFORMIX_EARL
@@ -110,7 +108,7 @@ def set_type(request):
     # retrieve student manager record
     man = get_manager(session, cid)
 
-    # default action is a database update
+    # default action for Entry Log is a database update
     action_flag = CHANGE
     if table:
         # retrieve the object based on table name
@@ -138,7 +136,6 @@ def set_type(request):
             message = ""
             for n,v in dic.items():
                 message += "{} = {}\n".format(n,v)
-            logger.debug("message = {}".format(message))
             log = {
                 "college_id": request.user.id,
                 "content_type_id": get_content_type(session, table).id,
@@ -147,7 +144,6 @@ def set_type(request):
                 "action_flag": action_flag,
                 "action_message": message
             }
-            logger.debug("log = {}".format(log))
             obj = StudentMedicalLogEntry(**log)
             session.add(obj)
         # new data for the student medical manager

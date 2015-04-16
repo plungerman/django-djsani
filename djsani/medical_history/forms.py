@@ -326,6 +326,9 @@ class StudentForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
 
+    def __init__(self, gender, *args, **kwargs):
+        super(StudentForm, self).__init__(*args, **kwargs)
+
     def clean(self):
         cd = self.cleaned_data
         for field in cd:
