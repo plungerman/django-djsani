@@ -106,22 +106,6 @@ def get_manager(session, cid):
 
     return manager
 
-def get_data(table, cid, fields=None):
-    """
-    table   = name of database table
-    fields  = list of database fields to return
-    """
-
-    status = False
-    sql = "SELECT "
-    if fields:
-        sql += ','.join(fields)
-    else:
-        sql += "*"
-    sql += " FROM %s WHERE college_id=%s" % (table,cid)
-    result = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
-    return result
-
 def put_data(dic,table,cid=None,noquo=[]):
     """
     dic:    dictionary of data
