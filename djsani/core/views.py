@@ -42,11 +42,6 @@ BASES = {
     "cc_athlete_sicklecell_waiver": Sicklecell,
 }
 
-PERSISTENT_TABLES = (
-    "cc_athlete_sicklecell_waiver",
-    "cc_student_health_insurance",
-)
-
 EARL = settings.INFORMIX_EARL
 
 @csrf_exempt
@@ -60,6 +55,7 @@ def set_type(request):
         2) if athlete, choose sport(s)
     Dashboard home
         1) immunization
+        2) Status (sitrep)
     Dashboard student detail
         1) student or athlete
         2) if athlete, choose sport(s)
@@ -112,8 +108,13 @@ def set_type(request):
     action_flag = CHANGE
     if table:
         # retrieve the object based on table name
-        if table in PERSISTENT_TABLES:
-            obj = session.query(BASES[table]).filter_by(college_id=cid).first()
+        if table == "cc_athlete_sicklecell_waiver" \
+          and getattr(man, "cc_athlete_sicklecell_waiver"):
+            obj = session.query(Sicklecell).\
+                filter_by(college_id=cid).filter(\
+                    (Sicklecell.proof == 1) | \
+                    (Sicklecell.created_at > settings.START_DATE)\
+                ).first()
         else:
             obj = session.query(BASES[table]).\
                 filter_by(college_id=cid).\
