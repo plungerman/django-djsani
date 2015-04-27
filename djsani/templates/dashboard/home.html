@@ -8,7 +8,7 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
         rel="stylesheet"/>
     <style type="text/css">
-    div.growlUI { background: url(//www.carthage.edu/themes/shared/img/ico/check48.png) no-repeat 10px 10px }
+    div.growlUI { background: url(//www.carthage.edu/themes/shared/img/ico/check48.png) no-repeat 10px 10px; margin-top:60px; }
     div.growlUI h1, div.growlUI h2 {
     color: white; padding: 5px 5px 5px 75px; text-align: left;
     font-size:1.4em;}
@@ -18,6 +18,7 @@
     .table-striped > tbody > tr:nth-child(2n+1) > td.minor {
         background-color: #ccf;
     }
+    .center{text-align:center;}
     .red {color:#800;}
     .green {color:#080;}
     div.DTTT {
@@ -34,6 +35,7 @@
     margin-top: 10px;
     padding: 6px;
     }
+    blockquote { padding: 10px 0; margin: 0px 0px 20px; font-size: inherit; border-left: 0; }
     </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -191,7 +193,7 @@
                 return params
             },
             success: function(response, newValue) {
-                $.growlUI('Saved');
+                $.growlUI('Success', "Data saved.");
             }
         });
         {% if not students and not student %}
