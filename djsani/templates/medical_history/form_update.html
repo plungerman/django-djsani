@@ -56,7 +56,7 @@ $(document).ready(function() {
             return params
         },
         success: function(response, newValue) {
-            $.growlUI('Saved');
+            $.growlUI('Success', "Data saved.");
         }
     });
 });
@@ -87,6 +87,10 @@ $(document).ready(function() {
             </p>
         </div>
     {% endif %}
-    {% include "medical_history/form_update.inc.html" %}
+    {% if stype == "athlete" %}
+        {% include "medical_history/form_athlete.inc.html" %}
+    {% else %}
+        {% include "medical_history/form_student.inc.html" %}
+    {% endif %}
 </div>
 {% endblock %}
