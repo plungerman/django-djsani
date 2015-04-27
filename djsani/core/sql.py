@@ -1,9 +1,7 @@
 from django.conf import settings
 
 # e.g. 2015-05-01 00:00:00
-START_DATE = settings.START_DATE.strftime("%Y-%m-%d %H:%M:%S")
-
-#stu_serv_rec.yr   =   YEAR(TODAY)
+START_DATE = settings.START_DATE
 
 STUDENTS_ALPHA = """
 SELECT UNIQUE
@@ -39,13 +37,15 @@ LEFT JOIN
         cc_student_medical_manager.created_at > "{}"
 LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
+    AND
+        (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > "{}")
 WHERE
     prog_enr_rec.subprog    NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
     AND prog_enr_rec.lv_date    IS  NULL
     AND prog_enr_rec.acst   IN  ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC","TRAD")
     AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
     AND stu_acad_rec.reg_hrs    >   0
-""".format(START_DATE)
+""".format(START_DATE,START_DATE)
 
 GROUP_BY = """
 GROUP BY
@@ -105,6 +105,8 @@ LEFT JOIN
         cc_student_medical_manager.created_at > "{}"
 LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
+    AND
+        (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > "{}")
 LEFT JOIN
     cc_athlete_privacy_waiver ON id_rec.id = cc_athlete_privacy_waiver.college_id
     AND
@@ -116,4 +118,4 @@ LEFT JOIN
 LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
-""".format(START_DATE, START_DATE)
+""".format(START_DATE, START_DATE, START_DATE)
