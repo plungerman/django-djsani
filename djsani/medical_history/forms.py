@@ -9,7 +9,7 @@ BINARY_CHOICES = (
     ('Yes', 'Yes'),
 )
 
-class StudentForm(forms.Form):
+class StudentMedicalHistoryForm(forms.Form):
     """
     Medical history for all students
     """
@@ -327,7 +327,7 @@ class StudentForm(forms.Form):
     )
 
     def __init__(self, gender, *args, **kwargs):
-        super(StudentForm, self).__init__(*args, **kwargs)
+        super(StudentMedicalHistoryForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         cd = self.cleaned_data
@@ -339,7 +339,7 @@ class StudentForm(forms.Form):
         return self.cleaned_data
 
 
-class AthleteForm(forms.Form):
+class AthleteMedicalHistoryForm(forms.Form):
     """
     Medical history for student athletes
     """
@@ -786,7 +786,7 @@ class AthleteForm(forms.Form):
     )
 
     def __init__(self, gender, *args, **kwargs):
-        super(AthleteForm, self).__init__(*args, **kwargs)
+        super(AthleteMedicalHistoryForm, self).__init__(*args, **kwargs)
         if gender == "M":
             del self.fields["menstrual_cycle"]
             del self.fields["menstrual_cycle_2"]
