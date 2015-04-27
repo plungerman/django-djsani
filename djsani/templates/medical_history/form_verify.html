@@ -1,0 +1,245 @@
+{% extends "home.html" %}
+{% load filters %}
+{% block title %}
+    Medical History &mdash;
+    Health and Counseling &mdash; Carthage College
+{% endblock %}
+{% block extra_style %}
+{{block.super}}
+<link rel="stylesheet" type="text/css" media="screen"
+    href="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" media="screen"
+    href="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/css/bootstrapValidator.min.css">
+{% endblock %}
+{% block extra_javascript %}
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
+<script src="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+        }
+    });
+    options = {
+        startYear: 1980,
+        finalYear: new Date().getFullYear();
+    };
+    // hide all text fields
+    $("li[id$='_2']").hide();
+    // set all radios to 'no' or not
+    $("#toggle_no").on('click', function() {
+        /* we need 'prop' to manage the UI selecting of 'no' button */
+        $("input[id$='_0']").prop('checked', this.checked);
+        /* we need 'attr' to set checked="checked" for POST value */
+        if ($(this).is(':checked')) {
+            $("input[id$='_0']").attr("checked", "checked");
+            $("li[id$='_2']").remove();
+            $("li.error").remove();
+        } else {
+            $("input[id$='_0']").removeAttr("checked");
+        }
+    });
+    $("input:radio").on('change', function() {
+        nm = $(this).attr('name');
+        id = nm + "_2";
+        if ($(this).val() == "Yes") {
+            $("#" + id).show();
+        }
+        if ($(this).val() == "No") {
+            $("#" + id).hide();
+        }
+    });
+    {% if form.errors %}
+    $(':radio:checked').each(function() {
+        val = $(this).val();
+        if (val != "No" &&  val != "" ) {
+            nm = $(this).attr('name');
+            id = nm + "_2";
+            $("#" + id).show();
+        }
+    });
+    {% for n,v in data.items %}
+    $("#{{n}}").val("{{v}}");
+    {% endfor %}
+    {% endif %}
+    $('#medical-history').submit(function( event ) {
+        var elem = document.getElementById('medical-history').elements;
+        var radios = {};
+        $(':radio').each(function() {
+            radios[$(this).attr('name')] = true;
+        });
+        var count = 0;
+        $.each(radios, function() {
+            count++;
+        });
+        if ($(':radio:checked').length === count) {
+            error = false;
+        }else{
+            error = true;
+        }
+
+        if(!error){
+            for(var i = 0; i < elem.length; i++) {
+                var e = elem[i];
+                var yes = e.name.match(/_2$/);
+                if (yes && e.type != "hidden" && $("#" + yes).is(":visible") ) {
+                    if (!e.value) {
+                        error = true;
+                    } else {
+                        elem[i-1].value = e.value;
+                    }
+                }
+            }
+        }
+        if (error) {
+            if(event.preventDefault) {
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+                return false;
+            }
+            $('#errorModal').modal('show');
+        }
+    });
+});
+</script>
+{% endblock %}
+{% block content %}
+<div class="large-12 forms-container">
+    <h2>
+        Medical history
+        {% if stype == "athlete" %}
+        for athletes
+        {% endif %}
+    </h2>
+    <p>
+        This information will become a part of your medical record.
+        Accurate health information is essential to provide you with
+        the best care possible. Medical record information is
+        confidential and will not be released to anyone outside
+        Carthage College without your permission, except as required
+        by law, such as with court-ordered release or in reporting of
+        certain communicable diseases to the Department of Health.
+    </p>
+    {% include "includes/errors_text.html" %}
+    <form method="post" action="." class="form" id="medical-history">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        {{init}}
+        <div id="medical-history">
+            <fieldset class="blockLabels">
+                <ol class="nobull">
+                    <!--
+                    <li>
+                        <input
+                            type="checkbox"
+                            name="toggle_no" id="toggle_no" />
+                        <label for="toggle_no" style="display:inline;">
+                            Mark all as "No"
+                        </label>
+                    </li>
+                    -->
+                    {% if stype == "athlete" %}
+                        {% for field in form.visible_fields %}
+                            {% include "medical_history/athlete_headers.inc.html" %}
+                            {% include "form_field.inc.html" %}
+                            <li class="form-group" id="{{field.name}}_2">
+                                <ul>
+                                <li class="infield">
+                                    <label>
+                                        &mdash;
+                                        <strong class="red">Explain:</strong>
+                                        &nbsp;
+                                    </label>
+                                    <input type="text" name="{{field.name}}_2"
+                                        maxlength="255" id="id_{{field.name}}_2"
+                                        {% if field.name == "chicken_pox" %}
+                                        class="dyntext required date-picker" />
+                                        {% else %}
+                                        class="dyntext required xlarge" />
+                                        {% endif %}
+                                </li>
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        {% for field in form.visible_fields %}
+                            {% if forloop.first %}
+                            <li>
+                                <p>
+                                    Any item to which you answer "Yes",
+                                    please provide name of medications, year,
+                                    side, diagnosis when appropriate.
+                                </p>
+                            </li>
+                            {% endif %}
+                            {% if field.name == "organ_loss" %}
+                            </li></ol></fieldset>
+                            <fieldset class="blockLabels">
+                            <p>
+                                Please check "yes" for any conditions with
+                                which you have been diagnosed. Please
+                                provide an explanation for item with a
+                                "yes" response.
+                            </p>
+                            <ol>
+                            {% endif %}
+                            {% include "form_field.inc.html" %}
+                            <li class="form-group" id="{{field.name}}_2">
+                                <ul>
+                                <li class="infield">
+                                    <label>
+                                        &mdash;
+                                        <strong class="red">Explain:</strong>
+                                        &nbsp;
+                                    </label>
+                                    <input type="text" name="{{field.name}}_2"
+                                        maxlength="255" id="id_{{field.name}}_2"
+                                        {% if field.name == "chicken_pox" %}
+                                        class="dyntext required date-picker" />
+                                        {% else %}
+                                        class="dyntext required xlarge" />
+                                        {% endif %}
+                                </li>
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ol>
+            </fieldset>
+            {% include "form_submit.inc.html" %}
+        </div>
+    </form>
+</div>
+<div id="errorModal" class="modal fade bs-example-modal-sm" tabindex="-1"
+    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">
+                Close
+            </span>
+        </button>
+        <h1 class="modal-title">Error</h1>
+      </div>
+      <div class="modal-body">
+        <p>
+            You did not respond with a "Yes" or "No" to all of the questions,
+            or you responsed "Yes" to one of the questions but did not provide
+            an explanation.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+{% endblock %}
