@@ -1,0 +1,23 @@
+<form class="form" id="medical-history">
+    <div id="medical-history">
+        <fieldset class="blockLabels">
+            <ol class="nobull">
+                {% for field in form.visible_fields %}
+                    {% include "medical_history/athlete_headers.inc.html" %}
+                    <li class="form-group ctrlHolder">
+                    <h3>{{ field.label_tag }}</h3>
+                    <a href="#" id="{{field.name}}" data-type="text"
+                        data-pk="{{cid}}"
+                        data-table="cc_athlete_medical_history"
+                        data-title="{{field.label}}" class="xeditable">
+                        {{field.value|default_if_none:"&nbsp;"}}
+                    </a>
+                    {% if field.help_text %}
+                        <p class="help">{{field.help_text}}</p>
+                    {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+        </fieldset>
+    </div>
+</form>

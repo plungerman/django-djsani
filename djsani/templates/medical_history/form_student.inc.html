@@ -1,0 +1,49 @@
+<form class="form" id="medical-history">
+    <div id="medical-history">
+        <fieldset class="blockLabels">
+            <ol class="nobull">
+                {% for field in form.visible_fields %}
+                    {% if forloop.first %}
+                    <li>
+                        <p>
+                            Any item to which you answer "Yes",
+                            please provide an explanation.
+                        </p>
+                    </li>
+                    {% endif %}
+                    {% if field.name == "organ_loss" %}
+                    </li></ol></fieldset>
+                    <fieldset class="blockLabels">
+                    {% if not update %}
+                    <p>
+                        Please check "yes" for any conditions with
+                        which you have been diagnosed. Please
+                        provide an explanation for any item with a
+                        "yes" response.
+                    </p>
+                    {% else %}
+                    <p>
+                        Please
+                        provide an explanation for any item with a
+                        "yes" response.
+                    </p>
+                    {% endif %}
+                    <ol>
+                    {% endif %}
+                    <li class="form-group ctrlHolder">
+                    <h3>{{ field.label_tag }}</h3>
+                    <a href="#" id="{{field.name}}" data-type="text"
+                        data-pk="{{cid}}"
+                        data-table="cc_student_medical_history"
+                        data-title="{{field.label}}" class="xeditable">
+                        {{field.value|default_if_none:"&nbsp;"}}
+                    </a>
+                    {% if field.help_text %}
+                        <p class="help">{{field.help_text}}</p>
+                    {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+        </fieldset>
+    </div>
+</form>
