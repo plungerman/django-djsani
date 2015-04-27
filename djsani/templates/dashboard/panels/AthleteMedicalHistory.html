@@ -1,0 +1,7 @@
+{% if data %}
+    {% include "medical_history/form_athlete.inc.html" %}
+{% else %}
+<div class="alert alert-danger">
+    <h3>The student has not completed this form.</h3>
+</div>
+{% endif %}

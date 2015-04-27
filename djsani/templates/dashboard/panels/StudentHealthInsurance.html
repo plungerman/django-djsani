@@ -5,7 +5,7 @@
         </h3>
     </div>
 {% endif %}
-{% if data.opt_out %}
+{% if data.opt_out == "True" %}
     <div class="alert alert-danger">
     <h3>Opt out</h3>
 {% else %}
@@ -13,7 +13,7 @@
 {% endif %}
 <form style="float:left;">
     <input type="checkbox" id="opt_out" class="set-type"
-        {% if data.opt_out %}
+        {% if data.opt_out == "True" %}
         value="0"
         checked="checked"
         {% else %}
@@ -27,7 +27,7 @@
     have health insurance.
 </p>
 </div>
-{% if not data.opt_out %}
+{% if data.opt_out == "False" %}
     <ul style="margin-bottom: 15px;clear:both;" class="nav nav-tabs">
     <li class="active">
         <a data-toggle="tab" href="#primary_insurance">
