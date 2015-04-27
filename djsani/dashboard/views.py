@@ -7,28 +7,23 @@ from django.views.decorators.csrf import csrf_exempt
 
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
+from djsani.medical_history.forms import StudentMedicalHistoryForm
+from djsani.medical_history.forms import AthleteMedicalHistoryForm
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
-from djsani.core.sql import STUDENT_VITALS
+from djsani.core.sql import STUDENTS_ALPHA, STUDENT_VITALS
 from djsani.core.utils import get_manager
 from djsani.emergency.models import AARec
 
 from djzbar.utils.informix import do_sql as do_esql, get_session
 from djtools.decorators.auth import group_required
+from djtools.utils.convert import str_to_class
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
 
 EARL = settings.INFORMIX_EARL
 
-
-def emergency_information(cid, session):
-    """
-    returns all of the emergency contact information for any given student
-    """
-    ens = session.query(AARec).filter_by(id=cid).\
-        filter(AARec.aa.in_(['ICE','ICE2'])).all()
-    return ens
 
 @group_required('MedicalStaff')
 def home(request):
@@ -87,23 +82,24 @@ def get_students(request):
 
 def panels(request, session, mod, student):
     """
-    Accepts data model class and student ID.
+    Accepts a data model class and student object.
     Returns the template data that paints the panels in the
     student detail view.
     """
     form = None
     data = None
-    gender = student.sex
+    mname = mod.__name__
+
     obj = session.query(mod).filter_by(college_id=student.id).\
         filter(mod.current(settings.START_DATE)).first()
     if obj:
-        if data:
-            init = row2dict(obj)
-            if  mod == StudentMedicalHistory:
-                form = SmedForm(initial=init, gender=gender)
-            if table == AthleteMedicalHistory:
-                form = AmedForm(initial=init, gender=gender)
-    t = loader.get_template("dashboard/panels/{}.html".format(mod.__name__)
+        data = row2dict(obj)
+        if mod == StudentMedicalHistory or mod == AthleteMedicalHistory:
+            form = str_to_class(
+                "djsani.medical_history.forms",
+                "{}Form".format(mname)
+            )(initial=data, gender=student.sex)
+    t = loader.get_template("dashboard/panels/{}.html".format(mname))
     c = RequestContext(request, {'data':data,'form':form})
     return t.render(c)
 
@@ -135,7 +131,8 @@ def student_detail(request,cid=None,content=None):
                     age = calculate_age(student.birth_date)
                 except:
                     age = None
-                ens = emergency_information(cid, session)
+                ens = session.query(AARec).filter_by(id=cid).\
+                    filter(AARec.aa.in_(['ICE','ICE2'])).all()
                 shi = panels(
                     request, session, StudentHealthInsurance, student
                 )
