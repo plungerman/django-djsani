@@ -288,6 +288,10 @@ $(function() {
                         Sickle cell waiver
                     </a>
                 {% endif %}
+                {% if manager.cc_athlete_sicklecell_waiver and student.proof %}
+                    Sickle cell waiver
+                    <i class="fa fa-check green"></i>
+                {% endif %}
                 {% if manager.cc_athlete_sicklecell_waiver and student.waive %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
