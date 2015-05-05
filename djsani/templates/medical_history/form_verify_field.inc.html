@@ -1,0 +1,23 @@
+<li class="form-group ctrlHolder medical-history-verify" id="{{field.name}}_2">
+    <h3>
+        <label for="id_{{field.name}}">
+            {{ field.label }}
+        </label>
+    </h3>
+    {% if field.errors %}
+    <div class="required warning">
+        <span class="error-message">
+            {{ field.errors|join:", "}}
+        </span>
+    {% else %}
+    <div{% if field.field.required %} class="required"{% endif %}>
+    {% endif %}
+        <input type="text" name="{{field.name}}" maxlength="255"
+            id="id_{{field.name}}_2" class="dyntext required xlarge"
+            value="{{field.value}}"
+        />
+    {% if field.help_text %}
+        <p class="help">{{field.help_text}}</p>
+    {% endif %}
+    </div>
+</li>
