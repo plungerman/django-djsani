@@ -326,7 +326,8 @@ class StudentMedicalHistoryForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
 
-    def __init__(self, gender, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        gender = kwargs.pop('gender',False)
         super(StudentMedicalHistoryForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -337,7 +338,6 @@ class StudentMedicalHistoryForm(forms.Form):
                     ["Explain your 'Yes' response"]
                 )
         return self.cleaned_data
-
 
 class AthleteMedicalHistoryForm(forms.Form):
     """
@@ -351,7 +351,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         help_text="(fainting during exercise)",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     heat_illness_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -359,7 +358,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     heat_illness = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     intense_chest_pain_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -367,7 +365,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     intense_chest_pain = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # Head and Neck Injury
     head_injuries_2 = forms.CharField(
@@ -377,7 +374,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label='Multiple head injuries',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     concussion_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -386,7 +382,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label='Diagnosed concussion (#)',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     suspected_concussion_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -395,7 +390,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label='Suspected, unreported concussion (#)',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     season_ending_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -404,7 +398,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Season ending head injuries",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     cervical_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -413,7 +406,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Cervical (neck) injury",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     stinger_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -422,7 +414,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label='"Stinger" or "Burner" injury',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     neurologist_treatment_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -431,7 +422,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Injury requiring neurologist treatment",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     spine_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -440,7 +430,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Spine or vertebral disc injury",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     history_headaches_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -449,7 +438,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="History of headaches",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     history_migraines_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -458,7 +446,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="History of migraine headaches",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # Torso Injury
     abdomen_injury_2 = forms.CharField(
@@ -468,7 +455,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Abdomen/Thoracic injury",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     rib_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -476,7 +462,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     rib_injury = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     lumbar_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -485,7 +470,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Lumbar/Sacral injury",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # Upper Extremity Injury
     #
@@ -497,7 +481,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Fracture",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     shoulder_dislocation_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -506,7 +489,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Dislocation/Subluxation",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     shoulder_muscle_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -515,7 +497,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Muscle injury",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     labrum_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -523,7 +504,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     labrum_injury = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     forearm_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -531,7 +511,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     forearm_injury = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     elbow_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -539,7 +518,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     elbow_injury = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     wrist_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -547,7 +525,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     wrist_injury = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     finger_injury_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -555,7 +532,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     finger_injury = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # Lower Extremity Injury
     hip_pelvis_2 = forms.CharField(
@@ -565,7 +541,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Hip/Pelvis",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     #### Thigh
     hamstring_2 = forms.CharField(
@@ -574,7 +549,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     hamstring = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     quadriceps_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -582,7 +556,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     quadriceps = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     thigh_other_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -590,7 +563,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     thigh_other = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     #### Knee
     knee_ligaments_2 = forms.CharField(
@@ -600,7 +572,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Ligaments",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     meniscus_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -608,7 +579,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     meniscus = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     patella_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -617,7 +587,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         help_text='',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     knee_other_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -626,7 +595,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Other",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     #### Lower leg
     shin_splints_2 = forms.CharField(
@@ -636,7 +604,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="MTSS/Shin splints",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     stress_fractures_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -644,7 +611,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     stress_fractures = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     compartment_syndrome_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -652,7 +618,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     compartment_syndrome = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     lower_leg_other_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -661,7 +626,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Other",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     #### Ankle
     ankle_fracture_2 = forms.CharField(
@@ -671,7 +635,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Fracture",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     ankle_sprain_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -680,7 +643,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         label="Sprain/Strain",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # foot and toe
     foot_2 = forms.CharField(
@@ -689,7 +651,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     foot = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     toe_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -697,7 +658,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     toe = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # Ears, Eyes, Dental
     glasses_2 = forms.CharField(
@@ -706,7 +666,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     glasses = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     contact_lenses_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -715,7 +674,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         help_text='If yes, indicate hard or soft lenses',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     hearing_aids_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -723,7 +681,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     hearing_aids = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     dental_appliances_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -731,12 +688,8 @@ class AthleteMedicalHistoryForm(forms.Form):
     dental_appliances = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # Additional Medical Information
-    previous_year_change_2 = forms.CharField(
-        widget=forms.HiddenInput(),required=False
-    )
     physician_prohibition_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
@@ -747,7 +700,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         ''',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     other_information_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -759,7 +711,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         ''',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     supplements_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
@@ -770,7 +721,6 @@ class AthleteMedicalHistoryForm(forms.Form):
         ''',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-        required=False
     )
     # Female Athletes Only
     menstrual_cycle_2 = forms.CharField(
@@ -785,11 +735,12 @@ class AthleteMedicalHistoryForm(forms.Form):
         required=False
     )
 
-    def __init__(self, gender, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        gender = kwargs.pop('gender',False)
         super(AthleteMedicalHistoryForm, self).__init__(*args, **kwargs)
         if gender == "M":
-            del self.fields["menstrual_cycle"]
-            del self.fields["menstrual_cycle_2"]
+            self.fields.pop("menstrual_cycle")
+            self.fields.pop("menstrual_cycle_2")
 
     def clean(self):
         cd = self.cleaned_data
