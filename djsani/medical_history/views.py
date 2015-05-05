@@ -28,6 +28,8 @@ def form(request,stype):
     data = {}
     # student id
     cid = request.user.id
+    # student gender
+    gender=request.session.get('gender')
     # model name
     mname = "{}MedicalHistory".format(stype.capitalize())
     # form name
@@ -66,7 +68,7 @@ def form(request,stype):
         init = row2dict(obj)
     if request.method == 'POST':
         post = request.POST.copy()
-        form = fclass(post)
+        form = fclass(post, gender=gender)
         logger.debug(form.as_ul())
         if form.is_valid():
             data = form.cleaned_data
@@ -104,7 +106,7 @@ def form(request,stype):
                         data[n[:-2]] = v
 
     else:
-        form = fclass(initial=init, gender=request.session.get('gender'))
+        form = fclass(initial=init, gender=gender)
     return render_to_response(
         template,
         {
