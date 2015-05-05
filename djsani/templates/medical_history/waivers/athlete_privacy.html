@@ -9,8 +9,8 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $('#privacy-waiver').submit(function() {
-        if ( $('#id_medical_insurance').is(':checked') &&
-             $('#id_disclose_records').is(':checked') ) {
+        if ( $('#medical_insurance').is(':checked') &&
+             $('#disclose_records').is(':checked') ) {
             return true;
         } else {
             alert('You must check the last two boxes in order to proceed.')
