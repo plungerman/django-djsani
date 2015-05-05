@@ -1,10 +1,8 @@
 li.ctrlHolder div ul li {display:inline;}
-li.ctrlHolder div ul {margin-left:-30px;}
-.form .blockLabels label { display: inherit; font-weight: normal; }
 .form .blockLabels label.error {display:none !important;}
 .placeholder {color:#800;}
 h1,h2,h3 {font-weight:normal;}
-li {
+.form li {
 list-style-type: none !important;
 list-style: none !important;
 list-style-image: none !important;
@@ -29,3 +27,5 @@ form textarea {width: 300px !important;height:90px !important;}
 #id_sports{background:none;}
 #primary-form{margin-right:20px;}
 .error-message { padding:3px; font-weight:900; background: #fbe3e4; border: 2px solid #fbc2c4 ; color: #8a1f11; }
+#student table {width:50%;}
+#athlete table {width:60%;}
