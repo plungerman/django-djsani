@@ -21,9 +21,6 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from textwrap import fill
 
-import logging
-logger = logging.getLogger(__name__)
-
 
 @login_required
 def form(request, stype, cid=None):
@@ -73,7 +70,7 @@ def form(request, stype, cid=None):
             form.is_valid()
             form = form.cleaned_data
             form["opt_out"] = False
-        # insert or update
+        # insert else update
         if not request.POST.get("update"):
             # insert
             form["college_id"] = cid
@@ -83,8 +80,11 @@ def form(request, stype, cid=None):
             # fetch our insurance object
             obj = session.query(StudentHealthInsurance).\
                 filter_by(college_id=cid).\
-                filter(StudentHealthInsurance.current(settings.START_DATE))
-            obj.update(form)
+                filter(StudentHealthInsurance.current(settings.START_DATE)).\
+                first()
+            # update it with form values
+            for key, value in form.iteritems():
+                setattr(obj, key, value)
 
         # update the manager
         manager.cc_student_health_insurance=True
@@ -107,7 +107,6 @@ def form(request, stype, cid=None):
         form = str_to_class("djsani.insurance.forms", fname)(initial=data)
     # close database session
     session.close()
-    #logger.debug("date = {}".format(data))
     return render_to_response(
         "insurance/form.html", {
             "form":form,"update":update,"oo":oo,
