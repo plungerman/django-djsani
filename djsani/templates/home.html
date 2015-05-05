@@ -7,8 +7,6 @@
     rel="stylesheet">
 <link href="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.css"
     rel="stylesheet" type="text/css" />
-<link href="//www.carthage.edu/static/vendor/css/grid-960.css"
-    rel="stylesheet" type="text/css" />
 <link href="/static/djsani/css/main.css"
     rel="stylesheet" type="text/css" />
 {% endblock %}
@@ -120,13 +118,17 @@ $(function() {
 {% endblock %}
 {% block content %}
 <div>
+    <div class="large-12 medium-6 small-6">
+        {% get_lw_content as student_directions blurbs 2007 %}
+        {{student_directions.body}}
+    </div>
     {% if student %}
     <p>
         <strong>NOTE:</strong>
         If you encounter any problems with the forms, please contact
         <a href="mailto:larry@carthage.edu">Library Information Systems</a>.
     </p>
-    <p>Do you plan to participate in NCAA Intercollegiate Athletics?</p>
+    <h3>Do you plan to participate in NCAA Intercollegiate Athletics?</h3>
     <form id="profile" class="form">
     <ul class="nobull">
         <li>
@@ -176,59 +178,65 @@ $(function() {
     </ul>
     </form>
     <div id="student" class="clear slider-container">
-        <div class="large-12">
-            <p>
-                All incoming freshmen and transfer students are required
-                to provide health insurance, emergency contact,
-                medical history, and immunization history. You will also
-                need to electronically sign the Meningitis/Hepatitis B
-                Response. If you will be 17 years of age or younger when
-                you arrive to campus, your parent or legal guardian must
-                complete the "Parental/Legal guardian consent" form.
-            </p>
-            <p>
-                Each academic year, returning students are required to
-                provide health insurance and emergency contact information,
-                and update your medical history. Returning students are
-                also required to electronically sign the
-                Meningitis/Hepatitis B Response.
-            </p>
-        </div>
         <h2 class="clear">Online forms</h2>
-        <ul>
-            <li>
-                <a href="{% url 'insurance_form' 'student' %}">
-                    Health insurance information
-                </a>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <td>
+                    <a href="#">
+                        Emergency contact information
+                    </a>
+                </td>
+                <td>
+                {% if manager.emergency_contact_information %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{% url 'insurance_form' 'student' %}">
+                        Health insurance information
+                    </a>
+                </td>
+                <td>
                 {% if manager.cc_student_health_insurance %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
-            </li>
-            <li>
-                <a href="{% url 'medical_history_form' 'student' %}">
-                    Medical history
-                </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{% url 'medical_history_form' 'student' %}">
+                        General Medical History
+                    </a>
+                </td>
+                <td>
                 {% if manager.cc_student_medical_history %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
-            </li>
-        </ul>
-        {% if student.residency_status == "Resident" %}
-        <ul class="slider-container" id="adult_student">
-            <li>
-                {% if manager.cc_student_meni_waiver %}
-                    Meningococcal meningitis/Hepatitis B response
+                </td>
+            </tr>
+            {% if student.residency_status == "Resident" %}
+            <tr class="slider-container" id="adult_student">
+                <td>
+                    {% if manager.cc_student_meni_waiver %}
+                        Meningococcal meningitis/Hepatitis B response
+                    {% else %}
+                        <a href="{% url 'waiver_form' 'student' 'meni' %}">
+                            Meningococcal meningitis/Hepatitis B response
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if manager.cc_student_meni_waiver %}
                     <i class="fa fa-check green"></i>
-                {% else %}
-                <a href="{% url 'waiver_form' 'student' 'meni' %}">
-                    Meningococcal meningitis/Hepatitis B response
-                </a>
-                {% endif %}
-            </li>
-        </ul>
-        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+        </table>
         <h2>Printable forms for Campus Nurse</h2>
-        <ul>
+        <ul class="big-arrow-bullets">
             <li>
                 <a href="//www.carthage.edu/live/files/830-pdf">
                     Immunization history
@@ -241,189 +249,192 @@ $(function() {
             </li>
         </ul>
     </div>
+    <!-- ./ student -->
     <div id="athlete" class="clear slider-container">
-        <h2 class="clear">Online forms</h2>
-        <ul>
-            <li>
-                <a href="{% url 'insurance_form' 'athlete' %}">
-                    Health insurance information
-                </a>
+        <div class="large-12 medium-6 small-6">
+        {% get_lw_content as athlete_directions blurbs 2008 %}
+        {{athlete_directions.body}}
+        </div>
+        <h2 class="clear">Online forms and Waivers</h2>
+        {% get_lw_content as online_forms blurbs 2009 %}
+        {{online_forms.body}}
+        <table class="table table-bordered table-hover">
+            <tr>
+                <td>
+                    <a href="#">
+                        Emergency contact information
+                    </a>
+                </td>
+                <td>
+                {% if manager.emergency_contact_information %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{% url 'insurance_form' 'athlete' %}">
+                        Health insurance information
+                    </a>
+                </td>
+                <td>
                 {% if manager.cc_student_health_insurance %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
-            </li>
-            <li>
-                <a href="{% url 'medical_history_form' 'student' %}">
-                    Medical history
-                </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{% url 'medical_history_form' 'student' %}">
+                        General Medical History
+                    </a>
+                </td>
+                <td>
                 {% if manager.cc_student_medical_history %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
-            </li>
-            <li>
-                <a href="{% url 'medical_history_form' 'athlete' %}">
-                    Medical history for athletes only
-                </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{% url 'medical_history_form' 'athlete' %}">
+                        Athlete Medical History
+                    </a>
+                </td>
+                <td>
                 {% if manager.cc_athlete_medical_history %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
-            </li>
-        </ul>
-        <ul class="slider-container" id="adult_athlete">
-            {% if student.residency_status == "Resident" %}
-            <li>
-                {% if manager.cc_student_meni_waiver %}
-                    Meningococcal meningitis/Hepatitis B response
-                    <i class="fa fa-check green"></i>
-                {% else %}
-                <a href="{% url 'waiver_form' 'student' 'meni' %}">
-                    Meningococcal meningitis/Hepatitis B response
-                </a>
-                {% endif %}
-            </li>
-            {% endif %}
-            <li>
-                {% if not manager.cc_athlete_sicklecell_waiver or student.waive %}
-                    <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
-                        Sickle cell waiver
-                    </a>
-                {% endif %}
-                {% if manager.cc_athlete_sicklecell_waiver and student.proof %}
-                    Sickle cell waiver
-                    <i class="fa fa-check green"></i>
-                {% endif %}
-                {% if manager.cc_athlete_sicklecell_waiver and student.waive %}
-                    <i class="fa fa-check green"></i>
-                {% endif %}
-            </li>
-            <li>
-                {% if manager.cc_athlete_risk_waiver %}
-                    Assumption of risk waiver
-                    <i class="fa fa-check green"></i>
-                {% else %}
-                    <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
-                        Assumption of risk waiver
-                    </a>
-                {% endif %}
-            </li>
-            <li>
+                </td>
+            </tr>
+            <tr>
                 {% if manager.cc_athlete_privacy_waiver %}
-                    HIPAA and FERPA waiver
-                    <i class="fa fa-check green"></i>
+                <td>HIPAA and FERPA waiver</td>
+                <td><i class="fa fa-check green"></i></td>
                 {% else %}
+                <td>
                     <a href="{% url 'waiver_form' 'athlete' 'privacy' %}">
                         HIPAA and FERPA waiver
                     </a>
+                </td>
+                <td></td>
                 {% endif %}
-            </li>
-            <li>
+            </tr>
+            <tr>
                 {% if manager.cc_athlete_reporting_waiver %}
+                <td>
                     CCIW Injury and Illness Reporting Acknowledgement waiver
-                    <i class="fa fa-check green"></i>
+                </td>
+                <td><i class="fa fa-check green"></i></td>
                 {% else %}
+                <td>
                     <a href="{% url 'waiver_form' 'athlete' 'reporting' %}">
                         CCIW Injury and Illness Reporting Acknowledgement waiver
                     </a>
+                </td>
+                <td></td>
                 {% endif %}
-            </li>
-        </ul>
-        <h2>Printable forms for Sports Medicine Staff</h2>
-        <ul>
-            <li>
-                <a href="//www.carthage.edu/live/files/816-pdf">
-                    Instructions and checklist
-                </a>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/793-pdf">
-                    Athlete pre-participation physical
-                </a>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/783-pdf">
-                    Medical insurance agreement
-                </a>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/802-pdf">
-                    Primary Insurance Card Copy
-                </a>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/792-pdf">
-                    Athlete ADHD medical exception
-                </a>
-                <span style="margin-left:5px;">
-                    (only if prescribed ADHD stimulant meds)
-                </span>
-            </li>
-        </ul>
-        <h2>Printable forms for Campus Nurse</h2>
-        <ul>
-            <li>
-                <a href="//www.carthage.edu/live/files/830-pdf">
-                    Immunization history
-                </a>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/831-pdf">
-                    Parent/Legal guardian consent form
-                </a>
-            </li>
-        </ul>
-        <div id="minor">
-            <h3>Under 18 years of age print waivers</h3>
-            <p>
-            If you are under the age of 18, you must print the following forms,
-            sign them, and hand deliver them to the athletic training staff
-            during sport check-in.
-            </p>
-            <ul class="nobull">
-                <li>
-                    <a href="//www.carthage.edu/live/files/794-pdf">
-                        Sickle cell waiver
-                    </a>
-                    <p>
-                        Carthage College Athletic Training &mdash;
-                        Sickle Cell Trait Testing.
-                    </p>
-                </li>
-                <li>
-                    <a href="//www.carthage.edu/live/files/795-pdf">
+            </tr>
+            <tr>
+            {% if adult %}
+                {% if manager.cc_athlete_risk_waiver %}
+                <td>Assumption of risk waiver</td>
+                <td><i class="fa fa-check green"></i></td>
+                {% else %}
+                <td>
+                    <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
                         Assumption of risk waiver
                     </a>
-                    <p>
-                        Carthage college intercollegiate athletic program
-                        Release and waiver of liability, assumption of risk
-                        And indemnity agreement
-                    </p>
-                </li>
-                <li>
-                    <a href="//www.carthage.edu/live/files/796-pdf">
-                        HIPAA and FERPA waiver
-                    </a>
-                    <p>
-                        Student Athlete Authorization/Consent For Disclosure
-                        of Protected Health Information (PHI).
-                    </p>
-                </li>
-                <li>
-                    <a href="//www.carthage.edu/live/files/797-pdf">
-                        CCIW injury and illness reporting acknowledgement waiver
-                    </a>
-                    <p>
-                        College Conference Of Illinois And Wisconsin waiver
-                    </p>
-                </li>
-                {% if student.residency_status == "Resident" %}
-                <li>
-                    <a href="//www.carthage.edu/live/files/832-pdf">
-                        Meningococcal meningitis/Hepatitis B response
-                    </a>
-                </li>
+                </td>
+                <td></td>
                 {% endif %}
-            </ul>
-        </div> <!-- ./minor -->
+            {% else %}
+                <td colspan="2">
+                {% get_lw_content as risk blurbs 2010 %}
+                {{risk.body}}
+                </td>
+            {% endif %}
+            </tr>
+        </table>
+        <h3>
+        {% if adult %}
+            <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
+                SICKLE CELL TRAIT TESTING WAIVER
+            </a>
+        {% else %}
+            <a href="https://www.carthage.edu/live/files/794-pdf">
+                SICKLE CELL TRAIT TESTING WAIVER
+            </a>
+        {% endif %}
+        </h3>
+        {% get_lw_content as sicklecell blurbs 2011 %}
+        {{sicklecell.body}}
+        <table class="table table-bordered table-hover">
+            <tr>
+                <td>
+                {% if not manager.cc_athlete_sicklecell_waiver or student.waive %}
+                    {% if adult %}
+                    <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
+                        Sickle cell trait testing waiver
+                    </a>
+                    {% else %}
+                        Sickle cell trait testing waiver
+                    {% endif %}
+                {% endif %}
+                {% if manager.cc_athlete_sicklecell_waiver and student.proof %}
+                    Sickle cell trait testing waiver
+                {% endif %}
+                </td>
+                <td>
+                {% if manager.cc_athlete_sicklecell_waiver %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
+                </td>
+            </tr>
+        </table>
+        {% if not adult %}
+            <p>
+            If you will be 17 years of age or younger at the time you arrive
+            on campus, please print out the
+            <a href="//www.carthage.edu/live/files/794-pdf">
+                Underage Sickle Cell Waiver form
+            </a>
+            and have your parent/legal guardian complete the form.
+            </p>
+        {% endif %}
+        {% if student.residency_status == "Resident" %}
+            <h3>
+                Meningococcal meningitis/Hepatitis B response and
+                Parent/Legal Guardian Consent Form
+            </h3>
+            {% if adult %}
+                {% get_lw_content as menihep blurbs 2012 %}
+                {{menihep.body}}
+            {% else %}
+                {% get_lw_content as menihep blurbs 2013 %}
+                {{menihep.body}}
+            {% endif %}
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <td>
+                        {% if manager.cc_student_meni_waiver or not adult %}
+                            Meningococcal meningitis/Hepatitis B response
+                        {% else %}
+                            <a href="{% url 'waiver_form' 'student' 'meni' %}">
+                                Meningococcal meningitis/Hepatitis B response
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if manager.cc_student_meni_waiver %}
+                        <i class="fa fa-check green"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+        {% get_lw_content as questions blurbs 2014 %}
+        {{questions.body}}
     </div>
     {% else %}
     <h1>We could not find your student record</h1>
