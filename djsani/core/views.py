@@ -215,8 +215,13 @@ def home(request):
         if request.GET.get("minor"):
             adult = False
 
+        # chapuza to test various UI
+        template = "home.html"
+        if request.GET.get("template"):
+            template = "home_{}.html".format(request.GET.get("template"))
+
         return render_to_response(
-            "home.html",
+            template,
             {
                 "switch_earl": reverse_lazy("set_type"),
                 "student":student,
