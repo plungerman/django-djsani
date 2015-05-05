@@ -159,6 +159,11 @@ $(function() {
             </div>
         </div>
         <div class="large-11">
+            {% if update %}
+            <h3>
+                I verify that this information is accurate.
+            </h3>
+            {% endif %}
             {% include "form_submit.inc.html" %}
         </div>
     </form>
