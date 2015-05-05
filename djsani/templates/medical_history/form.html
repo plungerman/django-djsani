@@ -12,22 +12,25 @@
     href="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/css/bootstrapValidator.min.css">
 {% endblock %}
 {% block extra_javascript %}
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
-        event.preventDefault();
-        return false;
+            event.preventDefault();
+            return false;
         }
     });
     options = {
         startYear: 1980,
-        finalYear: new Date().getFullYear();
+        finalYear: new Date().getFullYear()
     };
     // hide all text fields
     $("li[id$='_2']").hide();
+    // show text fields with content
+    $(".medical-history-verify").show();
     // set all radios to 'no' or not
     $("#toggle_no").on('click', function() {
         /* we need 'prop' to manage the UI selecting of 'no' button */
@@ -35,7 +38,8 @@ $(document).ready(function() {
         /* we need 'attr' to set checked="checked" for POST value */
         if ($(this).is(':checked')) {
             $("input[id$='_0']").attr("checked", "checked");
-            $("li[id$='_2']").remove();
+            $("li[id$='_2']").hide();
+            $("input[id$='_2']").val("");
             $("li.error").remove();
         } else {
             $("input[id$='_0']").removeAttr("checked");
@@ -43,11 +47,16 @@ $(document).ready(function() {
     });
     $("input:radio").on('change', function() {
         nm = $(this).attr('name');
+        console.log("name = " + nm);
         id = nm + "_2";
-        if ($(this).val() == "Yes") {
+        val = $(this).val();
+        if (val == "Yes") {
             $("#" + id).show();
+            if (nm == "counseling" || nm == "anxiety" || nm == "depression") {
+                $('#mentalHealthModal').modal('show');
+            }
         }
-        if ($(this).val() == "No") {
+        if (val == "No") {
             $("#" + id).hide();
         }
     });
@@ -60,9 +69,6 @@ $(document).ready(function() {
             $("#" + id).show();
         }
     });
-    {% for n,v in data.items %}
-    $("#{{n}}").val("{{v}}");
-    {% endfor %}
     {% endif %}
     $('#medical-history').submit(function( event ) {
         var elem = document.getElementById('medical-history').elements;
@@ -79,11 +85,12 @@ $(document).ready(function() {
         }else{
             error = true;
         }
-
+        /* copy _2 to _1 */
         if(!error){
             for(var i = 0; i < elem.length; i++) {
                 var e = elem[i];
                 var yes = e.name.match(/_2$/);
+                // we can remove this "hidden" clause
                 if (yes && e.type != "hidden" && $("#" + yes).is(":visible") ) {
                     if (!e.value) {
                         error = true;
@@ -126,9 +133,6 @@ $(document).ready(function() {
     {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="medical-history">
         {% csrf_token %}
-        {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-        {% endfor %}
         <div id="medical-history">
             <fieldset class="blockLabels">
                 <ol class="nobull">
@@ -145,25 +149,11 @@ $(document).ready(function() {
                     {% if stype == "athlete" %}
                         {% for field in form.visible_fields %}
                             {% include "medical_history/athlete_headers.inc.html" %}
-                            {% include "form_field.inc.html" %}
-                            <li class="form-group" id="{{field.name}}_2">
-                                <ul>
-                                <li class="infield">
-                                    <label>
-                                        &mdash;
-                                        <strong class="red">Explain:</strong>
-                                        &nbsp;
-                                    </label>
-                                    <input type="text" name="{{field.name}}_2"
-                                        maxlength="255" id="id_{{field.name}}_2"
-                                        {% if field.name == "chicken_pox" %}
-                                        class="dyntext required date-picker" />
-                                        {% else %}
-                                        class="dyntext required xlarge" />
-                                        {% endif %}
-                                </li>
-                                </ul>
-                            </li>
+                            {% if field.value == "No" or not field.value %}
+                                {% include "medical_history/form_field.inc.html" %}
+                            {% else %}
+                                {% include "medical_history/form_verify_field.inc.html" %}
+                            {% endif %}
                         {% endfor %}
                     {% else %}
                         {% for field in form.visible_fields %}
@@ -187,25 +177,11 @@ $(document).ready(function() {
                             </p>
                             <ol>
                             {% endif %}
-                            {% include "form_field.inc.html" %}
-                            <li class="form-group" id="{{field.name}}_2">
-                                <ul>
-                                <li class="infield">
-                                    <label>
-                                        &mdash;
-                                        <strong class="red">Explain:</strong>
-                                        &nbsp;
-                                    </label>
-                                    <input type="text" name="{{field.name}}_2"
-                                        maxlength="255" id="id_{{field.name}}_2"
-                                        {% if field.name == "chicken_pox" %}
-                                        class="dyntext required date-picker" />
-                                        {% else %}
-                                        class="dyntext required xlarge" />
-                                        {% endif %}
-                                </li>
-                                </ul>
-                            </li>
+                            {% if field.value == "No" %}
+                                {% include "medical_history/form_field.inc.html" %}
+                            {% else %}
+                                {% include "medical_history/form_verify_field.inc.html" %}
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 </ol>
@@ -231,6 +207,38 @@ $(document).ready(function() {
             You did not respond with a "Yes" or "No" to all of the questions,
             or you responsed "Yes" to one of the questions but did not provide
             an explanation.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+<div id="mentalHealthModal" class="modal fade bs-example-modal-sm" tabindex="-1"
+    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">
+                Close
+            </span>
+        </button>
+        <h1 class="modal-title">Counseling services</h1>
+      </div>
+      <div class="modal-body">
+        <p>
+            Counseling services are offered to Carthage College students,
+            free of charge from one of two counselors in the
+            Health &amp; Counseling Center. If you are interested in these
+            services, please contact
+            <a href="mailto:dbetsworth@carthage.edu">
+            Deborah Betsworth
+            </a> via email
+            or at 262.551.5725.
         </p>
       </div>
       <div class="modal-footer">
