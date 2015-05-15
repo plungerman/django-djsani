@@ -21,6 +21,7 @@ from djtools.utils.convert import str_to_class
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
+from djmaidez.core.models import ENS_CODES
 
 EARL = settings.INFORMIX_EARL
 
@@ -132,7 +133,7 @@ def student_detail(request,cid=None,content=None):
                 except:
                     age = None
                 ens = session.query(AARec).filter_by(id=cid).\
-                    filter(AARec.aa.in_(['ICE','ICE2'])).all()
+                    filter(AARec.aa.in_(ENS_CODES)).all()
                 shi = panels(
                     request, session, StudentHealthInsurance, student
                 )
