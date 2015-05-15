@@ -17,9 +17,6 @@ from djtools.utils.database import row2dict
 
 EARL = settings.INFORMIX_EARL
 
-import logging
-logger = logging.getLogger(__name__)
-
 @login_required
 def form(request,stype):
     # dictionary for initial values if "update" else empty
@@ -69,7 +66,6 @@ def form(request,stype):
     if request.method == 'POST':
         post = request.POST.copy()
         form = fclass(post, gender=gender)
-        logger.debug(form.as_ul())
         if form.is_valid():
             data = form.cleaned_data
             data["college_id"] = cid
