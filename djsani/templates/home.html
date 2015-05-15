@@ -9,16 +9,38 @@
     rel="stylesheet" type="text/css" />
 <link href="/static/djsani/css/main.css"
     rel="stylesheet" type="text/css" />
+<link href="/static/djmaidez/css/index.css"
+    rel="stylesheet" type="text/css" />
+<!-- from portal head -->
+<link rel="stylesheet" type="text/css"
+    href="https://my.carthage.edu/ics/UI/Common/Styles/jQuery/jquery-ui.custom.css" />
 {% endblock %}
 {% block extra_javascript %}
+<!-- from portal head -->
+<script type="text/javascript"
+    src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<!-- bootstrap -->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.js"></script>
+<!-- ens -->
+<script type="text/javascript" charset="utf-8">
+function GetUserID() {
+    return parseInt("{{request.user.id}}",10);
+}
+</script>
+<script src="https://raw.githubusercontent.com/digitalBush/jquery.maskedinput/1.4.0/dist/jquery.maskedinput.min.js"></script>
+<script src="/static/djsani/js/djmaidez.js"></script>
+<script src="/static/djmaidez/js/validate.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     {% if not student %}
         alert("There was a problem retrieving the data.\n\
         Please reload the page.");
     {% endif %}
+    // build emergency contact modal
+    $("a.ens-link").click(function() {
+        makeDialog();
+    });
     // set student types
     function setType(interruptor,field) {
         var $data = {
@@ -182,12 +204,12 @@ $(function() {
         <table class="table table-bordered table-hover">
             <tr>
                 <td>
-                    <a href="#">
+                    <a class="ens-link" style="cursor: pointer; cursor: hand;">
                         Emergency contact information
                     </a>
                 </td>
-                <td>
-                {% if manager.emergency_contact_information %}
+                <td class="djsani">
+                {% if manager.emergency_contact %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
                 </td>
@@ -261,12 +283,12 @@ $(function() {
         <table class="table table-bordered table-hover">
             <tr>
                 <td>
-                    <a href="#">
+                    <a class="ens-link" style="cursor: pointer; cursor: hand;">
                         Emergency contact information
                     </a>
                 </td>
-                <td>
-                {% if manager.emergency_contact_information %}
+                <td class="djsani">
+                {% if manager.emergency_contact %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
                 </td>
@@ -440,6 +462,9 @@ $(function() {
     <h1>We could not find your student record</h1>
     <p>Please contact the Registrar's office.</p>
     {% endif %}
+</div>
+<div id="emergencyContactFiller">
+    {% include "emergency/modal.html" %}
 </div>
 {% endblock %}
 {% block urchin %}{% endblock %}
