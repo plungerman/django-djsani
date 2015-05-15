@@ -70,6 +70,15 @@ column sports       varchar(255)
         (
         )
 
+column emergency_contact            smallint
+    comments        ""
+    desc            "Has the student completed the emergency contact information?"
+    heading         "Emergency Contact Information"
+    text            "Emergency Contact Information"
+    attributes
+        (
+        )
+
 column cc_student_medical_history   smallint
     comments        ""
     desc            "Has the student completed their medical history form?"
