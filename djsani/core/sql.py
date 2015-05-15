@@ -60,9 +60,11 @@ GROUP BY
 STUDENT_VITALS = """
 SELECT
     UNIQUE
-    CASE NVL(UPPER(stu_serv_rec.bldg), '')
+    CASE
         WHEN
-            'CMTR'
+            NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
+        OR
+            NVL(UPPER(stu_serv_rec.bldg), '') = ''
         THEN
             'Commuter'
         ELSE
