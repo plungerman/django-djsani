@@ -60,6 +60,7 @@ def get_manager(session, cid):
     if we don't have a current manager, we create one.
 
     Accepts a session object and the student's college ID.
+    Requires START_DATE in settings file
     """
     # try to fetch a current manager
     # from cache or database

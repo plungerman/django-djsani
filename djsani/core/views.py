@@ -6,24 +6,26 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
+from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_content_type, get_manager
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, StudentMedicalManager
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import ADDITION, CHANGE
 from djsani.insurance.models import StudentHealthInsurance
+from djsani.emergency.models import AARec
 from djsani.medical_history.waivers.models import Meni, Privacy, Reporting
 from djsani.medical_history.waivers.models import Risk, Sicklecell
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
-from djsani.core.sql import STUDENT_VITALS
+
+from djmaidez.core.models import ENS_CODES, MOBILE_CARRIER, RELATIONSHIP
 from djzbar.utils.informix import get_engine, get_session
 from djtools.utils.date import calculate_age
+from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
 import datetime
-
-
 import logging
 logger = logging.getLogger(__name__)
 
@@ -215,22 +217,37 @@ def home(request):
         if request.GET.get("minor"):
             adult = False
 
+        # context dict
+        data = {
+            "switch_earl": reverse_lazy("set_type"),
+            "student":student,
+            "manager":manager,
+            "sports":sports,
+            "my_sports":my_sports,
+            "adult":adult,
+            "first_year":first_year
+        }
+
+        # create database session
+        session = get_session(EARL)
+
+        # emergency contact modal form
+        objs = session.query(AARec).filter_by(id=cid).\
+            filter(AARec.aa.in_(ENS_CODES)).all()
+
+        for o in objs:
+            data[o.aa] = row2dict(o)
+        data["mobile_carrier"] = MOBILE_CARRIER
+        data["relationship"] = RELATIONSHIP
+        data["solo"] = True
+
         # chapuza to test various UI
         template = "home.html"
         if request.GET.get("template"):
             template = "home_{}.html".format(request.GET.get("template"))
 
         return render_to_response(
-            template,
-            {
-                "switch_earl": reverse_lazy("set_type"),
-                "student":student,
-                "manager":manager,
-                "sports":sports,
-                "my_sports":my_sports,
-                "adult":adult,
-                "first_year":first_year
-            },
+            template, data,
             context_instance=RequestContext(request)
         )
     else:
