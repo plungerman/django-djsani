@@ -136,7 +136,7 @@ $(document).ready(function() {
         <div id="medical-history">
             <fieldset class="blockLabels">
                 <ol class="nobull">
-                    <!--
+                    {% if request.user.is_staff %}
                     <li>
                         <input
                             type="checkbox"
@@ -145,7 +145,7 @@ $(document).ready(function() {
                             Mark all as "No"
                         </label>
                     </li>
-                    -->
+                    {% endif %}
                     {% if stype == "athlete" %}
                         {% for field in form.visible_fields %}
                             {% include "medical_history/athlete_headers.inc.html" %}
@@ -161,7 +161,7 @@ $(document).ready(function() {
                             <li>
                                 <p>
                                     Any item to which you answer "Yes",
-                                    please provide name of medications, year,
+                                    please provide the name of medications, year,
                                     side, diagnosis when appropriate.
                                 </p>
                             </li>
@@ -177,7 +177,7 @@ $(document).ready(function() {
                             </p>
                             <ol>
                             {% endif %}
-                            {% if field.value == "No" %}
+                            {% if field.value == "No" or not field.value %}
                                 {% include "medical_history/form_field.inc.html" %}
                             {% else %}
                                 {% include "medical_history/form_verify_field.inc.html" %}
