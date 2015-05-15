@@ -334,9 +334,12 @@ class StudentMedicalHistoryForm(forms.Form):
         cd = self.cleaned_data
         for field in cd:
             if cd[field] == "Yes" and not cd.get("%s_2" % field):
-                self._errors[field] = self.error_class(
-                    ["Explain your 'Yes' response"]
-                )
+                self._errors[field] = self.error_class([
+                    """
+                        Explain your 'Yes' response or type 'No'
+                        to respond in the negative.
+                    """
+                ])
         return self.cleaned_data
 
 class AthleteMedicalHistoryForm(forms.Form):
