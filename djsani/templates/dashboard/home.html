@@ -14,10 +14,11 @@
     font-size:1.4em;}
     .adult, .minor {text-align:center;}
     .minor {background-color:#ccf;}
-    .table-hover > tbody > tr:hover > td.minor { background-color: #ccf; }
-    .table-striped > tbody > tr:nth-child(2n+1) > td.minor {
-        background-color: #ccf;
-    }
+    table.dataTable > tbody > tr:hover > td.minor { background-color: #ccf; }
+    table.dataTable > tbody > tr:nth-child(2n+1) > td.minor { background-color: #ccf; }
+    table.dataTable > tbody tr.selected { background-color: #b0bed9 !important; }
+    table.dataTable > tbody tr:nth-child(even):hover td{ background-color: #fae7b5 !important; }
+    table.dataTable > tbody tr:nth-child(odd):hover td { background-color: #fae7b5 !important; }
     .center{text-align:center;}
     .red {color:#800;}
     .green {color:#080;}
@@ -130,16 +131,26 @@
                                 [100, 250, 500, 1000, 2000, "All"]
                             ]
                         });
+                        $(table).on( 'click', 'tr', function () {
+                            if ( $(this).hasClass('selected') ) {
+                                $(this).removeClass('selected');
+                            } else {
+                                table.$('tr.selected').removeClass('selected');
+                                $(this).addClass('selected');
+                            }
+                        });
                         $(table).on( 'change', 'input', function () {
                             var $dis = $(this);
+                            var $data = {
+                                'college_id': $dis.val(),
+                                'switch': 1,
+                                'field': $dis.attr("name"),
+                                'table': $dis.attr("data-table")
+                            }
                             $.ajax({
                                 type: "POST",
                                 url: "{% url 'set_type' %}",
-                                data: {
-                                    'college_id':$dis.val(),
-                                    'switch':1,
-                                    'field':$dis.attr("name")
-                                },
+                                data: $data,
                                 cache: false,
                                 beforeSend: function(){
                                     spinner.spin(target);
@@ -159,16 +170,26 @@
             });
             return false;
         });
+        $(table).on( 'click', 'tr', function () {
+            if ( $(this).hasClass('selected') ) {
+                $(this).removeClass('selected');
+            } else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
         $(table).on( 'change', 'input', function () {
             var $dis = $(this);
+            var $data = {
+                'college_id': $dis.val(),
+                'switch': 1,
+                'field': $dis.attr("name"),
+                'table': $dis.attr("data-table")
+            }
             $.ajax({
                 type: "POST",
                 url: "{% url 'set_type' %}",
-                data: {
-                    'college_id':$dis.val(),
-                    'switch':1,
-                    'field':$dis.attr("name")
-                },
+                data: $data,
                 cache: false,
                 beforeSend: function(){
                     spinner.spin(target);
@@ -298,6 +319,7 @@
                 <small>
                     <span class="minor">Lavender rows are minors</span>
                     <i class="fa fa-star green"></i> = Athlete
+                    <br>Click on a row to highlight it for easy viewing.
                 </small>
             </h1>
         </div>

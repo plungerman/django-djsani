@@ -1,7 +1,44 @@
+<ul style="margin-bottom: 15px;" class="nav nav-tabs">
+    <li class="active">
+        <a data-toggle="tab" href="#MIS1">
+            Missing 1
+        </a>
+    </li>
+    <li>
+        <a href="#MIS2" data-toggle="tab">
+            Missing 2
+        </a>
+    </li>
+    <li>
+        <a href="#MIS3" data-toggle="tab">
+            Missing 3
+        </a>
+    </li>
+    <li>
+        <a href="#ENS" data-toggle="tab">
+            ENS
+        </a>
+    </li>
+    <li>
+        <a href="#ICE" data-toggle="tab">
+            Emergency 1
+        </a>
+    </li>
+    <li>
+        <a href="#ICE2" data-toggle="tab">
+            Emergency 2
+        </a>
+    </li>
+</ul>
+<div class="tab-content">
 {% for e in ens %}
-    <h4>Contact {{forloop.counter}}</h4>
-    <ul>
-        <li>{{e.line1}}</li>
-        <li>{{e.phone}}</li>
-    </ul>
+    <div class="tab-pane fade{% if forloop.first %} active in{% endif %}"
+        id="{{e.aa}}">
+        <h3>{{e.aa}}</h3>
+        <ul>
+            <li>{{e.line1}}</li>
+            <li>{{e.phone}}</li>
+        </ul>
+    </div>
 {% endfor %}
+</div>
