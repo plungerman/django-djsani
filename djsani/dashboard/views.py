@@ -25,7 +25,6 @@ from djmaidez.core.models import ENS_CODES
 
 EARL = settings.INFORMIX_EARL
 
-
 @group_required('MedicalStaff')
 def home(request):
     """
@@ -59,7 +58,7 @@ def get_students(request):
     if request.POST and (in_group(request.user,"MedicalStaff") \
       or request.user.is_superuser):
         sport = request.POST.get("sport")
-        sql = " %s WHERE prog_enr_rec.cl IN (%s)" % (
+        sql = " %s AND prog_enr_rec.cl IN (%s)" % (
             STUDENTS_ALPHA,request.POST["class"]
         )
         if sport and sport != '0':
