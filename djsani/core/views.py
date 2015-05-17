@@ -57,7 +57,8 @@ def set_type(request):
         2) if athlete, choose sport(s)
     Dashboard home
         1) immunization
-        2) Status (sitrep)
+        2) meni/hep
+        3) Status (sitrep)
     Dashboard student detail
         1) student or athlete
         2) if athlete, choose sport(s)

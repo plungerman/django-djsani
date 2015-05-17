@@ -14,10 +14,6 @@ from sqlalchemy import desc
 
 EARL = settings.INFORMIX_EARL
 
-import logging
-logger = logging.getLogger(__name__)
-
-
 def get_content_type(session, name):
     """
     simple function to return a content type from cache
