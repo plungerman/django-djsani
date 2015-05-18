@@ -33,6 +33,15 @@ column college_id   integer default 0 not null
         (
         )
 
+column manager_id   integer default 0 not null
+    comments        ""
+    desc            "Manager ID"
+    heading         "Manager ID"
+    text            "Manager ID"
+    attributes
+        (
+        )
+
 column created_at   datetime year to second default current year to second not null
     comments        ""
     desc            "Date the record was created"
@@ -491,6 +500,11 @@ column menstrual_cycle      varchar(255)
     attributes
         (
         )
+
+constraints
+    foreign key (manager_id) references cc_student_medical_manager(id)
+    on delete cascade
+    constraint cc_athlete_medical_history_fk_manager_id
 
 index               { Index names must be unique across database }
                     cc_athlete_medical_history01 on (id)

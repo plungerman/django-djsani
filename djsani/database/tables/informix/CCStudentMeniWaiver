@@ -33,6 +33,15 @@ column college_id   integer default 0 not null
         (
         )
 
+column manager_id   integer default 0 not null
+    comments        ""
+    desc            "Manager ID"
+    heading         "Manager ID"
+    text            "Manager ID"
+    attributes
+        (
+        )
+
 column created_at   datetime year to second default current year to second not null
     comments        ""
     desc            "The date when the record was created"
@@ -50,6 +59,11 @@ column agree        smallint
     attributes
         (
         )
+
+constraints
+    foreign key (manager_id) references cc_student_medical_manager(id)
+    on delete cascade
+    constraint cc_student_meni_waiver_fk_manager_id
 
 index               { Index names must be unique across database }
                     cc_student_meni_waiver01 on (id)
