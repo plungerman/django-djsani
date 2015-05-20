@@ -9,7 +9,7 @@ from djsani.emergency.models import AARec
 
 from djtools.utils.database import row2dict
 from djzbar.utils.informix import do_sql, get_session
-from djmaidez.core.models import ENS, MOBILE_CARRIER, RELATIONSHIP
+from djmaidez.core.models import ENS_CODES, MOBILE_CARRIER, RELATIONSHIP
 
 EARL = settings.INFORMIX_EARL
 
