@@ -14,6 +14,7 @@ class StudentMedicalHistory(Base):
     # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
+    manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     # medical history fields
     allergies_medical = Column(String)

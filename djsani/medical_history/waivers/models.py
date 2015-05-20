@@ -14,6 +14,7 @@ class Sicklecell(Base):
     # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
+    manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     updated_at = Column(DateTime, default=NOW, nullable=False)
     # waiver fields
@@ -36,6 +37,7 @@ class Meni(Base):
     # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
+    manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     # waiver fields
     agree = Column(Boolean)
@@ -55,6 +57,7 @@ class Risk(Base):
     # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
+    manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     # waiver fields
     agree = Column(Boolean)
@@ -74,6 +77,7 @@ class Reporting(Base):
     # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
+    manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     # waiver fields
     agree = Column(Boolean)
@@ -92,6 +96,7 @@ class Privacy(Base):
     # core
     id = Column(BigInteger, primary_key=True)
     college_id = Column(Integer, nullable=False)
+    manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     # waiver fields
     ncaa_tool = Column(Boolean)
