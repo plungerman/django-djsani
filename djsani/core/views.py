@@ -111,23 +111,24 @@ def set_type(request):
     action_flag = CHANGE
     if table:
         # retrieve the object based on table name
+        model = BASES[table]
         if table == "cc_athlete_sicklecell_waiver" \
           and getattr(man, "cc_athlete_sicklecell_waiver"):
-            obj = session.query(Sicklecell).\
+            obj = session.query(model).\
                 filter_by(college_id=cid).filter(\
                     (Sicklecell.proof == 1) | \
                     (Sicklecell.created_at > settings.START_DATE)\
                 ).first()
         else:
-            obj = session.query(BASES[table]).\
+            obj = session.query(model).\
                 filter_by(college_id=cid).\
-                filter(BASES[table].current(settings.START_DATE)).first()
+                filter(model.current(settings.START_DATE)).first()
 
         if not obj:
             dic["college_id"] = cid
             # insert/create new object
             action_flag = ADDITION
-            obj = BASES[table](**dic)
+            obj = model(**dic)
             session.add(obj)
             session.flush()
         else:
