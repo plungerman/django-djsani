@@ -97,13 +97,10 @@ column disclose_records    smallint
         (
         )
 
-constraints
-    foreign key (manager_id) references cc_student_medical_manager(id)
-    on delete cascade
-    constraint cc_athlete_privacy_waiver_fk_manager_id
-
 index               { Index names must be unique across database }
                     cc_athlete_privacy_waiver01 on (id)
+                    cc_athlete_privacy_waiver_college_id on (college_id)
+                    cc_athlete_privacy_waiver_manager_id on (manager_id)
 
 grant
     select  to (group carsprog, group registrar, group student)

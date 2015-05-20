@@ -402,11 +402,6 @@ column other_condition  varchar(255)
         (
         )
 
-constraints
-    foreign key (manager_id) references cc_student_medical_manager(id)
-    on delete cascade
-    constraint cc_student_medical_history_fk_manager_id
-
 index               { Index names must be unique across database }
                     cc_student_medical_history01 on (id)
 

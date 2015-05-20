@@ -223,13 +223,10 @@ column secondary_policy_address     varchar(255)
         (
         )
 
-constraints
-    foreign key (manager_id) references cc_student_medical_manager(id)
-    on delete cascade
-    constraint cc_student_health_insurance_fk_manager_id
-
 index           { Index names must be unique across database }
-                cc_student_health_insurance01 on (
+                cc_student_health_insurance01 on (id)
+                cc_student_health_insurance_college_id on (college_id)
+                cc_student_health_insurance_manager_id on (manager_id)
 
 grant
     select  to (group carsprog, group registrar, group student)
