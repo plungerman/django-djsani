@@ -19,6 +19,7 @@ class StudentHealthInsurance(Base):
     id = Column(BigInteger, primary_key=True)
     #college_id = Column(Integer, ForeignKey("id_rec.id"), nullable=False)
     college_id = Column(Integer, nullable=False)
+    manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     opt_out = Column(Boolean)
     # primary
