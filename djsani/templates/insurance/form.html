@@ -95,6 +95,10 @@ $(function() {
     if ($('#id_secondary_dob').val() == "None") {
         $('#id_secondary_dob').val("");
     }
+    // disable submit button after users clicks it
+    $('form#profile').submit(function(){
+        $(this).children('input[type=submit]').attr('disabled', 'disabled');
+    });
 });
 </script>
 {% endblock %}
