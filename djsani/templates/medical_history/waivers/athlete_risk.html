@@ -10,6 +10,8 @@
 $(function() {
     $('#risk_waive').submit(function() {
         if ($('#agree').is(':checked')) {
+            // disable submit
+            $(this).children('input[type=submit]').attr('disabled', 'disabled');
             return true;
         } else {
             alert('You must agree by checking the checkbox.');

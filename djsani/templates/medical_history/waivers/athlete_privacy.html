@@ -9,11 +9,12 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $('#privacy-waiver').submit(function() {
-        if ( $('#medical_insurance').is(':checked') &&
-             $('#disclose_records').is(':checked') ) {
+        if ( $('#disclose_records').is(':checked') ) {
+            // disable submit
+            $(this).children('input[type=submit]').attr('disabled', 'disabled');
             return true;
         } else {
-            alert('You must check the last two boxes in order to proceed.')
+            alert('You must check the "Disclose Records" box in order to proceed.')
             return false;
         }
     });

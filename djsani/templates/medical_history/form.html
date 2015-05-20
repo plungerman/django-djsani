@@ -99,8 +99,9 @@ $(document).ready(function() {
                     }
                 }
             }
-        }
-        if (error) {
+            // disable submit
+            $(this).children('input[type=submit]').attr('disabled', 'disabled');
+        } else {
             if(event.preventDefault) {
                 event.preventDefault();
             } else {
@@ -133,7 +134,7 @@ $(document).ready(function() {
     {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="medical-history">
         {% csrf_token %}
-        <div id="medical-history">
+        <div>
             <fieldset class="blockLabels">
                 <ol class="nobull">
                     {% if request.user.is_staff %}

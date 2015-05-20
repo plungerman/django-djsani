@@ -19,12 +19,16 @@ $(function() {
         if ($('input:checkbox', this).is(':checked')) {
             if ($('#proof').is(':checked')) {
                 if ($('input:radio', this).is(':checked')) {
+                    // disable submit
+                    $(this).children('input[type=submit]').attr('disabled', 'disabled');
                     return true;
                 } else {
                     alert('You must indicate "Positive or Negative" results');
                     return false;
                 }
             } else {
+                // disable submit
+                $(this).children('input[type=submit]').attr('disabled', 'disabled');
                 return true;
             }
         } else {
