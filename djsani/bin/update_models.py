@@ -22,12 +22,15 @@ from djsani.core.views import BASES
 
 from djzbar.utils.informix import get_session
 
+from sqlalchemy import exc
+
 import argparse
 
 """
 """
 
-EARL = settings.INFORMIX_EARL
+from djzbar.settings import INFORMIX_EARL_PROD as EARL
+#EARL = settings.INFORMIX_EARL
 
 # set up command-line options
 desc = """
@@ -55,12 +58,13 @@ def main():
 
     # create database session
     session = get_session(EARL)
-
+    print EARL
     model = BASES[table]
 
-    objects = session.query(model).all()
-    count = 0
-    print "select all tables: {}".format(table)
+    objects = session.query(model).order_by(model.id).all()
+    count = 1
+    error = False
+    print "select all from table: {}".format(table)
     for obj in objects:
         if test:
             try:
@@ -68,15 +72,27 @@ def main():
                     filter_by(college_id=obj.college_id).one()
                 count += 1
             except:
+                #pass
                 print "Error on manager with ID: {}".format(obj.college_id)
         else:
-            manager = session.query(StudentMedicalManager).\
-                filter_by(college_id=obj.college_id).one()
-            obj.manager_id = manager.id
-            count += 1
+            try:
+                manager = session.query(StudentMedicalManager).\
+                    filter_by(college_id=obj.college_id).one()
+                obj.manager_id = manager.id
+                count += 1
+            except exc.SQLAlchemyError as e:
+                print e
+                print obj
+                print count
+                error = True
+                session.rollback()
+                pass
+
     print count
 
-    session.commit()
+    if not error and not test:
+        session.commit()
+
     session.close()
 
 ######################
