@@ -87,8 +87,6 @@ SELECT
     cc_athlete_sicklecell_waiver.waive,
     cc_athlete_sicklecell_waiver.proof,
     cc_athlete_sicklecell_waiver.results,
-    cc_athlete_privacy_waiver.ncaa_tool,
-    cc_athlete_privacy_waiver.medical_insurance,
     cc_athlete_privacy_waiver.news_media,
     cc_athlete_privacy_waiver.parents_guardians,
     cc_athlete_privacy_waiver.disclose_records,
@@ -103,16 +101,10 @@ LEFT JOIN
     cvid_rec     ON  id_rec.id = cvid_rec.cx_id
 LEFT JOIN
     cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
-    AND
-        cc_student_medical_manager.created_at > "{}"
 LEFT JOIN
-    cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
-    AND
-        (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > "{}")
+    cc_athlete_sicklecell_waiver ON cc_student_medical_manager.id = cc_athlete_sicklecell_waiver.manager_id
 LEFT JOIN
-    cc_athlete_privacy_waiver ON id_rec.id = cc_athlete_privacy_waiver.college_id
-    AND
-        cc_athlete_privacy_waiver.created_at > "{}"
+    cc_athlete_privacy_waiver ON cc_student_medical_manager.id = cc_athlete_privacy_waiver.manager_id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN
@@ -121,3 +113,23 @@ LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
 """.format(START_DATE, START_DATE, START_DATE)
+
+ACADEMIC_YEAR = """
+SELECT
+    id_rec.lastname, id_rec.firstname,
+    cc_student_medical_manager.id,
+    cc_student_medical_manager.college_id,
+    cc_student_health_insurance.primary_policy_holder
+FROM
+    id_rec
+LEFT JOIN
+    cc_student_medical_manager
+  ON
+    id_rec.id = cc_student_medical_manager.college_id
+LEFT JOIN
+    cc_student_health_insurance
+  ON
+    cc_student_medical_manager.id = cc_student_health_insurance.manager_id
+WHERE
+    cc_student_medical_manager.college_id=
+"""
