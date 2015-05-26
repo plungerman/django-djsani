@@ -99,10 +99,8 @@ class Privacy(Base):
     manager_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     # waiver fields
-    ncaa_tool = Column(Boolean)
-    medical_insurance = Column(Boolean)
     news_media = Column(Boolean) # required False
-    parents_guardians = Column(Boolean)
+    parents_guardians = Column(Boolean) # required False
     disclose_records = Column(Boolean)
 
     def __repr__(self):
