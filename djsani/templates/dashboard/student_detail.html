@@ -83,10 +83,10 @@
             // value of the input field
             var $val = $dis.val();
             dict = {
-                'college_id': {{student.id}},
-                'switch': $val,
-                'field': $did,
-                'table': $table
+                'college_id':{{student.id|default:"0"}},
+                'switch':$val,
+                'field':$did,
+                'table':$table
             }
             $.ajax({
                 type: "POST",
@@ -107,6 +107,10 @@
             });
         });
 
+        $('#manager-switch').on('change', function() {
+            $(this).parent('form').submit();
+        });
+
         /* if waive, uncheck proof & vice-versa */
         $('#waive').on('change', function() {
             $('input').not(this).prop('checked', false);
@@ -121,9 +125,23 @@
                 $('#waive').prop('checked', false);
             }
         );
-
     });
     </script>
+{% endblock %}
+{% block manager %}
+<li>
+    <form action="." method="post">
+        {% csrf_token %}
+        <select name="manid" id="manager-switch">
+            <option value="">---Select Profile Year---</option>
+            {% for m in managers %}
+            <option value="{{m.id}}">
+                {{m.created_at|date:"Y F"}}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+</li>
 {% endblock %}
 {% block content %}
 <div id="student-container">
