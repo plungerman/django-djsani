@@ -26,8 +26,6 @@ from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
 import datetime
-import logging
-logger = logging.getLogger(__name__)
 
 """
 table names are the key, base model classes are the value
@@ -77,6 +75,7 @@ def set_type(request):
     field = request.POST.get("field")
     table = request.POST.get("table")
     switch = request.POST.get("switch")
+    pk = request.POST.get("pk")
 
     # create our dictionary to hold name/value pairs
     dic = {}
@@ -110,6 +109,7 @@ def set_type(request):
     # default action for Entry Log is a database update
     action_flag = CHANGE
     if table:
+        dic["manager_id"] = man.id
         # retrieve the object based on table name
         model = BASES[table]
         if table == "cc_athlete_sicklecell_waiver" \
@@ -121,8 +121,8 @@ def set_type(request):
                 ).first()
         else:
             obj = session.query(model).\
-                filter_by(college_id=cid).\
-                filter(model.current(settings.START_DATE)).first()
+                filter_by(id=pk).first()
+                #filter(model.current(settings.START_DATE)).first()
 
         if not obj:
             dic["college_id"] = cid
