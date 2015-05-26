@@ -11,6 +11,7 @@ from djsani.medical_history.forms import StudentMedicalHistoryForm
 from djsani.medical_history.forms import AthleteMedicalHistoryForm
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
+from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENTS_ALPHA, STUDENT_VITALS
 from djsani.core.utils import get_manager
 from djsani.emergency.models import AARec
@@ -24,6 +25,9 @@ from djtools.utils.users import in_group
 from djmaidez.core.models import ENS_CODES
 
 EARL = settings.INFORMIX_EARL
+
+import logging
+logger = logging.getLogger(__name__)
 
 @group_required('MedicalStaff')
 def home(request):
@@ -80,31 +84,36 @@ def get_students(request):
     else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
 
-def panels(request, session, mod, student):
+def panels(request, session, mod, manager, gender=None):
     """
-    Accepts a data model class and student object.
+    Accepts a data model class, manager object, optional gender.
     Returns the template data that paints the panels in the
     student detail view.
     """
     form = None
     data = None
     mname = mod.__name__
-
-    obj = session.query(mod).filter_by(college_id=student.id).\
-        filter(mod.current(settings.START_DATE)).first()
+    """
+    try:
+        obj = session.query(mod).filter_by(manager_id=manager.id).one()
+    except:
+        obj = None
+    """
+    manid = manager.id
+    obj = session.query(mod).filter_by(manager_id=manid).first()
     if obj:
         data = row2dict(obj)
-        if mod == StudentMedicalHistory or mod == AthleteMedicalHistory:
+        if gender:
             form = str_to_class(
                 "djsani.medical_history.forms",
                 "{}Form".format(mname)
-            )(initial=data, gender=student.sex)
+            )(initial=data, gender=gender)
     t = loader.get_template("dashboard/panels/{}.html".format(mname))
     c = RequestContext(request, {'data':data,'form':form})
     return t.render(c)
 
 @group_required('MedicalStaff')
-def student_detail(request,cid=None,content=None):
+def student_detail(request, cid=None, content=None):
     """
     main method for displaying student data
     """
@@ -116,13 +125,22 @@ def student_detail(request,cid=None,content=None):
         # search form
         cid = request.POST.get("cid")
     if cid:
-        # get manager, just to be certain it exists
+        manid = request.POST.get("manid")
         session = get_session(EARL)
-        man = get_manager(session, cid)
+        # get managers
+        managers = session.query(StudentMedicalManager).\
+                filter_by(college_id=cid).all()
+        if manid:
+            manager = session.query(StudentMedicalManager).\
+                filter_by(id=manid).one()
+        else:
+            manager = get_manager(session, cid)
         # get student
         obj = do_esql(
-            "{} WHERE id_rec.id = '{}'".format(STUDENT_VITALS,cid),
-            key=settings.INFORMIX_DEBUG,earl=EARL
+            "{} WHERE cc_student_medical_manager.id = '{}'".format(
+                STUDENT_VITALS, manager.id
+            ),
+            key=settings.INFORMIX_DEBUG, earl=EARL
         )
         if obj:
             student = obj.fetchone()
@@ -134,13 +152,13 @@ def student_detail(request,cid=None,content=None):
                 ens = session.query(AARec).filter_by(id=cid).\
                     filter(AARec.aa.in_(ENS_CODES)).all()
                 shi = panels(
-                    request, session, StudentHealthInsurance, student
+                    request, session, StudentHealthInsurance, manager
                 )
                 smh = panels(
-                    request, session, StudentMedicalHistory, student
+                    request, session, StudentMedicalHistory, manager, student.sex
                 )
                 amh = panels(
-                    request, session, AthleteMedicalHistory, student
+                    request, session, AthleteMedicalHistory, manager, student.sex
                 )
                 # used for staff who update info on the dashboard
                 stype = "student"
@@ -161,7 +179,7 @@ def student_detail(request,cid=None,content=None):
                     "shi":shi,"amh":amh,"smh":smh,"cid":cid,
                     "switch_earl": reverse_lazy("set_type"),
                     "sports":sports, "my_sports":my_sports,
-                    "stype":stype
+                    "stype":stype,"managers":managers
                 },
                 context_instance=RequestContext(request)
             )
