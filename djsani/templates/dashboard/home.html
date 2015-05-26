@@ -240,6 +240,7 @@
 {% endblock %}
 {% block navbar-top-links %}
     <ul class="nav navbar-top-links navbar-right">
+        {% block manager %}{% endblock %}
         <li>
             <a href="{% if not request.session.desktop_mode %}{% url 'responsive_switch' "go" %}{% else %}{% url 'responsive_switch' "leave" %}{% endif %}/">{% if not request.session.desktop_mode %}Go to Desktop mode{% else %}Leave Desktop mode{% endif %}</a>
         </li>
