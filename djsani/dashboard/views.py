@@ -109,7 +109,7 @@ def panels(request, session, mod, manager, gender=None):
                 "{}Form".format(mname)
             )(initial=data, gender=gender)
     t = loader.get_template("dashboard/panels/{}.html".format(mname))
-    c = RequestContext(request, {'data':data,'form':form})
+    c = RequestContext(request, {'data':data,'form':form,'manager':manager})
     return t.render(c)
 
 @group_required('MedicalStaff')
@@ -125,6 +125,7 @@ def student_detail(request, cid=None, content=None):
         # search form
         cid = request.POST.get("cid")
     if cid:
+        # profile switcher POST from form
         manid = request.POST.get("manid")
         session = get_session(EARL)
         # get managers
@@ -179,7 +180,7 @@ def student_detail(request, cid=None, content=None):
                     "shi":shi,"amh":amh,"smh":smh,"cid":cid,
                     "switch_earl": reverse_lazy("set_type"),
                     "sports":sports, "my_sports":my_sports,
-                    "stype":stype,"managers":managers
+                    "stype":stype,"managers":managers,"manager":manager
                 },
                 context_instance=RequestContext(request)
             )
