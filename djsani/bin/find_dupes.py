@@ -31,7 +31,9 @@ EARL = settings.INFORMIX_EARL
 
 # set up command-line options
 desc = """
-Accepts as input a student's college ID
+Accepts as input database table name related to medical forms:
+
+python find_dupes.py --table=cc_student_meni_waiver
 """
 
 parser = OptionParser(description=desc)
