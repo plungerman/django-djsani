@@ -12,13 +12,14 @@
     <div>
 {% endif %}
 <form style="float:left;">
-    <input type="checkbox" id="opt_out" class="set-type"
+    <input type="checkbox" class="set-val" name="opt_out"
         {% if data.opt_out == "True" %}
         value="0"
         checked="checked"
         {% else %}
         value="1"
         {% endif %}
+        data-pk="{{data.id}}"
         data-table="cc_student_health_insurance" />
 </form>
 <p>

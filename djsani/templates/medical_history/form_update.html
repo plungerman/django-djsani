@@ -46,7 +46,7 @@ $(document).ready(function() {
     /* x-editable jquery plugin */
     $.fn.editable.defaults.mode = 'inline';
     $('.xeditable').editable({
-        url: "{% url 'set_type' %}",
+        url: "{% url 'set_val' %}",
         emptytext: "Click to edit",
         params: function (params) {
             params.table = $(this).attr("data-table");
