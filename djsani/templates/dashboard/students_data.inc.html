@@ -2,15 +2,16 @@
     <table class="dataTable display table-bordered table-hover" id="students-data">
         <thead>
             <tr>
-                <th><i class="fa fa-thumbs-up green"></i></th>
+                <th><i class="fa fa-thumbs-up green" title="Status"></i></th>
                 <th>Name</th>
+                <th><i class="fa fa-ambulance green" title="emergency contact"></i></th>
                 <th>Immun</th>
                 <th>Insur</th>
                 <th>Meni/Hep B</th>
-                <th>Med hist</th>
-                <th>Ath med hist</th>
+                <th>Gen history</th>
+                <th>Ath history</th>
                 <th>Privacy</th>
-                <th>Sickle</th>
+                <th>Sickle></i></th>
                 <th>Reporting</th>
                 <th>Risk</th>
             </tr>
@@ -24,8 +25,13 @@
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
+                        {% if s.manid %}
                         <input type="checkbox" name="sitrep"
-                            id="sitrep_{{s.id}}" value="{{s.id}}" />
+                            data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                            data-table="cc_student_medical_manager" />
+                        {% else %}
+                            <i class="fa fa-times red"></i>
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td class="{{s.adult}}" style="text-align:left;">
@@ -34,8 +40,17 @@
                     </a>
                     {% if s.athlete %}
                     <span style="float:right;">
-                    <i class="fa fa-star green"></i>
+                        <i class="fa fa-star green"></i>
                     </span>
+                    {% endif %}
+                </td>
+                <td class="{{s.adult}}">
+                    {% if s.emergency_contact %}
+                        <i class="fa fa-check">
+                            <span style="display:none;">x</span>
+                        </i>
+                    {% else %}
+                        <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
                 <td class="{{s.adult}}">
@@ -44,8 +59,13 @@
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
+                        {% if s.manid %}
                         <input type="checkbox" name="cc_student_immunization"
-                            id="immun_{{s.id}}" value="{{s.id}}" />
+                            data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                            data-table="cc_student_medical_manager" />
+                        {% else %}
+                            <i class="fa fa-times red"></i>
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td class="{{s.adult}}">
@@ -63,9 +83,13 @@
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
-                        <input type="checkbox" name="agree"
-                            data-table="cc_student_meni_waiver"
-                            id="meni_{{s.id}}" value="{{s.id}}">
+                        {% if s.manid %}
+                        <input type="checkbox" name="agree" value="1"
+                            data-cid="{{s.id}}" data-pk=""
+                            data-table="cc_student_meni_waiver">
+                        {% else %}
+                            <i class="fa fa-times red"></i>
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td class="{{s.adult}}">
@@ -120,9 +144,13 @@
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
-                        <input type="checkbox" name="agree"
-                            data-table="cc_athlete_reporting_waiver"
-                            id="reportings_{{s.id}}" value="{{s.id}}">
+                        {% if s.manid %}
+                        <input type="checkbox" name="agree" value="1"
+                            data-cid="{{s.id}}" data-pk=""
+                            data-table="cc_athlete_reporting_waiver">
+                        {% else %}
+                            <i class="fa fa-times red"></i>
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td class="{{s.adult}}">
@@ -131,9 +159,13 @@
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
-                        <input type="checkbox" name="agree"
-                            data-table="cc_athlete_risk_waiver"
-                            id="risk_{{s.id}}" value="{{s.id}}">
+                       {% if s.manid %}
+                        <input type="checkbox" name="agree" value="1"
+                            data-cid="{{s.id}}" data-pk=""
+                            data-table="cc_athlete_risk_waiver">
+                        {% else %}
+                            <i class="fa fa-times red"></i>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
