@@ -56,13 +56,11 @@
         /* x-editable jquery plugin: pronounced 'sheditable' */
         $.fn.editable.defaults.mode = 'inline';
         $('.xeditable').editable({
-            url: "{% url 'set_type' %}",
+            url: "{% url 'set_val' %}",
             emptytext: "Click to edit",
             params: function (params) {
                 params.table = $(this).attr("data-table");
                 params.college_id = {{student.id|default:"0"}};
-                params.switch = params.value;
-                params.field = params.name;
                 return params
             },
             success: function(response, newValue) {
@@ -73,36 +71,39 @@
         /* multiple select picker */
         $('#sports').selectpicker();
 
-        /* generic function to update various models */
-        $('.set-type').on('change', function() {
+        /* function to update a name/value pair for models */
+        $('.set-val').on('change', function() {
             var $dis = $(this);
-            // database table name
-            var $table = $dis.attr("data-table");
-            // DOM id is the field name
-            var $did = $dis.attr("id");
-            // value of the input field
-            var $val = $dis.val();
+            var $name = $dis.attr("name");
             dict = {
                 'college_id':{{student.id|default:"0"}},
-                'switch':$val,
-                'field':$did,
-                'table':$table
+                'value': $dis.val(),
+                'name': $name,
+                'table': $(this).attr("data-table"),
+                'pk': $(this).attr("data-pk")
             }
             $.ajax({
                 type: "POST",
-                url: "{% url 'set_type' %}",
+                url: "{% url 'set_val' %}",
                 data: dict,
-                dataType: 'json',
                 cache: false,
                 beforeSend: function(){
                     spinner.spin(target);
                 },
                 success: function(data) {
                     spinner.stop(target);
-                    $.growlUI('Success', "Data saved.");
-                    if ( $did == "athlete" || $did == "opt_out" || $did == "proof" || $did == "waive" ) {
-                        window.location.reload(true);
+                    if (data == "success") {
+                        $.growlUI('Success', "Data saved.");
+                        if ( $name == "athlete" || $name == "opt_out" ) {
+                            window.location.reload(true);
+                        }
+                    } else {
+                        $.growlUI('Error', data);
                     }
+                },
+                error: function(data) {
+                    spinner.stop(target);
+                    $.growlUI('Error', data);
                 }
             });
         });
@@ -132,10 +133,12 @@
 <li>
     <form action="." method="post">
         {% csrf_token %}
+        Year:
         <select name="manid" id="manager-switch">
             <option value="">---Select Profile Year---</option>
             {% for m in managers %}
-            <option value="{{m.id}}">
+            <option value="{{m.id}}"
+                {% if m.id == manager.id %}selected="selected"{% endif %}>
                 {{m.created_at|date:"Y F"}}
             </option>
             {% endfor %}
@@ -157,10 +160,10 @@
                 </small>
                 <form id="profile" class="form">
                     {% if student.athlete %}
-                    <select name="sports" class="selectpicker set-type"
-                        id="sports" size="5"
-                        multiple="multiple"
-                        title="Choose sport(s)&hellip;">
+                    <select name="sports" class="selectpicker set-val"
+                        id="sports" size="5" data-pk="{{manager.id}}"
+                        data-table="cc_student_medical_manager"
+                        multiple="multiple" title="Choose sport(s)&hellip;">
                         {% for s in sports %}
                         {% if not forloop.first %}
                         <option
@@ -179,8 +182,9 @@
                     </select>
                     {% endif %}
                     <small> Athlete: </small>
-                    <input type="checkbox" name="athlete" class="set-type"
-                        id="athlete"
+                    <input type="checkbox" name="athlete" class="set-val"
+                        data-table="cc_student_medical_manager"
+                        data-pk="{{manager.id}}"
                     {% if student.athlete %}
                         value="0"
                         checked="checked"
@@ -192,8 +196,9 @@
             </h1>
             <h3>
                 Immunization status:
-                <input type="checkbox" name="immun" class="set-type"
-                        id="cc_student_immunization"
+                <input type="checkbox" name="cc_student_immunization"
+                    class="set-val" data-pk="{{manager.id}}"
+                    data-table="cc_student_medical_manager"
                 {% if student.cc_student_immunization %}
                         value="0"
                         checked="checked"
