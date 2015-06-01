@@ -57,7 +57,7 @@ urlpatterns = patterns('djsani.core.views',
     ),
     # ajax post method to save various types characteristics to db and session
     url(
-        r'^set-type/$', 'set_type', name="set_type"
+        r'^set-val/$', 'set_val', name="set_val"
     ),
     # home
     url(
