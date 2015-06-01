@@ -30,111 +30,102 @@ import datetime
 """
 table names are the key, base model classes are the value
 """
-BASES = {
-    "cc_student_health_insurance": StudentHealthInsurance,
-    "cc_student_medical_manager": StudentMedicalManager,
-    "cc_student_medical_history": StudentMedicalHistory,
-    "cc_athlete_medical_history": AthleteMedicalHistory,
+
+WAIVERS = {
     "cc_student_meni_waiver": Meni,
     "cc_athlete_privacy_waiver": Privacy,
     "cc_athlete_reporting_waiver": Reporting,
     "cc_athlete_risk_waiver": Risk,
     "cc_athlete_sicklecell_waiver": Sicklecell,
 }
+BASES = {
+    "cc_student_medical_manager": StudentMedicalManager,
+    "cc_student_health_insurance": StudentHealthInsurance,
+    "cc_student_medical_history": StudentMedicalHistory,
+    "cc_athlete_medical_history": AthleteMedicalHistory,
+}
+
+BASES.update(WAIVERS)
 
 EARL = settings.INFORMIX_EARL
 
 @csrf_exempt
 @login_required
-def set_type(request):
+def set_val(request):
     """
-    Ajax POST. Locations in use:
+    Ajax POST for to set a single name/value pair, used mostly for
+    jquery xeditable and ajax updates for student medical manager.
 
-    Student home
-        1) choose student or athlete
-        2) if athlete, choose sport(s)
-    Dashboard home
-        1) immunization
-        2) meni/hep
-        3) Status (sitrep)
-    Dashboard student detail
-        1) student or athlete
-        2) if athlete, choose sport(s)
-        3) insurance opt-out
-        4) all waivers
+    Requires via POST:
+
+    college_id
+    name (database field)
+    value
+    pk (primary key of object to be updated)
+    table
     """
+
     staff = in_group(request.user, "MedicalStaff")
 
-    # we need a college ID and insure no funny stuff
+    # we need a college ID to insure no funny stuff
     cid = request.POST.get("college_id")
     if not cid:
         return HttpResponse("Error")
-    if not staff and int(cid) != request.user.id:
+    elif not staff and int(cid) != request.user.id:
         return HttpResponse("Not staff")
-
-    field = request.POST.get("field")
-    table = request.POST.get("table")
-    switch = request.POST.get("switch")
-    pk = request.POST.get("pk")
-
-    # create our dictionary to hold name/value pairs
-    dic = {}
-
-    # if student has sickle cell test results then
-    # proof is True and waive is False
-    if field[0:7] == "results":
-        field = "results"
-        dic["proof"] = 1
-        dic["waive"] = 0
-        dic["updated_at"] = datetime.datetime.now()
-
-    # sports field is a list
-    if field == "sports":
-        switch = ','.join(request.POST.getlist("switch[]"))
-
-
-    # if we switch from athlete then remove sports
-    if field == "athlete" and switch == "0":
-        dic["sports"] = ""
-
-    # set name/value
-    dic[field] = switch
-
-    # create database session
-    session = get_session(EARL)
-
-    # retrieve student manager record
-    man = get_manager(session, cid)
-
-    # default action for Entry Log is a database update
-    action_flag = CHANGE
-    if table:
-        dic["manager_id"] = man.id
-        # retrieve the object based on table name
-        model = BASES[table]
-        if table == "cc_athlete_sicklecell_waiver" \
-          and getattr(man, "cc_athlete_sicklecell_waiver"):
-            obj = session.query(model).\
-                filter_by(college_id=cid).filter(\
-                    (Sicklecell.proof == 1) | \
-                    (Sicklecell.created_at > settings.START_DATE)\
-                ).first()
+    else:
+        # name/value pair
+        name = request.POST.get("name")
+        # sports field is a list
+        if name == "sports":
+            value = ','.join(request.POST.getlist("value[]"))
         else:
-            obj = session.query(model).\
-                filter_by(id=pk).first()
-                #filter(model.current(settings.START_DATE)).first()
+            value = request.POST.get("value")
 
-        if not obj:
+        # table name
+        table = request.POST.get("table")
+        # primary key
+        pk = request.POST.get("pk")
+        # create our dictionary to hold name/value pairs
+        dic = { name: value }
+        if table == "cc_athlete_sicklecell_waiver" and name == "results":
+            dic["proof"] = 1
+        # create database session
+        session = get_session(EARL)
+        # retrieve student manager
+        man = get_manager(session, cid)
+
+        if WAIVERS.get(table) and not pk:
+            # create new waiver
             dic["college_id"] = cid
-            # insert/create new object
-            action_flag = ADDITION
-            obj = model(**dic)
+            dic["manager_id"] = man.id
+            obj = WAIVERS[table](**dic)
             session.add(obj)
+            setattr(man, table, value)
             session.flush()
         else:
-            # update existing object
-            for key, value in dic.iteritems():
-                setattr(obj, key, value)
+            model = BASES[table]
+            obj = session.query(model).\
+                filter_by(id=pk).first()
+            if not obj:
+                return HttpResponse(
+                    "No object found associated with ID: {}".format(pk),
+                    content_type="text/plain; charset=utf-8"
+                )
+            else:
+                if name == "athlete" and value == "0":
+                    dic["sports"] = ""
+                # update existing object
+                for key, value in dic.iteritems():
+                    setattr(obj, key, value)
+
+            # if waiver, updated manager table
+            if WAIVERS.get(table):
+                # set value = 1 if field name = "results" since that value is
+                # either Positive or Negative
+                if table == "cc_athlete_sicklecell_waiver" and name == "results":
+                    value = 1
+                setattr(man, table, value)
 
         # update the log entry for staff modifications
         if staff:
@@ -146,29 +137,18 @@ def set_type(request):
                 "content_type_id": get_content_type(session, table).id,
                 "object_id": obj.id,
                 "object_repr": "{}".format(obj),
-                "action_flag": action_flag,
+                "action_flag": CHANGE,
                 "action_message": message
             }
             obj = StudentMedicalLogEntry(**log)
             session.add(obj)
-        # new data for the student medical manager
-        if action_flag == ADDITION:
-            dic = {table:1,"college_id":cid}
-            obj = man
-        else:
-            obj = None
-    else:
-        obj = man
 
-    # update the student medical manager
-    if obj:
-        for key, value in dic.iteritems():
-            setattr(obj, key, value)
+        session.commit()
+        session.close()
 
-    session.commit()
-    session.close()
-
-    return HttpResponse(switch, content_type="text/plain; charset=utf-8")
+        return HttpResponse(
+            "success", content_type="text/plain; charset=utf-8"
+        )
 
 
 @login_required
@@ -221,7 +201,7 @@ def home(request):
 
         # context dict
         data = {
-            "switch_earl": reverse_lazy("set_type"),
+            "switch_earl": reverse_lazy("set_val"),
             "student":student,
             "manager":manager,
             "sports":sports,
