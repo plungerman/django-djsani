@@ -22,6 +22,7 @@ from djtools.utils.convert import str_to_class
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
+from djtools.fields import NEXT_YEAR
 from djmaidez.core.models import ENS_CODES
 
 EARL = settings.INFORMIX_EARL
@@ -178,8 +179,8 @@ def student_detail(request, cid=None, content=None):
                 {
                     "student":student,"age":age,"ens":ens,
                     "shi":shi,"amh":amh,"smh":smh,"cid":cid,
-                    "switch_earl": reverse_lazy("set_type"),
-                    "sports":sports, "my_sports":my_sports,
+                    "switch_earl":reverse_lazy("set_val"),
+                    "sports":sports,"my_sports":my_sports,"next_year":NEXT_YEAR,
                     "stype":stype,"managers":managers,"manager":manager
                 },
                 context_instance=RequestContext(request)
