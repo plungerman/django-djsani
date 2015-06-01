@@ -41,27 +41,27 @@ $(function() {
     $("a.ens-link").click(function() {
         makeDialog();
     });
-    // set student types
-    function setType(interruptor,field) {
+    // set name/value pairs
+    function setVal(name, value) {
         var $data = {
             "college_id": {{request.user.id}},
-            "switch": interruptor,
-            "field": field
+            "table": "cc_student_medical_manager",
+            "pk": {{manager.id}},
+            "name": name,
+            "value": value
         };
         $.ajax({
             type: "POST",
             async: true,
-            url:  '{{switch_earl}}',
-            dataType: 'html',
+            url:  "{{switch_earl}}",
+            dataType: "html",
             data: $data
         });
     }
     // multiple select picker
     $('#id_sports').selectpicker();
-    //$('#id_sports').selectpicker('val', ['Mustard','Relish']);
     $('#id_sports').on('change', function(){
-        $this = $(this).val();
-        setType($this,"sports");
+        setVal( "sports", $(this).val() );
     });
 
     {% if adult %}
@@ -85,19 +85,18 @@ $(function() {
     $("#sports-container").delay(200).slideDown(200);
     {% endif %}
     $stypes.change(function() {
-        $this = $(this).val();
-        if ($this == "0") {
-            setType($this,"athlete");
+        $val = $(this).val();
+        if ($val == "0") {
             $athlete.slideUp(200);
             $("#sports-container").slideUp(200);
             $student.delay(200).slideDown(200);
         }
-        else if ($this == "1") {
-            setType($this,"athlete");
+        else if ($val == "1") {
             $student.slideUp(200);
             $athlete.delay(200).slideDown(200);
             $("#sports-container").delay(200).slideDown(200);
         }
+        setVal("athlete", $val);
     });
 });
 </script>
@@ -178,7 +177,8 @@ $(function() {
                     (use the Ctrl or Command key to select multiple sports)
                 </small>
             </h4>
-            <select name="sports" class="selectpicker" id="id_sports" size="5"
+            <select name="sports" class="selectpicker"
+                id="id_sports" size="5"
                 multiple="multiple" title="Choose your sport(s)&hellip;">
                 {% for s in sports %}
                 {% if not forloop.first %}
