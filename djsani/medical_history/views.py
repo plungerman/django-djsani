@@ -21,8 +21,6 @@ EARL = settings.INFORMIX_EARL
 def form(request,stype):
     # dictionary for initial values if "update" else empty
     init = {}
-    # dictionary for 'yes' answer values
-    data = {}
     # student id
     cid = request.user.id
     # student gender
@@ -54,7 +52,10 @@ def form(request,stype):
     obj = session.query(model).filter_by(college_id=cid).\
         filter(model.current(settings.START_DATE)).first()
 
+    # dictionary for 'yes' answer values
+    data = {}
     if obj:
+        data["id"] = obj.id
         # if current update then use the xeditable form
         # otherwise we have data from the previous year but
         # the student needs to verify it
