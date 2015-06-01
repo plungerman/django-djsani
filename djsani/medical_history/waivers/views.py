@@ -53,6 +53,7 @@ def form(request, stype, wtype):
             data = form.cleaned_data
             # insert
             data["college_id"] = cid
+            data["manager_id"] = manager.id
 
             if student:
                 if wtype == "sicklecell":
