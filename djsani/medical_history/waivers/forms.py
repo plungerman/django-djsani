@@ -44,7 +44,7 @@ class SicklecellForm(forms.Form):
 
 class PrivacyForm(forms.Form):
     news_media = forms.BooleanField(required=False)
-    parents_guardians = forms.BooleanField()
+    parents_guardians = forms.BooleanField(required=False)
     disclose_records = forms.BooleanField()
 
 class ReportingForm(forms.Form):
