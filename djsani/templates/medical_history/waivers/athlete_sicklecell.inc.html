@@ -25,12 +25,13 @@
             </p>
         {% endif %}
         <div class="large-1 col-lg-1">
-                <input id="proof" type="checkbox" name="proof" class="set-type"
+                <input id="proof" type="checkbox" name="proof" class="set-val"
                 {% if student.proof %}
                     checked="checked" value="0"
                 {% else %}
                     value="1"
                 {% endif %}
+                data-pk="{{student.sickle_id|default:''}}"
                 data-table="cc_athlete_sicklecell_waiver" />
         </div>
         <div class="large-11 col-lg-11">
@@ -49,7 +50,8 @@
                 <ul>
                     <li>
                         <input id="results_1" type="radio" name="results"
-                            class="set-type" value="Positive"
+                            class="set-val" value="Positive"
+                            data-pk="{{student.sickle_id|default:''}}"
                             data-table="cc_athlete_sicklecell_waiver" />
                         <label for="results_1">
                             <i class="fa green fa-plus"></i>
@@ -57,7 +59,8 @@
                     </li>
                     <li>
                         <input id="results_0" type="radio" name="results"
-                            class="set-type" value="Negative"
+                            class="set-val" value="Negative"
+                            data-pk="{{student.sickle_id|default:''}}"
                             data-table="cc_athlete_sicklecell_waiver" />
                         <label for="results_0">
                             <i class="fa green fa-minus"></i>
@@ -67,7 +70,7 @@
             {% endif %}
         </div>
         <div class="large-1 col-lg-1">
-            <input id="waive" type="checkbox" name="waive" class="set-type"
+            <input id="waive" type="checkbox" name="waive" class="set-val"
             {% if student.waive %}
                 checked="checked" value="0"
             {% else %}
@@ -77,6 +80,7 @@
                 value="1"
                 {% endif %}
             {% endif %}
+            data-pk="{{student.sickle_id|default:''}}"
             data-table="cc_athlete_sicklecell_waiver" />
         </div>
         <div class="large-11 col-lg-11">

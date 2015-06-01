@@ -2,7 +2,7 @@
 <div class="large-12 col-lg-12">
     {% if form.errors %}
     <p class="error">
-        The last two checkboxes are required.
+        The last checkbox is required.
     </p>
     {% endif %}
     {% get_lw_content as preable blurbs 2022 %}
@@ -12,13 +12,14 @@
         of your (PHI) in each category:
     </h4>
     <div class="large-1 col-lg-1">
-        <input id="news_media" type="checkbox" name="news_media"
+        <input type="checkbox" name="news_media" class="set-val"
         {% if student.news_media %}
             checked="checked" value="0"
         {% else %}
             value="1"
         {% endif %}
-        data-table="cc_athlete_privacy_waiver" class="set-type" />
+        data-table="cc_athlete_privacy_waiver"
+        data-pk="{{student.privacy_id|default:''}}">
     </div>
     <div class="large-11 col-lg-11">
         <label for="privacy_news_media">
@@ -27,13 +28,14 @@
         </label>
     </div>
     <div class="large-1 col-lg-1">
-        <input id="parents_guardians" type="checkbox" name="parents_guardians"
+        <input type="checkbox" name="parents_guardians" class="set-val"
         {% if student.parents_guardians %}
             checked="checked" value="0"
         {% else %}
             value="1"
         {% endif %}
-        data-table="cc_athlete_privacy_waiver" class="set-type" />
+        data-table="cc_athlete_privacy_waiver"
+        data-pk="{{student.privacy_id|default:''}}">
     </div>
     <div class="large-11 col-lg-11">
         <label for="privacy_parents_guardians">
@@ -42,13 +44,14 @@
         </label>
     </div>
     <div class="large-1 col-lg-1">
-        <input id="disclose_records" type="checkbox" name="disclose_records"
+        <input type="checkbox" name="disclose_records" class="set-val"
         {% if student.disclose_records %}
             checked="checked" value="0"
         {% else %}
             value="1"
         {% endif %}
-        data-table="cc_athlete_privacy_waiver" class="set-type" />
+        data-table="cc_athlete_privacy_waiver"
+        data-pk="{{student.privacy_id|default:''}}">
     </div>
     <div class="large-11 col-lg-11">
         <label for="privacy_disclose_records">

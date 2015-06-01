@@ -19,7 +19,8 @@
     {% else %}
         value="1"
     {% endif %}
-    data-table="cc_athlete_risk_waiver" class="set-type" />
+    data-pk="{{student.risk_id|default:''}}"
+    data-table="cc_athlete_risk_waiver" class="set-val" />
     <label for="id_agree" style="display:inline;">
     I hereby acknowledge that I have read, understand and will
     abide by each of the terms and conditions of this

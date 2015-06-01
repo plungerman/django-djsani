@@ -13,7 +13,8 @@
     {% else %}
         value="1"
     {% endif %}
-    data-table="cc_athlete_reporting_waiver" class="set-type" />
+    data-pk="{{student.reporting_id|default:''}}"
+    data-table="cc_athlete_reporting_waiver" class="set-val" />
     <label for="id_agree" style="display:inline;">
     I have read the above and agree that the statements are
     accurate.
