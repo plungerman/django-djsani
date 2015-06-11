@@ -159,8 +159,13 @@
                                 },
                                 success: function(data) {
                                     spinner.stop(target);
-                                    check ='<i class="fa fa-check"></i>';
-                                    $dis.replaceWith(check);
+                                    if (data == "success") {
+                                        check ='<i class="fa fa-check"></i>';
+                                        $dis.replaceWith(check);
+                                        $.growlUI('Success', "Data saved.");
+                                    } else {
+                                        $.growlUI('Error', data);
+                                    }
                                 },
                                 error: function(data) {
                                     spinner.stop(target);
@@ -204,8 +209,13 @@
                 },
                 success: function(data) {
                     spinner.stop(target);
-                    check ='<i class="fa fa-check"></i>';
-                    $dis.replaceWith(check);
+                    if (data == "success") {
+                        check ='<i class="fa fa-check"></i>';
+                        $dis.replaceWith(check);
+                        $.growlUI('Success', "Data saved.");
+                    } else {
+                        $.growlUI('Error', data);
+                    }
                 },
                 error: function(data) {
                     spinner.stop(target);
