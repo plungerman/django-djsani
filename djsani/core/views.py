@@ -160,6 +160,10 @@ def home(request):
     adult = False
 
     engine = get_engine(EARL)
+    try:
+        engine.execute("SET LOCK MODE TO WAIT")
+    except:
+        pass
     # get student
     obj = engine.execute(
         "%s WHERE id_rec.id = '%s'" % (STUDENT_VITALS,cid)
