@@ -74,6 +74,7 @@ def form(request, stype, cid=None):
         if not request.POST.get("update"):
             # insert
             form["college_id"] = cid
+            form["manager_id"] = manager.id
             s = StudentHealthInsurance(**form)
             session.add(s)
         else:
