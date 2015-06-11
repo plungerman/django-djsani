@@ -7,7 +7,7 @@ from django.template import Context, RequestContext, loader
 from djsani.emergency.models import AARec
 
 from djtools.utils.database import row2dict
-from djzbar.utils.informix import do_sql, get_session
+from djzbar.utils.informix import get_session
 from djmaidez.core.models import ENS_CODES, MOBILE_CARRIER, RELATIONSHIP
 
 EARL = settings.INFORMIX_EARL
