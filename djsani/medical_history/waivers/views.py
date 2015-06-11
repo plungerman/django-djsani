@@ -51,16 +51,16 @@ def form(request, stype, wtype):
         form = fname(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            # insert
-            data["college_id"] = cid
-            data["manager_id"] = manager.id
 
             if student:
-                if wtype == "sicklecell":
-                    data["updated_at"] = datetime.datetime.now()
+                # update student's sicklecell waiver record
+                data["updated_at"] = datetime.datetime.now()
                 for key, value in data.iteritems():
                     setattr(student, key, value)
             else:
+                # insert
+                data["college_id"] = cid
+                data["manager_id"] = manager.id
                 model = str_to_class(
                     "djsani.medical_history.waivers.models",
                     wtype.capitalize()
