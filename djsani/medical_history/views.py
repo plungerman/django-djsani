@@ -69,9 +69,10 @@ def form(request,stype):
         form = fclass(post, gender=gender)
         if form.is_valid():
             data = form.cleaned_data
-            data["college_id"] = cid
             # insert else update
             if not obj:
+                data["college_id"] = cid
+                data["manager_id"] = manager.id
                 # set 'yes' responses with value from temp field
                 for n,v in data.items():
                     if v == "Yes":
