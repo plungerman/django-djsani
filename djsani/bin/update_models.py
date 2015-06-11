@@ -105,7 +105,7 @@ if __name__ == "__main__":
     test = args.test
 
     if not table:
-        print "mandatory option is missing: %s\n" % m
+        print "mandatory option is missing: table name\n"
         parser.print_help()
         exit(-1)
     sys.exit(main())
