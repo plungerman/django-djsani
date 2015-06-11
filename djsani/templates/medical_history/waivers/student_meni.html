@@ -8,7 +8,7 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $('#meni_waive').submit(function() {
-        if ($('#id_agree').is(':checked')) {
+        if ( $("input[name='agree']").is(':checked') ) {
             // disable submit
             $(this).children('input[type=submit]').attr('disabled', 'disabled');
             return true;
