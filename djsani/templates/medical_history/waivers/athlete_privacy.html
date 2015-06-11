@@ -9,7 +9,7 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $('#privacy-waiver').submit(function() {
-        if ( $('#disclose_records').is(':checked') ) {
+        if ( $("input[name='disclose_records']").is(':checked') ) {
             // disable submit
             $(this).children('input[type=submit]').attr('disabled', 'disabled');
             return true;
