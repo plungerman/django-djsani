@@ -53,9 +53,7 @@ def form(request, stype, cid=None):
             if settings.DEBUG:
                 TO_LIST = [settings.SERVER_EMAIL,]
             else:
-                TO_LIST = [
-                    settings.INSURANCE_RECIPIENTS
-                ]
+                TO_LIST = settings.INSURANCE_RECIPIENTS
             send_mail(
                 request, TO_LIST,
                 "[Health Insurance] Opt Out: {} {} ({})".format(
