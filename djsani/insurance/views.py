@@ -49,19 +49,20 @@ def form(request, stype, cid=None):
             # empty table
             form = STUDENT_HEALTH_INSURANCE
 
-            # alert email to staff
-            if settings.DEBUG:
-                TO_LIST = [settings.SERVER_EMAIL,]
-            else:
-                TO_LIST = settings.INSURANCE_RECIPIENTS
-            send_mail(
-                request, TO_LIST,
-                "[Health Insurance] Opt Out: {} {} ({})".format(
-                    request.user.first_name, request.user.last_name, cid
-                ), request.user.email,
-                "insurance/email.html",
-                request, settings.MANAGERS
-            )
+            if manager.athlete:
+                # alert email to staff
+                if settings.DEBUG:
+                    TO_LIST = [settings.SERVER_EMAIL,]
+                else:
+                    TO_LIST = settings.INSURANCE_RECIPIENTS
+                send_mail(
+                    request, TO_LIST,
+                    "[Health Insurance] Opt Out: {} {} ({})".format(
+                        request.user.first_name, request.user.last_name, cid
+                    ), request.user.email,
+                    "insurance/email.html",
+                    request, settings.MANAGERS
+                )
 
         else:
             form = str_to_class("djsani.insurance.forms", fname)(request.POST)
