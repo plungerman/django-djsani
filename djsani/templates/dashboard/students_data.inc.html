@@ -9,12 +9,12 @@
                 </th>
                 <th>Immun</th>
                 <th>Insur</th>
-                <th>Meni/Hep B</th>
-                <th>Gen history</th>
-                <th>Ath history</th>
-                <th>Privacy</th>
+                <th>Meni Hep</th>
+                <th>Gen hist</th>
+                <th>Ath hist</th>
+                <th>Prvcy</th>
                 <th>Sickle</i></th>
-                <th>Reporting</th>
+                <th>Rprtng</th>
                 <th>Risk</th>
             </tr>
         </thead>
@@ -36,7 +36,7 @@
                         {% endif %}
                     {% endif %}
                 </td>
-                <td class="{{s.adult}}" style="text-align:left;">
+                <td class="{{s.adult}} student-name" style="text-align:left;">
                     <a href="{% url 'student_detail' s.id %}">
                         {{s.lastname}}, {{s.firstname}}
                     </a>
