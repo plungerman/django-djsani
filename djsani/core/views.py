@@ -90,6 +90,7 @@ def set_val(request):
         dic = { name: value }
         if table == "cc_athlete_sicklecell_waiver" and name == "results":
             dic["proof"] = 1
+            dic["waive"] = 0
         # create database session
         session = get_session(EARL)
         # retrieve student manager
@@ -119,7 +120,7 @@ def set_val(request):
                 for key, value in dic.iteritems():
                     setattr(obj, key, value)
 
-            # if waiver, updated manager table
+            # if waiver, update manager table
             if WAIVERS.get(table):
                 # set value = 1 if field name = "results" since that value is
                 # either Positive or Negative
