@@ -195,6 +195,17 @@
                 </form>
             </h1>
             <h3>
+                All Forms Complete?
+                <input type="checkbox" name="sitrep"
+                    class="set-val" data-pk="{{manager.id}}"
+                    data-table="cc_student_medical_manager"
+                {% if student.sitrep %}
+                        value="0"
+                        checked="checked"
+                {% else %}
+                        value="1"
+                {% endif %}
+                    />
                 Immunization status:
                 <input type="checkbox" name="cc_student_immunization"
                     class="set-val" data-pk="{{manager.id}}"
