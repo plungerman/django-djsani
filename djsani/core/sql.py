@@ -4,7 +4,20 @@ from django.conf import settings
 START_DATE = settings.START_DATE
 
 STUDENTS_ALPHA = """
-SELECT UNIQUE
+SELECT
+    UNIQUE
+    CASE
+        WHEN
+            NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
+        OR
+            NVL(UPPER(stu_serv_rec.bldg), '') = ''
+        THEN
+            'Commuter'
+        ELSE
+            'Resident'
+        END
+    AS
+        residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
     profile_rec.birth_date,
     cc_student_medical_manager.id as manid,
@@ -29,6 +42,8 @@ FROM
     id_rec
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
+LEFT JOIN
+    stu_serv_rec  ON  id_rec.id = stu_serv_rec.id
 LEFT JOIN
     stu_acad_rec    ON  id_rec.id   =   stu_acad_rec.id
 LEFT JOIN
@@ -69,6 +84,7 @@ SELECT
     id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name,
     adm_rec.plan_enr_sess,adm_rec.plan_enr_yr,
     cc_student_medical_manager.id as manid,
+    cc_student_medical_manager.sitrep,
     cc_student_medical_manager.athlete, cc_student_medical_manager.sports,
     cc_student_medical_manager.cc_student_immunization,
     cc_student_medical_manager.cc_student_meni_waiver,
