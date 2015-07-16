@@ -70,7 +70,7 @@ def get_students(request):
             sql += """
                 AND cc_student_medical_manager.sports like '%%%s%%'
             """ % sport
-        #sql += GROUP_BY
+        sql += "ORDER BY lastname"
         objs = do_esql(
             sql,key=settings.INFORMIX_DEBUG,earl=EARL
         )
