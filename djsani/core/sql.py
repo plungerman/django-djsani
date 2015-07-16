@@ -139,9 +139,7 @@ LEFT JOIN
 LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
-WHERE
-    stu_serv_rec.add_date > TO_DATE('{}', '%Y-%m-%d')
-""".format(START_DATE,HOUSING_DATE)
+""".format(START_DATE)
 
 ACADEMIC_YEAR = """
 SELECT
