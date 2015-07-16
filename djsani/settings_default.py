@@ -159,6 +159,7 @@ INSURANCE_RECIPIENTS = []
 DEFAULT_HASH = ""
 DEFAULT_CID = ""
 START_DATE = datetime.datetime(NOW.year, 6, 1)
+HOUSING_DATE = "2015-05-01"
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(__file__), "logs/")
 LOG_FILENAME = LOG_FILEPATH + "debug.log"
