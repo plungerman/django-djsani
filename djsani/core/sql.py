@@ -2,7 +2,6 @@ from django.conf import settings
 
 # e.g. 2015-05-01 00:00:00
 START_DATE = settings.START_DATE
-HOUSING_DATE = settings.HOUSING_DATE
 
 STUDENTS_ALPHA = """
 SELECT
@@ -65,9 +64,7 @@ WHERE
     AND stu_serv_rec.add_date > TO_DATE('{}', '%Y-%m-%d')
     AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
     AND stu_acad_rec.reg_hrs    >   0
-""".format(START_DATE,START_DATE,HOUSING_DATE)
-#AND stu_serv_rec.add_date > "{}"
-#AND stu_serv_rec.add_date > MDY(5,1,2015)
+""".format(START_DATE,START_DATE,settings.HOUSING_DATE)
 
 STUDENT_VITALS = """
 SELECT
