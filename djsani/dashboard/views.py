@@ -139,7 +139,7 @@ def student_detail(request, cid=None, content=None):
             manager = get_manager(session, cid)
         # get student
         obj = do_esql(
-            "{} WHERE cc_student_medical_manager.id = '{}'".format(
+            "{} AND cc_student_medical_manager.id = '{}'".format(
                 STUDENT_VITALS, manager.id
             ),
             key=settings.INFORMIX_DEBUG, earl=EARL
