@@ -167,7 +167,7 @@ def home(request):
         pass
     # get student
     obj = engine.execute(
-        "{} WHERE id_rec.id = '{}'".format(STUDENT_VITALS,cid)
+        "{} AND id_rec.id = '{}'".format(STUDENT_VITALS,cid)
     )
     student = obj.fetchone()
     if student:
