@@ -60,7 +60,7 @@ def form(request, stype, cid=None):
                     "[Health Insurance] Opt Out: {} {} ({})".format(
                         request.user.first_name, request.user.last_name, cid
                     ), request.user.email,
-                    "insurance/email.html",
+                    "alert_email.html",
                     request, settings.MANAGERS
                 )
 

@@ -33,10 +33,6 @@ function GetUserID() {
 <script src="/static/djmaidez/js/validate.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
-    {% if not student %}
-        alert("There was a problem retrieving the data.\n\
-        Please reload the page.");
-    {% endif %}
     // build emergency contact modal
     $("a.ens-link").click(function() {
         makeDialog();
@@ -139,11 +135,11 @@ $(function() {
 {% endblock %}
 {% block content %}
 <div>
+    {% if student %}
     <div class="large-12 medium-6 small-6">
         {% get_lw_content as student_directions blurbs 2007 %}
         {{student_directions.body}}
     </div>
-    {% if student %}
     <p>
         <strong>NOTE:</strong>
         If you encounter any problems with the forms, please contact
@@ -460,11 +456,16 @@ $(function() {
     </div>
     {% else %}
     <h1>We could not find your student record</h1>
-    <p>Please contact the Registrar's office.</p>
+    <p>
+        Please contact the
+        <a href="/registrar/contact/" target="_blank">Registrar's office</a>.
+    </p>
     {% endif %}
 </div>
+{% if student %}
 <div id="emergencyContactFiller">
     {% include "emergency/modal.html" %}
 </div>
+{% endif %}
 {% endblock %}
 {% block urchin %}{% endblock %}

@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect
 
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_content_type, get_manager
@@ -22,6 +22,7 @@ from djmaidez.core.models import ENS_CODES, MOBILE_CARRIER, RELATIONSHIP
 from djzbar.utils.informix import get_engine, get_session
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
+from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
@@ -228,21 +229,28 @@ def home(request):
         data["relationship"] = RELATIONSHIP
         data["solo"] = True
 
-        # chapuza to test various UI
-        template = "home.html"
-        if request.GET.get("template"):
-            template = "home_{}.html".format(request.GET.get("template"))
-
-        return render_to_response(
-            template, data,
-            context_instance=RequestContext(request)
-        )
     else:
         # could not find student by college_id
-        # perhaps send error to home.html rather than 404
-        # and set:
-        # manager=sport=my_sports=first_year = None
-        return Http404
+        data = {"student": student,}
+        # notify admin
+        send_mail(
+            request, [settings.MANAGERS[0][1],],
+            "[Lost] Student: {} {} ({})".format(
+                request.user.first_name, request.user.last_name, cid
+            ), request.user.email,
+            "fail_email.html",
+            request, settings.MANAGERS
+        )
+
+    # chapuza to test various UI
+    template = "home.html"
+    if request.GET.get("template"):
+        template = "home_{}.html".format(request.GET.get("template"))
+
+    return render_to_response(
+        template, data,
+        context_instance=RequestContext(request)
+    )
 
 
 def responsive_switch(request,action):
