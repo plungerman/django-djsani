@@ -2,11 +2,9 @@ from django.conf import settings
 
 # e.g. 2015-05-01 00:00:00
 START_DATE = settings.START_DATE
-HOUSING_DATE = settings.HOUSING_DATE
 
-STUDENTS_ALPHA = """
+STUDENT_RESIDENCY = """
 SELECT
-    UNIQUE
     CASE
         WHEN
             NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
@@ -18,7 +16,14 @@ SELECT
             'Resident'
         END
     AS
-        residency_status,
+        residency_status
+FROM
+    stu_serv_rec
+"""
+
+STUDENTS_ALPHA = """
+SELECT
+    UNIQUE
     id_rec.lastname, id_rec.firstname, id_rec.id,
     profile_rec.birth_date,
     cc_student_medical_manager.id as manid,
@@ -44,8 +49,6 @@ FROM
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
 LEFT JOIN
-    stu_serv_rec  ON  id_rec.id = stu_serv_rec.id
-LEFT JOIN
     stu_acad_rec    ON  id_rec.id   =   stu_acad_rec.id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
@@ -61,27 +64,15 @@ WHERE
     prog_enr_rec.subprog    NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
     AND prog_enr_rec.lv_date    IS  NULL
     AND prog_enr_rec.acst   IN  ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC","TRAD")
-    AND stu_serv_rec.add_date IS NOT NULL
-    AND stu_serv_rec.add_date > TO_DATE('{}', '%Y-%m-%d')
     AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
-    AND stu_acad_rec.reg_hrs    >   0
-""".format(START_DATE,START_DATE,HOUSING_DATE)
+""".format(START_DATE,START_DATE)
+# some students currently have 0 hours registered for some reason.
+#AND stu_acad_rec.reg_hrs    >   0
+#AND stu_serv_rec.stusv_no = (SELECT stu_serv_rec.stusv_no FROM stu_serv_rec WHERE stu_serv_rec.id=1366734 ORDER BY stu_serv_rec.id DESC LIMIT 1);
 
 STUDENT_VITALS = """
 SELECT
     UNIQUE
-    CASE
-        WHEN
-            NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
-        OR
-            NVL(UPPER(stu_serv_rec.bldg), '') = ''
-        THEN
-            'Commuter'
-        ELSE
-            'Resident'
-        END
-    AS
-        residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
     id_rec.addr_line1, id_rec.addr_line2, id_rec.city, id_rec.st,
     id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name,
@@ -133,13 +124,9 @@ LEFT JOIN
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN
-    stu_serv_rec  ON  id_rec.id = stu_serv_rec.id
-LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
-WHERE
-    stu_serv_rec.add_date > TO_DATE('{}', '%Y-%m-%d')
-""".format(START_DATE, HOUSING_DATE)
+""".format(START_DATE)
 
 ACADEMIC_YEAR = """
 SELECT

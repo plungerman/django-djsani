@@ -138,9 +138,10 @@ def student_detail(request, cid=None, content=None):
         else:
             manager = get_manager(session, cid)
         # get student
-        obj = do_esql("AND cc_student_medical_manager.id = '{}'".format(
+        obj = do_esql("{} WHERE cc_student_medical_manager.id = '{}'".format(
                 STUDENT_VITALS, manager.id
-            ), key=settings.INFORMIX_DEBUG, earl=EARL
+            ),
+            key=settings.INFORMIX_DEBUG, earl=EARL
         )
         if obj:
             student = obj.fetchone()
