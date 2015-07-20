@@ -238,7 +238,7 @@ def home(request):
             "[Lost] Student: {} {} ({})".format(
                 request.user.first_name, request.user.last_name, cid
             ), request.user.email,
-            "fail_email.html",
+            "alert_email.html",
             request, settings.MANAGERS
         )
 
