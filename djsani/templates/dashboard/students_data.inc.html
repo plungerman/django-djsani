@@ -79,7 +79,6 @@
                         <i class="fa fa-times red"></i>
                     {% endif %}
                 </td>
-                {% if s.residency_status == "Resident" %}
                 <td class="{{s.adult}}">
                     {% if s.cc_student_meni_waiver %}
                         <i class="fa fa-check">
@@ -95,11 +94,6 @@
                         {% endif %}
                     {% endif %}
                 </td>
-                {% else %}
-                <td class="{{s.adult}}" style="background-color:#cacaca;">
-                    <i class="fa fa-ban red"></i>
-                </td>
-                {% endif %}
                 <td class="{{s.adult}}">
                     {% if s.cc_student_medical_history %}
                         <i class="fa fa-check">
