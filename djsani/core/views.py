@@ -97,12 +97,17 @@ def set_val(request):
         # retrieve student manager
         man = get_manager(session, cid)
 
+        # set value = 1 if field name = "results" since that value is
+        # either Positive or Negative
+        if table == "cc_athlete_sicklecell_waiver" and name == "results":
+            value = 1
         if WAIVERS.get(table) and not pk:
             # create new waiver
             dic["college_id"] = cid
             dic["manager_id"] = man.id
             obj = WAIVERS[table](**dic)
             session.add(obj)
+            # update the manager
             setattr(man, table, value)
             session.flush()
         else:
@@ -117,16 +122,16 @@ def set_val(request):
             else:
                 if name == "athlete" and value == "0":
                     dic["sports"] = ""
+                # remove the test results if a staff member is changing
+                # from proof to waive or nothing
+                if name == "proof" and value == "0":
+                    dic["results"] = ""
                 # update existing object
                 for key, value in dic.iteritems():
                     setattr(obj, key, value)
 
             # if waiver, update manager table
             if WAIVERS.get(table):
-                # set value = 1 if field name = "results" since that value is
-                # either Positive or Negative
-                if table == "cc_athlete_sicklecell_waiver" and name == "results":
-                    value = 1
                 setattr(man, table, value)
 
         # update the log entry for staff modifications
