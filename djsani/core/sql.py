@@ -3,8 +3,9 @@ from django.conf import settings
 # e.g. 2015-05-01 00:00:00
 START_DATE = settings.START_DATE
 
-STUDENT_RESIDENCY = """
+STUDENTS_ALPHA = """
 SELECT
+    UNIQUE
     CASE
         WHEN
             NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
@@ -16,14 +17,7 @@ SELECT
             'Resident'
         END
     AS
-        residency_status
-FROM
-    stu_serv_rec
-"""
-
-STUDENTS_ALPHA = """
-SELECT
-    UNIQUE
+        residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
     profile_rec.birth_date,
     cc_student_medical_manager.id as manid,
@@ -51,6 +45,8 @@ INNER JOIN
 LEFT JOIN
     stu_acad_rec    ON  id_rec.id   =   stu_acad_rec.id
 LEFT JOIN
+    stu_serv_rec    ON  id_rec.id   =   stu_serv_rec.id
+LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN
     cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
@@ -68,11 +64,22 @@ WHERE
 """.format(START_DATE,START_DATE)
 # some students currently have 0 hours registered for some reason.
 #AND stu_acad_rec.reg_hrs    >   0
-#AND stu_serv_rec.stusv_no = (SELECT stu_serv_rec.stusv_no FROM stu_serv_rec WHERE stu_serv_rec.id=1366734 ORDER BY stu_serv_rec.id DESC LIMIT 1);
 
 STUDENT_VITALS = """
 SELECT
     UNIQUE
+    CASE
+        WHEN
+            NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
+        OR
+            NVL(UPPER(stu_serv_rec.bldg), '') = ''
+        THEN
+            'Commuter'
+        ELSE
+            'Resident'
+        END
+    AS
+        residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
     id_rec.addr_line1, id_rec.addr_line2, id_rec.city, id_rec.st,
     id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name,
@@ -123,6 +130,8 @@ LEFT JOIN
     cc_athlete_reporting_waiver ON cc_student_medical_manager.id = cc_athlete_reporting_waiver.manager_id
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
+LEFT JOIN
+    stu_serv_rec    ON  id_rec.id   =   stu_serv_rec.id
 LEFT JOIN
     aa_rec as mobile_rec on
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")

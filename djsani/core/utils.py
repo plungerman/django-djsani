@@ -7,6 +7,7 @@ from djsani.medical_history.waivers.models import Sicklecell
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import StudentMedicalContentType
 from djsani.core.models import StudentMedicalManager
+from djtools.fields import TODAY
 
 from sqlalchemy.orm.session import make_transient
 from sqlalchemy import desc
@@ -47,6 +48,14 @@ def _doop(session, mod, man):
         # in case we need PK id
         session.flush()
     return obj
+
+def get_term():
+    sess = "RA"
+    sd = settings.START_DATE
+    r = "RA"
+    if TODAY.month < sd.month:
+        r = "RC"
+    return {"yr": sd.year, "sess":r}
 
 def get_manager(session, cid):
     """

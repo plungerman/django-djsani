@@ -13,7 +13,7 @@ from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
 from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENTS_ALPHA, STUDENT_VITALS
-from djsani.core.utils import get_manager
+from djsani.core.utils import get_manager, get_term
 from djsani.emergency.models import AARec
 
 from djzbar.utils.informix import do_sql as do_esql, get_session
@@ -36,7 +36,15 @@ def home(request):
     dashboard home with a list of students
     """
     students = None
-    sql = '{} AND prog_enr_rec.cl IN ("FF","FR") '.format(STUDENTS_ALPHA)
+    # get academic term
+    term = get_term()
+    sql = ''' {}
+        AND stu_serv_rec.yr = "{}"
+        AND stu_serv_rec.sess = "{}"
+        AND prog_enr_rec.cl IN ("FF","FR")
+    '''.format(
+        STUDENTS_ALPHA, term["yr"], term["sess"]
+    )
     sql += "ORDER BY lastname"
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
     session = get_session(EARL)
@@ -63,8 +71,14 @@ def get_students(request):
     if request.POST and (in_group(request.user,"MedicalStaff") \
       or request.user.is_superuser):
         sport = request.POST.get("sport")
-        sql = " %s AND prog_enr_rec.cl IN (%s)" % (
-            STUDENTS_ALPHA,request.POST["class"]
+        # get academic term
+        term = get_term()
+        sql = ''' {}
+            AND stu_serv_rec.yr = "{}"
+            AND stu_serv_rec.sess = "{}"
+            AND prog_enr_rec.cl IN ({})
+        '''.format(
+            STUDENTS_ALPHA, term["yr"], term["sess"], request.POST["class"]
         )
         if sport and sport != '0':
             sql += """
@@ -137,12 +151,16 @@ def student_detail(request, cid=None, content=None):
                 filter_by(id=manid).one()
         else:
             manager = get_manager(session, cid)
+        # get academic term
+        term = get_term()
         # get student
-        obj = do_esql("{} WHERE cc_student_medical_manager.id = '{}'".format(
-                STUDENT_VITALS, manager.id
-            ),
-            key=settings.INFORMIX_DEBUG, earl=EARL
+        sql = '''
+            {} WHERE cc_student_medical_manager.id = "{}"
+            AND yr = "{}" AND sess = "{}"
+        '''.format(
+            STUDENT_VITALS, manager.id, term["yr"], term["sess"]
         )
+        obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
         if obj:
             student = obj.fetchone()
             if student:
@@ -156,10 +174,10 @@ def student_detail(request, cid=None, content=None):
                     request, session, StudentHealthInsurance, manager
                 )
                 smh = panels(
-                    request, session, StudentMedicalHistory, manager, student.sex
+                    request,session,StudentMedicalHistory,manager,student.sex
                 )
                 amh = panels(
-                    request, session, AthleteMedicalHistory, manager, student.sex
+                    request,session,AthleteMedicalHistory,manager,student.sex
                 )
                 # used for staff who update info on the dashboard
                 stype = "student"

@@ -37,6 +37,11 @@
     padding: 6px;
     }
     blockquote { padding: 10px 0; margin: 0px 0px 20px; font-size: inherit; border-left: 0; }
+
+@media (min-width: 768px) {
+    .navbar-static-side { width: 150px; }
+    #page-wrapper { margin: 0 0 0 150px; }
+}
     </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -320,7 +325,7 @@
                 </li>
                 <li>
                     <a href="http://www.carthage.edu/">
-                        <i class="fa fa-home fa-fw"></i> Carthage Home
+                        <i class="fa fa-home fa-fw"></i> Carthage
                     </a>
                 </li>
                 <li>
@@ -376,7 +381,7 @@
                             {% if not s.0 %}
                                 disabled{% else %} value="{{s.0}}"
                             {% endif %}>
-                            {{s.1}}
+                            {{s.1|safe}}
                             </option>
                             {% endfor %}
                             </select>

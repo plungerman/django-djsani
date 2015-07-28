@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
 from djsani.core.sql import STUDENT_VITALS
-from djsani.core.utils import get_content_type, get_manager
+from djsani.core.utils import get_content_type, get_manager, get_term
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, StudentMedicalManager
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import ADDITION, CHANGE
@@ -171,10 +171,19 @@ def home(request):
         engine.execute("SET LOCK MODE TO WAIT")
     except:
         pass
+
+    # get academic term
+    term = get_term()
     # get student
-    obj = engine.execute(
-        "{} WHERE id_rec.id = '{}'".format(STUDENT_VITALS,cid)
+    sql = ''' {}
+        WHERE
+        id_rec.id = '{}'
+        AND stu_serv_rec.yr = "{}"
+        AND stu_serv_rec.sess = "{}"
+    '''.format(
+        STUDENT_VITALS, cid, term["yr"], term["sess"]
     )
+    obj = engine.execute(sql)
     student = obj.fetchone()
     if student:
         # save some things to Django session:
