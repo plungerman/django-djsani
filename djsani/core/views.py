@@ -247,14 +247,15 @@ def home(request):
         # could not find student by college_id
         data = {"student": student,}
         # notify admin
-        send_mail(
-            request, [settings.MANAGERS[0][1],],
-            "[Lost] Student: {} {} ({})".format(
-                request.user.first_name, request.user.last_name, cid
-            ), request.user.email,
-            "alert_email.html",
-            request, settings.MANAGERS
-        )
+        if not request.user.is_staff:
+            send_mail(
+                request, [settings.MANAGERS[0][1],],
+                "[Lost] Student: {} {} ({})".format(
+                    request.user.first_name, request.user.last_name, cid
+                ), request.user.email,
+                "alert_email.html",
+                request, settings.MANAGERS
+            )
 
     # chapuza to test various UI
     template = "home.html"
