@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.utils.encoding import smart_text
 
 from sqlalchemy.ext.declarative import declarative_base
