@@ -34,7 +34,7 @@ class AthleteForm(forms.Form):
         max_length=12,
         help_text="Please provide the toll free customer service number",
         required=False,
-        widget=forms.TextInput(attrs={'class': 'required phoneUS'})
+        widget=forms.TextInput(attrs={'class': 'required'})
     )
     primary_policy_address = forms.CharField(
         label="Insurance address",
