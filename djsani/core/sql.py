@@ -59,9 +59,9 @@ LEFT JOIN
 WHERE
     prog_enr_rec.subprog    NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
     AND prog_enr_rec.lv_date    IS  NULL
-    AND prog_enr_rec.acst   IN  ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC","TRAD")
     AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
 """.format(START_DATE,START_DATE)
+#AND prog_enr_rec.acst   IN  ("GOOD","LOC","NS","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC","TRAD")
 # some students currently have 0 hours registered for some reason.
 #AND stu_acad_rec.reg_hrs    >   0
 
