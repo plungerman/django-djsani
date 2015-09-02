@@ -4,6 +4,8 @@
             <tr>
                 <th><i class="fa fa-thumbs-up green" title="Status"></i></th>
                 <th>Name</th>
+                <th class="hide">ID</th>
+                <th class="hide">Email</th>
                 <th>
                 <i class="fa fa-ambulance green" title="Emergency contact"></i>
                 </th>
@@ -46,6 +48,8 @@
                     </span>
                     {% endif %}
                 </td>
+                <th class="hide">{{s.id}}</th>
+                <th class="hide">{{s.ldap_name}}@carthage.edu</th>
                 <td class="{{s.adult}}">
                     {% if s.emergency_contact %}
                         <i class="fa fa-check">

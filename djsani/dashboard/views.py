@@ -73,18 +73,29 @@ def get_students(request):
         sport = request.POST.get("sport")
         # get academic term
         term = get_term()
+
         sql = ''' {}
             AND stu_serv_rec.yr = "{}"
             AND stu_serv_rec.sess = "{}"
-            AND prog_enr_rec.cl IN ({})
         '''.format(
-            STUDENTS_ALPHA, term["yr"], term["sess"], request.POST["class"]
+            STUDENTS_ALPHA, term["yr"], term["sess"]
         )
+        c = request.POST["class"]
+        if c in ['0','1','2']:
+            if c == '1':
+                sql += "AND cc_student_medical_manager.sitrep = 1"
+            elif c == '0':
+                sql += "AND cc_student_medical_manager.sitrep = 0"
+                #sql += "OR cc_student_medical_manager.sitrep IS NULL)"
+            else:
+                sql += "AND cc_student_medical_manager.id IS NULL"
+        else:
+            sql += "AND prog_enr_rec.cl IN ({})".format(c)
         if sport and sport != '0':
             sql += """
                 AND cc_student_medical_manager.sports like '%%%s%%'
             """ % sport
-        sql += "ORDER BY lastname"
+        sql += " ORDER BY lastname"
         objs = do_esql(
             sql,key=settings.INFORMIX_DEBUG,earl=EARL
         )

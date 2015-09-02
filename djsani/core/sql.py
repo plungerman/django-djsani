@@ -19,7 +19,7 @@ SELECT
     AS
         residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
-    profile_rec.birth_date,
+    profile_rec.birth_date, cvid_rec.ldap_name,
     cc_student_medical_manager.id as manid,
     cc_student_medical_manager.athlete,
     cc_student_medical_manager.sitrep,
@@ -42,6 +42,8 @@ FROM
     id_rec
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
+LEFT JOIN
+    cvid_rec     ON  id_rec.id = cvid_rec.cx_id
 LEFT JOIN
     stu_acad_rec    ON  id_rec.id   =   stu_acad_rec.id
 LEFT JOIN
