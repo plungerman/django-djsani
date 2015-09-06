@@ -19,7 +19,6 @@ from djtools.utils.users import in_group
 from djtools.utils.mail import send_mail
 
 from sqlalchemy.orm import sessionmaker
-from datetime import datetime
 from textwrap import fill
 
 
