@@ -166,12 +166,6 @@ def home(request):
     student = None
     adult = False
 
-    engine = get_engine(EARL)
-    try:
-        engine.execute("SET LOCK MODE TO WAIT")
-    except:
-        pass
-
     # get academic term
     term = get_term()
     # get student
