@@ -20,7 +20,7 @@ urlpatterns = patterns('djsani.core.views',
     url(r'^admin/', include(admin.site.urls)),
     # auth
     url(
-        r'^accounts/login',auth_views.login,
+        r'^accounts/login/$',auth_views.login,
         {'template_name': 'accounts/login.html'},
         name='auth_login'
     ),
@@ -30,7 +30,7 @@ urlpatterns = patterns('djsani.core.views',
         name="auth_logout"
     ),
     url(
-        r'^accounts/loggedout',loggedout,
+        r'^accounts/loggedout/$',loggedout,
         {'template_name': 'accounts/logged_out.html'},
         name="auth_loggedout"
     ),
