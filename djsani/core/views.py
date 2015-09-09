@@ -177,6 +177,7 @@ def home(request):
     '''.format(
         STUDENT_VITALS, cid, term["yr"], term["sess"]
     )
+    engine = get_engine()
     obj = engine.execute(sql)
     student = obj.fetchone()
     if student:

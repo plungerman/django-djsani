@@ -41,11 +41,12 @@ def home(request):
     sql = ''' {}
         AND stu_serv_rec.yr = "{}"
         AND stu_serv_rec.sess = "{}"
-        AND prog_enr_rec.cl IN ("FF","FR")
+        AND prog_enr_rec.cl IN ("FF","FR","UT")
     '''.format(
         STUDENTS_ALPHA, term["yr"], term["sess"]
     )
     sql += "ORDER BY lastname"
+
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
     session = get_session(EARL)
     if objs:
@@ -86,7 +87,6 @@ def get_students(request):
                 sql += "AND cc_student_medical_manager.sitrep = 1"
             elif c == '0':
                 sql += "AND cc_student_medical_manager.sitrep = 0"
-                #sql += "OR cc_student_medical_manager.sitrep IS NULL)"
             else:
                 sql += "AND cc_student_medical_manager.id IS NULL"
         else:
@@ -96,6 +96,7 @@ def get_students(request):
                 AND cc_student_medical_manager.sports like '%%%s%%'
             """ % sport
         sql += " ORDER BY lastname"
+
         objs = do_esql(
             sql,key=settings.INFORMIX_DEBUG,earl=EARL
         )
