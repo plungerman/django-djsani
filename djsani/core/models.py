@@ -105,7 +105,7 @@ SPORTS_MEN = (
     ("35","Cross Country"),
     ("45","Football"),
     ("55","Golf"),
-    ("60","Ice Hockey"),
+    ("61","Ice Hockey"),
     ("65","Lacrosse"),
     ("75","Soccer"),
     ("85","Swimming"),
