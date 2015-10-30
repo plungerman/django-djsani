@@ -287,7 +287,7 @@
                     <h3 class="panel-title">
                         <i class="fa fa-umbrella"></i>
                         Health Insurance
-                        <a href="{% url 'student_detail_print' cid 'insurance' %}"
+                        <a href="{% url 'student_detail_print' cid 'insurance' %}?manid={{manager.id}}"
                             title="Print health insurance">
                             <i class="fa fa-print"></i>
                         </a>

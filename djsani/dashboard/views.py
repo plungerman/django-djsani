@@ -154,6 +154,8 @@ def student_detail(request, cid=None, content=None):
     if cid:
         # profile switcher POST from form
         manid = request.POST.get("manid")
+        if not manid:
+            manid = request.GET.get("manid")
         session = get_session(EARL)
         # get managers
         managers = session.query(StudentMedicalManager).\
