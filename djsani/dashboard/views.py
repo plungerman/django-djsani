@@ -48,7 +48,6 @@ def home(request):
     sql += "ORDER BY lastname"
 
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
-    session = get_session(EARL)
     if objs:
         students = [dict(row) for row in objs.fetchall()]
         for s in students:
@@ -58,7 +57,6 @@ def home(request):
                 if age > 17:
                     adult = "adult"
             s["adult"] = adult
-    session.close()
     return render_to_response(
         "dashboard/home.html",
         {"students":students,"sports":SPORTS},
