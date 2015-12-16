@@ -160,6 +160,7 @@ def student_detail(request, cid=None, content=None):
         # get managers
         managers = session.query(StudentMedicalManager).\
                 filter_by(college_id=cid).all()
+        # post from manager switch select box
         if manid:
             manager = session.query(StudentMedicalManager).\
                 filter_by(id=manid).one()
@@ -170,10 +171,7 @@ def student_detail(request, cid=None, content=None):
         # get student
         sql = '''
             {} WHERE cc_student_medical_manager.id = "{}"
-            AND yr = "{}" AND sess = "{}"
-        '''.format(
-            STUDENT_VITALS, manager.id, term["yr"], term["sess"]
-        )
+        '''.format(STUDENT_VITALS, manager.id)
         obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
         if obj:
             student = obj.fetchone()

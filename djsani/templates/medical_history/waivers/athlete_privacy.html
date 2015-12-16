@@ -31,7 +31,9 @@ $(function() {
     <form method="post" action="." class="form" id="privacy-waiver">
         {% csrf_token %}
         {% include "medical_history/waivers/athlete_privacy.inc.html" %}
+        {% if not request.session.staff %}
         {% include "form_submit.inc.html" %}
+        {% endif %}
     </form>
 </div>
 {% endblock %}

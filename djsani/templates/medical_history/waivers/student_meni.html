@@ -27,9 +27,12 @@ $(function() {
         Important Information about Meningitis<br /> and Hepatitis B
     </h2>
     {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form" id="meni_waive">{% csrf_token %}
+    <form method="post" action="." class="form" id="meni_waive">
+        {% csrf_token %}
         {% include "medical_history/waivers/student_meni.inc.html" %}
+        {% if not request.session.staff %}
         {% include "form_submit.inc.html" %}
+        {% endif %}
     </form>
 </div>
 {% endblock %}

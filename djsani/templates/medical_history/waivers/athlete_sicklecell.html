@@ -17,7 +17,9 @@
         {% csrf_token %}
         {% include "medical_history/waivers/athlete_sicklecell.inc.html" %}
         <div class="large-12 cf">
+            {% if not request.session.staff %}
             {% include "form_submit.inc.html" %}
+            {% endif %}
         </div>
     </form>
 </div>

@@ -103,6 +103,7 @@ $(function() {
 </script>
 {% endblock %}
 {% block left_nav %}{% endblock %}
+{% block group_name %}{% endblock %}
 {% block page_content %}class="content large-11"{% endblock %}
 {% block content %}
 <div id="spotlight-wrap">
@@ -175,7 +176,9 @@ $(function() {
                 I verify that this information is accurate.
             </h3>
             {% endif %}
+            {% if not request.session.staff %}
             {% include "form_submit.inc.html" %}
+            {% endif %}
         </div>
     </form>
     <div id="athlete-warning" style="display:none;width:500px;">

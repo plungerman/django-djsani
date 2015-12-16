@@ -8,7 +8,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_content_type, get_manager, get_term
-from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, StudentMedicalManager
+
+from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
+from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import ADDITION, CHANGE
 from djsani.insurance.models import StudentHealthInsurance
@@ -160,12 +162,20 @@ def set_val(request):
 
 @login_required
 def home(request):
-    staff = in_group(request.user, "MedicalStaff")
+    # check for medical staff
+    medical_staff = in_group(request.user, "MedicalStaff")
+    if medical_staff:
+        request.session['medical_staff'] = True
+    # check for carthage staff
+    staff = in_group(request.user, "carthageStaffStatus")
+    if staff:
+        request.session['staff'] = True
+    # fetch college id from user object
     cid = request.user.id
+    # intialise some things
     my_sports = ""
     student = None
     adult = False
-
     # get academic term
     term = get_term()
     # get student
@@ -180,11 +190,11 @@ def home(request):
     engine = get_engine()
     obj = engine.execute(sql)
     student = obj.fetchone()
+    # create database session
+    session = get_session()
     if student:
         # save some things to Django session:
         request.session['gender'] = student.sex
-        # create database session
-        session = get_session()
         # retrieve student manager
         manager = get_manager(session, cid)
 
@@ -225,9 +235,6 @@ def home(request):
             "first_year":first_year
         }
 
-        # create database session
-        session = get_session(EARL)
-
         # emergency contact modal form
         objs = session.query(AARec).filter_by(id=cid).\
             filter(AARec.aa.in_(ENS_CODES)).all()
@@ -237,10 +244,12 @@ def home(request):
         data["mobile_carrier"] = MOBILE_CARRIER
         data["relationship"] = RELATIONSHIP
         data["solo"] = True
-
     else:
         # could not find student by college_id
-        data = {"student": student,}
+        data = {
+            "student":student,"staff":staff,"medical_staff":medical_staff,
+            "sports":SPORTS,"solo":True
+        }
         # notify admin
         if not request.user.is_staff:
             send_mail(
@@ -252,8 +261,22 @@ def home(request):
                 request, settings.MANAGERS
             )
 
-    # chapuza to test various UI
+    # template depends on student or staff
     template = "home.html"
+    if staff:
+        adult = True
+        template = "home_staff.html"
+        # emergency contact modal form
+        objs = session.query(AARec).filter_by(id=request.user.id).\
+            filter(AARec.aa.in_(ENS_CODES)).all()
+
+        for o in objs:
+            data[o.aa] = row2dict(o)
+        data["mobile_carrier"] = MOBILE_CARRIER
+        data["relationship"] = RELATIONSHIP
+
+    session.close()
+    # chapuza to test various UI
     if request.GET.get("template"):
         template = "home_{}.html".format(request.GET.get("template"))
 
