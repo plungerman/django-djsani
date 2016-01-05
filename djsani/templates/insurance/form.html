@@ -77,12 +77,12 @@ $(function() {
             $(this).closest('li').next().find('select').removeClass("required");
         }
     });
-    {% if oo == "True" %}
+    {% if oo == True %}
         $('#insurance-policies').slideUp(200);
         $('#secondary-box').slideUp(200);
         $("#id_opt_out").prop("checked", true);
     {% else %}
-        {% if secondary == "None" and update %}
+        {% if secondary == None and update %}
             $("#id_second").prop("checked", true);
             $("input[id^='id_secondary']").removeClass("error required");
             $('#secondary-form').slideUp(200);
