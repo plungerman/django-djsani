@@ -11,6 +11,8 @@
 {% else %}
     <div>
 {% endif %}
+<h4>Date of submission</h4>
+<p>{{data.created_at}}</p>
 <form style="float:left;">
     <input type="checkbox" class="set-val" name="opt_out"
         {% if data.opt_out == True %}
