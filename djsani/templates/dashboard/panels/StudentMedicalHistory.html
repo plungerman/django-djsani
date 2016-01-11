@@ -1,4 +1,6 @@
 {% if data %}
+    <h4>Date of Submission</h4>
+    {{form.created_at.value}}
     {% include "medical_history/form_student.inc.html" %}
 {% else %}
 <div class="alert alert-danger">
