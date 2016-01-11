@@ -3,8 +3,6 @@ from sqlalchemy import BigInteger, Boolean, Column, DateTime
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
-from djtools.fields import NOW
-
 Base = declarative_base()
 
 class AARec(Base):
