@@ -10,6 +10,8 @@ SELECT
         WHEN
             NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
         OR
+            NVL(stu_serv_rec.bldg, '') = 'undc'
+        OR
             NVL(UPPER(stu_serv_rec.bldg), '') = ''
         THEN
             'Commuter'
@@ -73,6 +75,8 @@ SELECT
     CASE
         WHEN
             NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
+        OR
+            NVL(stu_serv_rec.bldg, '') = 'undc'
         OR
             NVL(UPPER(stu_serv_rec.bldg), '') = ''
         THEN
