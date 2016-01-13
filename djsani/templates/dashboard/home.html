@@ -37,11 +37,10 @@
     padding: 6px;
     }
     blockquote { padding: 10px 0; margin: 0px 0px 20px; font-size: inherit; border-left: 0; }
-
-@media (min-width: 768px) {
-    .navbar-static-side { width: 150px; }
-    #page-wrapper { margin: 0 0 0 150px; }
-}
+    @media (min-width: 768px) {
+        .navbar-static-side { width: 150px; }
+        #page-wrapper { margin: 0 0 0 150px; }
+    }
     </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -253,13 +252,9 @@
 {% endblock %}
 {% block navbar-header %}
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse"
-            data-target=".sidebar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
+        <a href="/" style="float:left;">
+            <img src="https://www.carthage.edu/themes/korra/assets/images/carthage-logo-main.png" height="50">
+        </a>
         <a class="navbar-brand"
             href="http://www.carthage.edu/campus-life/health-counseling/">
             Carthage Health &amp; Counseling Center
