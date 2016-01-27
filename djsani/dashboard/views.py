@@ -3,7 +3,6 @@ from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
-from django.views.decorators.csrf import csrf_exempt
 
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
