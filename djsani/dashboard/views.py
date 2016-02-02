@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
@@ -198,12 +199,13 @@ def student_detail(request, cid=None, content=None):
                     sports = SPORTS_WOMEN
                 else:
                     sports = SPORTS_MEN
+                user = User.objects.get(pk=cid)
             else:
                 age=ens=shi=smh=amh=student=sports=stype=None
             return render_to_response(
                 template,
                 {
-                    "student":student,"age":age,"ens":ens,
+                    "student":student,"user":user,"age":age,"ens":ens,
                     "shi":shi,"amh":amh,"smh":smh,"cid":cid,
                     "switch_earl":reverse_lazy("set_val"),
                     "sports":sports,"my_sports":my_sports,"next_year":NEXT_YEAR,
