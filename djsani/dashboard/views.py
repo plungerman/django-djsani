@@ -199,7 +199,10 @@ def student_detail(request, cid=None, content=None):
                     sports = SPORTS_WOMEN
                 else:
                     sports = SPORTS_MEN
-                user = User.objects.get(pk=cid)
+                try:
+                    user = User.objects.get(pk=cid)
+                except:
+                    user = None
             else:
                 age=ens=shi=smh=amh=student=sports=stype=None
             return render_to_response(
