@@ -4,6 +4,8 @@ SELECT
         WHEN
             NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
         OR
+            NVL(stu_serv_rec.bldg, '') = 'undc'
+        OR
             NVL(UPPER(stu_serv_rec.bldg), '') = ''
         THEN
             'Commuter'
@@ -56,10 +58,6 @@ LEFT JOIN
 WHERE
     prog_enr_rec.subprog    NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
     AND prog_enr_rec.lv_date    IS  NULL
-    AND prog_enr_rec.acst   IN  ("GOOD","LOC","PROB","PROC","PROR","READ","RP","SAB","SHAC","SHOC","TRAD")
-    AND stu_serv_rec.add_date > TO_DATE('2015-05-01', '%Y-%m-%d')
-    AND stu_serv_rec.add_date IS NOT NULL
     AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
-    AND stu_acad_rec.reg_hrs    >   0
     AND cc_student_medical_manager.id IS NULL
 ORDER BY lastname;
