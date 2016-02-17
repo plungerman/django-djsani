@@ -204,7 +204,7 @@ def student_detail(request, cid=None, content=None):
                 except:
                     user = None
             else:
-                age=ens=shi=smh=amh=student=sports=stype=None
+                age=ens=shi=smh=amh=student=sports=stype=user=None
             return render_to_response(
                 template,
                 {
