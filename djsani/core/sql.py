@@ -113,9 +113,12 @@ SELECT
     cc_athlete_reporting_waiver.id as reporting_id,
     profile_rec.birth_date,
     profile_rec.sex,
+    prog_enr_rec.cl,
     mobile_rec.phone as mobile
 FROM
     id_rec
+INNER JOIN
+    prog_enr_rec ON  id_rec.id = prog_enr_rec.id
 LEFT JOIN
     adm_rec     ON  id_rec.id = adm_rec.id
 LEFT JOIN
