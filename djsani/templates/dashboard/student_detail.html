@@ -156,7 +156,7 @@
                 <small>
                     ({{student.sex}}) &mdash;
                     DOB: {{student.birth_date}}
-                    ({{age}})
+                    ({{age}})[{{student.cl}}]
                 </small>
                 <form id="profile" class="form">
                     {% if student.athlete %}
@@ -240,7 +240,9 @@
                                 {{student.ldap_name}}@carthage.edu
                             </a><br>
                             Residency Status:
-                            <strong> {{student.residency_status}} </strong><br>
+                            <strong>
+                                {{student.residency_status}}
+                            </strong><br>
                             Signed in: {{user.last_login|date:"m/d/Y, fA"}}
                             </address>
                         </div>
