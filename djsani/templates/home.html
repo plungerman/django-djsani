@@ -66,9 +66,6 @@ $(function() {
                 } else {
                     $.growlUI('Error', data);
                 }
-            },
-            error: function(data) {
-                $.growlUI('Error', data);
             }
         });
     }
@@ -76,6 +73,11 @@ $(function() {
     $('#id_sports').selectpicker();
     $('#id_sports').on('change', function(){
         setVal( "sports", $(this).val() );
+        if ( $(this).val() ) {
+            $athlete.delay(200).slideDown(200);
+        }else{
+            $athlete.delay(200).slideUp(200);
+        }
     });
 
     {% if adult %}
@@ -89,14 +91,16 @@ $(function() {
     $athlete = $('#athlete');
     $("#sports-container").slideUp(200);
     {% if manager.athlete == 0 %}
-    $athlete.slideUp(200);
-    $student.delay(200).slideDown(200);
-    $("#sports-container").slideUp(200);
+        $athlete.slideUp(200);
+        $student.delay(200).slideDown(200);
+        $("#sports-container").slideUp(200);
     {% endif %}
     {% if manager.athlete == 1 %}
-    $student.slideUp(200);
-    $athlete.delay(200).slideDown(200);
-    $("#sports-container").delay(200).slideDown(200);
+        $student.slideUp(200);
+        $("#sports-container").delay(200).slideDown(200);
+        {% if my_sports %}
+            $athlete.delay(200).slideDown(200);
+        {% endif %}
     {% endif %}
     $stypes.change(function() {
         $val = $(this).val();
@@ -107,7 +111,6 @@ $(function() {
         }
         else if ($val == "1") {
             $student.slideUp(200);
-            $athlete.delay(200).slideDown(200);
             $("#sports-container").delay(200).slideDown(200);
         }
         setVal("athlete", $val);
