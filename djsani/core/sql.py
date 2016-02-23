@@ -21,7 +21,7 @@ SELECT
     AS
         residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
-    profile_rec.birth_date, cvid_rec.ldap_name,
+    profile_rec.birth_date,
     cc_student_medical_manager.id as manid,
     cc_student_medical_manager.athlete,
     cc_student_medical_manager.sitrep,
@@ -36,6 +36,7 @@ SELECT
     cc_student_medical_manager.cc_athlete_reporting_waiver,
     cc_student_medical_manager.cc_athlete_risk_waiver,
     cc_student_medical_manager.cc_athlete_sicklecell_waiver,
+    cc_student_health_insurance.primary_policy_type,
     cc_athlete_sicklecell_waiver.updated_at,
     cc_athlete_sicklecell_waiver.waive,
     cc_athlete_sicklecell_waiver.proof,
@@ -44,8 +45,6 @@ FROM
     id_rec
 INNER JOIN
     prog_enr_rec ON  id_rec.id = prog_enr_rec.id
-LEFT JOIN
-    cvid_rec     ON  id_rec.id = cvid_rec.cx_id
 LEFT JOIN
     stu_acad_rec    ON  id_rec.id   =   stu_acad_rec.id
 LEFT JOIN
@@ -57,13 +56,19 @@ LEFT JOIN
     AND
         cc_student_medical_manager.created_at > "{}"
 LEFT JOIN
+    cc_student_health_insurance
+  ON
+    cc_student_medical_manager.id = cc_student_health_insurance.manager_id
+LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
     AND
         (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > "{}")
 WHERE
-    prog_enr_rec.subprog    NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
-    AND prog_enr_rec.lv_date    IS  NULL
-    AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
+    prog_enr_rec.subprog NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
+AND
+    prog_enr_rec.lv_date IS  NULL
+AND
+    stu_acad_rec.sess IN  ("RA","RC","AM","GC","PC","TC")
 """.format(START_DATE,START_DATE)
 
 STUDENT_VITALS = """

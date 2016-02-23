@@ -80,11 +80,15 @@ def get_students(request):
             STUDENTS_ALPHA, term["yr"], term["sess"]
         )
         c = request.POST["class"]
-        if c in ['0','1','2']:
+        if c in ['0','1','2','3','4']:
             if c == '1':
                 sql += "AND cc_student_medical_manager.sitrep = 1"
             elif c == '0':
                 sql += "AND cc_student_medical_manager.sitrep = 0"
+            elif c == '3':
+                sql += "AND cc_student_medical_manager.athlete = 1"
+            elif c == '4':
+                sql += "AND cc_student_health_insurance.primary_policy_type='Gov'"
             else:
                 sql += "AND cc_student_medical_manager.id IS NULL"
         else:
