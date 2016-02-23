@@ -370,7 +370,10 @@
                                 <option value="'FF','FR','SO','JR','SR','GD','UT'">
                                     All Current Students
                                 </option>
-                                <option value="">-----Status Reports-----</option>
+                                <option value="3">
+                                    All Current Athletes
+                                </option>
+                                <option value="" disabled>-----Status Reports-----</option>
                                 <option value="1">
                                     Have completed all forms
                                 </option>
@@ -380,12 +383,16 @@
                                 <option value="2">
                                     Have not started
                                 </option>
+                                <option value="4">
+                                    Have government insurance
+                                </option>
                             </select>
                             <label>Participating in</label>
                             <select name="sport" class="form-control">
+                            <option value="">----Select----</option>
                             {% for s in sports %}
                             <option
-                            {% if not s.0 %}
+                            {% if s.0 == "0" %}
                                 disabled{% else %} value="{{s.0}}"
                             {% endif %}>
                             {{s.1|safe}}
