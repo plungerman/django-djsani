@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load livewhale_api %}
 {% block title %}
     Health Insurance Information &mdash;
     Health and Counseling &mdash;
@@ -55,7 +56,7 @@ $(function() {
     });
 
     $("[id$='policy_type']").change(function() {
-        if( $(this).val()=="Gov" ) {
+        if( $(this).val()=="Gov" || $(this).val()=="Mil" ) {
             $.fancybox.open([{
                 href : '#athlete-warning'
             }]);
@@ -184,16 +185,8 @@ $(function() {
     <div id="athlete-warning" style="display:none;width:500px;">
         <h2>Primary Insurance Required</h2>
         <p>
-            All student-athletes must maintain primary insurance
-            that covers intercollegiate athletics and is applicable
-            to coverage in the state of Wisconsin. A copy of this
-            insurance card (front and back) needs to be on file with
-            Carthage Athletic Training. If you do not have insurance,
-            <a href="http://www.eiiastudent.org/carthage/students/athletes/enroll"
-                target="_blank">
-                click here
-            </a>
-            to purchase your primary athletic insurance.
+            {% get_lw_content as insurance_required blurbs 2173 %}
+            {{insurance_required.body}}
         </p>
         <p>
             <a href="javascript:$.fancybox.close();">Close</a>
