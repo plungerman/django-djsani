@@ -1,5 +1,6 @@
 {% extends "home.html" %}
 {% load filters %}
+{% load livewhale_api %}
 {% block title %}
     Verify &mdash;
     Medical History &mdash;
@@ -234,14 +235,8 @@ $(document).ready(function() {
       </div>
       <div class="modal-body">
         <p>
-            Counseling services are offered to Carthage College students,
-            free of charge from one of two counselors in the
-            Health &amp; Counseling Center. If you are interested in these
-            services, please contact
-            <a href="mailto:dbetsworth@carthage.edu">
-            Deborah Betsworth
-            </a> via email
-            or at 262.551.5725.
+            {% get_lw_content as counseling blurbs 2174 %}
+            {{counseling.body}}
         </p>
       </div>
       <div class="modal-footer">
