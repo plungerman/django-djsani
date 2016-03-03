@@ -2,34 +2,34 @@
 {% block css %}
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
         rel="stylesheet">
-    <link href="//www.carthage.edu/static/vendor/dashboard/font-awesome/css/font-awesome.min.css"
-        rel="stylesheet">
 {% endblock %}
 {% block extra_style %}
 <style>
-body {font-size: 1em;}
+body {font-size: 1em;line-height:14px;}
+p {margin:5px !important;padding:0;}
 blockquote {font-size:1em;border:0;}
 h1, .h1 {font-size: 2em;}
 h2, .h2 {font-size: 1.7em;}
-h3, .h3 {font-size: 1.4em;}
+h3, .h3 {font-size: 1.4em;margin-top:0;margin-bottom:0;}
 h4, .h4 {font-size: 1.1em;}
-@page { size: 8.5in 10.875in;margin: .6in 0; padding: 0 .5in;}
+label {margin-bottom:0px;}
+blockquote {margin:0;padding:0px;}
+@page {
+    size: 8.5in 10.875in;
+    margin: .6in .4in .4in .4in;
+}
 fieldset {
     page-break-before: avoid;
     page-break-after: avoid;
-    page-break-inside: always;
 }
 ol {
     page-break-before: avoid;
     page-break-after: avoid;
-    page-break-inside: always;
 }
 fieldset ol li {
     page-break-before: avoid;
     page-break-after: avoid;
-    page-break-inside: always;
 }
-.athlete-header {margin-bottom:-10px;margin-left:9px;}
 .dl-horizontal dt.widus {
     overflow: auto;
     width: 300px;
@@ -45,20 +45,12 @@ fieldset ol li {
 .fade {
     opacity: 1;
 }
+.form-group{margin-bottom:0;}
 </style>
 {% endblock %}
-{% block extra_javascript %}
-<script>
-if ( window.location.search.match( /print/gi ) ) {
-    $('#print-header').append("#student-contact");
-}
-</script>
-{% endblock %}
-{% block body_tag %} onload="window.print()"{% endblock %}
 {% block content %}
-<div id="print-header" style="float:right;"></div>
 <div id="student-contact">
-    <h1 class="page-header">
+    <h1 id="page-header">
     {{student.firstname}} {{student.lastname}}
     <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
     </h1>
