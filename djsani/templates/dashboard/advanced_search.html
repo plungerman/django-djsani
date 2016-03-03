@@ -1,0 +1,46 @@
+{% extends "dashboard/home.html" %}
+{% block title %}Advanced Search{% endblock %}
+{% block extra_javascript %}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Search Results
+            </h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <!-- /.panel-heading -->
+                <div class="panel-body" id="students-data-panel">
+                {% if students %}
+                <ol>
+                {% for s in students %}
+                    {% ifchanged s.id %}
+                    <li>
+                        <a href="{% url 'student_detail' s.id %}">
+                        {{s.lastname}}, {{s.firstname}}
+                        </a>
+                    </li>
+                    {% endifchanged %}
+                {% endfor %}
+                </ol>
+                {% else %}
+                <h2>Your search did not return any results</h2>
+                <ul>
+                    <li>Minimum 3 characters</li>
+                    <li>Case insensative</li>
+                </ul>
+                {% endif %}
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock content %}
