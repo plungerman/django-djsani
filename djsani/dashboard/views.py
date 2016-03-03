@@ -151,8 +151,8 @@ def student_detail(request, cid=None, content=None):
         template = "dashboard/student_print_%s.html" % content
     my_sports = None
     if not cid:
-        # search form
-        cid = request.POST.get("cid")
+        # search form, grab only numbers from string
+        cid = filter(str.isdigit, str(request.POST.get("cid")))
     if cid:
         # profile switcher POST from form
         manid = request.POST.get("manid")
@@ -224,4 +224,22 @@ def student_detail(request, cid=None, content=None):
             raise Http404
     else:
         raise Http404
+
+
+@group_required('MedicalStaff')
+def advanced_search(request):
+    q = request.POST.get("lastname", "").lower()
+    if q and len(q) > 3:
+        sql = '''
+            {} WHERE LOWER(id_rec.lastname) LIKE "%%{}%%"
+            ORDER BY lastname
+        '''.format(STUDENT_VITALS, q)
+        students = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL).fetchall()
+    else:
+        students = None
+    return render_to_response(
+        "dashboard/advanced_search.html",
+        {"students":students,},
+        context_instance=RequestContext(request)
+    )
 

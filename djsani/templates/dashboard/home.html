@@ -291,16 +291,18 @@
             <ul class="nav" id="side-menu">
                 <li class="sidebar-search">
                     <div class="input-group custom-search-form">
+                        <h4>Search by...</h4>
                         <form action="{% url 'student_search' %}" method="post" />
                         {% csrf_token %}
                         <input type="text" name="cid" class="form-control"
-                            placeholder="Search by ID...">
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
+                            placeholder="College ID">
                         </form>
-                    </span>
+                        <form action="{% url 'advanced_search' %}" method="post" />
+                        {% csrf_token %}
+                        <input type="text" name="lastname" class="form-control"
+                            placeholder="Last Name">
+                        </form>
+                        <small>Hit 'return' to submit</small>
                     </div>
                 </li>
                 <li>
