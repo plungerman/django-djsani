@@ -229,7 +229,7 @@ def student_detail(request, cid=None, content=None):
 @group_required('MedicalStaff')
 def advanced_search(request):
     q = request.POST.get("lastname", "").lower()
-    if q and len(q) > 3:
+    if q and len(q) >= 3:
         sql = '''
             {} WHERE LOWER(id_rec.lastname) LIKE "%%{}%%"
             ORDER BY lastname
