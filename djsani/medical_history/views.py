@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -18,7 +18,7 @@ from djtools.utils.database import row2dict
 EARL = settings.INFORMIX_EARL
 
 @login_required
-def form(request,stype):
+def form(request, stype, display=None):
     # dictionary for initial values if "update" else empty
     init = {}
     # student id
@@ -32,8 +32,8 @@ def form(request,stype):
         "djsani.medical_history.forms",
         "{}Form".format(mname)
     )
-    #template = "medical_history/form.html".format(stype)
-    template = "medical_history/form.html"
+    if display == "print":
+        template = "templates/medical_history/print.html"
     # check for student record(s)
     update = False
     table = "cc_{}_medical_history".format(stype)
@@ -113,32 +113,4 @@ def form(request,stype):
         },
         context_instance=RequestContext(request)
     )
-
-@login_required
-def print(request, stype):
-    # student id
-    cid = request.user.id
-    if cid:
-        # model name
-        mname = "{}MedicalHistory".format(stype.capitalize())
-        template = "templates/medical_history/print_{}.html".format(stype)
-        table = "cc_{}_medical_history".format(stype)
-
-        # create database session
-        session = get_session(EARL)
-
-        # retrieve our model and check to see if they already
-        # submitted this form or we have data from previous years
-        model = str_to_class(
-            "djsani.medical_history.models", mname
-        )
-        obj = session.query(model).filter_by(college_id=cid).\
-            filter(model.current(settings.START_DATE)).first()
-
-        return render_to_response(
-            template, { "data":obj },
-            context_instance=RequestContext(request)
-        )
-    else:
-        raise Http404
 
