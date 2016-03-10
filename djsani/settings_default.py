@@ -6,6 +6,8 @@ from djzbar.settings import INFORMIX_EARL_TEST as INFORMIX_EARL
 #from djzbar.settings import INFORMIX_EARL
 from djtools.fields import NOW
 
+from datetime import datetime
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -158,8 +160,8 @@ SERVER_MAIL=''
 INSURANCE_RECIPIENTS = []
 DEFAULT_HASH = ""
 DEFAULT_CID = ""
-START_DATE = datetime.datetime(NOW.year, 6, 1)
-HOUSING_DATE = "2015-05-01"
+START_DATE = datetime(NOW.year, 6, 1)
+HOUSING_DATE = datetime(NOW.year, 5, 1)
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(__file__), "logs/")
 LOG_FILENAME = LOG_FILEPATH + "debug.log"

@@ -1,0 +1,11 @@
+{% extends "home.html" %}
+{% load livewhale_api %}
+{% block extra_style %}{% endblock %}
+{% block extra_javascript %}{% endblock %}
+{% block content %}
+<div>
+    <h2>Closed</h2>
+    {% get_lw_content as closed blurbs 2175 %}
+    {{closed.body}}
+</div>
+{% endblock %}

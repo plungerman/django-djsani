@@ -28,7 +28,7 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
-import datetime
+from datetime import datetime
 
 """
 table names are the key, base model classes are the value
@@ -162,6 +162,13 @@ def set_val(request):
 
 @login_required
 def home(request):
+    now = datetime.now()
+    if now > settings.HOUSING_DATE and now < settings.START_DATE:
+        return render_to_response(
+            "closed.html",
+            context_instance=RequestContext(request)
+        )
+
     # check for medical staff
     medical_staff = in_group(request.user, "MedicalStaff")
     if medical_staff:
@@ -276,9 +283,6 @@ def home(request):
         data["relationship"] = RELATIONSHIP
 
     session.close()
-    # chapuza to test various UI
-    if request.GET.get("template"):
-        template = "home_{}.html".format(request.GET.get("template"))
 
     return render_to_response(
         template, data,
