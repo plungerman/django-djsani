@@ -1,0 +1,58 @@
+{% if field.name == "head_injuries" %}
+    <dt class="header">
+        <h3>Head and Neck Injury</h3>
+    </dt>
+{% endif %}
+{% if field.name == "abdomen_injury" %}
+    <dt class="header">
+        <h3>Torso Injury</h3>
+    </dt>
+{% endif %}
+{% if field.name == "shoulder_fracture" %}
+    <dt class="header">
+        <h3>Upper Extremity Injury</h3>
+    </dt>
+    <dt class="sub-header">
+        <h4 class="athlete-header">Shoulder/Clavicle</h4>
+    </dt>
+{% endif %}
+{% if field.name == "hip_pelvis" %}
+    <dt class="header">
+        <h3>Lower Extremity Injury</h3>
+    </dt>
+{% endif %}
+{% if field.name == "hamstring" %}
+    <dt class="sub-header">
+        <h4 class="althlete-header">Thigh</h4>
+    </dt>
+{% endif %}
+{% if field.name == "knee_ligaments" %}
+    <dt class="sub-header">
+        <h4 class="althete-header">Knee</h4>
+    </dt>
+{% endif %}
+{% if field.name == "shin_spints" %}
+    <dt class="sub-header">
+        <h4 class="athlete-header">Lower leg</h4>
+    </dt>
+{% endif %}
+{% if field.name == "ankle_fracture" %}
+    <dt class="sub-header">
+        <h4 class="athlete-header">Ankle</h4>
+    </dt>
+{% endif %}
+{% if field.name == "glasses" %}
+    <dt class="header">
+        <h3>Ears, Eyes, Dental</h3>
+    </dt>
+{% endif %}
+{% if field.name == "previous_year_change" %}
+    <dt class="header">
+        <h3>Additional Medical Information</h3>
+    </dt>
+{% endif %}
+{% if field.name == "menstrual_cycle" %}
+    <dt class="header">
+        <h3>Female Athletes Only</h3>
+    </dt>
+{% endif %}

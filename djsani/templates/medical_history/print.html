@@ -1,0 +1,66 @@
+{% extends "blank.html" %}
+{% block css %}
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+        rel="stylesheet">
+{% endblock %}
+{% block extra_style %}
+<style>
+body {font-size: 1em;line-height:14px;}
+p {margin:5px !important;padding:0;}
+blockquote {font-size:1em;border:0;}
+h1, .h1 {font-size: 2em;}
+h2, .h2 {font-size: 1.7em;}
+h3, .h3 {font-size: 1.4em;margin-top:0;margin-bottom:0;}
+h4, .h4 {font-size: 1.1em;}
+label {margin-bottom:0px;}
+blockquote {margin:0;padding:0px;}
+@page {
+    size: 8.5in 10.875in;
+    margin: .6in .4in .4in .4in;
+}
+fieldset {
+    page-break-before: avoid;
+    page-break-after: avoid;
+}
+ol {
+    page-break-before: avoid;
+    page-break-after: avoid;
+}
+fieldset ol li {
+    page-break-before: avoid;
+    page-break-after: avoid;
+}
+.dl-horizontal dt.widus {
+    overflow: auto;
+    width: 300px;
+    margin-right:9px;
+}
+.dl-horizontal dd.yes {
+    margin-left: 0;
+}
+.nav-tabs{display:none;}
+.tab-content > .tab-pane {
+    display: block;
+}
+.fade {
+    opacity: 1;
+}
+.form-group{margin-bottom:0;}
+</style>
+{% endblock %}
+{% block body_tag %} onload="window.print()"{% endblock %}
+{% block content %}
+<div id="student-contact">
+    <h1 id="page-header">
+    {{request.user.last_name}}, {{request.user.first_name}}
+    </h1>
+</div>
+<div id="student-medical-history">
+    <h2>{{stype|capfirst}} Medical History</h2>
+    {% if stype == "athlete" %}
+        {% include "medical_history/print_athlete.inc.html" %}
+    {% else %}
+        {% include "medical_history/print_student.inc.html" %}
+    {% endif %}
+</div>
+{% endblock content %}

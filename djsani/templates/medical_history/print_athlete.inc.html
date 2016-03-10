@@ -1,0 +1,18 @@
+<div id="medical-history">
+    <dl class="nobull">
+        {% for field in form.visible_fields %}
+            {% include "medical_history/print_athlete_headers.inc.html" %}
+            <dt>
+                <h3>{{ field.label }}</h3>
+            </dt>
+            <dd>
+                {{field.value|default_if_none:"&nbsp;"}}
+            </dd>
+            {% if field.help_text %}
+            <dt class="help">
+                <p>{{field.help_text}}</p>
+            </dt>
+            {% endif %}
+        {% endfor %}
+    </dl>
+</div>
