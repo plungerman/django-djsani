@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.forms import StudentMedicalHistoryForm
@@ -32,6 +32,8 @@ def form(request, stype, display=None):
         "djsani.medical_history.forms",
         "{}Form".format(mname)
     )
+    if not fclass:
+        raise Http404
     # default template
     template = "medical_history/form.html"
     # check for student record(s)
@@ -49,8 +51,11 @@ def form(request, stype, display=None):
     model = str_to_class(
         "djsani.medical_history.models", mname
     )
-    obj = session.query(model).filter_by(college_id=cid).\
-        filter(model.current(settings.START_DATE)).first()
+    if model:
+        obj = session.query(model).filter_by(college_id=cid).\
+            filter(model.current(settings.START_DATE)).first()
+    else:
+        raise Http404
 
     # dictionary for 'yes' answer values
     data = {}
