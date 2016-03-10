@@ -1,8 +1,7 @@
 {% load livewhale_api %}
-{% load ifusergroup %}
 <div id="medical-history">
     <div class="large-12 col-lg-12">
-        {% ifusergroup MedicalStaff %}
+        {% if MedicalStaff %}
         {% else %}
         <h3>About Sickle Cell Trait</h3>
         {% get_lw_content as about blurbs 2029 %}
@@ -10,7 +9,7 @@
         <h3>Sickle Cell trait Testing</h3>
         {% get_lw_content as testing blurbs 2030 %}
         {{testing.body|safe}}
-        {% endifusergroup %}
+        {% endif %}
         <h3>Test Results or Sickle Cell Trait Testing Waiver</h3>
         {% get_lw_content as testing blurbs 2031 %}
         {{testing.body|safe}}
