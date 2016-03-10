@@ -204,19 +204,20 @@ def student_detail(request, cid=None, content=None):
                 else:
                     sports = SPORTS_MEN
                 try:
-                    user = User.objects.get(pk=cid)
+                    student_user = User.objects.get(pk=cid)
                 except:
-                    user = None
+                    student_user = None
             else:
-                age=ens=shi=smh=amh=student=sports=stype=user=None
+                age=ens=shi=smh=amh=student=sports=stype=student_user=None
             return render_to_response(
                 template,
                 {
-                    "student":student,"user":user,"age":age,"ens":ens,
-                    "shi":shi,"amh":amh,"smh":smh,"cid":cid,
+                    "student":student,"student_user":student_user,"age":age,
+                    "ens":ens, "shi":shi,"amh":amh,"smh":smh,"cid":cid,
                     "switch_earl":reverse_lazy("set_val"),
-                    "sports":sports,"my_sports":my_sports,"next_year":NEXT_YEAR,
-                    "stype":stype,"managers":managers,"manager":manager
+                    "sports":sports,"my_sports":my_sports,
+                    "next_year":NEXT_YEAR,"stype":stype,"managers":managers,
+                    "manager":manager,"MedicalStaff":True
                 },
                 context_instance=RequestContext(request)
             )
