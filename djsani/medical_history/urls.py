@@ -16,6 +16,11 @@ urlpatterns = patterns('djsani.medical_history.views',
     ),
     # medical history form: athletics or academics
     url(
+        r'^(?P<stype>[a-zA-Z0-9_-]+)/(?P<display>[a-zA-Z0-9_-]+)/$',
+        'form', name="medical_history_print"
+    ),
+    # medical history form: athletics or academics
+    url(
         r'^(?P<stype>[a-zA-Z0-9_-]+)/$',
         'form', name="medical_history_form"
     ),

@@ -1,6 +1,11 @@
 <form class="form" id="medical-history">
     <div id="medical-history">
         <fieldset class="blockLabels">
+            <div style="float:right;">
+                <a href="{% url 'medical_history_print' 'student' 'print' %}">
+                    <i class="fa fa-print fa-4x"></i>
+                </a>
+            </div>
             <ol class="nobull">
                 {% for field in form.visible_fields %}
                     {% if forloop.first %}

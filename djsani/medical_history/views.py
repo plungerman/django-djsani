@@ -32,8 +32,8 @@ def form(request, stype, display=None):
         "djsani.medical_history.forms",
         "{}Form".format(mname)
     )
-    if display == "print":
-        template = "templates/medical_history/print.html"
+    # default template
+    template = "medical_history/form.html"
     # check for student record(s)
     update = False
     table = "cc_{}_medical_history".format(stype)
@@ -61,7 +61,10 @@ def form(request, stype, display=None):
         # the student needs to verify it
         if getattr(manager, table):
             update = True
-            template = "medical_history/form_update.html"
+            if display == "print":
+                template = "medical_history/print.html"
+            else:
+                template = "medical_history/form_update.html"
         # put it in a dict
         init = row2dict(obj)
     if request.method == 'POST':
