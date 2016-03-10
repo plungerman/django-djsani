@@ -16,7 +16,6 @@ label {margin-bottom:0px;}
 blockquote {margin:0;padding:0px;}
 @page {
     size: 8.5in 10.875in;
-    margin: .6in .4in .4in .4in;
 }
 fieldset {
     page-break-before: avoid;
@@ -38,6 +37,10 @@ fieldset ol li {
 .dl-horizontal dd.yes {
     margin-left: 0;
 }
+dt.header{
+    margin:5px 0; font-size:1.1em;text-transform: uppercase;
+    text-decoration: underline dotted;
+}
 .nav-tabs{display:none;}
 .tab-content > .tab-pane {
     display: block;
@@ -57,10 +60,9 @@ fieldset ol li {
     </h1>
 </div>
 <div id="student-medical-history">
-    <h2>Medical History</h2>
-    <h3>Student</h3>
+    <h2>Student Medical History</h2>
     {{smh}}
-    <h3>Athlete</h3>
+    <h2>Athlete Medical History</h2>
     {{amh}}
 </div>
 {% endblock content %}

@@ -113,7 +113,7 @@ def get_students(request):
     else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
 
-def panels(request, session, mod, manager, gender=None):
+def panels(request, session, mod, manager,content,gender=None):
     """
     Accepts a data model class, manager object, optional gender.
     Returns the template data that paints the panels in the
@@ -122,12 +122,6 @@ def panels(request, session, mod, manager, gender=None):
     form = None
     data = None
     mname = mod.__name__
-    """
-    try:
-        obj = session.query(mod).filter_by(manager_id=manager.id).one()
-    except:
-        obj = None
-    """
     manid = manager.id
     obj = session.query(mod).filter_by(manager_id=manid).first()
     if obj:
@@ -138,7 +132,9 @@ def panels(request, session, mod, manager, gender=None):
                 "{}Form".format(mname)
             )(initial=data, gender=gender)
     t = loader.get_template("dashboard/panels/{}.html".format(mname))
-    c = RequestContext(request, {'data':data,'form':form,'manager':manager})
+    c = RequestContext(
+        request, {'data':data,'form':form,'content':content,'manager':manager}
+    )
     return t.render(c)
 
 @group_required('MedicalStaff')
@@ -185,13 +181,15 @@ def student_detail(request, cid=None, content=None):
                 ens = session.query(AARec).filter_by(id=cid).\
                     filter(AARec.aa.in_(ENS_CODES)).all()
                 shi = panels(
-                    request, session, StudentHealthInsurance, manager
+                    request, session, StudentHealthInsurance, manager, content
                 )
                 smh = panels(
-                    request,session,StudentMedicalHistory,manager,student.sex
+                    request,session,StudentMedicalHistory,manager,content,
+                    student.sex
                 )
                 amh = panels(
-                    request,session,AthleteMedicalHistory,manager,student.sex
+                    request,session,AthleteMedicalHistory,manager,content,
+                    student.sex
                 )
                 # used for staff who update info on the dashboard
                 stype = "student"

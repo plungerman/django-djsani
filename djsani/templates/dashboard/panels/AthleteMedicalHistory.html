@@ -1,7 +1,11 @@
 {% if data %}
     <h4>Date of Submission</h4>
-    {{data.created_at}}
-    {% include "medical_history/form_athlete.inc.html" %}
+    <p>{{data.created_at}}</p>
+    {% if content %}
+        {% include "medical_history/print_athlete.inc.html" %}
+    {% else %}
+        {% include "medical_history/form_athlete.inc.html" %}
+    {% endif %}
 {% else %}
 <div class="alert alert-danger">
     <h3>The student has not completed this form.</h3>
