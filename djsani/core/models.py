@@ -85,6 +85,7 @@ class StudentMedicalManager(Base):
     cc_athlete_reporting_waiver = Column(Boolean)
     cc_athlete_risk_waiver = Column(Boolean)
     cc_athlete_sicklecell_waiver = Column(Boolean)
+    staff_notes = Column(Text)
 
     def __repr__(self):
         return str(self.college_id)
