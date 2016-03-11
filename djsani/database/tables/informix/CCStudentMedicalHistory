@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalHistory,v 8.0.17100.1 2015/05/01 16:20:00 skirk Released $
+ $Header: CCStudentMedicalHistory,v 8.0.17100.4 2015/05/20 12:12:46 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -404,6 +404,8 @@ column other_condition  varchar(255)
 
 index               { Index names must be unique across database }
                     cc_student_medical_history01 on (id)
+                    cc_student_medical_history_college_id on (college_id)
+                    cc_student_medical_history_manager_id on (manager_id)
 
 grant
     select  to (group carsprog, group registrar, group student)
