@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalManager,v 8.0.17100.1 2015/05/01 16:20:00 skirk Released $
+ $Header: CCStudentMedicalManager,v 8.0.17100.8 2016/03/11 10:21:05 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -159,6 +159,16 @@ column cc_athlete_reporting_waiver smallint
     attributes
         (
         )
+
+column staff_notes lvarchar(4092)
+    comments        ""
+    desc            "Staff notes and comments"
+    heading         "Staff notes and comments"
+    text            "Staff notes and comments"
+    attributes
+        (
+        )
+
 
 index               { Index names must be unique across database }
                     cc_student_medical_manager_college_id on (college_id)
