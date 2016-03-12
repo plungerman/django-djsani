@@ -45,6 +45,8 @@
     </style>
 {% endblock %}
 {% block extra_javascript %}
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/jquery.dataTables.js"></script>
     <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
     <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/dataTables.bootstrap.js"></script>
@@ -244,6 +246,10 @@
             success: function(response, newValue) {
                 $.growlUI('Success', "Data saved.");
             }
+        });
+        $('[data-toggle="popover"]').popover({
+            trigger: 'hover',
+            'placement': 'top'
         });
         {% if not students and not student %}
             alert("There was a problem fetching the student data.\nPlease reload the page or try your search again.");

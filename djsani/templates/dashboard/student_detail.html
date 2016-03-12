@@ -19,6 +19,7 @@
     /* show the move cursor as the user moves the mouse over the panel header.*/
     #draggablePanelList .panel-heading { cursor: move; }
     li { list-style: none; }
+    .editable-input textarea {width:375px !important;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -61,6 +62,7 @@
             params: function (params) {
                 params.table = $(this).attr("data-table");
                 params.college_id = {{student.id|default:"0"}};
+                params.pk = $(this).attr("data-pk");
                 return params
             },
             success: function(response, newValue) {
@@ -275,6 +277,22 @@
                 <div class="panel-body">
                     <div id="emergency_information">
                         {% include "dashboard/panels/emergency_information.html" %}
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel-info -->
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-comments-o"></i>
+                        Staff Notes and Comments
+                    </h3>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="staff_notes">
+                        {% include "dashboard/panels/staff_notes.html" %}
                     </div>
                 </div>
                 <!-- /.panel-body -->

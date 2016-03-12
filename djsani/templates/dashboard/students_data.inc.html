@@ -43,8 +43,16 @@
                         {{s.lastname}}, {{s.firstname}}
                     </a>
                     {% if s.athlete %}
-                    <span style="float:right;">
+                    <span style="float:right;margin-left:3px;">
                         <i class="fa fa-star green"></i>
+                    </span>
+                    {% endif %}
+                    {% if s.staff_notes %}
+                    <span style="float:right;">
+                        <i class="fa fa-comments-o red"
+                            data-content="{{s.staff_notes|default:'&nbsp;'}}"
+                            data-toggle="popover">
+                        </i>
                     </span>
                     {% endif %}
                 </td>

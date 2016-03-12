@@ -23,6 +23,7 @@ SELECT
     id_rec.lastname, id_rec.firstname, id_rec.id,
     profile_rec.birth_date,
     cc_student_medical_manager.id as manid,
+    cc_student_medical_manager.staff_notes,
     cc_student_medical_manager.athlete,
     cc_student_medical_manager.sitrep,
     cc_student_medical_manager.emergency_contact,
