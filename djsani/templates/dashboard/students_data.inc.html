@@ -37,6 +37,9 @@
                             <i class="fa fa-times red"></i>
                         {% endif %}
                     {% endif %}
+                    <span style="float:right;"><!-- all one line required -->
+                        <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting{% else %} fa-commenting-o{% endif %} red" data-toggle="popover" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-1000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
+                    </span>
                 </td>
                 <td class="{{s.adult}} student-name" style="text-align:left;">
                     <a href="{% url 'student_detail' s.id %}">
@@ -45,14 +48,6 @@
                     {% if s.athlete %}
                     <span style="float:right;margin-left:3px;">
                         <i class="fa fa-star green"></i>
-                    </span>
-                    {% endif %}
-                    {% if s.staff_notes %}
-                    <span style="float:right;">
-                        <i class="fa fa-commenting red"
-                            data-content="{{s.staff_notes|default:'&nbsp;'}}"
-                            data-toggle="popover">
-                        </i>
                     </span>
                     {% endif %}
                 </td>

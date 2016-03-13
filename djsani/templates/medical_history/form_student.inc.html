@@ -1,11 +1,13 @@
 <form class="form" id="medical-history">
     <div id="medical-history">
         <fieldset class="blockLabels">
+            {% if not request.user.is_staff %}
             <div style="float:right;">
                 <a href="{% url 'medical_history_print' 'student' 'print' %}">
                     <i class="fa fa-print fa-4x"></i>
                 </a>
             </div>
+            {% endif %}
             <ol class="nobull" style="float:left;">
                 {% for field in form.visible_fields %}
                     {% if forloop.first %}

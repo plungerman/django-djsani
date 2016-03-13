@@ -20,6 +20,7 @@
     #draggablePanelList .panel-heading { cursor: move; }
     li { list-style: none; }
     .editable-input textarea {width:375px !important;}
+    .editable-container.editable-popup { z-index: 10000; }
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -55,7 +56,7 @@
         spinner.stop(target);
 
         /* x-editable jquery plugin: pronounced 'sheditable' */
-        $.fn.editable.defaults.mode = 'inline';
+        $.fn.editable.defaults.mode = 'popup';
         $('.xeditable').editable({
             url: "{% url 'set_val' %}",
             emptytext: "Click to edit",

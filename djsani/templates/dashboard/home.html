@@ -21,6 +21,11 @@
     table.dataTable > tbody tr:nth-child(odd):hover td { background-color: #fae7b5 !important; }
     table.dataTable tbody th, table.dataTable tbody td { padding: 2px 4px; }
     table.dataTable thead th, table.dataTable thead td { border-bottom: 1px solid #111; padding: 2px 6px; }
+    .editable-pre-wrapped { white-space: normal; }
+    .editable-input textarea {width:375px !important;}
+    .editable-container.editable-popup { z-index: 10000; }
+    .editable-click, a.editable-click, a.editable-click:hover {border-bottom: 0; text-decoration: none; }
+    .navbar-default {z-index:100;}
     address { margin-bottom: 0; }
     .center{text-align:center;}
     .red {color:#800;}
@@ -234,19 +239,32 @@
             });
         });
         /* x-editable jquery plugin: pronounced 'sheditable' */
-        $.fn.editable.defaults.mode = 'inline';
+        $.fn.editable.defaults.mode = 'popup';
         $('.xeditable').editable({
             url: "{% url 'set_val' %}",
             emptytext: "Click to edit",
             params: function (params) {
                 params.table = $(this).attr("data-table");
-                params.college_id = {{student.id|default:"0"}};
-                params.switch = params.value;
-                params.field = params.name;
+                params.college_id = $(this).attr("data-cid");
+                params.name = $(this).attr("data-field");
+                params.pk = $(this).attr("data-pk");
                 return params
+            },
+            display: function(value, response) {
+                //disable this method so we can update in 'success' method
+                return false;
             },
             success: function(response, newValue) {
                 $.growlUI('Success', "Data saved.");
+                $icon = $(this).find("i");
+                if ($icon.attr("data-content") == '') {
+                    $icon.attr("class",'fa fa-commenting red');
+                }
+                if (newValue == "") {
+                    $icon.attr("class",'fa fa-commenting-o red');
+                }
+                $icon.attr("data-content", newValue);
+                $(this).find("span").text(newValue);
             }
         });
         $('[data-toggle="popover"]').popover({
@@ -254,7 +272,10 @@
             'placement': 'top'
         });
         {% if not students and not student %}
-            alert("There was a problem fetching the student data.\nPlease reload the page or try your search again.");
+            alert("\
+               There was a problem fetching the student data.\n\
+               Please reload the page or try your search again.\
+            ");
         {% endif %}
     });
     </script>
