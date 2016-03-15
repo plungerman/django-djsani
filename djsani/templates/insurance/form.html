@@ -7,7 +7,9 @@
 {% endblock %}
 {% block extra_style %}
 {{block.super}}
-<link rel="stylesheet" href="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+<link rel="stylesheet"
+    href="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css"
+    type="text/css" media="screen" />
 {% endblock %}
 {% block extra_javascript %}
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
@@ -28,16 +30,24 @@ $(function() {
     });
     $('#id_opt_out').change(function() {
         if($(this).is(":checked")) {
-            $('#insurance-policies').slideUp(200);
-            $('#secondary-box').slideUp(200);
             {% if manager.athlete == 1 %}
             $.fancybox.open([{
                 href : '#athlete-warning'
             }]);
+            $("#primary-insurance-header").text("Athlete Insurance");
+            {% else %}
+            $('#primary-form').slideUp(200);
             {% endif %}
+            $('#secondary-box').slideUp(200);
+            $('#secondary-form').slideUp(200);
         }else{
-            $('#insurance-policies').slideDown(200);
+            $("#primary-insurance-header").text("Primary Insurance");
+            $('#primary-form').slideDown(200);
             $('#secondary-box').slideDown(200);
+            if (!$("#id_second").is(":checked")) {
+                console.log('boo!');
+                $('#secondary-form').slideDown(200);
+            }
         }
     });
     $('#id_second').change(function() {
@@ -54,7 +64,6 @@ $(function() {
             $('#secondary-form').slideDown(200);
         }
     });
-
     $("[id$='policy_type']").change(function() {
         if( $(this).val()=="Gov" || $(this).val()=="Mil" ) {
             $.fancybox.open([{
@@ -62,7 +71,6 @@ $(function() {
             }]);
         }
     });
-
     // for updates to the form
     if ( $('#id_primary_policy_type').val() == "Gov") {
         $('#id_primary_policy_state').addClass("required");
@@ -79,9 +87,19 @@ $(function() {
         }
     });
     {% if oo == True %}
-        $('#insurance-policies').slideUp(200);
-        $('#secondary-box').slideUp(200);
-        $("#id_opt_out").prop("checked", true);
+        {% if manager.athlete == 1 %}
+            $.fancybox.open([{
+                href : '#athlete-warning'
+            }]);
+            $("#primary-insurance-header").text("Athlete Insurance");
+            $('#secondary-box').slideUp(200);
+            $('#secondary-form').slideUp(200);
+        {% else %}
+            $('#primary-form').slideUp(200);
+            $('#secondary-form').slideUp(200);
+            $('#secondary-box').slideUp(200);
+            $("#id_opt_out").prop("checked", true);
+        {% endif %}
     {% else %}
         {% if secondary == None and update %}
             $("#id_second").prop("checked", true);
@@ -134,7 +152,7 @@ $(function() {
             value="{{update}}" name="update">
         <div class="large-5 medium-7 small-7">
             <label for="id_opt_out">
-                <input id="id_opt_out" type="checkbox" value="1" name="opt_out" />
+                <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
                 <span style="color:#f00;">
                     I attest that I do <strong><u>NOT</u></strong>
                     have health insurance.
@@ -144,7 +162,8 @@ $(function() {
         <div class="large-5 medium-7 small-7">
             <div id="secondary-box">
                 <label for="id_second" style="display:block;">
-                    <input id="id_second" type="checkbox" value="1" name="second_policy" />
+                    <input id="id_second" type="checkbox"
+                        value="1" name="second_policy">
                     <span style="color:#800;">
                         I do <strong><u>NOT</u></strong>
                         have a secondary policy.
@@ -154,7 +173,9 @@ $(function() {
         </div>
         <div id="insurance-policies">
             <div class="large-5 medium-7 small-7" id="primary-form">
-                <h2>Primary Insurance Policy</h2>
+                <h2 id="primary-insurance-header">
+                    Primary Insurance Policy
+                </h2>
                 <fieldset class="blockLabels">
                     <ol>
                         {% for field in form.visible_fields %}
@@ -162,7 +183,9 @@ $(function() {
                             {% if field.name == "primary_policy_state" %}
                                 </ol></fieldset></div>
                                 <div class="large-5 medium-7 small-7" id="secondary-form">
-                                <h2>Secondary Insurance Policy</h2>
+                                <h2>
+                                    Secondary Insurance Policy
+                                </h2>
                                 <fieldset class="blockLabels">
                                     <ol>
                             {% endif %}
@@ -172,14 +195,19 @@ $(function() {
             </div>
         </div>
         <div class="large-11">
+            <div class="large-4">&nbsp;</div>
+            <div class="large-5">
             {% if update %}
             <h3>
                 I verify that this information is accurate.
             </h3>
             {% endif %}
             {% if not request.session.staff %}
+            <div style="margin-left:45px;">
             {% include "form_submit.inc.html" %}
+            </div>
             {% endif %}
+            </div>
         </div>
     </form>
     <div id="athlete-warning" style="display:none;width:500px;">
