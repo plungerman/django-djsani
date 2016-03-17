@@ -258,10 +258,12 @@
                 $.growlUI('Success', "Data saved.");
                 $icon = $(this).find("i");
                 if ($icon.attr("data-content") == '') {
-                    $icon.attr("class",'fa fa-commenting red');
+                    $icon.attr("class",'fa fa-commenting green');
                 }
                 if (newValue == "") {
-                    $icon.attr("class",'fa fa-commenting-o red');
+                    $icon.attr("class",'fa fa-commenting-o green');
+                }else{
+                    $icon.attr("class",'fa fa-commenting red');
                 }
                 $icon.attr("data-content", newValue);
                 $(this).find("span").text(newValue);
