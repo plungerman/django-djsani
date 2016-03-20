@@ -35,6 +35,7 @@ $(function() {
                 href : '#athlete-warning'
             }]);
             $("#primary-insurance-header").text("Athlete Insurance");
+            $('#insurance-card').slideUp(200);
             {% else %}
             $('#primary-form').slideUp(200);
             {% endif %}
@@ -43,6 +44,7 @@ $(function() {
         }else{
             $("#primary-insurance-header").text("Primary Insurance");
             $('#primary-form').slideDown(200);
+            $('#insurance-card').slideDown(200);
             $('#secondary-box').slideDown(200);
             if (!$("#id_second").is(":checked")) {
                 console.log('boo!');
@@ -92,6 +94,7 @@ $(function() {
                 href : '#athlete-warning'
             }]);
             $("#primary-insurance-header").text("Athlete Insurance");
+            $('#insurance-card').slideUp(200);
             $('#secondary-box').slideUp(200);
             $('#secondary-form').slideUp(200);
         {% else %}
