@@ -146,7 +146,8 @@ $(function() {
     {% include "includes/errors_text.html" %}
     </div>
     <p class="cf">&nbsp;</p>
-    <form method="post" action="." type="actionForm" class="form" id="profile">
+    <form method="post" action="." type="actionForm" class="form"
+         enctype="multipart/form-data" id="profile">
         {% csrf_token %}
         <input id="id_update" type="hidden"
             value="{{update}}" name="update">
@@ -177,20 +178,42 @@ $(function() {
                     Primary Insurance Policy
                 </h2>
                 <fieldset class="blockLabels">
-                    <ol>
-                        {% for field in form.visible_fields %}
-                            {% include "form_field.inc.html" %}
-                            {% if field.name == "primary_policy_state" %}
-                                </ol></fieldset></div>
-                                <div class="large-5 medium-7 small-7" id="secondary-form">
-                                <h2>
-                                    Secondary Insurance Policy
-                                </h2>
-                                <fieldset class="blockLabels">
-                                    <ol>
-                            {% endif %}
-                        {% endfor %}
-                    </ol>
+                  <ol>
+                    {% for field in form.visible_fields %}
+                      {% if field.name == "primary_card_front" %}
+                        <li class="form-group ctrlHolder" id="insurance-card">
+                          <h3 class="help">
+                            Photo/Scan of your insurance card
+                          </h3>
+                          <div class="clear">
+                            <strong class="fleft" style="width:35px;margin-right:5px;">Front</strong>
+                            <input type="file" name="primary_card_front"
+                              id="id_primary_card_front" class="fleft" style="width:300px">
+                              {% if form.primary_card_front.value %}
+                                <a href="{{media_url}}files/{{form.primary_card_front.value}}" class="fright">
+                                  <i class="fa fa-credit-card"></i></a>
+                              {% endif %}
+                          </div>
+                          <div class="clear">
+                            <strong class="fleft" style="width:35px;margin-right:5px;">Back</strong>
+                            <input type="file" name="primary_card_back"
+                              id="id_primary_card_back" class="fleft" style="width:300px">
+                              {% if form.primary_card_back.value %}
+                                <a href="{{media_url}}files/{{form.primary_card_back.value}}" class="fright">
+                                  <i class="fa fa-credit-card"></i></a>
+                              {% endif %}
+                          </div>
+                        </li>
+                        </ol></fieldset></div>
+                        <div class="large-5 medium-7 small-7" id="secondary-form">
+                          <h2>Secondary Insurance Policy</h2>
+                          <fieldset class="blockLabels">
+                            <ol>
+                      {% else %}
+                        {% include "form_field.inc.html" %}
+                      {% endif %}
+                    {% endfor %}
+                  </ol>
                 </fieldset>
             </div>
         </div>

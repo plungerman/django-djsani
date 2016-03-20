@@ -13,14 +13,15 @@ from djsani.insurance.forms import StudentForm, AthleteForm
 
 from djzbar.utils.informix import get_session
 
+from djtools.fields.helpers import handle_uploaded_file
 from djtools.utils.convert import str_to_class
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
 from djtools.utils.mail import send_mail
 
 from sqlalchemy.orm import sessionmaker
-from textwrap import fill
 
+from os.path import join
 
 @login_required
 def form(request, stype, cid=None):
@@ -63,11 +64,33 @@ def form(request, stype, cid=None):
                     "alert_email.html",
                     request, settings.MANAGERS
                 )
-
         else:
-            form = str_to_class("djsani.insurance.forms", fname)(request.POST)
+            form = str_to_class(
+                "djsani.insurance.forms", fname
+            )(request.POST, request.FILES)
             form.is_valid()
             form = form.cleaned_data
+            # deal with file uploads
+            if request.FILES:
+                folder = "insurance/{}/{}".format(
+                    cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
+                )
+                p = join(settings.UPLOADS_DIR, folder)
+                if request.FILES.get('primary_card_front'):
+                    front = handle_uploaded_file(
+                        request.FILES['primary_card_front'], p
+                    )
+                    form["primary_card_front"] = "{}/{}".format(folder, front)
+                else:
+                    form.pop("primary_card_front", None)
+                if request.FILES.get('primary_card_back'):
+                    back = handle_uploaded_file(
+                        request.FILES['primary_card_back'], p
+                    )
+                    form["primary_card_back"] = "{}/{}".format(folder, back)
+                else:
+                    form.pop("primary_card_back", None)
+            # student did not opt out
             form["opt_out"] = False
         # insert else update
         if not request.POST.get("update"):

@@ -13,7 +13,7 @@ from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
 from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENTS_ALPHA, STUDENT_VITALS
-from djsani.core.utils import get_manager, get_term
+from djsani.core.utils import get_manager, get_term, facstaff
 from djsani.emergency.models import AARec
 
 from djzbar.utils.informix import do_sql as do_esql, get_session
@@ -146,10 +146,12 @@ def student_detail(request, cid=None, content=None):
     if content:
         template = "dashboard/student_print_%s.html" % content
     my_sports = None
+    # search form, grab only numbers from string
     if not cid:
-        # search form, grab only numbers from string
         cid = filter(str.isdigit, str(request.POST.get("cid")))
-    if cid:
+    # we do not want to display faculty/staff details
+    # nor do we want to create a manager for them
+    if cid and not facstaff(cid):
         # profile switcher POST from form
         manid = request.POST.get("manid")
         if not manid:

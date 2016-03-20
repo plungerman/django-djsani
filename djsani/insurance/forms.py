@@ -62,6 +62,17 @@ class AthleteForm(forms.Form):
         widget=forms.Select(choices=STATE_CHOICES),
         required=False
     )
+    primary_card_front = forms.FileField(
+        label="Insurance Card Front",
+        help_text="Photo/Scan of your insurance card",
+        required=False
+    )
+    primary_card_back = forms.FileField(
+        label="Insurance Card Back",
+        help_text="Photo/Scan of your insurance card",
+        required=False
+    )
+
     # secondary
     secondary_policy_holder = forms.CharField(
         max_length=128,

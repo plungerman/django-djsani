@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentHealthInsurance,v 8.0.17100.3 2015/05/18 13:23:03 mkishlin Released $
+ $Header: CCStudentHealthInsurance,v 8.0.17100.5 2016/03/20 11:22:03 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -138,6 +138,24 @@ column primary_policy_address   varchar(255)
     desc            "Primary policy address"
     heading         "Prim. Policy Address"
     text            "Prim. Policy Address"
+    attributes
+        (
+        )
+
+column primary_card_front varchar(128)
+    comments        ""
+    desc            "Insurance card image (front)"
+    heading         "Insurance Card Front"
+    text            "Insurance Card Front"
+    attributes
+        (
+        )
+
+column primary_card_back varchar(128)
+    comments        ""
+    desc            "Insurance card image (back)"
+    heading         "Insurance Card Back"
+    text            "Insurance Card Back"
     attributes
         (
         )

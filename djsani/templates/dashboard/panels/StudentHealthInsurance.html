@@ -11,6 +11,15 @@
 {% else %}
     <div>
 {% endif %}
+{% if data.primary_card_front %}
+<div style="float:right;">
+    <a href="{{media_url}}files/{{data.primary_card_front}}">
+        <i class="fa fa-credit-card"></i> Front</a>
+    <br>
+    <a href="{{media_url}}files/{{data.primary_card_back}}">
+        <i class="fa fa-credit-card"></i> Back</a>
+</div>
+{% endif %}
 <h4>Date of submission</h4>
 <p>{{data.created_at}}</p>
 <form style="float:left;">

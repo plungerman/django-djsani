@@ -33,6 +33,8 @@ class StudentHealthInsurance(Base):
     primary_policy_type = Column(String)
     primary_policy_state = Column(String)
     primary_policy_address = Column(String)
+    primary_card_front = Column(String)
+    primary_card_back = Column(String)
     # secondary
     secondary_policy_holder = Column(String)
     secondary_dob = Column(Date, default="")
@@ -46,6 +48,9 @@ class StudentHealthInsurance(Base):
 
     def __repr__(self):
         return str(self.college_id)
+
+    def get_slug(self):
+        return "insurance"
 
     def set_opt_out(self):
         """
