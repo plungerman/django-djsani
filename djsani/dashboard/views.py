@@ -104,7 +104,14 @@ def get_students(request):
         )
         students = None
         if objs:
-            students = objs.fetchall()
+            students = [dict(row) for row in objs.fetchall()]
+            for s in students:
+                adult = "minor"
+                if s["birth_date"]:
+                    age = calculate_age(s["birth_date"])
+                    if age > 17:
+                        adult = "adult"
+                s["adult"] = adult
         return render_to_response(
             "dashboard/students_data.inc.html",
             {"students":students,"sports":SPORTS,},
