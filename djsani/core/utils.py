@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.contrib.auth.models import User
 
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
@@ -7,6 +8,7 @@ from djsani.medical_history.waivers.models import Sicklecell
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import StudentMedicalContentType
 from djsani.core.models import StudentMedicalManager
+from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
 from sqlalchemy.orm.session import make_transient
@@ -27,6 +29,12 @@ def get_content_type(session, name):
         cache.set(name, ct, None)
     return ct
 
+def facstaff(cid):
+    """
+    is user faculty or staff?
+    """
+    user = User.objects.get(pk=cid)
+    return in_group(user, "carthageStaffStatus","carthageFacultyStatus")
 
 def _doop(session, mod, man):
     """
