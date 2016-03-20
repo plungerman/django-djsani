@@ -146,6 +146,36 @@
                                 [100, 250, 500, 1000, 2000, "All"]
                             ]
                         });
+                        $.fn.editable.defaults.mode = 'popup';
+                        $('.xeditable').editable({
+                            url: "{% url 'set_val' %}",
+                            emptytext: "Click to edit",
+                            params: function (params) {
+                                params.table = $(this).attr("data-table");
+                                params.college_id = $(this).attr("data-cid");
+                                params.name = $(this).attr("data-field");
+                                params.pk = $(this).attr("data-pk");
+                                return params
+                            },
+                            display: function(value, response) {
+                                //disable this method so we can update in 'success' method
+                                return false;
+                            },
+                            success: function(response, newValue) {
+                                $.growlUI('Success', "Data saved.");
+                                $icon = $(this).find("i");
+                                if ($icon.attr("data-content") == '') {
+                                    $icon.attr("class",'fa fa-commenting green');
+                                }
+                                if (newValue == "") {
+                                    $icon.attr("class",'fa fa-commenting-o green');
+                                }else{
+                                    $icon.attr("class",'fa fa-commenting red');
+                                }
+                                $icon.attr("data-content", newValue);
+                                $(this).find("span").text(newValue);
+                            }
+                        });
                         $(table).on( 'click', 'tr', function () {
                             if ( $(this).hasClass('selected') ) {
                                 $(this).removeClass('selected');
