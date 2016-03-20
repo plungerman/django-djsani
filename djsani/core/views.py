@@ -216,10 +216,6 @@ def home(request):
             age = calculate_age(student.birth_date)
             if age >= 18:
                 adult = True
-        # freshman/transfer?
-        first_year = False
-        if student.plan_enr_sess == "RA" and student.plan_enr_yr == TODAY.year:
-            first_year = True
 
         # show the corresponding list of sports
         if student.sex == "F":
@@ -239,7 +235,6 @@ def home(request):
             "sports":sports,
             "my_sports":my_sports,
             "adult":adult,
-            "first_year":first_year
         }
 
         # emergency contact modal form
