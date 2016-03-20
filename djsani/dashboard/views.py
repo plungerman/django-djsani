@@ -152,43 +152,50 @@ def student_detail(request, cid=None, content=None):
     # we do not want to display faculty/staff details
     # nor do we want to create a manager for them
     if cid and not facstaff(cid):
-        # profile switcher POST from form
+        # manager ID comes from profile switcher POST from form
         manid = request.POST.get("manid")
+        # or from URL with GET variable
         if not manid:
             manid = request.GET.get("manid")
         session = get_session(EARL)
-        # get managers
-        managers = session.query(StudentMedicalManager).\
-                filter_by(college_id=cid).all()
-        # post from manager switch select box
-        if manid:
-            manager = session.query(StudentMedicalManager).\
-                filter_by(id=manid).one()
-        else:
-            manager = get_manager(session, cid)
         # get academic term
         term = get_term()
         # get student
         sql = '''
-            {} WHERE cc_student_medical_manager.id = "{}"
-        '''.format(STUDENT_VITALS, manager.id)
+            {} WHERE id_rec.id = "{}"
+            ORDER BY cc_student_medical_manager.created_at DESC
+        '''.format(STUDENT_VITALS, cid)
         obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
         if obj:
             student = obj.fetchone()
             if student:
+                # get all managers for switch select options
+                managers = session.query(StudentMedicalManager).\
+                    filter_by(college_id=cid).all()
+                # manid from GET or POST. if None let get_manager() sort it out
+                if manid:
+                    manager = session.query(StudentMedicalManager).\
+                        filter_by(id=manid).one()
+                else:
+                    manager = get_manager(session, cid)
+                # calculate student's age
                 try:
                     age = calculate_age(student.birth_date)
                 except:
                     age = None
+                # emergency notification system
                 ens = session.query(AARec).filter_by(id=cid).\
                     filter(AARec.aa.in_(ENS_CODES)).all()
+                # health insurance
                 shi = panels(
                     request, session, StudentHealthInsurance, manager, content
                 )
+                # student medical history
                 smh = panels(
                     request,session,StudentMedicalHistory,manager,content,
                     student.sex
                 )
+                # athlete medical history
                 amh = panels(
                     request,session,AthleteMedicalHistory,manager,content,
                     student.sex
