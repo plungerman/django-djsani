@@ -12,7 +12,7 @@
     </h2>
     {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form"
-         enctype="multipart/form-data" id="profile">
+         enctype="multipart/form-data" id="profile" style="height:600px;">
         {% csrf_token %}
         <fieldset class="blockLabels">
           <ol>
@@ -35,8 +35,9 @@
                   id="id_physical_evaluation" class="fleft" style="width:300px">
                 {% if manager.physical_evaluation %}
                 <a href="{{media_url}}files/{{manager.physical_evaluation}}"
-                  class="fright">
-                  <i class="fa fa-file-image-o"></i></a>
+                  class="fleft" style="margin-left:10px;margin-top:3px;"
+                  target="_blank" title="current file">
+                  <i class="fa fa-file"></i></a>
                 {% endif %}
               </div>
             </li>
