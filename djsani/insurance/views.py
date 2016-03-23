@@ -19,8 +19,6 @@ from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
 from djtools.utils.mail import send_mail
 
-from sqlalchemy.orm import sessionmaker
-
 from os.path import join
 
 @login_required

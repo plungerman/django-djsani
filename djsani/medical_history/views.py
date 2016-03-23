@@ -7,18 +7,22 @@ from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.forms import StudentMedicalHistoryForm
 from djsani.medical_history.forms import AthleteMedicalHistoryForm
+from djsani.medical_history.forms import AthletePhysicalEvaluationForm
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.core.utils import get_manager
 
-from djzbar.utils.informix import get_session
+from djtools.fields.helpers import handle_uploaded_file
 from djtools.utils.convert import str_to_class
+from djzbar.utils.informix import get_session
 from djtools.utils.database import row2dict
+
+from os.path import join
 
 EARL = settings.INFORMIX_EARL
 
 @login_required
-def form(request, stype, display=None):
+def history(request, stype, display=None):
     # dictionary for initial values if "update" else empty
     init = {}
     # student id
@@ -118,6 +122,46 @@ def form(request, stype, display=None):
         {
             "form":form,"stype":stype,"table":table,"cid":cid,
             "update":update,"data":data
+        },
+        context_instance=RequestContext(request)
+    )
+
+@login_required
+def physical_evaluation(request):
+    # create database session
+    session = get_session(EARL)
+    # student id
+    cid = request.user.id
+    # retrieve student manager record
+    manager = get_manager(session, cid)
+    if request.method=='POST':
+        form = AthletePhysicalEvaluationForm(request.POST, request.FILES)
+        if form.is_valid():
+            # folder in which we will store the file
+            folder = "physical/{}/{}".format(
+                cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
+            )
+            # complete path
+            sendero = join(settings.UPLOADS_DIR, folder)
+            # rename and write file to new location
+            phile = handle_uploaded_file(
+                request.FILES['physical_evaluation'], sendero
+            )
+            manager.physical_evaluation = "{}/{}".format(folder, phile)
+            session.commit()
+            return HttpResponseRedirect(
+                reverse_lazy("home")
+            )
+    else:
+        form = AthletePhysicalEvaluationForm()
+
+    # close our session
+    session.close()
+
+    return render_to_response(
+        "medical_history/physical_evaluation.html",
+        {
+            "form":form,"manager":manager
         },
         context_instance=RequestContext(request)
     )

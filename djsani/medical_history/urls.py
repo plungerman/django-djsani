@@ -14,14 +14,19 @@ urlpatterns = patterns('djsani.medical_history.views',
         ),
         name='medical_history_success'
     ),
+    # physical evaluation form
+    url(
+        r'^physical-evaluation/$',
+        'physical_evaluation', name="physical_evaluation"
+    ),
     # medical history form: athletics or academics
     url(
         r'^(?P<stype>[a-zA-Z0-9_-]+)/(?P<display>[a-zA-Z0-9_-]+)/$',
-        'form', name="medical_history_print"
+        'history', name="medical_history_print"
     ),
     # medical history form: athletics or academics
     url(
         r'^(?P<stype>[a-zA-Z0-9_-]+)/$',
-        'form', name="medical_history_form"
+        'history', name="medical_history_form"
     ),
 )

@@ -1,0 +1,50 @@
+{% extends "home.html" %}
+{% load filters %}
+{% load livewhale_api %}
+{% block title %}
+    Physical Evaluation &mdash; Medical History &mdash;
+    Health and Counseling &mdash; Carthage College
+{% endblock %}
+{% block content %}
+<div class="large-12 forms-container">
+    <h2>
+        Pre-Participation Physical Evaluation
+    </h2>
+    {% include "includes/errors_text.html" %}
+    <form method="post" action="." class="form"
+         enctype="multipart/form-data" id="profile">
+        {% csrf_token %}
+        <fieldset class="blockLabels">
+          <ol>
+            <li class="form-group ctrlHolder">
+              <h3>
+                <label for="id_physical_evaluation">
+                Photo or scan of your physical evaluation form
+                signed by your doctor
+                </label>
+              </h3>
+              {% if form.physical_evaluation.errors %}
+              <div class="required warning">
+                <span class="error-message">
+                  {{ form.physical_evaluation.errors|join:", "}}
+                </span>
+              {% else %}
+              <div class="required">
+              {% endif %}
+                <input type="file" name="physical_evaluation"
+                  id="id_physical_evaluation" class="fleft" style="width:300px">
+                {% if manager.physical_evaluation %}
+                <a href="{{media_url}}files/{{manager.physical_evaluation}}"
+                  class="fright">
+                  <i class="fa fa-file-image-o"></i></a>
+                {% endif %}
+              </div>
+            </li>
+          </ol>
+        </fieldset>
+        {# if not request.session.staff #}
+        {% include "form_submit.inc.html" %}
+        {# endif #}
+    </form>
+</div>
+{% endblock %}

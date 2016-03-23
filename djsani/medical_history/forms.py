@@ -754,3 +754,12 @@ class AthleteMedicalHistoryForm(forms.Form):
                 )
         return self.cleaned_data
 
+
+class AthletePhysicalEvaluationForm(forms.Form):
+    physical_evaluation = forms.FileField(
+        label="Upload your file",
+        help_text = """
+            Photo or scan of your physical evaluation form signed by your doctor
+        """,
+        required=True
+    )

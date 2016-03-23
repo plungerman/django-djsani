@@ -350,6 +350,18 @@ $(function() {
                 </td>
             </tr>
             <tr>
+                <td>
+                    <a href="{% url 'physical_evaluation' %}">
+                        Pre-Participation Physical Evaluation Form
+                    </a>
+                </td>
+                <td>
+                {% if manager.physical_evaluation %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
                 {% if manager.cc_athlete_privacy_waiver %}
                 <td>HIPAA and FERPA waiver</td>
                 <td><i class="fa fa-check green"></i></td>

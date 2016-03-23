@@ -194,7 +194,7 @@ def home(request):
     '''.format(
         STUDENT_VITALS, cid, term["yr"], term["sess"]
     )
-    engine = get_engine()
+    engine = get_engine(earl=EARL)
     obj = engine.execute(sql)
     student = obj.fetchone()
     # create database session
