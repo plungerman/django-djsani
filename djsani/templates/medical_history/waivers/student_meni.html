@@ -30,7 +30,7 @@ $(function() {
     <form method="post" action="." class="form" id="meni_waive">
         {% csrf_token %}
         {% include "medical_history/waivers/student_meni.inc.html" %}
-        {% if not request.session.staff %}
+        {% if not user.is_staff %}
         {% include "form_submit.inc.html" %}
         {% endif %}
     </form>

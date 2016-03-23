@@ -42,9 +42,9 @@
             </li>
           </ol>
         </fieldset>
-        {# if not request.session.staff #}
+        {% if not user.is_staff %}
         {% include "form_submit.inc.html" %}
-        {# endif #}
+        {% endif %}
     </form>
 </div>
 {% endblock %}

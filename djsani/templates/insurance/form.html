@@ -228,7 +228,7 @@ $(function() {
                 I verify that this information is accurate.
             </h3>
             {% endif %}
-            {% if not request.session.staff %}
+            {% if not user.is_staff %}
             <div style="margin-left:45px;">
             {% include "form_submit.inc.html" %}
             </div>
