@@ -17,6 +17,7 @@
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    $("#profile").validate();
     $(".fancybox").fancybox({
         maxWidth    : 800,
         maxHeight   : 800,
@@ -47,7 +48,6 @@ $(function() {
             $('#insurance-card').slideDown(200);
             $('#secondary-box').slideDown(200);
             if (!$("#id_second").is(":checked")) {
-                console.log('boo!');
                 $('#secondary-form').slideDown(200);
             }
         }
@@ -80,7 +80,6 @@ $(function() {
     if ( $('#id_secondary_policy_type').val() == "Gov") {
         $('#id_secondary_policy_state').addClass("required");
     }
-    $("#profile").validate();
     $("select[id$='policy_type']").on('change', function() {
         if( $(this).val() == "Gov") {
             $(this).closest('li').next().find('select').addClass("required");
@@ -109,6 +108,16 @@ $(function() {
             $("input[id^='id_secondary']").removeClass("error required");
             $('#secondary-form').slideUp(200);
         {% endif %}
+    {% endif %}
+    {% if manager.athlete == 1 %}
+        {% if not form.primary_card_front.value %}
+        $("#id_primary_card_front").addClass("required");
+        {% endif %}
+        {% if not form.primary_card_back.value %}
+        $("#id_primary_card_back").addClass("required");
+        {% endif %}
+    {% else %}
+        $('#insurance-card').slideUp(200);
     {% endif %}
     // stupid informix
     if ( $('#id_primary_dob').val() == "None") {

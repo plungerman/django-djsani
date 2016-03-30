@@ -284,7 +284,12 @@ $(function() {
                 <a href="//www.carthage.edu/live/files/830-pdf">
                     Immunization history
                 </a>
-            </li>
+            <sdffdsakljadsf
+
+
+
+
+/li>
             <li>
                 <a href="//www.carthage.edu/live/files/831-pdf">
                     Parent/Legal guardian consent form
@@ -323,6 +328,22 @@ $(function() {
                 {% if manager.cc_student_health_insurance %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% if manager.cc_student_meni_waiver or not adult %}
+                        Meningococcal meningitis/Hepatitis B response
+                    {% else %}
+                        <a href="{% url 'waiver_form' 'student' 'meni' %}">
+                            Meningococcal meningitis/Hepatitis B response
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if manager.cc_student_meni_waiver %}
+                    <i class="fa fa-check green"></i>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -409,21 +430,6 @@ $(function() {
                 </td>
             {% endif %}
             </tr>
-        </table>
-        <h3>
-        {% if adult %}
-            <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
-                SICKLE CELL TRAIT TESTING WAIVER
-            </a>
-        {% else %}
-            <a href="https://www.carthage.edu/live/files/794-pdf">
-                SICKLE CELL TRAIT TESTING WAIVER
-            </a>
-        {% endif %}
-        </h3>
-        {% get_lw_content as sicklecell blurbs 2011 %}
-        {{sicklecell.body}}
-        <table class="table table-bordered table-hover">
             <tr>
                 <td>
                 {% if not manager.cc_athlete_sicklecell_waiver or student.waive %}
@@ -447,45 +453,36 @@ $(function() {
             </tr>
         </table>
         {% if not adult %}
+            <h3>
+            <a href="https://www.carthage.edu/live/files/794-pdf">
+                SICKLE CELL TRAIT TESTING WAIVER
+            </a>
+            </h3>
+            {% get_lw_content as sicklecell blurbs 2011 %}
+            {{sicklecell.body}}
             <p>
             If you will be 17 years of age or younger at the time you arrive
             on campus, please print out the
             <a href="//www.carthage.edu/live/files/794-pdf">
                 Underage Sickle Cell Waiver form
-            </a>
+            </a>&nbsp;
             and have your parent/legal guardian complete the form.
             </p>
+            <ul class="big-arrow-bullets">
+              <li>
+                <a href="//www.carthage.edu/live/files/794-pdf">
+                Underage Sickle Cell Waiver form
+                </a>
+              </li>
+            </ul>
         {% endif %}
-        {% if student.residency_status == "Resident" %}
+        {% if student.residency_status == "Resident" and not adult %}
             <h3>
                 Meningococcal meningitis/Hepatitis B response and
                 Parent/Legal Guardian Consent Form
             </h3>
-            {% if adult %}
-                {% get_lw_content as menihep blurbs 2012 %}
-                {{menihep.body}}
-            {% else %}
-                {% get_lw_content as menihep blurbs 2013 %}
-                {{menihep.body}}
-            {% endif %}
-            <table class="table table-bordered table-hover">
-                <tr>
-                    <td>
-                        {% if manager.cc_student_meni_waiver or not adult %}
-                            Meningococcal meningitis/Hepatitis B response
-                        {% else %}
-                            <a href="{% url 'waiver_form' 'student' 'meni' %}">
-                                Meningococcal meningitis/Hepatitis B response
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if manager.cc_student_meni_waiver %}
-                        <i class="fa fa-check green"></i>
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
+            {% get_lw_content as menihep blurbs 2013 %}
+            {{menihep.body}}
         {% endif %}
         {% get_lw_content as questions blurbs 2014 %}
         {{questions.body}}

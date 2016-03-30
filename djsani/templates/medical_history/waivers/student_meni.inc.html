@@ -1,4 +1,6 @@
 {% load livewhale_api %}
+{% get_lw_content as menihep blurbs 2012 %}
+{{menihep.body|safe}}
 {% get_lw_content as meni blurbs 2027 %}
 {{meni.body|safe}}
 {% if form.errors %}

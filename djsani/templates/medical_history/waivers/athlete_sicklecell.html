@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load livewhale_api %}
 {% block title %}
     Sickle Cell Trait Testing
     Form &mdash; Health and Counseling &mdash; Carthage College
@@ -12,6 +13,8 @@
         Carthage College Athletic Training &mdash;<br />
         Sickle Cell Trait Testing
     </h2>
+    {% get_lw_content as sicklecell blurbs 2011 %}
+    {{sicklecell.body}}
     {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="sickle_cell">
         {% csrf_token %}
