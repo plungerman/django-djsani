@@ -79,6 +79,15 @@ column physical_evaluation varchar(128)
         (
         )
 
+column medical_consent_agreement varchar(128)
+    comments        ""
+    desc            "Medical consent and medical insurance agreement file upload"
+    heading         "Medical consent agreement"
+    text            "Medical consent agreement"
+    attributes
+        (
+        )
+
 column emergency_contact            smallint
     comments        ""
     desc            "Has the student completed the emergency contact information?"

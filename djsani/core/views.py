@@ -194,11 +194,11 @@ def home(request):
     '''.format(
         STUDENT_VITALS, cid, term["yr"], term["sess"]
     )
-    engine = get_engine(earl=EARL)
+    engine = get_engine(EARL)
     obj = engine.execute(sql)
     student = obj.fetchone()
     # create database session
-    session = get_session()
+    session = get_session(EARL)
     if student:
         # save some things to Django session:
         request.session['gender'] = student.sex

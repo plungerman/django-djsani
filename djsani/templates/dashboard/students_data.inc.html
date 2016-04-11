@@ -9,15 +9,19 @@
                 <th>
                 <i class="fa fa-ambulance green" title="Emergency contact"></i>
                 </th>
-                <th>Immun</th>
-                <th>Insur</th>
-                <th>Meni</th>
-                <th>Gen hist</th>
-                <th>Ath hist</th>
-                <th>Prvcy</th>
-                <th>Sickle cell</i></th>
-                <th>Rprtng</th>
-                <th>Risk</th>
+                <th><i class="fa fa-bug green" title="Immunization"></i></th>
+                <th title="Insurance">Insur</th>
+                <th title="Meningococcal meningitis/Hepatitis B response">
+                    Meni
+                </th>
+                <th title="General medical history">Gen hist</th>
+                <th title="Athlete Medical History / Physical Evaluation / Medial consent and insurance agreement">Ath hist</th>
+                <th title="Privacy waiver">Prvcy</th>
+                <th title="Sickle cell waiver">Sickle cell</i></th>
+                <th title="CCIW Injury and Illness Reporting Acknowledgement waiver">
+                    Rprtng
+                </th>
+                <th title="Assumption of risk waiver">Risk</th>
             </tr>
         </thead>
         <tbody>
@@ -124,6 +128,18 @@
                     {% else %}
                         <i class="fa fa-times red"></i>
                     {% endif %}
+                    {% if s.athlete %}
+                        {% if s.physical_evaluation %}
+                        / <i class="fa fa-stethoscope green"></i>
+                        {% else %}
+                        / <i class="fa fa-stethoscope grey"></i>
+                        {% endif %}
+                        {% if s.medical_consent %}
+                        / <i class="fa fa-umbrella green"></i>
+                        {% else %}
+                        / <i class="fa fa-umbrella grey"></i>
+                        {% endif %}
+                    {% endif %}
                 </td>
                 <td class="{{s.adult}}">
                     {% if s.cc_athlete_privacy_waiver %}
@@ -195,15 +211,19 @@
                 <th>
                 <i class="fa fa-ambulance green" title="Emergency contact"></i>
                 </th>
-                <th>Immun</th>
-                <th>Insur</th>
-                <th>Meni</th>
-                <th>Gen hist</th>
-                <th>Ath hist</th>
-                <th>Prvcy</th>
-                <th>Sickle cell</i></th>
-                <th>Rprtng</th>
-                <th>Risk</th>
+                <th><i class="fa fa-bug green" title="Immunization"></i></th>
+                <th title="Insurance">Insur</th>
+                <th title="Meningococcal meningitis/Hepatitis B response">
+                    Meni
+                </th>
+                <th title="General Medical History">Gen hist</th>
+                <th title="Athlete Medical History / Physical Evaluation / Medial consent and insurance agreement">Ath hist</th>
+                <th title="Privacy waiver">Prvcy</th>
+                <th title="Sickle cell waiver">Sickle cell</th>
+                <th title="CCIW Injury and Illness Reporting Acknowledgement waiver">
+                    Rprtng
+                </th>
+                <th title="Assumption of risk waiver">Risk</th>
             </tr>
         </tfoot>
     </table>

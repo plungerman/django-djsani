@@ -763,3 +763,16 @@ class AthletePhysicalEvaluationForm(forms.Form):
         """,
         required=True
     )
+
+
+class MedicalConsentAgreementForm(forms.Form):
+    medical_consent_agreement = forms.FileField(
+        label="Upload your file",
+        help_text = """
+            Photo or scan of your signed medical consent and
+            medical insurance agreement form
+        """,
+        required=True
+    )
+
+

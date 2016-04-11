@@ -23,6 +23,7 @@ form textarea {width: 300px !important;height:90px !important;}
 .center{text-align:center;}
 .red, .glyphicon {color:#800;}
 .green, .glyphicon-ok {color:#008000;}
+.white, .glyphicon-ok {color:#fff;}
 .hidden {display:none;}
 #id_sports{background:none;}
 #primary-form{margin-right:20px;}

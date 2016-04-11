@@ -74,6 +74,7 @@ class StudentMedicalManager(Base):
     sitrep = Column(Boolean)
     athlete = Column(Boolean)
     sports = Column(String)
+    medical_consent_agreement = Column(String)
     physical_evaluation = Column(String)
     emergency_contact = Column(Boolean)
     # forms and waivers

@@ -14,10 +14,16 @@ urlpatterns = patterns('djsani.medical_history.views',
         ),
         name='medical_history_success'
     ),
-    # physical evaluation form
+    # physical evaluation upload form
     url(
         r'^physical-evaluation/$',
         'physical_evaluation', name="physical_evaluation"
+    ),
+    # medical consent and insurance agreement upload form
+    url(
+        r'^consent-agreement/$',
+        'medical_consent_agreement',
+        name="medical_consent_agreement"
     ),
     # medical history form: athletics or academics
     url(

@@ -284,12 +284,7 @@ $(function() {
                 <a href="//www.carthage.edu/live/files/830-pdf">
                     Immunization history
                 </a>
-            <sdffdsakljadsf
-
-
-
-
-/li>
+            </li>
             <li>
                 <a href="//www.carthage.edu/live/files/831-pdf">
                     Parent/Legal guardian consent form
@@ -373,7 +368,19 @@ $(function() {
             <tr>
                 <td>
                     <a href="{% url 'physical_evaluation' %}">
-                        Pre-Participation Physical Evaluation Form
+                        Pre-Participation Physical Evaluation Upload Form
+                    </a>
+                </td>
+                <td>
+                {% if manager.physical_evaluation %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{% url 'medical_consent_agreement' %}">
+                        Medical Consent and Insurance Agreement Upload Form
                     </a>
                 </td>
                 <td>
