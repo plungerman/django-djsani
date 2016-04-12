@@ -2,6 +2,8 @@ from django.conf import settings
 
 # e.g. 2015-05-01 00:00:00
 START_DATE = settings.START_DATE
+# Informix likes DATE("2015-06-01") when using an IDE like Squirrel or RazorSQL
+# or DATE("06/01/15")
 
 STUDENTS_ALPHA = """
 SELECT
