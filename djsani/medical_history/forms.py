@@ -755,7 +755,7 @@ class AthleteMedicalHistoryForm(forms.Form):
         return self.cleaned_data
 
 
-class AthletePhysicalEvaluationForm(forms.Form):
+class PhysicalEvaluationForm(forms.Form):
     physical_evaluation = forms.FileField(
         label="Upload your file",
         help_text = """

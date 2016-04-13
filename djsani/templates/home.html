@@ -367,9 +367,13 @@ $(function() {
             </tr>
             <tr>
                 <td>
-                    <a href="{% url 'physical_evaluation' %}">
-                        Pre-Participation Physical Evaluation Upload Form
+                {% if manager.physical_evaluation %}
+                    Pre-Participation Physical Evaluation Upload Form
+                {% else %}
+                    <a href="{% url 'file_upload' 'physical-evaluation' %}">
+                    Pre-Participation Physical Evaluation Upload Form
                     </a>
+                {% endif %}
                 </td>
                 <td>
                 {% if manager.physical_evaluation %}
@@ -379,12 +383,16 @@ $(function() {
             </tr>
             <tr>
                 <td>
-                    <a href="{% url 'medical_consent_agreement' %}">
-                        Medical Consent and Insurance Agreement Upload Form
+                {% if manager.medical_consent_agreement %}
+                    Medical Consent and Insurance Agreement Upload Form
+                {% else %}
+                    <a href="{% url 'file_upload' 'medical-consent-agreement' %}">
+                    Medical Consent and Insurance Agreement Upload Form
                     </a>
+                {% endif %}
                 </td>
                 <td>
-                {% if manager.physical_evaluation %}
+                {% if manager.medical_consent_agreement %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
                 </td>

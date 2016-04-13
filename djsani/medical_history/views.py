@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from djsani.medical_history.forms import StudentMedicalHistoryForm
 from djsani.medical_history.forms import AthleteMedicalHistoryForm
-from djsani.medical_history.forms import AthletePhysicalEvaluationForm
+from djsani.medical_history.forms import PhysicalEvaluationForm
 from djsani.medical_history.forms import MedicalConsentAgreementForm
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
@@ -16,6 +16,7 @@ from djsani.core.utils import get_manager
 from djtools.fields.helpers import handle_uploaded_file
 from djtools.utils.convert import str_to_class
 from djzbar.utils.informix import get_session
+from djtools.utils.convert import str_to_class
 from djtools.utils.database import row2dict
 
 from os.path import join
@@ -128,7 +129,23 @@ def history(request, stype, display=None):
     )
 
 @login_required
-def physical_evaluation(request):
+def file_upload(request, name):
+    """
+    almost generic file upload, just need model class to make it so
+    """
+    # munge the field name
+    slug_list = name.split("-")
+    field_name = name.replace("-","_")
+    name = slug_list.pop(0).capitalize()
+    for n in slug_list:
+        name += " %s" % n.capitalize()
+    name = "".join(name.split(" "))
+
+    fclass = str_to_class(
+        "djsani.medical_history.forms",
+        "{}Form".format(name)
+    )
+
     # create database session
     session = get_session(EARL)
     # student id
@@ -136,74 +153,33 @@ def physical_evaluation(request):
     # retrieve student manager record
     manager = get_manager(session, cid)
     if request.method=='POST':
-        form = AthletePhysicalEvaluationForm(request.POST, request.FILES)
+        form = fclass(request.POST, request.FILES)
         if form.is_valid():
             # folder in which we will store the file
-            folder = "physical/{}/{}".format(
-                cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
+            folder = "{}/{}/{}".format(
+                field_name, cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
             )
             # complete path
             sendero = join(settings.UPLOADS_DIR, folder)
             # rename and write file to new location
             phile = handle_uploaded_file(
-                request.FILES['physical_evaluation'], sendero
+                request.FILES[field_name], sendero
             )
-            manager.physical_evaluation = "{}/{}".format(folder, phile)
+            setattr(manager, field_name, "{}/{}".format(folder, phile))
             session.commit()
             return HttpResponseRedirect(
                 reverse_lazy("home")
             )
     else:
-        form = AthletePhysicalEvaluationForm()
+        form = fclass
 
     # close our session
     session.close()
 
     return render_to_response(
-        "medical_history/physical_evaluation.html",
+        "medical_history/{}.html".format(field_name),
         {
             "form":form,"manager":manager
         },
         context_instance=RequestContext(request)
     )
-
-@login_required
-def medical_consent_agreement(request):
-    # create database session
-    session = get_session(EARL)
-    # student id
-    cid = request.user.id
-    # retrieve student manager record
-    manager = get_manager(session, cid)
-    if request.method=='POST':
-        form = MedicalConsentAgreementForm(request.POST, request.FILES)
-        if form.is_valid():
-            # folder in which we will store the file
-            folder = "medical_consent_agreement/{}/{}".format(
-                cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
-            )
-            # complete path
-            sendero = join(settings.UPLOADS_DIR, folder)
-            # rename and write file to new location
-            phile = handle_uploaded_file(
-                request.FILES['medical_consent_agreement'], sendero
-            )
-            manager.medical_consent_agreement = "{}/{}".format(folder, phile)
-            session.commit()
-            return HttpResponseRedirect(
-                reverse_lazy("home")
-            )
-    else:
-        form = MedicalConsentAgreementForm()
-
-    # close our session
-    session.close()
-
-    return render_to_response(
-        "medical_history/medical_consent_agreement.html",
-        {
-            "form":form,"manager":manager
-        },
-        context_instance=RequestContext(request)
-    )
-

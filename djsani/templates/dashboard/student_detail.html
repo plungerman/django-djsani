@@ -352,9 +352,14 @@
                                     Student
                                 </a>
                             </li>
-                            <li{#% if not student.athlete class="disabled" endif #}>
+                            <li>
                                 <a href="#cc_athlete_medical_history" data-toggle="tab">
                                     Athlete
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#athlete_files" data-toggle="tab">
+                                    Files
                                 </a>
                             </li>
                         </ul>
@@ -365,6 +370,30 @@
                             </div>
                             <div id="cc_athlete_medical_history" class="tab-pane fade">
                                 {{amh}}
+                            </div>
+                            <div id="athlete_files" class="tab-pane fade">
+                                <ul>
+                                    <li>
+                                    {% if student.physical_evaluation %}
+                                        <a href="{{media_url}}files/{{manager.physical_evaluation}}"
+                                        class="fleft" style="margin-left:10px;margin-top:3px;"
+                                        target="_blank" title="current file">
+                                        <i class="fa fa-stethoscope green"></i>
+                                        Physical evaluation
+                                        </a>
+                                        {% endif %}
+                                    </li>
+                                    <li>
+                                    {% if student.medical_consent_agreement %}
+                                        <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
+                                        class="fleft" style="margin-left:10px;margin-top:3px;"
+                                        target="_blank" title="current file">
+                                        <i class="fa fa-umbrella green"></i>
+                                        Medical consent and insurance agreement
+                                        </a>
+                                        {% endif %}
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <!-- /.tab-content -->

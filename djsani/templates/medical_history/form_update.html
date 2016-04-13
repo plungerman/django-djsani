@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load livewhale_api %}
 {% block title %}
     Medical History &mdash;
     Health and Counseling &mdash; Carthage College
@@ -70,15 +71,8 @@ $(document).ready(function() {
         for athletes
         {% endif %}
     </h2>
-    <p>
-        This information will become a part of your medical record.
-        Accurate health information is essential to provide you with
-        the best care possible. Medical record information is
-        confidential and will not be released to anyone outside
-        Carthage College without your permission, except as required
-        by law, such as with court-ordered release or in reporting of
-        certain communicable diseases to the Department of Health.
-    </p>
+    {% get_lw_content as instructions blurbs 2223 %}
+    {{instructions.body}}
     {% if update %}
         <div class="alert alert-warning" role="alert">
             <p>
