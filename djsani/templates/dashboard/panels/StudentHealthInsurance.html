@@ -5,25 +5,25 @@
         </h3>
     </div>
 {% endif %}
-{% if data.opt_out == True %}
-    <div class="alert alert-danger">
-    <h3>Opt out</h3>
-{% else %}
-    <div>
-{% endif %}
-{% if data.primary_card_front %}
-<div style="float:right;">
+<div style="float:right;" id="insuranceCard">
     <a href="{{media_url}}files/{{data.primary_card_front}}">
         <i class="fa fa-credit-card"></i> Front</a>
     <br>
     <a href="{{media_url}}files/{{data.primary_card_back}}">
         <i class="fa fa-credit-card"></i> Back</a>
 </div>
-{% endif %}
 <h4>Date of submission</h4>
 <p>{{data.created_at}}</p>
-<form style="float:left;">
-    <input type="checkbox" class="set-val" name="opt_out"
+
+{% if data.opt_out == True %}
+<div class="alert alert-danger">
+  <h3>Opt out</h3>
+{% else %}
+<div>
+{% endif %}
+    <form id="optOutForm">
+      <input type="checkbox" class="set-val" name="opt_out"
+        style="float:left;"
         {% if data.opt_out == True %}
         value="0"
         checked="checked"
@@ -32,12 +32,12 @@
         {% endif %}
         data-pk="{{data.id}}"
         data-table="cc_student_health_insurance" />
-</form>
-<p>
-    &nbsp;&nbsp;
-    I attest that I do <strong><u>NOT</u></strong>
-    have health insurance.
-</p>
+    </form>
+    <p>
+        &nbsp;&nbsp;
+        I attest that I do <strong><u>NOT</u></strong>
+        have health insurance.
+    </p>
 </div>
 {% if data.opt_out == False %}
     <ul style="margin-bottom: 15px;clear:both;" class="nav nav-tabs">
@@ -54,10 +54,10 @@
     </ul>
     <!-- /.nav-tabs -->
     <div class="tab-content">
-    <div id="primary_insurance" class="tab-pane fade active in">
+      <div id="primary_insurance" class="tab-pane fade active in">
         <h3>Primary Health Insurance</h3>
         <dl class="dl-horizontal">
-            <dt>Policy holder</dt>
+            <dt style="font-weight:700;">Policy holder</dt>
             <dd>
                 <a href="#" id="primary_policy_holder" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -65,7 +65,7 @@
                 {{data.primary_policy_holder|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Date of birth</dt>
+            <dt style="font-weight:700;">Date of birth</dt>
             <dd>
                 <a href="#" id="primary_dob" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -73,7 +73,7 @@
                 {{data.primary_dob|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Company</dt>
+            <dt style="font-weight:700;">Company</dt>
             <dd>
                 <a href="#" id="primary_company" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -81,7 +81,7 @@
                 {{data.primary_company|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Phone</dt>
+            <dt style="font-weight:700;">Phone</dt>
             <dd>
                 <a href="#" id="primary_phone" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -89,7 +89,7 @@
                 {{data.primary_phone|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Member ID</dt>
+            <dt style="font-weight:700;">Member ID</dt>
             <dd>
                 <a href="#" id="primary_member_id" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -97,7 +97,7 @@
                 {{data.primary_member_id|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Group number</dt>
+            <dt style="font-weight:700;">Group number</dt>
             <dd>
                 <a href="#" id="primary_group_no" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -105,7 +105,7 @@
                 {{data.primary_group_no|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Policy type</dt>
+            <dt style="font-weight:700;">Policy type</dt>
             <dd>
                 <a href="#" id="primary_policy_type" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -113,7 +113,7 @@
                 {{data.primary_policy_type|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Policy state</dt>
+            <dt style="font-weight:700;">Policy state</dt>
             <dd>
                 <a href="#" id="primary_policy_state" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -121,7 +121,7 @@
                 {{data.primary_policy_state|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Address</dt>
+            <dt style="font-weight:700;">Address</dt>
             <dd>
                 <a href="#" id="primary_policy_address" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -134,7 +134,7 @@
     <div id="secondary_insurance" class="tab-pane fade" style="clear:both;">
         <h3>Secondary Health Insurance</h3>
         <dl class="dl-horizontal">
-            <dt>Policy holder</dt>
+            <dt style="font-weight:700;">Policy holder</dt>
             <dd>
                 <a href="#" id="secondary_policy_holder" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -142,7 +142,7 @@
                 {{data.secondary_policy_holder|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Date of birth</dt>
+            <dt style="font-weight:700;">Date of birth</dt>
             <dd>
                 <a href="#" id="secondary_dob" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -150,7 +150,7 @@
                 {{data.secondary_dob|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Company</dt>
+            <dt style="font-weight:700;">Company</dt>
             <dd>
                 <a href="#" id="secondary_company" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -158,7 +158,7 @@
                 {{data.secondary_company|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Phone</dt>
+            <dt style="font-weight:700;">Phone</dt>
             <dd>
                 <a href="#" id="secondary_phone" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -166,7 +166,7 @@
                 {{data.secondary_phone|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Member ID</dt>
+            <dt style="font-weight:700;">Member ID</dt>
             <dd>
                 <a href="#" id="secondary_member_id" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -174,7 +174,7 @@
                 {{data.secondary_member_id|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Group number</dt>
+            <dt style="font-weight:700;">Group number</dt>
             <dd>
                 <a href="#" id="secondary_group_no" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -182,7 +182,7 @@
                 {{data.secondary_group_no|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Policy type</dt>
+            <dt style="font-weight:700;">Policy type</dt>
             <dd>
                 <a href="#" id="secondary_policy_type" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -190,7 +190,7 @@
                 {{data.secondary_policy_type|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Policy state</dt>
+            <dt style="font-weight:700;">Policy state</dt>
             <dd>
                 <a href="#" id="secondary_policy_state" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -198,7 +198,7 @@
                 {{data.secondary_policy_state|default_if_none:""}}
                 </a>
             </dd>
-            <dt>Address</dt>
+            <dt style="font-weight:700;">Address</dt>
             <dd>
                 <a href="#" id="secondary_policy_address" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
@@ -207,7 +207,57 @@
                 </a>
             </dd>
         </dl>
-    </div>
+      </div>
     </div>
     <!-- /.tab-content -->
+{% endif %}
+{% if data.opt_out == False %}
+<div id="healthInsuranceEmailData">
+  <h4>Date of submission</h4>
+  <p>{{data.created_at}}</p>
+  <h3>Primary Health Insurance</h3>
+  <dl class="dl-horizontal">
+    <dt style="font-weight:700;">Policy holder</dt>
+    <dd>{{data.primary_policy_holder|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Date of birth</dt>
+    <dd>{{data.primary_dob|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Company</dt>
+    <dd>{{data.primary_company|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Phone</dt>
+    <dd>{{data.primary_phone|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Member ID</dt>
+    <dd>{{data.primary_member_id|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Group number</dt>
+    <dd>{{data.primary_group_no|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Policy type</dt>
+    <dd>{{data.primary_policy_type|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Policy state</dt>
+    <dd>{{data.primary_policy_state|default_if_none:"&nbsp;"}}</dd>
+    <dt style="font-weight:700;">Address</dt>
+    <dd>{{data.primary_policy_address|default_if_none:"&nbsp;"}}</dd>
+  </dl>
+  {% if data.secondary_policy_holder %}
+  <h3>Secondary Health Insurance</h3>
+  <dl class="dl-horizontal">
+    <dt style="font-weight:700;">Policy holder</dt>
+    <dd>{{data.secondary_policy_holder|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Date of birth</dt>
+    <dd>{{data.secondary_dob|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Company</dt>
+    <dd>{{data.secondary_company|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Phone</dt>
+    <dd>{{data.secondary_phone|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Member ID</dt>
+    <dd>{{data.secondary_member_id|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Group number</dt>
+    <dd>{{data.secondary_group_no|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Policy type</dt>
+    <dd>{{data.secondary_policy_type|default_if_none:""}}</dd>
+    <dt style="font-weight:700;">Policy state</dt>
+    <dd>{{data.secondary_policy_state|default_if_none:"&nbsp;"}}</dd>
+    <dt style="font-weight:700;">Address</dt>
+    <dd>{{data.secondary_policy_address|default_if_none:"&nbsp;"}}</dd>
+  </dl>
+  {% endif %}
+</div>
 {% endif %}

@@ -9,6 +9,11 @@ urlpatterns = patterns('djsani.dashboard.views',
         ),
         name='admin_success'
     ),
+    # generic send mail functions
+    url(
+        r'^send-mail/$',
+        'sendmail', name="sendmail"
+    ),
     # ajax communication to paint the panels
     url(
         r'^panels/$',
@@ -35,11 +40,11 @@ urlpatterns = patterns('djsani.dashboard.views',
         r'^student/(?P<cid>\d+)/$',
         'student_detail', name="student_detail"
     ),
-    # student detail print
+    # student detail content specific
     url(
-        r'^student/(?P<cid>\d+)/print/(?P<content>[-\w]+)/$',
+        r'^student/(?P<cid>\d+)/(?P<medium>[-\w]+)/(?P<content>[-\w]+)/$',
         'student_detail',
-        name="student_detail_print"
+        name="student_detail_medium"
     ),
     # home
     url(

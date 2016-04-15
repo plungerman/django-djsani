@@ -22,13 +22,11 @@ from djtools.utils.convert import str_to_class
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
 from djtools.utils.users import in_group
+from djtools.utils.mail import send_mail
 from djtools.fields import NEXT_YEAR
 from djmaidez.core.models import ENS_CODES
 
 EARL = settings.INFORMIX_EARL
-
-import logging
-logger = logging.getLogger(__name__)
 
 @group_required('MedicalStaff')
 def home(request):
@@ -145,13 +143,15 @@ def panels(request, session, mod, manager,content,gender=None):
     return t.render(c)
 
 @group_required('MedicalStaff')
-def student_detail(request, cid=None, content=None):
+def student_detail(request, cid=None, medium=None, content=None):
     """
     main method for displaying student data
     """
     template = "dashboard/student_detail.html"
     if content:
-        template = "dashboard/student_print_%s.html" % content
+        template = "dashboard/student_{}_{}.html".format(
+            medium, content
+        )
     my_sports = None
     # search form, grab only numbers from string
     if not cid:
@@ -257,4 +257,19 @@ def advanced_search(request):
         {"students":students,},
         context_instance=RequestContext(request)
     )
+
+
+@group_required('MedicalStaff')
+def sendmail(request):
+    message = "error"
+    if request.POST:
+        email = request.POST['email']
+        subject = request.POST['subject']
+        data = {'content': request.POST['content']}
+        send_mail(
+            request, [email], subject, request.user.email,
+            "sendmail.html", data, settings.MANAGERS
+        )
+        message = "success"
+    return HttpResponse(message, content_type="text/plain; charset=utf-8")
 
