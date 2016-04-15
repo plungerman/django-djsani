@@ -4,23 +4,25 @@
             The student has not completed this form.
         </h3>
     </div>
-{% endif %}
-<div style="float:right;" id="insuranceCard">
+{% else %}
+  {% if dataprimary_card_front %}
+  <div style="float:right;" id="insuranceCard">
     <a href="{{media_url}}files/{{data.primary_card_front}}">
         <i class="fa fa-credit-card"></i> Front</a>
     <br>
     <a href="{{media_url}}files/{{data.primary_card_back}}">
         <i class="fa fa-credit-card"></i> Back</a>
-</div>
-<h4>Date of submission</h4>
-<p>{{data.created_at}}</p>
+  </div>
+  {% endif %}
+  <h4>Date of submission</h4>
+  <p>{{data.created_at}}</p>
 
-{% if data.opt_out == True %}
-<div class="alert alert-danger">
-  <h3>Opt out</h3>
-{% else %}
-<div>
-{% endif %}
+  {% if data.opt_out == True %}
+  <div class="alert alert-danger">
+    <h3>Opt out</h3>
+  {% else %}
+  <div>
+  {% endif %}
     <form id="optOutForm">
       <input type="checkbox" class="set-val" name="opt_out"
         style="float:left;"
@@ -38,8 +40,8 @@
         I attest that I do <strong><u>NOT</u></strong>
         have health insurance.
     </p>
-</div>
-{% if data.opt_out == False %}
+  </div>
+  {% if data.opt_out == False %}
     <ul style="margin-bottom: 15px;clear:both;" class="nav nav-tabs">
     <li class="active">
         <a data-toggle="tab" href="#primary_insurance">
@@ -210,6 +212,7 @@
       </div>
     </div>
     <!-- /.tab-content -->
+  {% endif %}
 {% endif %}
 {% if data.opt_out == False %}
 <div id="healthInsuranceEmailData">
