@@ -153,6 +153,7 @@ def student_detail(request, cid=None, medium=None, content=None):
             medium, content
         )
     my_sports = None
+    managers = None
     # search form, grab only numbers from string
     if not cid:
         cid = filter(str.isdigit, str(request.POST.get("cid")))
@@ -222,7 +223,7 @@ def student_detail(request, cid=None, medium=None, content=None):
                 except:
                     student_user = None
             else:
-                age=ens=shi=smh=amh=student=sports=stype=student_user=None
+                age=ens=shi=smh=amh=student=sports=stype=student_user=manager=None
             return render_to_response(
                 template,
                 {
