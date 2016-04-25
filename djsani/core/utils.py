@@ -33,8 +33,12 @@ def facstaff(cid):
     """
     is user faculty or staff?
     """
-    user = User.objects.get(pk=cid)
-    return in_group(user, "carthageStaffStatus","carthageFacultyStatus")
+    try:
+        user = User.objects.get(pk=cid)
+        status = in_group(user, "carthageStaffStatus","carthageFacultyStatus")
+    except:
+        status = False
+    return status
 
 def _doop(session, mod, man):
     """
