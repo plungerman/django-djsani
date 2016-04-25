@@ -21,7 +21,7 @@
     li { list-style: none; }
     .editable-input textarea {width:375px !important;}
     .editable-container.editable-popup { z-index: 10000; }
-    #healthInsuranceEmailData {display:none;}
+    #healthInsuranceEmailData, #StudentContactEmailHeader {display:none;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -132,8 +132,10 @@
         );
         $("#emailInsuranceForm").submit(function(e) {
             subject = "[Carthage College] Student: {{student.lastname}}, {{student.firstname}} :: DOB {{student.birth_date}}"
+            content = $("#student-contact").html();
+            content += $("#healthInsuranceEmailData").html();
             dict = {
-                'content':  $("#healthInsuranceEmailData").html(),
+                'content': content,
                 'subject': subject,
                 'email': $('input[name=destinationEmail]').val(),
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
@@ -266,6 +268,7 @@
                             <i class="fa fa-globe fa-4x"></i>
                         </div>
                         <div class="col-xs-8" id="student-contact">
+                            <h4 id="StudentContactEmailHeader">Student Contact Information</h4>
                             <address>
                             {{student.addr_line1}} {{student.addr_line2}}<br>
                             {{student.city}}, {{student.st}}<br>
