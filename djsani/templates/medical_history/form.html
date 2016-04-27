@@ -125,6 +125,12 @@ $(document).ready(function() {
     </h2>
     {% get_lw_content as instructions blurbs 2223 %}
     {{instructions.body}}
+    <div class="alert alert-warning" role="alert">
+        <p>
+            All questions are 'yes' or 'no' answer,
+            where a 'yes' response requires an explanation.
+        </p>
+    </div>
     {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form" id="medical-history">
         {% csrf_token %}
