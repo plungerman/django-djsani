@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCAthleteMedicalHistory,v 8.0.17100.4 2015/05/18 13:30:45 mkishlin Released $
+ $Header: CCAthleteMedicalHistory,v 8.0.17100.5 2016/04/29 11:53:21 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -78,15 +78,120 @@ column intense_chest_pain   varchar(255)
         (
         )
 
-column sickle_cell_trait    varchar(255)
-    comments        ""
-    desc            "Sickle Cell Trait"
-    heading         "Sickle Cell Trait"
-    text            "Sickle Cell Trait"
+column passed_out           varchar(255)
+    comments        "Passed out"
+    desc            "Have you ever passed out or nearly passed out DURING or AFTER exercise?"
+    heading         "Passed out"
+    text            "Passed out"
     attributes
         (
         )
 
+column chest_pain           varchar(255)
+    comments        "Chest Pain"
+    desc            "Have you ever had discomfort, pain, tightness, or pressure in your chest during exercise?"
+    heading         "Chest Pain"
+    text            "Chest Pain"
+    attributes
+        (
+        )
+
+column skip_beats           varchar(255)
+    comments        "Skip Beats"
+    desc            "Does your heart ever race or skip beats (irregular beats) during exercise?"
+    heading         "Skip Beats"
+    text            "Skip Beats"
+    attributes
+        (
+        )
+column high_cholesterol     varchar(255)
+    comments        "High Cholesterol"
+    desc            "Has a doctor ever told you that you have high cholesterol?"
+    heading         "High Cholesterol"
+    text            "High Cholesterol"
+    attributes
+        (
+        )
+
+column kawasaki_disease     varchar(255)
+    comments        "Kawasaki Disease"
+    desc            "Has a doctor ever told you that you have Kawasaki disease?"
+    heading         "Kawasaki Disease"
+    text            "Kawasaki Disease"
+    attributes
+        (
+        )
+
+column heart_infection      varchar(255)
+    comments        "Heart Infection"
+    desc            "Has a doctor ever told you that you have or had a heart infection?"
+    heading         "Heart Infection"
+    text            "Heart Infection"
+    attributes
+        (
+        )
+column heart_test           varchar(255)
+    comments        "Heart Test"
+    desc            "Has doctor ever ordered a test for your heart (For example, ECG/EKG, echocardiogram)?"
+    heading         "Heart Test"
+    text            "Heart Test"
+    attributes
+        (
+        )
+column lightheaded          varchar(255)
+    comments        "Lightheaded"
+    desc            "Do you get lightheaded or feel more short of breath than expected during exercise?"
+    heading         "Lightheaded"
+    text            "Lightheaded"
+    attributes
+        (
+        )
+column unexplained_seizure  varchar(255)
+    comments        "Unexplained Seizure"
+    desc            "Have you ever had an unexplained seizure?"
+    heading         "Unexplained Seizure"
+    text            "Unexplained Seizure"
+    attributes
+        (
+        )
+column tired_quickly        varchar(255)
+    comments        "Tired Quickly"
+    desc            "Do you get more tired or short of breath more quickly than your friends during exercise?"
+    heading         "Tired Quickly"
+    text            "Tired Quickly"
+    attributes
+        (
+        )
+column sudden_death         varchar(255)
+    comments        "Sudden Death"
+    desc            "Has any family member or relative died of unexplained sudden death before age 50?"
+    heading         "Sudden Death"
+    text            "Sudden Death"
+    attributes
+        (
+        )
+column sudden_cardiac_death varchar(255)
+    comments        "Sudden Cardiac Death"
+    desc            "Does anyone in your family have...[long list of things that cause sudden cardiac death]?"
+    heading         "Sudden Cardiac Death"
+    text            "Sudden Cardiac Death"
+    attributes
+        (
+        )
+column family_heart_problems varchar(255)
+    comments        "Family Heart Problems"
+    desc            "Does anyone in your family have a heart problem, pacemaker, or implanted defibrillator?"
+    text            "Family Heart Problems"
+    attributes
+        (
+        )
+column fainting_seizures    varchar(255)
+    comments        "Fainting Seizures"
+    desc            "Has anyone in your family had unexplained fainting, unexplained seizures, or near drowning?"
+    text            "Fainting Seizures"
+    attributes
+        (
+        )
 column concussion           varchar(255)
     comments        ""
     desc            "Concussion"

@@ -370,6 +370,161 @@ class AthleteMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
+    # Heart Health Questions about You and Your Family
+    passed_out_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    passed_out = forms.CharField(
+        label="""
+            Have you ever passed out or nearly passed out
+            DURING or AFTER exercise?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    chest_pain_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    chest_pain = forms.CharField(
+        label="""
+            Have you ever had discomfort, pain, tightness, or pressure
+            in your chest during exercise?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    skip_beats_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    skip_beats = forms.CharField(
+        label="""
+            Does your heart ever race or skip beats (irregular beats)
+            during exercise?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    high_cholesterol_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    high_cholesterol = forms.CharField(
+        label="""
+            Has a doctor ever told you that you have high cholesterol?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    kawaski_disease_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    kawasaki_disease = forms.CharField(
+        label="""
+            Has a doctor ever told you that you have Kawasaki disease?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    heart_infection_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    heart_infection = forms.CharField(
+        label="""
+            Has a doctor ever told you that you have or had a heart infection?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    heart_test_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    heart_test = forms.CharField(
+        label="""
+            Has doctor ever ordered a test for your heart
+            (For example, ECG/EKG, echocardiogram)?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    lightheaded_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    lightheaded = forms.CharField(
+        label="""
+            Do you get lightheaded or feel more short of breath than expected
+            during exercise?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    unexplained_seizure_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    unexplained_seizure = forms.CharField(
+        label="""
+            Have you ever had an unexplained seizure?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    tired_quickly_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    tired_quickly = forms.CharField(
+        label="""
+            Do you get more tired or short of breath more quickly
+            than your friends during exercise?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    sudden_death_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    sudden_death = forms.CharField(
+        label="""
+            Has any family member or relative died of heart problems
+            or had an unexpected or unexplained sudden death before age 50
+            (including drowning, unexplained car accident, or
+            sudden infant death syndrome)?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    sudden_cardiac_death_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    sudden_cardiac_death = forms.CharField(
+        label="""
+            Does anyone in your family have hypertrophic cardiomyopathy,
+            Marfan syndrome, arrhythmogenic right ventricular cardiomyopathy,
+            long QT syndrome, short QT syndrome, Brugada syndrome, or
+            catecholaminergic polymorphic ventricular tachycardia?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    family_heart_problems_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    family_heart_problems = forms.CharField(
+        label="""
+            Does anyone in your family have a heart problem, pacemaker,
+            or implanted defibrillator?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    fainting_seizures_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    fainting_seizures = forms.CharField(
+        label="""
+            Has anyone in your family had unexplained fainting,
+            unexplained seizures, or near drowning?
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
     # Head and Neck Injury
     head_injuries_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
