@@ -163,7 +163,7 @@ def set_val(request):
 @login_required
 def home(request):
     now = datetime.now()
-    if now > settings.HOUSING_DATE and now < settings.START_DATE:
+    if now >= settings.HOUSING_DATE and now < settings.START_DATE:
         return render_to_response(
             "closed.html",
             context_instance=RequestContext(request)
