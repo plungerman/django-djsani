@@ -224,6 +224,11 @@ $(function() {
     </form>
     <div id="student" class="clear slider-container">
         <h2 class="clear">Online forms</h2>
+        <p>
+          <strong>Your Progress:</strong><br>
+          A green checkmark will appear in the second column below
+          when that form is complete.
+        </p>
         <table class="table table-bordered table-hover">
             <tr>
                 <td>
@@ -302,6 +307,11 @@ $(function() {
         <h2 class="clear">Online forms and Waivers</h2>
         {% get_lw_content as online_forms blurbs 2009 %}
         {{online_forms.body}}
+        <p>
+          <strong>Your Progress:</strong><br>
+          A green checkmark will appear in the second column below
+          when that form is complete.
+        </p>
         <table class="table table-bordered table-hover">
             <tr>
                 <td>
