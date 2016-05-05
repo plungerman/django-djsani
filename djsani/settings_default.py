@@ -161,7 +161,8 @@ INSURANCE_RECIPIENTS = []
 DEFAULT_HASH = ""
 DEFAULT_CID = ""
 START_DATE = datetime(NOW.year, 6, 1)
-HOUSING_DATE = datetime(NOW.year, 5, 1)
+#ACADEMIC_YEAR_LIMBO = True
+ACADEMIC_YEAR_LIMBO = False
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(__file__), "logs/")
 LOG_FILENAME = LOG_FILEPATH + "debug.log"
