@@ -183,6 +183,8 @@ def home(request):
     my_sports = ""
     student = None
     adult = False
+    if staff and not request.GET.get("adult"):
+        adult = True
     # get academic term
     term = get_term()
     # get student
@@ -210,8 +212,6 @@ def home(request):
             my_sports = manager.sports.split(",")
 
         # adult or minor? if we do not have a DOB, default to minor
-        if staff:
-            adult = True
         if student.birth_date:
             age = calculate_age(student.birth_date)
             if age >= 18:
@@ -250,7 +250,7 @@ def home(request):
         # could not find student by college_id
         data = {
             "student":student,"staff":staff,"medical_staff":medical_staff,
-            "sports":SPORTS,"solo":True
+            "sports":SPORTS,"solo":True, "adult":adult,
         }
         # notify admin
         if not request.user.is_staff:
@@ -266,7 +266,6 @@ def home(request):
     # template depends on student or staff
     template = "home.html"
     if staff:
-        adult = True
         template = "home_staff.html"
         # emergency contact modal form
         objs = session.query(AARec).filter_by(id=request.user.id).\

@@ -1,5 +1,12 @@
 {% extends "home.html" %}
 {% load livewhale_api %}
+{% block title %}
+    {% ifusergroup MedicalStaff %}
+    {% if adult %}Adult{% else %}Minor{% endif %} &mdash;
+    {% endifusergroup %}
+    Medical Forms &mdash;
+    Carthage College
+{% endblock %}
 {% block extra_javascript %}
 <!-- from portal head -->
 <script type="text/javascript"
@@ -24,12 +31,17 @@ $(function() {
     $("a.ens-link").click(function() {
         makeDialog();
     });
-    // disable select option 'labels'
-    $('#id_sports option').each(function() {
-        if ($(this).val() == "0") $(this).attr('disabled', 'disabled');
-    });
     // multiple select picker
     $('#id_sports').selectpicker();
+    $('#id_sports').on('change', function(){
+        //setVal( "sports", $(this).val() );
+        if ( $(this).val() ) {
+            $athlete.delay(200).slideDown(200);
+        }else{
+            $athlete.delay(200).slideUp(200);
+        }
+    });
+
     {% if adult %}
         $('#adult_athlete').delay(200).slideDown(200);
         $('#adult_student').delay(200).slideDown(200);
@@ -40,6 +52,18 @@ $(function() {
     $student = $('#student');
     $athlete = $('#athlete');
     $("#sports-container").slideUp(200);
+    {% if manager.athlete == 0 %}
+        $athlete.slideUp(200);
+        $student.delay(200).slideDown(200);
+        $("#sports-container").slideUp(200);
+    {% endif %}
+    {% if manager.athlete == 1 %}
+        $student.slideUp(200);
+        $("#sports-container").delay(200).slideDown(200);
+        {% if my_sports %}
+            $athlete.delay(200).slideDown(200);
+        {% endif %}
+    {% endif %}
     $stypes.change(function() {
         $val = $(this).val();
         if ($val == "0") {
@@ -49,9 +73,9 @@ $(function() {
         }
         else if ($val == "1") {
             $student.slideUp(200);
-            $athlete.delay(200).slideDown(200);
             $("#sports-container").delay(200).slideDown(200);
         }
+        //setVal("athlete", $val);
     });
 });
 </script>
@@ -161,7 +185,6 @@ $(function() {
                 {% endif %}
                 </td>
             </tr>
-            {% if student.residency_status == "Resident" %}
             <tr class="slider-container" id="adult_student">
                 <td>
                     {% if manager.cc_student_meni_waiver %}
@@ -178,7 +201,6 @@ $(function() {
                     {% endif %}
                 </td>
             </tr>
-            {% endif %}
         </table>
         <h2>Printable forms for Campus Nurse</h2>
         <ul class="big-arrow-bullets">
@@ -194,14 +216,24 @@ $(function() {
             </li>
         </ul>
     </div>
-    <!-- ./ student -->
+    <!-- /#student -->
     <div id="athlete" class="clear slider-container">
-        <div class="large-12 medium-8 small-8">
+      <div class="large-12 medium-8 small-8">
         {% get_lw_content as athlete_directions blurbs 2008 %}
         {{athlete_directions.body}}
+        {% if not adult %}
+            {% get_lw_content as sicklecell blurbs 2226 %}
+            {{sicklecell.body}}
+        {% endif %}
+        {% if student.residency_status == "Resident" and not adult %}
+            <h3>
+                Meningococcal meningitis/Hepatitis B response and
+                Parent/Legal Guardian Consent Form
+            </h3>
+            {% get_lw_content as menihep blurbs 2013 %}
+            {{menihep.body}}
+        {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
-        {% get_lw_content as online_forms blurbs 2009 %}
-        {{online_forms.body}}
         <p>
           <strong>Your Progress:</strong><br>
           A green checkmark will appear in the second column below
@@ -234,6 +266,22 @@ $(function() {
             </tr>
             <tr>
                 <td>
+                    {% if manager.cc_student_meni_waiver or not adult %}
+                        Meningococcal meningitis/Hepatitis B response
+                    {% else %}
+                        <a href="{% url 'waiver_form' 'student' 'meni' %}">
+                            Meningococcal meningitis/Hepatitis B response
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if manager.cc_student_meni_waiver %}
+                    <i class="fa fa-check green"></i>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <a href="{% url 'medical_history_form' 'student' %}">
                         General Medical History
                     </a>
@@ -252,6 +300,38 @@ $(function() {
                 </td>
                 <td>
                 {% if manager.cc_athlete_medical_history %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                {% if manager.physical_evaluation %}
+                    Pre-Participation Physical Evaluation Upload Form
+                {% else %}
+                    <a href="{% url 'file_upload' 'physical-evaluation' %}">
+                    Pre-Participation Physical Evaluation Upload Form
+                    </a>
+                {% endif %}
+                </td>
+                <td>
+                {% if manager.physical_evaluation %}
+                    <i class="fa fa-check green"></i>
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                {% if manager.medical_consent_agreement %}
+                    Medical Consent and Insurance Agreement Upload Form
+                {% else %}
+                    <a href="{% url 'file_upload' 'medical-consent-agreement' %}">
+                    Medical Consent and Insurance Agreement Upload Form
+                    </a>
+                {% endif %}
+                </td>
+                <td>
+                {% if manager.medical_consent_agreement %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
                 </td>
@@ -304,21 +384,6 @@ $(function() {
                 </td>
             {% endif %}
             </tr>
-        </table>
-        <h3>
-        {% if adult %}
-            <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
-                SICKLE CELL TRAIT TESTING WAIVER
-            </a>
-        {% else %}
-            <a href="https://www.carthage.edu/live/files/794-pdf">
-                SICKLE CELL TRAIT TESTING WAIVER
-            </a>
-        {% endif %}
-        </h3>
-        {% get_lw_content as sicklecell blurbs 2011 %}
-        {{sicklecell.body}}
-        <table class="table table-bordered table-hover">
             <tr>
                 <td>
                 {% if not manager.cc_athlete_sicklecell_waiver or student.waive %}
@@ -341,51 +406,12 @@ $(function() {
                 </td>
             </tr>
         </table>
-        {% if not adult %}
-            <p>
-            If you will be 17 years of age or younger at the time you arrive
-            on campus, please print out the
-            <a href="//www.carthage.edu/live/files/794-pdf">
-                Underage Sickle Cell Waiver form
-            </a>
-            and have your parent/legal guardian complete the form.
-            </p>
-        {% endif %}
-        {% if student.residency_status == "Resident" %}
-            <h3>
-                Meningococcal meningitis/Hepatitis B response and
-                Parent/Legal Guardian Consent Form
-            </h3>
-            {% if adult %}
-                {% get_lw_content as menihep blurbs 2012 %}
-                {{menihep.body}}
-            {% else %}
-                {% get_lw_content as menihep blurbs 2013 %}
-                {{menihep.body}}
-            {% endif %}
-            <table class="table table-bordered table-hover">
-                <tr>
-                    <td>
-                        {% if manager.cc_student_meni_waiver or not adult %}
-                            Meningococcal meningitis/Hepatitis B response
-                        {% else %}
-                            <a href="{% url 'waiver_form' 'student' 'meni' %}">
-                                Meningococcal meningitis/Hepatitis B response
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if manager.cc_student_meni_waiver %}
-                        <i class="fa fa-check green"></i>
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
-        {% endif %}
         {% get_lw_content as questions blurbs 2014 %}
         {{questions.body}}
-        </div>
+      </div>
+      <!-- /.large .medium .small -->
     </div>
+    <!-- /#athlete -->
 </div>
 <div id="emergencyContactFiller">
     {% include "emergency/modal.html" %}
