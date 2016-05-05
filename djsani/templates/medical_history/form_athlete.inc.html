@@ -12,12 +12,16 @@
                 {% for field in form.visible_fields %}
                     {% include "medical_history/athlete_headers.inc.html" %}
                     <li class="form-group ctrlHolder">
-                    <h3>{{ field.label_tag }}</h3>
+                    <h3>
+                        <label>
+                            {{ field.label }}
+                        </label>
+                    </h3>
                     <a href="#" id="{{field.name}}" data-type="text"
                         data-pk="{{data.id}}"
                         data-table="cc_athlete_medical_history"
                         data-title="{{field.label}}" class="xeditable">
-                        {{field.value|default_if_none:"&nbsp;"}}
+                        {{field.value|default_if_none:"No"}}
                     </a>
                     {% if field.help_text %}
                         <p class="help">{{field.help_text}}</p>

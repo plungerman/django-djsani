@@ -21,7 +21,9 @@
     font-size:1.4em;}
     .althlete-header: {margin-bottom:-10px;margin-left:9px;}
     #page-content-wrap .content p, #page-content-wrap .content ul, #page-content-wrap .content ol {
-    margin-bottom: .5em;}
+    margin-bottom: .7em;}
+    #djforms #athlete h2, #djforms #athlete h3 {margin-top:19px !important;}
+    #djforms #page-content-wrap .content .big-arrow-bullets{margin:1em 0;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -299,14 +301,24 @@ $(function() {
             </li>
         </ul>
     </div>
-    <!-- ./ student -->
+    <!-- /#student -->
     <div id="athlete" class="clear slider-container">
-        <div class="large-12 medium-8 small-8">
+      <div class="large-12 medium-8 small-8">
         {% get_lw_content as athlete_directions blurbs 2008 %}
         {{athlete_directions.body}}
+        {% if not adult %}
+            {% get_lw_content as sicklecell blurbs 2226 %}
+            {{sicklecell.body}}
+        {% endif %}
+        {% if student.residency_status == "Resident" and not adult %}
+            <h3>
+                Meningococcal meningitis/Hepatitis B response and
+                Parent/Legal Guardian Consent Form
+            </h3>
+            {% get_lw_content as menihep blurbs 2013 %}
+            {{menihep.body}}
+        {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
-        {% get_lw_content as online_forms blurbs 2009 %}
-        {{online_forms.body}}
         <p>
           <strong>Your Progress:</strong><br>
           A green checkmark will appear in the second column below
@@ -479,42 +491,12 @@ $(function() {
                 </td>
             </tr>
         </table>
-        {% if not adult %}
-            <h3>
-            <a href="https://www.carthage.edu/live/files/794-pdf">
-                SICKLE CELL TRAIT TESTING WAIVER
-            </a>
-            </h3>
-            {% get_lw_content as sicklecell blurbs 2011 %}
-            {{sicklecell.body}}
-            <p>
-            If you will be 17 years of age or younger at the time you arrive
-            on campus, please print out the
-            <a href="//www.carthage.edu/live/files/794-pdf">
-                Underage Sickle Cell Waiver form
-            </a>&nbsp;
-            and have your parent/legal guardian complete the form.
-            </p>
-            <ul class="big-arrow-bullets">
-              <li>
-                <a href="//www.carthage.edu/live/files/794-pdf">
-                Underage Sickle Cell Waiver form
-                </a>
-              </li>
-            </ul>
-        {% endif %}
-        {% if student.residency_status == "Resident" and not adult %}
-            <h3>
-                Meningococcal meningitis/Hepatitis B response and
-                Parent/Legal Guardian Consent Form
-            </h3>
-            {% get_lw_content as menihep blurbs 2013 %}
-            {{menihep.body}}
-        {% endif %}
         {% get_lw_content as questions blurbs 2014 %}
         {{questions.body}}
-        </div>
+      </div>
+      <!-- /.large .medium .small -->
     </div>
+    <!-- /#athlete -->
     {% else %}
     <h2>We could not find your student record</h2>
     <ul>
