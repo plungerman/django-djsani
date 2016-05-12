@@ -152,6 +152,7 @@ def student_detail(request, cid=None, medium=None, content=None):
             medium, content
         )
     my_sports = None
+    manager = None
     managers = None
     # search form, grab only numbers from string
     if not cid:
@@ -177,7 +178,7 @@ def student_detail(request, cid=None, medium=None, content=None):
                 if manid:
                     manager = session.query(StudentMedicalManager).\
                         filter_by(id=manid).one()
-                else:
+                if not manager:
                     manager = get_manager(session, cid)
                     # execute student vitals sql again in case we just created
                     # a new manager
