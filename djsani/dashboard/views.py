@@ -40,10 +40,10 @@ def home(request):
         AND stu_serv_rec.yr = "{}"
         AND stu_serv_rec.sess = "{}"
         AND prog_enr_rec.cl IN ("FF","FR","UT")
+        ORDER BY lastname
     '''.format(
         STUDENTS_ALPHA, term["yr"], term["sess"]
     )
-    sql += "ORDER BY lastname"
 
     objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
     if objs:
@@ -70,7 +70,6 @@ def get_students(request):
         sport = request.POST.get("sport")
         # get academic term
         term = get_term()
-
         sql = ''' {}
             AND stu_serv_rec.yr = "{}"
             AND stu_serv_rec.sess = "{}"
@@ -166,8 +165,6 @@ def student_detail(request, cid=None, medium=None, content=None):
         if not manid:
             manid = request.GET.get("manid")
         session = get_session(EARL)
-        # get academic term
-        term = get_term()
         # get student
         sql = '''
             {} WHERE id_rec.id = "{}"
@@ -177,15 +174,18 @@ def student_detail(request, cid=None, medium=None, content=None):
         if obj:
             student = obj.fetchone()
             if student:
-                # get all managers for switch select options
-                managers = session.query(StudentMedicalManager).\
-                    filter_by(college_id=cid).all()
-                # manid from GET or POST. if None let get_manager() sort it out
                 if manid:
                     manager = session.query(StudentMedicalManager).\
                         filter_by(id=manid).one()
                 else:
                     manager = get_manager(session, cid)
+                    # execute student vitals sql again in case we just created
+                    # a new manager
+                    obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
+                    student = obj.fetchone()
+                # get all managers for switch select options
+                managers = session.query(StudentMedicalManager).\
+                    filter_by(college_id=cid).all()
                 # calculate student's age
                 try:
                     age = calculate_age(student.birth_date)
