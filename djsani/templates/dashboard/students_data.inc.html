@@ -28,22 +28,25 @@
         {% for s in students %}
             <tr>
                 <td class="{{s.adult}}">
-                    {% if s.sitrep %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        {% if s.manid %}
-                        <input type="checkbox" name="sitrep"
-                            data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
-                            data-table="cc_student_medical_manager" />
-                        {% else %}
-                            <i class="fa fa-times red"></i>
-                        {% endif %}
-                    {% endif %}
+                  {% if s.sitrep %}
+                      <i class="fa fa-check">
+                          <span style="display:none;">x</span>
+                      </i>
+                  {% else %}
+                    {% if s.manid %}
+                    <input type="checkbox" name="sitrep"
+                        data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                        data-table="cc_student_medical_manager" />
                     <span style="float:right;"><!-- all one line required -->
-                        <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting red{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-1000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
+                      <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting red{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-1000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
                     </span>
+                    {% else %}
+                    <i class="fa fa-times red"></i>
+                    <span style="float:right;">
+                      <i class="fa fa-commenting red"></i>
+                    </span>
+                    {% endif %}
+                  {% endif %}
                 </td>
                 <td class="{{s.adult}} student-name" style="text-align:left;">
                     <a href="{% url 'student_detail' s.id %}">
