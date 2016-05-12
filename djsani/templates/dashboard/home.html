@@ -57,7 +57,6 @@
 {% endblock %}
 {% block extra_javascript %}
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/jquery.dataTables.js"></script>
     <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
     <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/dataTables.bootstrap.js"></script>
@@ -342,12 +341,12 @@
                 <li class="divider"></li>
                 <li>
                     <a href="{% url 'auth_logout' %}">
-                        <i class="fa fa-power-off"></i> Log Out
+                        <i class="fa fa-power-off"></i> Sign Out
                     </a>
                 </li>
             </ul>
         </li>
-        <!-- /.dropdown-user -->
+        <!-- /.user-dropdown -->
     </ul>
 {% endblock %}
 {% block navbar-static-side %}
