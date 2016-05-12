@@ -222,7 +222,9 @@ $(function() {
                           <fieldset class="blockLabels">
                             <ol>
                       {% else %}
+                        {% if field.name != "primary_card_back" %}
                         {% include "form_field.inc.html" %}
+                        {% endif %}
                       {% endif %}
                     {% endfor %}
                   </ol>

@@ -325,6 +325,11 @@ $(function() {
             {% get_lw_content as menihep blurbs 2013 %}
             {{menihep.body}}
         {% endif %}
+        {% if not adult %}
+            <h3>Assumption of Risk</h3>
+            {% get_lw_content as risk blurbs 2010 %}
+            {{risk.body}}
+        {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
         <p>
           <strong>Your Progress:</strong><br>
@@ -457,23 +462,20 @@ $(function() {
                 {% endif %}
             </tr>
             <tr>
-            {% if adult %}
-                {% if manager.cc_athlete_risk_waiver %}
-                <td>Assumption of risk waiver</td>
-                <td><i class="fa fa-check green"></i></td>
-                {% else %}
-                <td>
-                    <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
-                        Assumption of risk waiver
-                    </a>
-                </td>
-                <td></td>
-                {% endif %}
+            {% if manager.cc_athlete_risk_waiver %}
+            <td>Assumption of risk waiver</td>
+            <td><i class="fa fa-check green"></i></td>
             {% else %}
-                <td colspan="2">
-                {% get_lw_content as risk blurbs 2010 %}
-                {{risk.body}}
-                </td>
+            <td>
+                {% if adult %}
+                <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
+                    Assumption of risk waiver
+                </a>
+                {% else %}
+                    Assumption of risk waiver
+                {% endif %}
+            </td>
+            <td></td>
             {% endif %}
             </tr>
             <tr>
