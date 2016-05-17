@@ -6,12 +6,13 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from djsani.core.utils import get_manager
+from djsani.core.sql import STUDENT_VITALS
+from djsani.core.utils import get_manager, get_term
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 from djsani.insurance.forms import StudentForm, AthleteForm
 
-from djzbar.utils.informix import get_session
+from djzbar.utils.informix import get_session, get_engine
 
 from djtools.fields.helpers import handle_uploaded_file
 from djtools.utils.convert import str_to_class
@@ -21,8 +22,11 @@ from djtools.utils.mail import send_mail
 
 from os.path import join
 
+EARL = settings.INFORMIX_EARL
+
 @login_required
 def form(request, stype, cid=None):
+    medical_staff=False
     if not cid:
         cid = request.user.id
     else:
@@ -30,10 +34,37 @@ def form(request, stype, cid=None):
             return HttpResponseRedirect(
                 reverse_lazy("home")
             )
+        else:
+            medical_staff=True
+
+    # get academic term
+    term = get_term()
+    # get student
+    sql = ''' {}
+        WHERE
+        id_rec.id = '{}'
+        AND stu_serv_rec.yr = "{}"
+        AND stu_serv_rec.sess = "{}"
+    '''.format(
+        STUDENT_VITALS, cid, term["yr"], term["sess"]
+    )
+
+    engine = get_engine(EARL)
+    obj = engine.execute(sql)
+    student = obj.fetchone()
+
+    if not student:
+        if medical_staff:
+            return HttpResponseRedirect(
+                reverse_lazy("dashboard_home")
+            )
+        else:
+            return HttpResponseRedirect(
+                reverse_lazy("home")
+            )
 
     # create database session
     session = get_session(settings.INFORMIX_EARL)
-
     # get our student medical manager
     manager = get_manager(session, cid)
 
@@ -130,7 +161,7 @@ def form(request, stype, cid=None):
     session.close()
     return render_to_response(
         "insurance/form.html", {
-            "form":form,"update":update,"oo":oo,
+            "form":form,"update":update,"oo":oo,"medical_staff":medical_staff,
             "manager":manager,"secondary":data.get("secondary_dob")
         },
         context_instance=RequestContext(request)
