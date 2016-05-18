@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalManager,v 8.0.17100.9 2016/03/22 11:18:40 mkishlin Released $
+ $Header: CCStudentMedicalManager,v 8.0.17100.10 2016/04/11 12:19:40 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -70,11 +70,20 @@ column sports       varchar(255)
         (
         )
 
-column physical_evaluation varchar(128)
+column physical_evaluation_1 varchar(128)
     comments        ""
-    desc            "Pre-Participation Physical Evaluation Form File"
-    heading         "Physical Evaluation"
-    text            "Physical Evaluation"
+    desc            "Pre-Participation Physical Evaluation Form File Page 1"
+    heading         "Physical Evaluation Page 1"
+    text            "Physical Evaluation Page 1"
+    attributes
+        (
+        )
+
+column physical_evaluation_2 varchar(128)
+    comments        ""
+    desc            "Pre-Participation Physical Evaluation Form File Page 2"
+    heading         "Physical Evaluation Page 2"
+    text            "Physical Evaluation Page 2"
     attributes
         (
         )

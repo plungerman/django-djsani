@@ -10,6 +10,10 @@
     <h2>
         Pre-Participation Physical Evaluation
     </h2>
+    <p>
+        Photo or scan of your physical evaluation form
+        signed by your doctor
+    </p>
     {% include "includes/errors_text.html" %}
     <form method="post" action="." class="form"
          enctype="multipart/form-data" id="profile" style="height:600px;">
@@ -18,23 +22,46 @@
           <ol>
             <li class="form-group ctrlHolder">
               <h3>
-                <label for="id_physical_evaluation">
-                Photo or scan of your physical evaluation form
-                signed by your doctor
+                <label for="id_physical_evaluation_1">
+                    Page 1
                 </label>
               </h3>
-              {% if form.physical_evaluation.errors %}
+              {% if form.physical_evaluation_1.errors %}
               <div class="required warning">
                 <span class="error-message">
-                  {{ form.physical_evaluation.errors|join:", "}}
+                  {{ form.physical_evaluation_1.errors|join:", "}}
                 </span>
               {% else %}
               <div class="required">
               {% endif %}
-                <input type="file" name="physical_evaluation"
-                  id="id_physical_evaluation" class="fleft" style="width:300px">
-                {% if manager.physical_evaluation %}
-                <a href="{{media_url}}files/{{manager.physical_evaluation}}"
+                <input type="file" name="physical_evaluation_1"
+                  id="id_physical_evaluation_1" class="fleft" style="width:300px">
+                {% if manager.physical_evaluation_1 %}
+                <a href="{{media_url}}files/{{manager.physical_evaluation_1}}"
+                  class="fleft" style="margin-left:10px;margin-top:3px;"
+                  target="_blank" title="current file">
+                  <i class="fa fa-file"></i></a>
+                {% endif %}
+              </div>
+            </li>
+            <li class="form-group ctrlHolder">
+              <h3>
+                <label for="id_physical_evaluation_2">
+                    Page 2
+                </label>
+              </h3>
+              {% if form.physical_evaluation_2.errors %}
+              <div class="required warning">
+                <span class="error-message">
+                  {{ form.physical_evaluation_2.errors|join:", "}}
+                </span>
+              {% else %}
+              <div class="required">
+              {% endif %}
+                <input type="file" name="physical_evaluation_2"
+                  id="id_physical_evaluation_2" class="fleft" style="width:300px">
+                {% if manager.physical_evaluation_2 %}
+                <a href="{{media_url}}files/{{manager.physical_evaluation_2}}"
                   class="fleft" style="margin-left:10px;margin-top:3px;"
                   target="_blank" title="current file">
                   <i class="fa fa-file"></i></a>

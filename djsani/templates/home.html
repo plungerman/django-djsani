@@ -387,11 +387,7 @@ $(function() {
                 {% if manager.cc_student_medical_history %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="{% url 'medical_history_form' 'athlete' %}">
+                </td> </tr> <tr> <td> <a href="{% url 'medical_history_form' 'athlete' %}">
                         Athlete Medical History
                     </a>
                 </td>
@@ -403,16 +399,12 @@ $(function() {
             </tr>
             <tr>
                 <td>
-                {% if manager.physical_evaluation %}
-                    Pre-Participation Physical Evaluation Upload Form
-                {% else %}
                     <a href="{% url 'file_upload' 'physical-evaluation' %}">
                     Pre-Participation Physical Evaluation Upload Form
                     </a>
-                {% endif %}
                 </td>
                 <td>
-                {% if manager.physical_evaluation %}
+                {% if manager.physical_evaluation_1 and manager.physical_evaluation_2 %}
                     <i class="fa fa-check green"></i>
                 {% endif %}
                 </td>

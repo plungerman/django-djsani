@@ -912,8 +912,15 @@ class AthleteMedicalHistoryForm(forms.Form):
 
 
 class PhysicalEvaluationForm(forms.Form):
-    physical_evaluation = forms.FileField(
-        label="Upload your file",
+    physical_evaluation_1 = forms.FileField(
+        label="Upload page 1 of the form",
+        help_text = """
+            Photo or scan of your physical evaluation form signed by your doctor
+        """,
+        required=True
+    )
+    physical_evaluation_2 = forms.FileField(
+        label="Upload page 2 of the form",
         help_text = """
             Photo or scan of your physical evaluation form signed by your doctor
         """,

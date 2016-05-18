@@ -135,15 +135,14 @@ def file_upload(request, name):
     """
     # munge the field name
     slug_list = name.split("-")
-    field_name = name.replace("-","_")
-    name = slug_list.pop(0).capitalize()
+    form_name = slug_list.pop(0).capitalize()
     for n in slug_list:
-        name += " %s" % n.capitalize()
-    name = "".join(name.split(" "))
+        form_name += " %s" % n.capitalize()
+    form_name = "".join(form_name.split(" "))
 
     fclass = str_to_class(
         "djsani.medical_history.forms",
-        "{}Form".format(name)
+        "{}Form".format(form_name)
     )
 
     # create database session
@@ -157,15 +156,18 @@ def file_upload(request, name):
         if form.is_valid():
             # folder in which we will store the file
             folder = "{}/{}/{}".format(
-                field_name, cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
+                name.replace("-","_"), cid, manager.created_at.strftime(
+                    "%Y%m%d%H%M%S%f"
+                )
             )
             # complete path
             sendero = join(settings.UPLOADS_DIR, folder)
             # rename and write file to new location
-            phile = handle_uploaded_file(
-                request.FILES[field_name], sendero
-            )
-            setattr(manager, field_name, "{}/{}".format(folder, phile))
+            for field in form.fields:
+                phile = handle_uploaded_file(
+                    request.FILES[field], sendero
+                )
+                setattr(manager, field, "{}/{}".format(folder, phile))
             session.commit()
             return HttpResponseRedirect(
                 reverse_lazy("home")
@@ -177,7 +179,7 @@ def file_upload(request, name):
     session.close()
 
     return render_to_response(
-        "medical_history/{}.html".format(field_name),
+        "medical_history/{}.html".format(name.replace("-","_")),
         {
             "form":form,"manager":manager
         },
