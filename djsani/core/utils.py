@@ -96,11 +96,13 @@ def get_manager(session, cid):
     if not manager:
         immunization = False
         sicklecell = False
+        notes = ""
         # do we have a past manager?
         obj = session.query(StudentMedicalManager).filter_by(college_id=cid).\
             order_by(desc(StudentMedicalManager.id)).first()
         if obj:
             # returning student
+            notes = obj.staff_notes
             if obj.cc_student_immunization:
                 immunization = True
             # if sicklecell waiver, check the latest for proof,
@@ -116,6 +118,7 @@ def get_manager(session, cid):
         manager = StudentMedicalManager(
             college_id=cid, cc_student_immunization=immunization,
             cc_athlete_sicklecell_waiver=sicklecell, sitrep=False
+            staff_notes=notes
         )
         # add manager
         session.add(manager)
