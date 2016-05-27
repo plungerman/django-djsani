@@ -117,7 +117,7 @@ def get_manager(session, cid):
         # create new manager
         manager = StudentMedicalManager(
             college_id=cid, cc_student_immunization=immunization,
-            cc_athlete_sicklecell_waiver=sicklecell, sitrep=False
+            cc_athlete_sicklecell_waiver=sicklecell, sitrep=False,
             staff_notes=notes
         )
         # add manager
