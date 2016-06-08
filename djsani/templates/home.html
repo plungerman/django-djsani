@@ -411,13 +411,9 @@ $(function() {
             </tr>
             <tr>
                 <td>
-                {% if manager.medical_consent_agreement %}
-                    Medical Consent and Insurance Agreement Upload Form
-                {% else %}
                     <a href="{% url 'file_upload' 'medical-consent-agreement' %}">
                     Medical Consent and Insurance Agreement Upload Form
                     </a>
-                {% endif %}
                 </td>
                 <td>
                 {% if manager.medical_consent_agreement %}

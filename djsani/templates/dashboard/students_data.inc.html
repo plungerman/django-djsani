@@ -125,22 +125,22 @@
                 </td>
                 <td class="{{s.adult}}">
                     {% if s.cc_athlete_medical_history %}
-                        <i class="fa fa-check">
+                        <i class="fa fa-check" title="athlete medical history">
                             <span style="display:none;">x</span>
                         </i>
                     {% else %}
-                        <i class="fa fa-times red"></i>
+                        <i class="fa fa-times red" title="athlete medical history"></i>
                     {% endif %}
                     {% if s.athlete %}
-                        {% if s.physical_evaluation %}
-                        / <i class="fa fa-stethoscope green"></i>
+                        {% if s.physical_evaluation_1 and s.physical_evaluation_2 %}
+                        / <i class="fa fa-stethoscope green" title="pre-participation physical"></i>
                         {% else %}
-                        / <i class="fa fa-stethoscope grey"></i>
+                        / <i class="fa fa-stethoscope grey" title="pre-participation physical"></i>
                         {% endif %}
-                        {% if s.medical_consent %}
-                        / <i class="fa fa-umbrella green"></i>
+                        {% if s.medical_consent_agreement %}
+                        / <i class="fa fa-umbrella green" title="medical consent agreement"></i>
                         {% else %}
-                        / <i class="fa fa-umbrella grey"></i>
+                        / <i class="fa fa-umbrella grey" title="medical consent agreement"></i>
                         {% endif %}
                     {% endif %}
                 </td>
