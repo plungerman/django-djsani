@@ -253,7 +253,7 @@ def home(request):
             "sports":SPORTS,"solo":True, "adult":adult,
         }
         # notify admin
-        if not request.user.is_staff:
+        if not staff:
             send_mail(
                 request, [settings.MANAGERS[0][1],],
                 "[Lost] Student: {} {} ({})".format(
