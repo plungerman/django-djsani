@@ -148,7 +148,7 @@ $(function() {
         </li>
         {% if user.is_superuser %}
         <li>
-            <a href="/campus-life/medical/forms/admin/">Administration</a>
+            <a href="{% url 'admin:index' %}">Administration</a>
         </li>
         {% endif %}
     {% else %}
