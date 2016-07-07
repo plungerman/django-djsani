@@ -16,7 +16,6 @@ from djsani.core.utils import get_manager
 from djtools.fields.helpers import handle_uploaded_file
 from djtools.utils.convert import str_to_class
 from djzbar.utils.informix import get_session
-from djtools.utils.convert import str_to_class
 from djtools.utils.database import row2dict
 
 from os.path import join
@@ -164,10 +163,11 @@ def file_upload(request, name):
             sendero = join(settings.UPLOADS_DIR, folder)
             # rename and write file to new location
             for field in form.fields:
-                phile = handle_uploaded_file(
-                    request.FILES[field], sendero
-                )
-                setattr(manager, field, "{}/{}".format(folder, phile))
+                if request.FILES.get(field):
+                    phile = handle_uploaded_file(
+                        request.FILES[field], sendero
+                    )
+                    setattr(manager, field, "{}/{}".format(folder, phile))
             session.commit()
             return HttpResponseRedirect(
                 reverse_lazy("home")
