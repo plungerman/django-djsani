@@ -14,7 +14,6 @@ from djsani.insurance.models import StudentHealthInsurance
 from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 
 from djzbar.utils.informix import get_session
-from sqlalchemy.orm import sessionmaker
 
 from optparse import OptionParser
 
