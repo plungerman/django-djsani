@@ -84,8 +84,6 @@ $(function() {
 {% block content %}
 <div>
     <div class="large-12 medium-12 small-12">
-        {% get_lw_content as alert blurbs 2250 %}
-        {{alert.body}}
         {% get_lw_content as student_directions blurbs 2007 %}
         {{student_directions.body}}
     </div>
