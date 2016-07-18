@@ -15,10 +15,11 @@
 <link href="/static/djmaidez/css/index.css"
     rel="stylesheet" type="text/css" />
 <style type="text/css">
-    div.growlUI { background: url(//www.carthage.edu/themes/shared/img/ico/check48.png) no-repeat 10px 10px; margin-top:60px; }
+    div.growlUI { position:relative;margin-top:60px; }
+    div.growlUI:before { color:red; font-size: 4em;position: absolute; font-family: 'FontAwesome'; top: 0; left: 10px; content: "\f00c"; }
     div.growlUI h1, div.growlUI h2 {
-    color: white; padding: 5px 5px 5px 75px; text-align: left;
-    font-size:1.4em;}
+    color: white; padding: 5px 5px 5px 75px; text-align: left;font-size:2em;}
+    div.growlUI h2 { font-size:1.4em;}
     .althlete-header: {margin-bottom:-10px;margin-left:9px;}
     #page-content-wrap .content p, #page-content-wrap .content ul, #page-content-wrap .content ol {
     margin-bottom: .7em;}
