@@ -1,13 +1,10 @@
 {% extends "djcher/accounts/login.html" %}
-{% load livewhale_api %}
 {% block content_head %}
 <h1 id="page_title">
     Medical Information Login<span id="secondary-dropdown"></span>
 </h1>
 {% endblock %}
 {% block content %}
-    {% get_lw_content as alert blurbs 2250 %}
-    {{alert.body}}
     {% if user.is_anonymous %}
         <p>
             Please use your Carthage username to log in.
