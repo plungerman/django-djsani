@@ -110,6 +110,12 @@ $(function() {
         {% endif %}
     {% endif %}
     {% if manager.athlete == 1 %}
+        {% if not form.primary_card_front.value %}
+        $("#id_primary_card_front").addClass("required");
+        {% endif %}
+        {% if not form.primary_card_back.value %}
+        $("#id_primary_card_back").addClass("required");
+        {% endif %}
     {% else %}
         $('#insurance-card').slideUp(200);
     {% endif %}
