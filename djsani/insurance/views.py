@@ -73,78 +73,82 @@ def form(request, stype, cid=None):
     # opt out
     oo = None
     if request.method=='POST':
-        # opt out of insurance
-        oo = request.POST.get("opt_out")
-        if oo:
-            # empty table
-            form = STUDENT_HEALTH_INSURANCE
-
-            if manager.athlete:
-                # alert email to staff
-                if settings.DEBUG:
-                    TO_LIST = [settings.SERVER_EMAIL,]
-                else:
-                    TO_LIST = settings.INSURANCE_RECIPIENTS
-                send_mail(
-                    request, TO_LIST,
-                    "[Health Insurance] Opt Out: {} {} ({})".format(
-                        request.user.first_name, request.user.last_name, cid
-                    ), request.user.email,
-                    "alert_email.html",
-                    request, settings.MANAGERS
-                )
-        else:
-            form = str_to_class(
-                "djsani.insurance.forms", fname
-            )(request.POST, request.FILES, manager=manager)
-            form.is_valid()
+        update = request.POST.get("update")
+        secondary = request.POST.get("secondary_dob")
+        if not secondary:
+            secondary = None
+        form = str_to_class(
+            "djsani.insurance.forms", fname
+        )(request.POST, request.FILES, manager=manager)
+        if form.is_valid():
             form = form.cleaned_data
-            # deal with file uploads
-            if request.FILES:
-                folder = "insurance/{}/{}".format(
-                    cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
-                )
-                p = join(settings.UPLOADS_DIR, folder)
-                if request.FILES.get('primary_card_front'):
-                    front = handle_uploaded_file(
-                        request.FILES['primary_card_front'], p
-                    )
-                    form["primary_card_front"] = "{}/{}".format(folder, front)
-                else:
-                    form.pop("primary_card_front", None)
-                if request.FILES.get('primary_card_back'):
-                    back = handle_uploaded_file(
-                        request.FILES['primary_card_back'], p
-                    )
-                    form["primary_card_back"] = "{}/{}".format(folder, back)
-                else:
-                    form.pop("primary_card_back", None)
-            # student did not opt out
-            form["opt_out"] = False
-        # insert else update
-        if not request.POST.get("update"):
-            # insert
-            form["college_id"] = cid
-            form["manager_id"] = manager.id
-            s = StudentHealthInsurance(**form)
-            session.add(s)
-        else:
-            # fetch our insurance object
-            obj = session.query(StudentHealthInsurance).\
-                filter_by(college_id=cid).\
-                filter(StudentHealthInsurance.current(settings.START_DATE)).\
-                first()
-            # update it with form values
-            for key, value in form.iteritems():
-                setattr(obj, key, value)
+            # opt out of insurance
+            oo = form.get("opt_out")
+            if oo:
+                # empty table
+                form = STUDENT_HEALTH_INSURANCE
 
-        # update the manager
-        manager.cc_student_health_insurance=True
-        # lastly, commit and redirect
-        session.commit()
-        return HttpResponseRedirect(
-            reverse_lazy("insurance_success")
-        )
+                if manager.athlete:
+                    # alert email to staff
+                    if settings.DEBUG:
+                        TO_LIST = [settings.SERVER_EMAIL,]
+                    else:
+                        TO_LIST = settings.INSURANCE_RECIPIENTS
+                    send_mail(
+                        request, TO_LIST,
+                        "[Health Insurance] Opt Out: {} {} ({})".format(
+                            request.user.first_name, request.user.last_name, cid
+                        ), request.user.email,
+                        "alert_email.html",
+                        request, settings.MANAGERS
+                    )
+            else:
+                # deal with file uploads
+                if request.FILES:
+                    folder = "insurance/{}/{}".format(
+                        cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
+                    )
+                    p = join(settings.UPLOADS_DIR, folder)
+                    if request.FILES.get('primary_card_front'):
+                        front = handle_uploaded_file(
+                            request.FILES['primary_card_front'], p
+                        )
+                        form["primary_card_front"] = "{}/{}".format(folder, front)
+                    else:
+                        form.pop("primary_card_front", None)
+                    if request.FILES.get('primary_card_back'):
+                        back = handle_uploaded_file(
+                            request.FILES['primary_card_back'], p
+                        )
+                        form["primary_card_back"] = "{}/{}".format(folder, back)
+                    else:
+                        form.pop("primary_card_back", None)
+                # student did not opt out
+                form["opt_out"] = False
+            # insert else update
+            if not update:
+                # insert
+                form["college_id"] = cid
+                form["manager_id"] = manager.id
+                s = StudentHealthInsurance(**form)
+                session.add(s)
+            else:
+                # fetch our insurance object
+                obj = session.query(StudentHealthInsurance).\
+                    filter_by(college_id=cid).\
+                    filter(StudentHealthInsurance.current(settings.START_DATE)).\
+                    first()
+                # update it with form values
+                for key, value in form.iteritems():
+                    setattr(obj, key, value)
+
+            # update the manager
+            manager.cc_student_health_insurance=True
+            # lastly, commit and redirect
+            session.commit()
+            return HttpResponseRedirect(
+                reverse_lazy("insurance_success")
+            )
     else:
         obj = session.query(StudentHealthInsurance).\
             filter_by(college_id=cid).\
@@ -159,12 +163,13 @@ def form(request, stype, cid=None):
         form = str_to_class("djsani.insurance.forms", fname)(
             initial=data, manager=manager
         )
+        secondary = data.get("secondary_dob")
     # close database session
     session.close()
     return render_to_response(
         "insurance/form.html", {
             "form":form,"update":update,"oo":oo,"medical_staff":medical_staff,
-            "manager":manager,"secondary":data.get("secondary_dob")
+            "manager":manager,"secondary":secondary
         },
         context_instance=RequestContext(request)
     )

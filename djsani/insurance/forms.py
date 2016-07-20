@@ -17,7 +17,7 @@ POLICY_CHOICES = (
 class AthleteForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('manager', None)
+        self.manager = kwargs.pop('manager', None)
         super(AthleteForm, self).__init__(*args, **kwargs)
 
     primary_policy_holder = forms.CharField(

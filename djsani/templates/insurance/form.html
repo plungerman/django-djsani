@@ -110,12 +110,6 @@ $(function() {
         {% endif %}
     {% endif %}
     {% if manager.athlete == 1 %}
-        {% if not form.primary_card_front.value %}
-        $("#id_primary_card_front").addClass("required");
-        {% endif %}
-        {% if not form.primary_card_back.value %}
-        $("#id_primary_card_back").addClass("required");
-        {% endif %}
     {% else %}
         $('#insurance-card').slideUp(200);
     {% endif %}
@@ -198,6 +192,11 @@ $(function() {
                             Photo or scan of your insurance card
                           </h3>
                           <div class="clear">
+                            {% if form.primary_card_front.errors %}
+                                  <span class="error-message">
+                                    {{form.primary_card_front.errors|join:", "}}
+                                  </span>
+                            {% endif %}
                             <strong class="fleft" style="width:35px;margin-right:5px;">Front</strong>
                             <input type="file" name="primary_card_front"
                               id="id_primary_card_front" class="fleft" style="width:300px">
@@ -207,6 +206,11 @@ $(function() {
                               {% endif %}
                           </div>
                           <div class="clear">
+                            {% if form.primary_card_back.errors %}
+                                  <span class="error-message">
+                                    {{form.primary_card_back.errors|join:", "}}
+                                  </span>
+                            {% endif %}
                             <strong class="fleft" style="width:35px;margin-right:5px;">Back</strong>
                             <input type="file" name="primary_card_back"
                               id="id_primary_card_back" class="fleft" style="width:300px">
