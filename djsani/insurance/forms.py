@@ -15,6 +15,11 @@ POLICY_CHOICES = (
 )
 
 class AthleteForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('manager', None)
+        super(AthleteForm, self).__init__(*args, **kwargs)
+
     primary_policy_holder = forms.CharField(
         max_length=128,
         required=False,widget=forms.TextInput(attrs=REQ_CSS)
@@ -121,6 +126,15 @@ class AthleteForm(forms.Form):
         widget=forms.Select(choices=STATE_CHOICES),
         required=False
     )
+
+    def clean(self):
+        cd = self.cleaned_data
+        if self.manager.athlete and \
+        (not cd["primary_card_front"] or not cd["primary_card_back"]):
+            error =  "Required Field"
+            self._errors["primary_card_front"] = self.error_class([error])
+            self._errors["primary_card_back"] = self.error_class([error])
+        return self.cleaned_data
 
 
 class StudentForm(AthleteForm):

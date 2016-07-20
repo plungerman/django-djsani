@@ -96,7 +96,7 @@ def form(request, stype, cid=None):
         else:
             form = str_to_class(
                 "djsani.insurance.forms", fname
-            )(request.POST, request.FILES)
+            )(request.POST, request.FILES, manager=manager)
             form.is_valid()
             form = form.cleaned_data
             # deal with file uploads
@@ -156,7 +156,9 @@ def form(request, stype, cid=None):
             oo = data["opt_out"]
             update = cid
 
-        form = str_to_class("djsani.insurance.forms", fname)(initial=data)
+        form = str_to_class("djsani.insurance.forms", fname)(
+            initial=data, manager=manager
+        )
     # close database session
     session.close()
     return render_to_response(
