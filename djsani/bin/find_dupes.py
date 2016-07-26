@@ -24,9 +24,6 @@ from djzbar.utils.informix import get_session
 
 from optparse import OptionParser
 
-"""
-"""
-
 EARL = settings.INFORMIX_EARL
 
 # set up command-line options
