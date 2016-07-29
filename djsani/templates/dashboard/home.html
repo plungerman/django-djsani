@@ -8,8 +8,13 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
         rel="stylesheet"/>
     <style type="text/css">
+    .red {color:#800;}
+    .green {color:#080;}
+    .grey {color:#cacaca;}
+    .white {color:#fff;}
     div.growlUI { position:relative;margin-top:60px; }
-    div.growlUI:before { color:red; font-size: 4em;position: absolute; font-family: 'FontAwesome'; top: 0; left: 10px; content: "\f00c"; }
+    div.growlUI:before { color:green; font-size: 4em;position: absolute; font-family: 'FontAwesome'; top: 0; left: 10px; content: "\f00c"; }
+    div.gerror:before { color:red; font-size: 4em;position: absolute; font-family: 'FontAwesome'; top: 0; left: 10px; content: "\f00d"; }
     div.growlUI h1, div.growlUI h2 {
     color: white; padding: 5px 5px 5px 75px; text-align: left;font-size:2em;}
     div.growlUI h2 { font-size:1.4em;}
@@ -30,10 +35,6 @@
     .navbar-default {z-index:100;}
     address { margin-bottom: 0; }
     .center{text-align:center;}
-    .red {color:#800;}
-    .green {color:#080;}
-    .grey {color:#cacaca;}
-    .white {color:#fff;}
     .fa-stethoscope{font-weight:900;}
     div.DTTT {
     float: right;
@@ -245,7 +246,6 @@
                                 type: "POST",
                                 url: "{% url 'set_val' %}",
                                 data: $data,
-                                dataType: 'json',
                                 cache: false,
                                 beforeSend: function(){
                                     spinner.spin(target);
@@ -257,12 +257,13 @@
                                         $dis.replaceWith(check);
                                         $.growlUI('Success', "Data saved.");
                                     } else {
-                                        $.growlUI('Error', data);
+                                        $.growlUI('Error?', data);
+                                        console.log("data = '" + data + "'");
                                     }
                                 },
                                 error: function(data) {
                                     spinner.stop(target);
-                                    $.growlUI('Error', data);
+                                    $.growlUI('Error?', data);
                                 }
                             });
                         });
@@ -295,7 +296,6 @@
                 type: "POST",
                 url: "{% url 'set_val' %}",
                 data: $data,
-                dataType: 'json',
                 cache: false,
                 beforeSend: function(){
                     spinner.spin(target);
@@ -307,12 +307,15 @@
                         $dis.replaceWith(check);
                         $.growlUI('Success', "Data saved.");
                     } else {
-                        $.growlUI('Error', data);
+                        $.growlUI('Error?', data);
+                        console.log("data = '" + data + "'");
                     }
                 },
                 error: function(data) {
                     spinner.stop(target);
-                    $.growlUI('Error', data);
+                    /* does not work */
+                    $('div.growlUI').addClass('gerror');
+                    $.growlUI('Error?', data);
                 }
             });
         });
