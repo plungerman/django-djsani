@@ -11,7 +11,7 @@ sys.path.append('/data2/django_third/')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 
 from djzbar.utils.informix import do_sql
 from djtools.utils.users import in_group
@@ -35,15 +35,24 @@ parser.add_argument(
     help="Group name",
     dest="group"
 )
+parser.add_argument(
+    "--remove",
+    required=False,
+    help="Remove users from group?",
+    dest="remove"
+)
 
 def main():
     """
     main method
     """
     users = User.objects.all()
+    g = Group.objects.get(name=group)
     for user in users:
         if in_group(user, group):
             print user.username, user.id
+            if remove:
+                g.user_set.remove(user)
 
 ######################
 # shell command line
@@ -52,5 +61,6 @@ def main():
 if __name__ == "__main__":
     args = parser.parse_args()
     group = args.group
+    remove = args.remove
 
     sys.exit(main())
