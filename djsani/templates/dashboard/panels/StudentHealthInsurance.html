@@ -7,10 +7,10 @@
 {% else %}
   {% if data.primary_card_front %}
   <div style="float:right;" id="insuranceCard">
-    <a href="{{media_url}}files/{{data.primary_card_front}}">
+    <a href="{{media_url}}files/{{data.primary_card_front}}" target="_blank">
         <i class="fa fa-credit-card"></i> Front</a>
     <br>
-    <a href="{{media_url}}files/{{data.primary_card_back}}">
+    <a href="{{media_url}}files/{{data.primary_card_back}}" target="_blank">
         <i class="fa fa-credit-card"></i> Back</a>
   </div>
   {% endif %}
