@@ -256,7 +256,7 @@ def home(request):
         if not staff:
             send_mail(
                 request, [settings.MANAGERS[0][1],],
-                "[Lost] Student: {} {} ({})".format(
+                u"[Lost] Student: {} {} ({})".format(
                     request.user.first_name, request.user.last_name, cid
                 ), request.user.email,
                 "alert_email.html",

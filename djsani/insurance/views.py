@@ -96,7 +96,7 @@ def form(request, stype, cid=None):
                         TO_LIST = settings.INSURANCE_RECIPIENTS
                     send_mail(
                         request, TO_LIST,
-                        "[Health Insurance] Opt Out: {} {} ({})".format(
+                        u"[Health Insurance] Opt Out: {} {} ({})".format(
                             request.user.first_name, request.user.last_name, cid
                         ), request.user.email,
                         "alert_email.html",
