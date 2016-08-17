@@ -192,7 +192,7 @@ def home(request):
         WHERE
         id_rec.id = '{}'
         AND stu_serv_rec.yr = "{}"
-        AND stu_serv_rec.sess = "{}"
+        AND UPPER(stu_serv_rec.sess) = "{}"
     '''.format(
         STUDENT_VITALS, cid, term["yr"], term["sess"]
     )
