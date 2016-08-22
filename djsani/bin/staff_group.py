@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, sys
+import django
 
 # env
 sys.path.append('/usr/local/lib/python2.7/dist-packages/')
@@ -10,6 +11,8 @@ sys.path.append('/data2/django_projects/')
 sys.path.append('/data2/django_third/')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
 
+django.setup()
+
 from django.conf import settings
 from django.contrib.auth.models import Group, User
 
@@ -19,7 +22,6 @@ from djtools.utils.users import in_group
 import argparse
 import django
 
-django.setup()
 
 # set up command-line options
 desc = """
