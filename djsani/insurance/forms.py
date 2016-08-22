@@ -130,7 +130,7 @@ class AthleteForm(forms.Form):
     def clean(self):
         cd = self.cleaned_data
         if self.manager.athlete and \
-        (not cd["primary_card_front"] or not cd["primary_card_back"]):
+        (not cd.get("primary_card_front") or not cd.get("primary_card_back")):
             error =  "Required Field"
             self._errors["primary_card_front"] = self.error_class([error])
             self._errors["primary_card_back"] = self.error_class([error])
