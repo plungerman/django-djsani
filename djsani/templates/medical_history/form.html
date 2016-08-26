@@ -187,9 +187,7 @@ $(document).ready(function() {
                     {% endif %}
                 </ol>
             </fieldset>
-            {% if not user.is_staff %}
             {% include "form_submit.inc.html" %}
-            {% endif %}
         </div>
     </form>
 </div>

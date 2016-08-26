@@ -173,10 +173,13 @@ def home(request):
     medical_staff = in_group(request.user, "MedicalStaff")
     if medical_staff:
         request.session['medical_staff'] = True
-    # check for carthage staff
+    # check for carthage staff: broken in Novell
+    """
     staff = in_group(request.user, "carthageStaffStatus")
     if staff:
         request.session['staff'] = True
+    """
+    staff = False
     # fetch college id from user object
     cid = request.user.id
     # intialise some things
