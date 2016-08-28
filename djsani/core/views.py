@@ -256,6 +256,7 @@ def home(request):
             "sports":SPORTS,"solo":True, "adult":adult,
         }
         # notify admin
+        '''
         if not staff:
             send_mail(
                 request, [settings.MANAGERS[0][1],],
@@ -265,6 +266,7 @@ def home(request):
                 "alert_email.html",
                 request, settings.MANAGERS
             )
+        '''
 
     # template depends on student or staff
     template = "home.html"
