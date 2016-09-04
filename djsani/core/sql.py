@@ -75,7 +75,7 @@ WHERE
 AND
     prog_enr_rec.lv_date IS  NULL
 AND
-    stu_acad_rec.sess IN  ("RA","RC","AM","GC","PC","TC")
+    stu_acad_rec.sess IN  ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
 """.format(START_DATE,START_DATE)
 
 STUDENT_VITALS = """
