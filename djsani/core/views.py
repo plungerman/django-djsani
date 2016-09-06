@@ -191,13 +191,11 @@ def home(request):
     # get academic term
     term = get_term()
     # get student
-    '''
-        AND stu_serv_rec.yr = "{}"
-        AND UPPER(stu_serv_rec.sess) = "{}"
-    '''
     sql = ''' {}
         WHERE
         id_rec.id = '{}'
+        AND stu_serv_rec.yr = "{}"
+        AND UPPER(stu_serv_rec.sess) = "{}"
     '''.format(
         STUDENT_VITALS, cid, term["yr"], term["sess"]
     )
