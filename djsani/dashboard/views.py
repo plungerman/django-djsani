@@ -146,6 +146,7 @@ def student_detail(request, cid=None, medium=None, content=None):
     """
     main method for displaying student data
     """
+    term = get_term()
     template = "dashboard/student_detail.html"
     if content:
         template = "dashboard/student_{}_{}.html".format(
@@ -169,8 +170,10 @@ def student_detail(request, cid=None, medium=None, content=None):
         # get student
         sql = '''
             {} WHERE id_rec.id = "{}"
+            AND stu_serv_rec.yr = "{}"
+            AND UPPER(stu_serv_rec.sess) = "{}"
             ORDER BY cc_student_medical_manager.created_at DESC
-        '''.format(STUDENT_VITALS, cid)
+        '''.format(STUDENT_VITALS, cid, term["yr"], term["sess"])
         obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
         if obj:
             student = obj.fetchone()
