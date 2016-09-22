@@ -50,14 +50,16 @@ LEFT JOIN
 LEFT JOIN
     cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
     AND
-        cc_student_medical_manager.created_at > DATE('06-01-15')
+        cc_student_medical_manager.created_at > DATE('2016-05-01')
 LEFT JOIN
     cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
     AND
-        (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > DATE('06-01-15'))
+        (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > DATE('2016-05-01'))
 WHERE
     prog_enr_rec.subprog    NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
     AND prog_enr_rec.lv_date    IS  NULL
-    AND stu_acad_rec.sess   IN  ("RA","RC","AM","GC","PC","TC")
+    AND stu_acad_rec.sess IN  ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
+        AND stu_serv_rec.yr = "2016"
+        AND stu_serv_rec.sess  IN  ("RA","AA","AB","GA")
     AND cc_student_medical_manager.id IS NULL
 ORDER BY lastname;
