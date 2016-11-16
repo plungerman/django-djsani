@@ -166,6 +166,23 @@
             //Prevent Default action.
             e.preventDefault();
         });
+        //$('.rotate-foto').on('click', function(){
+        $('.rotate-photo').click(function(e){
+          e.preventDefault();
+          var $dis = $(this);
+          var $html = $dis.html();
+          $dis.html('<i class="fa fa-refresh fa-spin"></i>');
+          var $phile = $dis.attr('href');
+          $.ajax({
+            type: "POST",
+            url: "{% url 'rotate_photo' %}",
+            data: {"phile":$phile},
+            success: function(data) {
+              $dis.html($html);
+            }
+          });
+
+        });
     });
 </script>
 {% endblock %}
@@ -419,12 +436,14 @@
                                 <ul>
                                     <li>
                                     {% if student.physical_evaluation_1 and student.physical_evaluation_2 %}
+                                        <i class="fa fa-repeat" aria-hidden="true" title="Rotate Clockwise"></i>
                                         <a href="{{media_url}}files/{{manager.physical_evaluation_1}}"
                                         class="fleft" style="margin-left:10px;margin-top:3px;"
                                         target="_blank" title="current file">
                                         <i class="fa fa-stethoscope green"></i>
                                         Physical evaluation page 1
                                         </a><br>
+                                        <i class="fa fa-repeat" aria-hidden="true" title="Rotate Clockwise"></i>
                                         <a href="{{media_url}}files/{{manager.physical_evaluation_2}}"
                                         class="fleft" style="margin-left:10px;margin-top:3px;"
                                         target="_blank" title="current file">
@@ -435,6 +454,7 @@
                                     </li>
                                     <li>
                                     {% if student.medical_consent_agreement %}
+                                        <i class="fa fa-repeat" aria-hidden="true" title="Rotate Clockwise"></i>
                                         <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
                                         class="fleft" style="margin-left:10px;margin-top:3px;"
                                         target="_blank" title="current file">

@@ -30,6 +30,9 @@ from djtools.fields import TODAY
 
 from datetime import datetime
 
+import Image
+
+
 """
 table names are the key, base model classes are the value
 """
@@ -288,6 +291,24 @@ def home(request):
         context_instance=RequestContext(request)
     )
 
+@csrf_exempt
+@login_required
+def rotate_photo(request):
+    '''
+    AJAX Post request for rotating an image 90 degrees clockwise
+    '''
+    msg = "Error"
+    phile = request.POST.get('phile')
+    if phile:
+        path = "{}/files/{}".format(settings.MEDIA_ROOT,phile)
+        src_im = Image.open(path)
+        im = src_im.rotate(90, expand=True)
+        im.save(path)
+        msg = "Success"
+
+    return HttpResponse(
+        msg, content_type="text/plain; charset=utf-8"
+    )
 
 def responsive_switch(request,action):
     if action=="go":

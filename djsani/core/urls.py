@@ -59,6 +59,10 @@ urlpatterns = patterns('djsani.core.views',
     url(
         r'^set-val/$', 'set_val', name="set_val"
     ),
+    # ajax post method to rotate an image 90 degress clockwise
+    url(
+        r'^rotate-photo/$', 'rotate_photo', name="rotate_photo"
+    ),
     # home
     url(
         r'^$', 'home', name="home"
