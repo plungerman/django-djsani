@@ -66,10 +66,11 @@ def get_term():
     sd = settings.START_DATE
     r = "RA"
     year = TODAY.year
-    if (TODAY.month < sd.month or TODAY.month == 12):
+    #if (TODAY.month < sd.month or TODAY.month == 12):
+    if (TODAY.month < sd.month):
         r = "RC"
-        if TODAY.month == 12:
-            year = year+1
+        #if TODAY.month == 12:
+        #    year = year+1
     return {"yr": year, "sess":r}
 
 def get_manager(session, cid):
