@@ -8,11 +8,12 @@
   {% if data.primary_card_front %}
   <div style="float:right;" id="insuranceCard">
     <a href="{{data.primary_card_front}}" class="rotate-photo">
-      <i class="fa fa-repeat" aria-hidden="true" title="Rotate Clockwise"></i></a>
+      <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
     <a href="{{media_url}}files/{{data.primary_card_front}}" target="_blank">
       <i class="fa fa-credit-card"></i> Front</a>
     <br>
-    <i class="fa fa-repeat" aria-hidden="true" title="Rotate Clockwise"></i>
+    <a href="{{data.primary_card_back}}" class="rotate-photo">
+      <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
     <a href="{{media_url}}files/{{data.primary_card_back}}" target="_blank">
       <i class="fa fa-credit-card"></i> Back</a>
   </div>
