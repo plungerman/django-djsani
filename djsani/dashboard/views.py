@@ -39,7 +39,7 @@ def home(request):
     sql = ''' {}
         AND stu_serv_rec.yr = "{}"
         AND stu_serv_rec.sess = "{}"
-        AND prog_enr_rec.cl IN ("FN","FF","FR","UT")
+        AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PFF")
         ORDER BY lastname
     '''.format(
         STUDENTS_ALPHA, term["yr"], term["sess"]
