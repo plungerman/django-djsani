@@ -65,7 +65,7 @@ def get_term():
     sd = settings.START_DATE
     r = "RA"
     year = TODAY.year
-    if (TODAY.month < sd.month or (TODAY.month == 12 and TODAY.day > 23)):
+    if (TODAY.month < sd.month or TODAY.month == 12):
         r = "RC"
         if TODAY.month == 12:
             year = year+1
