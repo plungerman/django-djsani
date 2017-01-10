@@ -154,10 +154,13 @@ def student_detail(request, cid=None, medium=None, content=None):
         )
     my_sports = None
     manager = None
-    managers = None
+    session = get_session(EARL)
     # search form, grab only numbers from string
     if not cid:
         cid = filter(str.isdigit, str(request.POST.get("cid")))
+    # get all managers for switch select options
+    managers = session.query(StudentMedicalManager).\
+        filter_by(college_id=cid).all()
     # we do not want to display faculty/staff details
     # nor do we want to create a manager for them
     if cid and not facstaff(cid):
@@ -166,14 +169,19 @@ def student_detail(request, cid=None, medium=None, content=None):
         # or from URL with GET variable
         if not manid:
             manid = request.GET.get("manid")
-        session = get_session(EARL)
         # get student
-        sql = '''
-            {} WHERE id_rec.id = "{}"
-            AND stu_serv_rec.yr = "{}"
-            AND UPPER(stu_serv_rec.sess) = "{}"
-            ORDER BY cc_student_medical_manager.created_at DESC
-        '''.format(STUDENT_VITALS, cid, term["yr"], term["sess"])
+        if manid:
+            sql = '''
+                {} WHERE cc_student_medical_manager.id = {}
+                ORDER by stu_serv_rec.stusv_no DESC
+        '''.format(STUDENT_VITALS, manid)
+        else:
+            sql = '''
+                {} WHERE id_rec.id = "{}"
+                AND stu_serv_rec.yr = "{}"
+                AND UPPER(stu_serv_rec.sess) = "{}"
+                ORDER BY cc_student_medical_manager.created_at DESC
+            '''.format(STUDENT_VITALS, cid, term["yr"], term["sess"])
         obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
         if obj:
             student = obj.fetchone()
@@ -187,9 +195,6 @@ def student_detail(request, cid=None, medium=None, content=None):
                     # a new manager
                     obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
                     student = obj.fetchone()
-                # get all managers for switch select options
-                managers = session.query(StudentMedicalManager).\
-                    filter_by(college_id=cid).all()
                 # calculate student's age
                 try:
                     age = calculate_age(student.birth_date)
