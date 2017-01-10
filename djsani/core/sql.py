@@ -94,7 +94,7 @@ SELECT
             'Resident'
         END
     AS
-        residency_status,
+        residency_status,stu_serv_rec.stusv_no,
     id_rec.lastname, id_rec.firstname, id_rec.id,
     id_rec.addr_line1, id_rec.addr_line2, id_rec.city, id_rec.st,
     id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name,
