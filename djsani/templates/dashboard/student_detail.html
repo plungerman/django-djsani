@@ -305,7 +305,7 @@
                             </address>
                         </div>
                         <div class="col-xs-1">
-                            <a href="{% url 'student_detail_medium' cid 'print' 'travel' %}"
+                            <a href="{% url 'student_detail_medium' cid 'print' 'travel' %}?manid={{manager.id}}"
                                 title="Print travel kit">
                                 <i class="fa fa-print fa-4x"></i>
                             </a>
@@ -323,7 +323,7 @@
                     <h3 class="panel-title">
                         <i class="fa fa-ambulance"></i>
                         Emergency Contact Information
-                        <a href="{% url 'student_detail_medium' cid 'print' 'emergency' %}"
+                        <a href="{% url 'student_detail_medium' cid 'print' 'emergency' %}?manid={{manager.id}}"
                             title="Print emergency contact">
                             <i class="fa fa-print"></i>
                         </a>
@@ -398,7 +398,7 @@
                     <h3 class="panel-title">
                         <i class="fa fa-plus-square"></i>
                         Medical History
-                        <a href="{% url 'student_detail_medium' cid 'print' 'history' %}"
+                        <a href="{% url 'student_detail_medium' cid 'print' 'history' %}?manid={{manager.id}}"
                             title="Print medical history">
                             <i class="fa fa-print"></i>
                         </a>
@@ -484,7 +484,7 @@
                     <h3 class="panel-title">
                         <i class="fa fa-edit"></i>
                         Waivers
-                        <a href="{% url 'student_detail_medium' cid 'print' 'waivers' %}"
+                        <a href="{% url 'student_detail_medium' cid 'print' 'waivers' %}?manid={{manager.id}}"
                             title="Print waivers">
                             <i class="fa fa-print"></i>
                         </a>
