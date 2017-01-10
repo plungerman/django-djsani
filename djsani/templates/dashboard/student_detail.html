@@ -134,6 +134,14 @@
             subject = "[Carthage College] Student: {{student.lastname}}, {{student.firstname}} :: DOB {{student.birth_date}}"
             content = $("#student-contact").html();
             content += $("#healthInsuranceEmailData").html();
+            // ens
+            content += $("#MIS1").html();
+            content += $("#MIS2").html();
+            content += $("#MIS3").html();
+            content += $("#ENS").html();
+            content += $("#ICE").html();
+            content += $("#ICE2").html();
+            // post data dictionary
             dict = {
                 'content': content,
                 'subject': subject,
