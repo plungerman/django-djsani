@@ -10,6 +10,8 @@ sys.path.append('/data2/django_projects/')
 sys.path.append('/data2/django_third/')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
 
+from django.conf import settings
+
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.insurance.models import STUDENT_HEALTH_INSURANCE
 
