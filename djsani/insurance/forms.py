@@ -20,6 +20,9 @@ class AthleteForm(forms.Form):
         self.manager = kwargs.pop('manager', None)
         super(AthleteForm, self).__init__(*args, **kwargs)
 
+    opt_out = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
     primary_policy_holder = forms.CharField(
         max_length=128,
         required=False,widget=forms.TextInput(attrs=REQ_CSS)
