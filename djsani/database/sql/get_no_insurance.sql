@@ -15,8 +15,6 @@ SELECT
     AS
         residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.id,
-    cc_student_medical_manager.id as manid,
-    cc_student_medical_manager.created_at,
     cc_student_medical_manager.athlete,
     cc_student_medical_manager.sitrep,
     cc_student_health_insurance.primary_policy_type
@@ -43,11 +41,10 @@ AND
 AND
     stu_acad_rec.sess IN  ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
 AND
-    cc_student_health_insurance.primary_policy_type = "Gov"
-    /* cc_student_health_insurance.primary_policy_type = "Mil" */
+    cc_student_health_insurance.opt_out = 1
 AND
     stu_serv_rec.yr = "2017"
 AND
     stu_serv_rec.sess = "RC"
 ORDER BY
-    lastname
+    id_rec.lastname
