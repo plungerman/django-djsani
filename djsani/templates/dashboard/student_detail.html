@@ -131,7 +131,7 @@
             }
         );
         $("#emailInsuranceForm").submit(function(e) {
-            subject = "[Carthage College] Student: {{student.lastname}}, {{student.firstname}} :: DOB {{student.birth_date}}"
+            subject = "[Carthage Medical Forms] Student Insurance: {{student.lastname}}, {{student.firstname}} :: DOB {{student.birth_date}}"
             content = $("#student-contact").html();
             content += $("#healthInsuranceEmailData").html();
             // ens
