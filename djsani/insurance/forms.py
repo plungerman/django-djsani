@@ -12,6 +12,7 @@ POLICY_CHOICES = (
     ('POS', 'POS'),
     ('Gov', 'Medicaid'),
     ('Mil', 'Military'),
+    ('Int', 'International')
 )
 
 class AthleteForm(forms.Form):
