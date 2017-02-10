@@ -19,7 +19,8 @@ SELECT
     cc_student_medical_manager.created_at,
     cc_student_medical_manager.athlete,
     cc_student_medical_manager.sitrep,
-    cc_student_health_insurance.primary_policy_type
+    cc_student_health_insurance.primary_company,
+    cc_student_health_insurance.secondary_company
 FROM
     id_rec
 INNER JOIN
