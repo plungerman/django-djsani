@@ -300,11 +300,17 @@ def rotate_photo(request):
     msg = "Error"
     phile = request.POST.get('phile')
     if phile:
-        path = "{}/files/{}".format(settings.MEDIA_ROOT,phile)
-        src_im = Image.open(path)
-        im = src_im.rotate(90, expand=True)
-        im.save(path)
-        msg = "Success"
+        if phile.lower().split('.')[-1] in ['jpg','jpeg','png']:
+            path = "{}/files/{}".format(settings.MEDIA_ROOT,phile)
+            try:
+                src_im = Image.open(path)
+                im = src_im.rotate(90, expand=True)
+                im.save(path)
+                msg = "Success"
+            except:
+                msg = "Fail. Something is a miss with that file."
+        else:
+            msg = "Fail. The file is not a graphics file."
 
     return HttpResponse(
         msg, content_type="text/plain; charset=utf-8"
