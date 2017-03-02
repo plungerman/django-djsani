@@ -155,7 +155,11 @@
                 </td>
                 {% if s.waive or s.proof %}
                     <td class="{{s.adult}}" style="background-color:#cacaca;">
-                    <i class="fa fa-check">
+                      {% if s.results == "Positive" %}
+                        <i class="fa fa-times red">
+                      {% else %}
+                        <i class="fa fa-check">
+                      {% endif %}
                         <span style="display:none;">x</span>
                     </i>
                     {% if s.proof %}
