@@ -1,4 +1,5 @@
 {% extends "djcher/accounts/login.html" %}
+{% load livewhale_api %}
 {% block content_head %}
 <h1 id="page_title">
     Medical Information Login<span id="secondary-dropdown"></span>
@@ -48,4 +49,6 @@
             </li>
         </ul>
     {% endif %}
+    {% get_lw_content as files blurbs 2455 %}
+    {{files.body}}
 {% endblock %}
