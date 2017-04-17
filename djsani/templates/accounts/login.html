@@ -11,6 +11,10 @@
             Please use your Carthage username to log in.
             Do not include @carthage.edu as part of your username.
         </p>
+        <p>
+            <a href="#login-downloadable-forms">
+                Downloadable forms are located at the bottom at of the page</a>.
+        </p>
         {% if form.errors or errors %}
             <p class="error">
                 Please enter a correct username and password.
@@ -49,6 +53,8 @@
             </li>
         </ul>
     {% endif %}
+    <div id="login-downloadable-forms">
     {% get_lw_content as files blurbs 2455 %}
     {{files.body}}
+    </div>
 {% endblock %}
