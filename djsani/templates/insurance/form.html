@@ -140,13 +140,8 @@ $(function() {
 <div id="spotlight-wrap">
 <div class="spotlight forms-container">
     <div class="large-7 medium-7 small-12">
-    <p>
-        Carthage College requires every full-time undergraduate student to
-        provide insurance and emergency contact information each academic
-        year. By completing this form, you are providing your permission
-        for Carthage College to release your insurance information to a
-        healthcare provider in the event that treatment is needed off-campus.
-    </p>
+    {% get_lw_content as insurance_intro blurbs 2456 %}
+    {{insurance_intro.body}}
     {% include "includes/required_text.html" %}
     <div style="border: 3px green solid;">
         <p style="margin:5px;">
