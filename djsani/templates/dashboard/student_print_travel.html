@@ -30,7 +30,7 @@
 {% block content %}
 <div id="student-contact">
     <h1 class="page-header">
-    {{student.firstname}} {{student.lastname}}
+    {{student.firstname}} {{student.lastname}} ({{student.sex}}) [{{student.id}}]
     {% if student.athlete %}<small>Athlete</small><br />{% endif %}
     <small>DOB: {{student.birth_date}} &mdash; Age: {{age}}</small>
     </h1>
