@@ -21,6 +21,7 @@ class Sicklecell(Base):
     waive = Column(Boolean)
     proof = Column(Boolean)
     results = Column(String)
+    results_file = Column(String)
     #status = Column(Boolean)
 
     def __repr__(self):

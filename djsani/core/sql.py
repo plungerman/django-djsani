@@ -47,7 +47,8 @@ SELECT
     cc_athlete_sicklecell_waiver.updated_at,
     cc_athlete_sicklecell_waiver.waive,
     cc_athlete_sicklecell_waiver.proof,
-    cc_athlete_sicklecell_waiver.results
+    cc_athlete_sicklecell_waiver.results,
+    cc_athlete_sicklecell_waiver.results_file
 FROM
     id_rec
 INNER JOIN
@@ -116,6 +117,7 @@ SELECT
     cc_athlete_sicklecell_waiver.waive,
     cc_athlete_sicklecell_waiver.proof,
     cc_athlete_sicklecell_waiver.results,
+    cc_athlete_sicklecell_waiver.results_file,
     cc_athlete_privacy_waiver.id as privacy_id,
     cc_athlete_privacy_waiver.news_media,
     cc_athlete_privacy_waiver.parents_guardians,

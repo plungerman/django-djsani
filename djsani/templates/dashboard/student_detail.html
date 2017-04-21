@@ -21,7 +21,7 @@
     li { list-style: none; }
     .editable-input textarea {width:375px !important;}
     .editable-container.editable-popup { z-index: 10000; }
-    #healthInsuranceEmailData, #StudentContactEmailHeader {display:none;}
+    #healthInsuranceEmailData, #StudentContactEmailHeader, #id_results_file {display:none;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -442,8 +442,8 @@
                             </div>
                             <div id="athlete_files" class="tab-pane fade">
                                 <ul>
-                                    <li>
                                     {% if student.physical_evaluation_1 and student.physical_evaluation_2 %}
+                                    <li>
                                         <a href="{{manager.physical_evaluation_1}}" class="rotate-photo">
                                           <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
                                         <a href="{{media_url}}files/{{manager.physical_evaluation_1}}"
@@ -460,10 +460,10 @@
                                         <i class="fa fa-stethoscope green"></i>
                                         Physical evaluation page 2
                                         </a>
-                                    {% endif %}
                                     </li>
-                                    <li>
+                                    {% endif %}
                                     {% if student.medical_consent_agreement %}
+                                    <li>
                                         <a href="{{manager.medical_consent_agreement}}" class="rotate-photo">
                                           <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
                                         <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
@@ -472,8 +472,20 @@
                                         <i class="fa fa-umbrella green"></i>
                                         Medical consent and insurance agreement
                                         </a>
-                                        {% endif %}
                                     </li>
+                                    {% endif %}
+                                    {% if student.results_file %}
+                                    <li>
+                                        <a href="{{student.results_file}}" class="rotate-photo">
+                                          <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
+                                        <a href="{{media_url}}files/{{student.results_file}}"
+                                        class="fleft" style="margin-left:10px;margin-top:3px;"
+                                        target="_blank" title="current file">
+                                        <i class="fa fa-moon-o green"></i>
+                                        Sickle Cell Test Results
+                                        </a>
+                                    </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>

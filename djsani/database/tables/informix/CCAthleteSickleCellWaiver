@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCAthleteSickleCellWaiver,v 8.0.17100.4 2015/05/18 13:24:24 mkishlin Released $
+ $Header: CCAthleteSickleCellWaiver,v 8.0.17100.5 2017/04/21 09:00:34 stevek Released $
  -------------------------------------------------------------------------
 }
 
@@ -83,6 +83,15 @@ column results      varchar(64)
     desc            "Results"
     heading         "Results"
     text            "Results"
+    attributes
+        (
+        )
+
+column results_file varchar(128)
+    comments        ""
+    desc            "Test results file upload"
+    heading         "Test results file upload"
+    text            "Test results file upload"
     attributes
         (
         )

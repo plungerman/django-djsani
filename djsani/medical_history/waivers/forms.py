@@ -14,10 +14,14 @@ class SicklecellForm(forms.Form):
     proof = forms.BooleanField(
         required=False
     )
-
     results = forms.ChoiceField(
         choices=BINARY_CHOICES,
         widget=forms.RadioSelect(),
+        required=False
+    )
+    results_file = forms.FileField(
+        label="Results File",
+        help_text="Photo/Scan of your test results",
         required=False
     )
 

@@ -12,8 +12,12 @@ from djsani.core.utils import get_manager
 from djzbar.utils.informix import get_session
 from djtools.fields import NEXT_YEAR
 from djtools.utils.convert import str_to_class
+from djtools.fields.helpers import handle_uploaded_file
 
 import os
+
+from os.path import join
+
 
 @login_required
 def form(request, stype, wtype):
@@ -30,33 +34,41 @@ def form(request, stype, wtype):
         "djsani.medical_history.waivers.forms",
         "{}Form".format(wtype.capitalize())
     )
-    student = None
-    waive = True
+    sicklecell = None
     if wtype == "sicklecell":
-        student = session.query(Sicklecell).\
+        sicklecell = session.query(Sicklecell).\
             filter_by(college_id=cid).filter(\
                 (Sicklecell.proof == 1) | \
                 (Sicklecell.created_at > settings.START_DATE)\
             ).first()
-        if student:
-            waive = student.waive
 
     # check to see if they already submitted this form.
-    # redirect except for those who waived sicklecell test
+    # redirect except for sicklecell waiver
     # or wtype does not return a form class (fname)
-    if (manager and getattr(manager, table, None) and not waive) or not fname:
+    if (manager and getattr(manager, table, None) and not sicklecell) or not fname:
         return HttpResponseRedirect( reverse_lazy("home") )
 
     if request.method=='POST':
-        form = fname(request.POST)
+        form = fname(request.POST, request.FILES)
         if form.is_valid():
             data = form.cleaned_data
 
-            if student:
+            # deal with file uploads
+            if request.FILES.get('results_file'):
+                folder = "sicklecell/{}/{}".format(
+                    cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
+                )
+                p = join(settings.UPLOADS_DIR, folder)
+                phile = handle_uploaded_file(
+                    request.FILES['results_file'], p
+                )
+                data['results_file'] = '{}/{}'.format(folder, phile)
+
+            if sicklecell:
                 # update student's sicklecell waiver record
                 data["updated_at"] = datetime.datetime.now()
                 for key, value in data.iteritems():
-                    setattr(student, key, value)
+                    setattr(sicklecell, key, value)
             else:
                 # insert
                 data["college_id"] = cid
@@ -91,7 +103,7 @@ def form(request, stype, wtype):
     return render_to_response(
         template,
         {
-            "form":form,"next_year":NEXT_YEAR,"student":student
+            "form":form,"next_year":NEXT_YEAR,"student":sicklecell
         },
         context_instance=RequestContext(request)
     )
