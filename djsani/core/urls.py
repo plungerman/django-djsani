@@ -1,17 +1,20 @@
 from django.contrib import admin
 from django.views.generic import RedirectView
 from django.core.urlresolvers import reverse_lazy
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 
+from djsani.core import views
+
 from djauth.views import loggedout
+from djzbar.views import auth
 
 admin.autodiscover()
 
 handler404 = 'djtools.views.errors.four_oh_four_error'
 handler500 = 'djtools.views.errors.server_error'
 
-urlpatterns = patterns('djsani.core.views',
+urlpatterns = [
     # we don't want users created through django admin
     url(
         r'^admin/auth/user/add/$',
@@ -30,7 +33,7 @@ urlpatterns = patterns('djsani.core.views',
         name="auth_logout"
     ),
     url(
-        r'^accounts/loggedout/$',loggedout,
+        r'^accounts/loggedout/$', loggedout,
         {'template_name': 'accounts/logged_out.html'},
         name="auth_loggedout"
     ),
@@ -53,25 +56,23 @@ urlpatterns = patterns('djsani.core.views',
     # override mobile first responsive UI
     url(
         r'^responsive/(?P<action>[-\w]+)/',
-        'responsive_switch', name="responsive_switch"
+        views.responsive_switch, name="responsive_switch"
     ),
     # ajax post method to save various types characteristics to db and session
     url(
-        r'^set-val/$', 'set_val', name="set_val"
+        r'^set-val/$', views.set_val, name="set_val"
     ),
     # ajax post method to rotate an image 90 degress clockwise
     url(
-        r'^rotate-photo/$', 'rotate_photo', name="rotate_photo"
+        r'^rotate-photo/$', views.rotate_photo, name="rotate_photo"
     ),
     # home
     url(
-        r'^$', 'home', name="home"
+        r'^$', views.home, name="home"
     ),
-)
-# authentication views
-urlpatterns += patterns('djzbar.views.auth',
+    # authentication views
     # login required error page
     url(
-        r'^login-required/?cid=@@UserID', 'login_required', name="login_required"
+        r'^login-required/?cid=@@UserID', auth.login_required, name="login_required"
     ),
-)
+]

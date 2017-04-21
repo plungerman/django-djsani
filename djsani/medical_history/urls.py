@@ -1,7 +1,9 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
-urlpatterns = patterns('djsani.medical_history.views',
+from djsani.medical_history import views
+
+urlpatterns = [
     # waivers
     url(
         r'^waivers/', include("djsani.medical_history.waivers.urls")
@@ -17,16 +19,16 @@ urlpatterns = patterns('djsani.medical_history.views',
     # files upload form
     url(
         r'^files/(?P<name>[a-zA-Z0-9_-]+)/$',
-        'file_upload', name="file_upload"
+        views.file_upload, name="file_upload"
     ),
     # medical history form: athletics or academics
     url(
         r'^(?P<stype>[a-zA-Z0-9_-]+)/(?P<display>[a-zA-Z0-9_-]+)/$',
-        'history', name="medical_history_print"
+        views.history, name="medical_history_print"
     ),
     # medical history form: athletics or academics
     url(
         r'^(?P<stype>[a-zA-Z0-9_-]+)/$',
-        'history', name="medical_history_form"
+        views.history, name="medical_history_form"
     ),
-)
+]
