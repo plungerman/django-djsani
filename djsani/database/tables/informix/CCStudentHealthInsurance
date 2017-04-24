@@ -241,6 +241,87 @@ column secondary_policy_address     varchar(255)
         (
         )
 
+        column tertiary_policy_holder  varchar(128)
+            comments        ""
+            desc            "tertiary insurance policy holder"
+            heading         "Sec. Policy Holder"
+            text            "Sec. Policy Holder"
+            attributes
+                (
+                )
+
+        column tertiary_dob        date
+            comments        ""
+            desc            "Date of birth for tertiary policy holder"
+            heading         "Sec. Holder DOB"
+            text            "Sec. Holder DOB"
+            attributes
+                (
+                )
+
+        column tertiary_company    varchar(128)
+            comments        ""
+            desc            "Name of insurance company for tertiary policy"
+            heading         "tertiary Company"
+            text            "tertiary Company"
+            attributes
+                (
+                )
+
+        column tertiary_phone      varchar(12)
+            comments        ""
+            desc            "Phone number for tertiary insurance company"
+            heading         "tertiary Phone"
+            text            "tertiary Phone"
+            attributes
+                (
+                )
+
+        column tertiary_member_id  varchar(64)
+            comments        ""
+            desc            "Member ID for tertiary policy"
+            heading         "tertiary Member ID"
+            text            "tertiary Member ID"
+            attributes
+                (
+                )
+
+        column tertiary_group_no   varchar(64)
+            comments        ""
+            desc            "tertiary policy group number"
+            heading         "tertiary group number"
+            text            "tertiary group number"
+            attributes
+                (
+                )
+
+        column tertiary_policy_type    varchar(128)
+            comments        ""
+            desc            "Type of tertiary policy"
+            heading         "Sec. Policy Type"
+            text            "Sec. Policy Type"
+            attributes
+                (
+                )
+
+        column tertiary_policy_state   char(2)
+            comments        ""
+            desc            "Sec. Policy State"
+            heading         "Sec. Policy State"
+            text            "Sec. Policy State"
+            attributes
+                (
+                )
+
+        column tertiary_policy_address     varchar(255)
+            comments    ""
+            desc        "tertiary policy address"
+            heading     "Sec. Policy Address"
+            text        "Sec. Policy Address"
+            attributes
+                (
+                )
+
 index           { Index names must be unique across database }
                 cc_student_health_insurance01 on (id)
                 cc_student_health_insurance_college_id on (college_id)
