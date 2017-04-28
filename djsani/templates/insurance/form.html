@@ -10,6 +10,13 @@
 <link rel="stylesheet"
     href="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css"
     type="text/css" media="screen" />
+<style>
+@media only screen and (max-width: 60em) {
+    #page-content-wrap .content {
+        width: 95%;
+    }
+}
+</style>
 {% endblock %}
 {% block extra_javascript %}
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
@@ -42,28 +49,56 @@ $(function() {
             {% endif %}
             $('#secondary-box').slideUp(200);
             $('#secondary-form').slideUp(200);
+            $('#tertiary-box').slideUp(200);
+            $('#tertiary-form').slideUp(200);
         }else{
             $("#primary-insurance-header").text("Primary Insurance");
             $('#primary-form').slideDown(200);
             $('#insurance-card').slideDown(200);
             $('#secondary-box').slideDown(200);
-            if (!$("#id_second").is(":checked")) {
+            $('#tertiary-box').slideDown(200);
+            if ($("#id_second").is(":checked")) {
                 $('#secondary-form').slideDown(200);
+            }
+            if ($("#id_third").is(":checked")) {
+                $('#tertiary-form').slideDown(200);
             }
         }
     });
     $('#id_second').change(function() {
         if($(this).is(":checked")) {
-            $("[id^='id_secondary']").removeClass("error required");
-            $("[id^='id_secondary']").val("");
-            $('#secondary-form').slideUp(200);
-        }else{
             $("[id^='id_secondary']").addClass("required");
             // state is not required unless policy type is "state"
             $('#id_secondary_policy_state').removeClass("required");
             // address is not required
             $('#id_secondary_policy_address').removeClass("required");
             $('#secondary-form').slideDown(200);
+            $('#tertiary-box').slideDown(200);
+        }else{
+            $("[id^='id_secondary']").removeClass("error required");
+            $("[id^='id_secondary']").val("");
+            $('#secondary-form').slideUp(200);
+            $('#tertiary-form').slideUp(200);
+            $('#tertiary-box').slideUp(200);
+            $("#id_third").prop("checked", false);
+            $("[id^='id_tertiary']").val("");
+            $("[id^='id_tertiary']").removeClass("error required");
+        }
+    });
+    $('#id_third').change(function() {
+        if($(this).is(":checked")) {
+            $("[id^='id_tertiary']").addClass("required");
+            // state is not required unless policy type is "state"
+            $('#id_tertiary_policy_state').removeClass("required");
+            // address is not required
+            $('#id_tertiary_policy_address').removeClass("required");
+            $('#tertiary-form').slideDown(200);
+            // jump to tertiary form
+            window.location = $('#tertiary-form-anchor').attr('href');
+        }else{
+            $("[id^='id_tertiary']").removeClass("error required");
+            $("[id^='id_tertiary']").val("");
+            $('#tertiary-form').slideUp(200);
         }
     });
     $("[id$='policy_type']").change(function() {
@@ -80,6 +115,9 @@ $(function() {
     if ( $('#id_secondary_policy_type').val() == "Gov") {
         $('#id_secondary_policy_state').addClass("required");
     }
+    if ( $('#id_tertiary_policy_type').val() == "Gov") {
+        $('#id_tertiary_policy_state').addClass("required");
+    }
     $("select[id$='policy_type']").on('change', function() {
         if( $(this).val() == "Gov") {
             $(this).closest('li').next().find('select').addClass("required");
@@ -89,24 +127,49 @@ $(function() {
     });
     {% if oo == True %}
         {% if manager.athlete == 1 %}
+            {% if not primary %}
             $.fancybox.open([{
                 href : '#athlete-warning'
             }]);
+            {% endif %}
             $("#primary-insurance-header").text("Athlete Insurance");
             $('#insurance-card').slideUp(200);
             $('#secondary-box').slideUp(200);
             $('#secondary-form').slideUp(200);
+            $('#tertiary-box').slideUp(200);
+            $('#tertiary-form').slideUp(200);
+            $("#id_opt_out").prop("checked", true);
         {% else %}
             $('#primary-form').slideUp(200);
             $('#secondary-form').slideUp(200);
             $('#secondary-box').slideUp(200);
+            $('#tertiary-form').slideUp(200);
+            $('#tertiary-box').slideUp(200);
             $("#id_opt_out").prop("checked", true);
         {% endif %}
     {% else %}
-        {% if secondary == None and update %}
-            $("#id_second").prop("checked", true);
+        {% if secondary == None %}
+            $("#id_second").prop("checked", false);
             $("input[id^='id_secondary']").removeClass("error required");
             $('#secondary-form').slideUp(200);
+            $('#tertiary-form').slideUp(200);
+            // don't display 3rd if no 2nd
+            $("#tertiary-box").slideUp(200);
+        {% else %}
+            $("#id_second").prop("checked", true);
+            $("input[id^='id_secondary']").addClass("required");
+            $('#secondary-form').slideDown(200);
+            // display 3rd since we have a 2nd
+            $("#tertiary-box").slideDown(200);
+        {% endif %}
+        {% if tertiary == None %}
+            $("#id_third").prop("checked", false);
+            $("input[id^='id_tertiary']").removeClass("error required");
+            $('#tertiary-form').slideUp(200);
+        {% else %}
+            $("#id_third").prop("checked", true);
+            $("input[id^='id_tertiary']").addClass("required");
+            $('#tertiary-form').slideDown(200);
         {% endif %}
     {% endif %}
     {% if manager.athlete == 1 %}
@@ -126,6 +189,9 @@ $(function() {
     if ($('#id_secondary_dob').val() == "None") {
         $('#id_secondary_dob').val("");
     }
+    if ($('#id_tertiary_dob').val() == "None") {
+        $('#id_tertiary_dob').val("");
+    }
     // disable submit button after users clicks it
     $('form#profile').submit(function(){
         $(this).children('input[type=submit]').attr('disabled', 'disabled');
@@ -135,11 +201,11 @@ $(function() {
 {% endblock %}
 {% block left_nav %}{% endblock %}
 {% block group_name %}{% endblock %}
-{% block page_content %}class="content large-11"{% endblock %}
+{% block page_content %}class="content large-11 medium-12 small-12"{% endblock %}
 {% block content %}
 <div id="spotlight-wrap">
 <div class="spotlight forms-container">
-    <div class="large-7 medium-7 small-12">
+    <div class="large-7 medium-12 small-12">
     {% get_lw_content as insurance_intro blurbs 2456 %}
     {{insurance_intro.body}}
     {% include "includes/required_text.html" %}
@@ -157,8 +223,8 @@ $(function() {
          enctype="multipart/form-data" id="profile">
         {% csrf_token %}
         <input id="id_update" type="hidden"
-            value="{{update}}" name="update">
-        <div class="large-5 medium-7 small-7">
+            value="{{update|default:''}}" name="update">
+        <div class="large-5 medium-12 small-12">
             <label for="id_opt_out">
                 <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
                 <span style="color:#f00;">
@@ -167,20 +233,31 @@ $(function() {
                 </span>
             </label>
         </div>
-        <div class="large-5 medium-7 small-7">
+        <div class="large-5 medium-12 small-12">
             <div id="secondary-box">
                 <label for="id_second" style="display:block;">
                     <input id="id_second" type="checkbox"
                         value="1" name="second_policy">
                     <span style="color:#800;">
-                        I do <strong><u>NOT</u></strong>
-                        have a secondary policy.
+                        <strong><u>Secondary Policy</u></strong>
                     </span>
+                </label>
+            </div>
+            <div id="tertiary-box">
+                <label for="id_third" style="display:block;">
+                    <input id="id_third" type="checkbox"
+                        value="1" name="third_policy">
+                    <span style="color:#800;">
+                        <strong><u>Tertiary Policy</u></strong>
+                    </span>
+                    <a href="#tertiary-form" id="tertiary-form-anchor" style="display:none;">
+                        tertiary form
+                    </a>
                 </label>
             </div>
         </div>
         <div id="insurance-policies">
-            <div class="large-5 medium-7 small-7" id="primary-form">
+            <div class="large-5 medium-12 small-12" id="primary-form">
                 <h2 id="primary-insurance-header">
                     Primary Insurance Policy
                 </h2>
@@ -222,7 +299,7 @@ $(function() {
                           </div>
                         </li>
                         </ol></fieldset></div>
-                        <div class="large-5 medium-7 small-7" id="secondary-form">
+                        <div class="large-5 medium-12 small-12" id="secondary-form">
                           <h2>Secondary Insurance Policy</h2>
                           <fieldset class="blockLabels">
                             <ol>
@@ -230,15 +307,22 @@ $(function() {
                         {% if field.name != "primary_card_back" %}
                         {% include "form_field.inc.html" %}
                         {% endif %}
+                        {% if field.name == "secondary_policy_state" %}
+                        </ol></fieldset></div>
+                        <div class="large-5 medium-12 small-12 cf clear anchor" id="tertiary-form">
+                          <h2>Tertiary Insurance Policy</h2>
+                          <fieldset class="blockLabels">
+                            <ol>
+                        {% endif %}
                       {% endif %}
                     {% endfor %}
                   </ol>
                 </fieldset>
             </div>
         </div>
-        <div class="large-11">
+        <div class="large-11 medium-12 small-12r">
             <div class="large-4">&nbsp;</div>
-            <div class="large-5">
+            <div class="large-5 medium-12 small-12">
             {% if update %}
             <h3>
                 I verify that this information is accurate.

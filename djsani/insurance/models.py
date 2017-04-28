@@ -45,6 +45,16 @@ class StudentHealthInsurance(Base):
     secondary_policy_type = Column(String)
     secondary_policy_state = Column(String)
     secondary_policy_address = Column(String)
+    # tertiary
+    tertiary_policy_holder = Column(String)
+    tertiary_dob = Column(Date, default="")
+    tertiary_company = Column(String)
+    tertiary_phone = Column(String)
+    tertiary_member_id = Column(String)
+    tertiary_group_no = Column(String)
+    tertiary_policy_type = Column(String)
+    tertiary_policy_state = Column(String)
+    tertiary_policy_address = Column(String)
 
     def __repr__(self):
         return str(self.college_id)
@@ -79,6 +89,15 @@ class StudentHealthInsurance(Base):
         self.secondary_policy_type=''
         self.secondary_policy_address=''
         self.secondary_phone=''
+        self.tertiary_company=''
+        self.tertiary_member_id=''
+        self.tertiary_group_no=''
+        self.tertiary_dob=''
+        self.tertiary_policy_state=''
+        self.tertiary_policy_holder=''
+        self.tertiary_policy_type=''
+        self.tertiary_policy_address=''
+        self.tertiary_phone=''
 
     @hybrid_method
     def current(self, day):
@@ -111,4 +130,13 @@ STUDENT_HEALTH_INSURANCE = {
     'secondary_policy_type': '',
     'secondary_policy_address': '',
     'secondary_phone': '',
+    'tertiary_company': '',
+    'tertiary_member_id': '',
+    'tertiary_group_no': '',
+    'tertiary_dob': '',
+    'tertiary_policy_state': '',
+    'tertiary_policy_holder': '',
+    'tertiary_policy_type': '',
+    'tertiary_policy_address': '',
+    'tertiary_phone': '',
 }
