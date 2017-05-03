@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load ifusergroup %}
 {% load livewhale_api %}
 {% block title %}
     Health Insurance Information &mdash;
@@ -16,6 +17,7 @@
         width: 95%;
     }
 }
+#athletic-policy {display:none;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -51,6 +53,9 @@ $(function() {
             $('#secondary-form').slideUp(200);
             $('#tertiary-box').slideUp(200);
             $('#tertiary-form').slideUp(200);
+            {% ifusergroup MedicalStaff %}
+            $('#athletic-policy').show();
+            {% endifusergroup %}
         }else{
             $("#primary-insurance-header").text("Primary Insurance");
             $('#primary-form').slideDown(200);
@@ -64,6 +69,17 @@ $(function() {
                 $('#tertiary-form').slideDown(200);
             }
         }
+    });
+    $('#athletic-policy-data').click(function() {
+        $('#id_primary_policy_holder').val('{{student.firstname}} {{student.lastname}}');
+        $('#id_primary_dob').val('{{student.birth_date}}');
+        $('#id_primary_company').val('US Fire Insurance Company');
+        $('#id_primary_phone').val('877-497-4980');
+        $('#id_primary_member_id').val('{{student.id}}');
+        $('#id_primary_group_no').val('US745605');
+        $('#id_primary_policy_address').val('');
+        $('#id_primary_policy_type').val('');
+        $('#id_primary_policy_state').val('');
     });
     $('#id_second').change(function() {
         if($(this).is(":checked")) {
@@ -231,6 +247,12 @@ $(function() {
                     I attest that I do <strong><u>NOT</u></strong>
                     have health insurance.
                 </span>
+                {% ifusergroup MedicalStaff %}
+                <div id="athletic-policy">
+                <input type="button" id="athletic-policy-data"
+                    value="Load Athletic Policy Data" class="btn btn-primary">
+                </div>
+                {% endifusergroup %}
             </label>
         </div>
         <div class="large-5 medium-12 small-12">

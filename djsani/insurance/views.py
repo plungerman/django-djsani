@@ -185,7 +185,7 @@ def form(request, stype, cid=None):
 
     return render(
         request, 'insurance/form.html', {
-            'form':form,'update':update,'oo':oo,
+            'form':form,'update':update,'oo':oo,'student':student,
             'medical_staff':medical_staff, 'manager':manager,
             'primary':primary,'secondary':secondary,'tertiary':tertiary
         }
