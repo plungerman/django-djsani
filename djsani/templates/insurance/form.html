@@ -155,6 +155,9 @@ $(function() {
             $('#tertiary-box').slideUp(200);
             $('#tertiary-form').slideUp(200);
             $("#id_opt_out").prop("checked", true);
+            {% ifusergroup MedicalStaff %}
+            $('#athletic-policy').show();
+            {% endifusergroup %}
         {% else %}
             $('#primary-form').slideUp(200);
             $('#secondary-form').slideUp(200);
