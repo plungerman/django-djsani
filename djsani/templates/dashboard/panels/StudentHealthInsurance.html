@@ -80,7 +80,7 @@
                 <a href="#" id="primary_dob" data-type="text"
                  data-pk="{{data.id}}" data-table="cc_student_health_insurance"
                  data-title="Date of birth" class="xeditable">
-                {{data.primary_dob|default_if_none:""}}
+                {{data.primary_dob|date:"m/d/Y"|default_if_none:""}}
                 </a>
             </dd>
             <dt style="font-weight:700;">Company</dt>
