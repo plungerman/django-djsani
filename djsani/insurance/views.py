@@ -27,10 +27,11 @@ EARL = settings.INFORMIX_EARL
 @login_required
 def form(request, stype, cid=None):
     medical_staff=False
+    staff = in_group(request.user, "MedicalStaff")
     if not cid:
         cid = request.user.id
     else:
-        if not in_group(request.user, 'MedicalStaff'):
+        if not staff:
             return HttpResponseRedirect(
                 reverse_lazy('home')
             )
@@ -172,9 +173,11 @@ def form(request, stype, cid=None):
             manager.cc_student_health_insurance=True
             # lastly, commit and redirect
             session.commit()
-            return HttpResponseRedirect(
-                reverse_lazy('insurance_success')
-            )
+            if staff:
+                redirect = reverse_lazy('student_detail', args=[cid])
+            else:
+                redirect = reverse_lazy('insurance_success')
+            return HttpResponseRedirect(redirect)
         else:
             primary = data.get('primary_dob')
             secondary = request.POST.get('secondary_dob')
