@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 from django.core.urlresolvers import reverse_lazy
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
@@ -40,6 +40,12 @@ urlpatterns = [
     url(
         r'^accounts/$',
         RedirectView.as_view(url=reverse_lazy("auth_login"))
+    ),
+    url(
+        r'^denied/$',
+        TemplateView.as_view(
+            template_name="denied.html"
+        ), name="access_denied"
     ),
     # admin manager
     url(

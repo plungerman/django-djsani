@@ -22,6 +22,7 @@ from djsani.medical_history.models import AthleteMedicalHistory
 
 from djmaidez.core.models import ENS_CODES, MOBILE_CARRIER, RELATIONSHIP
 from djzbar.utils.informix import get_engine, get_session
+from djzbar.decorators.auth import portal_auth_required
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
 from djtools.utils.mail import send_mail
@@ -163,7 +164,9 @@ def set_val(request):
         )
 
 
-@login_required
+@portal_auth_required(
+    session_var="DJSANI_AUTH", redirect_url=reverse_lazy("access_denied")
+)
 def home(request):
     now = datetime.now()
     if settings.ACADEMIC_YEAR_LIMBO:
