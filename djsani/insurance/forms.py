@@ -26,6 +26,7 @@ class AthleteForm(forms.Form):
         widget=forms.HiddenInput(),required=False
     )
     primary_policy_holder = forms.CharField(
+        label = "Policy holder",
         max_length=128,
         required=False,
         widget=forms.TextInput(attrs=REQ_CSS)
@@ -88,6 +89,7 @@ class AthleteForm(forms.Form):
 
     # secondary
     secondary_policy_holder = forms.CharField(
+        label = "Policy holder",
         max_length=128,
         required=False,
         widget=forms.TextInput(attrs=REQ_CSS)
@@ -141,6 +143,7 @@ class AthleteForm(forms.Form):
 
     # tertiary
     tertiary_policy_holder = forms.CharField(
+        label = "Policy holder",
         max_length=128,
         required=False,
         widget=forms.TextInput(attrs=REQ_CSS)

@@ -38,48 +38,51 @@ $(function() {
         openEffect  : 'none',
         closeEffect : 'none'
     });
+    {% ifusergroup MedicalStaff %}
+    $('#athletic-policy').show();
+    {% endifusergroup %}
     $('#id_opt_out').change(function() {
         if($(this).is(":checked")) {
             {% if manager.athlete == 1 %}
-            $.fancybox.open([{
+              $.fancybox.open([{
                 href : '#athlete-warning'
-            }]);
-            $("#primary-insurance-header").text("Athlete Insurance");
-            $('#insurance-card').slideUp(200);
+              }]);
+              $("#tertiary-insurance-header").text("Athlete Insurance");
+              $('#insurance-card').slideUp(200);
+              $('#tertiary-form').slideDown(200);
             {% else %}
-            $('#primary-form').slideUp(200);
+              $('#tertiary-form').slideUp(200);
             {% endif %}
+            $('#tertiary-box').slideUp(200);
+            $('#primary-form').slideUp(200);
             $('#secondary-box').slideUp(200);
             $('#secondary-form').slideUp(200);
-            $('#tertiary-box').slideUp(200);
-            $('#tertiary-form').slideUp(200);
-            {% ifusergroup MedicalStaff %}
-            $('#athletic-policy').show();
-            {% endifusergroup %}
         }else{
-            $("#primary-insurance-header").text("Primary Insurance");
+            $("#tertiary-insurance-header").text("Tertiary Insurance");
             $('#primary-form').slideDown(200);
             $('#insurance-card').slideDown(200);
             $('#secondary-box').slideDown(200);
-            $('#tertiary-box').slideDown(200);
             if ($("#id_second").is(":checked")) {
                 $('#secondary-form').slideDown(200);
             }
             if ($("#id_third").is(":checked")) {
                 $('#tertiary-form').slideDown(200);
+                $('#tertiary-box').slideDown(200);
+            }else{
+              $('#tertiary-form').slideUp(200);
             }
         }
     });
     $('#athletic-policy-data').click(function() {
-        $('#id_primary_policy_holder').val('{{student.firstname}} {{student.lastname}}');
-        $('#id_primary_dob').val('{{student.birth_date}}');
-        $('#id_primary_company').val('US Fire Insurance Company');
-        $('#id_primary_phone').val('877-497-4980');
-        $('#id_primary_member_id').val('{{student.id}}');
-        $('#id_primary_group_no').val('US745605');
-        $('#id_primary_policy_address').val('');
-        $('#id_primary_policy_type').val('');
-        $('#id_primary_policy_state').val('');
+        $('#id_tertiary_policy_holder').val('{{student.firstname}} {{student.lastname}}');
+        $('#id_tertiary_dob').val('{{student.birth_date}}');
+        $('#id_tertiary_company').val('US Fire Insurance Company');
+        $('#id_tertiary_phone').val('877-497-4980');
+        $('#id_tertiary_member_id').val('{{student.id}}');
+        $('#id_tertiary_group_no').val('US745605');
+        $('#id_tertiary_policy_address').val('NAHGA\nPO BOX 189\nBridgton, ME 04009');
+        $('#id_tertiary_policy_type').val('PPO');
+        $('#id_tertiary_policy_state').val('ME');
     });
     $('#id_second').change(function() {
         if($(this).is(":checked")) {
@@ -143,29 +146,22 @@ $(function() {
     });
     {% if oo == True %}
         {% if manager.athlete == 1 %}
-            {% if not primary %}
+            {% if not tertiary %}
             $.fancybox.open([{
                 href : '#athlete-warning'
             }]);
             {% endif %}
-            $("#primary-insurance-header").text("Athlete Insurance");
+            $("#tertiary-insurance-header").text("Athlete Insurance");
             $('#insurance-card').slideUp(200);
-            $('#secondary-box').slideUp(200);
-            $('#secondary-form').slideUp(200);
-            $('#tertiary-box').slideUp(200);
-            $('#tertiary-form').slideUp(200);
-            $("#id_opt_out").prop("checked", true);
-            {% ifusergroup MedicalStaff %}
-            $('#athletic-policy').show();
-            {% endifusergroup %}
+            $('#tertiary-form').slideDown(200);
         {% else %}
-            $('#primary-form').slideUp(200);
-            $('#secondary-form').slideUp(200);
-            $('#secondary-box').slideUp(200);
             $('#tertiary-form').slideUp(200);
-            $('#tertiary-box').slideUp(200);
-            $("#id_opt_out").prop("checked", true);
         {% endif %}
+        $('#tertiary-box').slideUp(200);
+        $('#primary-form').slideUp(200);
+        $('#secondary-box').slideUp(200);
+        $('#secondary-form').slideUp(200);
+        $("#id_opt_out").prop("checked", true);
     {% else %}
         {% if secondary == None %}
             $("#id_second").prop("checked", false);
@@ -283,7 +279,7 @@ $(function() {
         </div>
         <div id="insurance-policies">
             <div class="large-5 medium-12 small-12" id="primary-form">
-                <h2 id="primary-insurance-header">
+                <h2>
                     Primary Insurance Policy
                 </h2>
                 <fieldset class="blockLabels">
@@ -335,7 +331,9 @@ $(function() {
                         {% if field.name == "secondary_policy_state" %}
                         </ol></fieldset></div>
                         <div class="large-5 medium-12 small-12 cf clear anchor" id="tertiary-form">
-                          <h2>Tertiary Insurance Policy</h2>
+                          <h2 id="tertiary-insurance-header">
+                            Tertiary Insurance Policy
+                          </h2>
                           <fieldset class="blockLabels">
                             <ol>
                         {% endif %}
