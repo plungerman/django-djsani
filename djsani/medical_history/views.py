@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
@@ -118,13 +118,12 @@ def history(request, stype, display=None):
 
     else:
         form = fclass(initial=init, gender=gender)
-    return render_to_response(
-        template,
+    return render(
+        request, template,
         {
             "form":form,"stype":stype,"table":table,"cid":cid,
             "update":update,"data":data
-        },
-        context_instance=RequestContext(request)
+        }
     )
 
 @login_required
@@ -178,10 +177,7 @@ def file_upload(request, name):
     # close our session
     session.close()
 
-    return render_to_response(
-        "medical_history/{}.html".format(name.replace("-","_")),
-        {
-            "form":form,"manager":manager
-        },
-        context_instance=RequestContext(request)
+    return render(
+        request, "medical_history/{}.html".format(name.replace("-","_")),
+        { "form":form,"manager":manager }
     )

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
@@ -100,10 +100,9 @@ def form(request, stype, wtype):
     except:
         return HttpResponseRedirect( reverse_lazy("home") )
 
-    return render_to_response(
-        template,
+    return render(
+        request, template,
         {
             "form":form,"next_year":NEXT_YEAR,"student":sicklecell
-        },
-        context_instance=RequestContext(request)
+        }
     )

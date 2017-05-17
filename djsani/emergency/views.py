@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.template import Context, RequestContext, loader
 
@@ -33,7 +33,6 @@ def emergency_contact(request):
 
     session.close()
 
-    return render_to_response(
-        "contact/modal.html", data,
-        context_instance=RequestContext(request)
+    return render(
+        request, "contact/modal.html", data
     )

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -170,9 +170,8 @@ def set_val(request):
 def home(request):
     now = datetime.now()
     if settings.ACADEMIC_YEAR_LIMBO:
-        return render_to_response(
-            "closed.html",
-            context_instance=RequestContext(request)
+        return render(
+            request, "closed.html",
         )
 
     # check for medical staff
@@ -289,10 +288,8 @@ def home(request):
 
     session.close()
 
-    return render_to_response(
-        template, data,
-        context_instance=RequestContext(request)
-    )
+    return render( request, template, data)
+
 
 @csrf_exempt
 @login_required

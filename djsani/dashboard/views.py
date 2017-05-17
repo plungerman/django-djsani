@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.template import RequestContext, loader
+from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 
 from djsani.medical_history.models import StudentMedicalHistory
@@ -55,10 +55,9 @@ def home(request):
                 if age > 17:
                     adult = "adult"
             s["adult"] = adult
-    return render_to_response(
-        "dashboard/home.html",
-        {"students":students,"sports":SPORTS},
-        context_instance=RequestContext(request)
+    return render(
+        request, "dashboard/home.html",
+        {"students":students,"sports":SPORTS}
     )
 
 def get_students(request):
@@ -109,10 +108,9 @@ def get_students(request):
                     if age > 17:
                         adult = "adult"
                 s["adult"] = adult
-        return render_to_response(
-            "dashboard/students_data.inc.html",
-            {"students":students,"sports":SPORTS,},
-            context_instance=RequestContext(request)
+        return render(
+            request, "dashboard/students_data.inc.html",
+            {"students":students,"sports":SPORTS,}
         )
     else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
@@ -136,10 +134,10 @@ def panels(request, session, mod, manager,content,gender=None):
                 "{}Form".format(mname)
             )(initial=data, gender=gender)
     t = loader.get_template("dashboard/panels/{}.html".format(mname))
-    c = RequestContext(
-        request, {'data':data,'form':form,'content':content,'manager':manager}
+
+    return t.render(
+        {'data':data,'form':form,'content':content,'manager':manager}, request
     )
-    return t.render(c)
 
 @group_required('MedicalStaff')
 def student_detail(request, cid=None, medium=None, content=None):
@@ -233,8 +231,8 @@ def student_detail(request, cid=None, medium=None, content=None):
                     student_user = None
             else:
                 age=ens=shi=smh=amh=student=sports=stype=student_user=manager=None
-            return render_to_response(
-                template,
+            return render(
+                request, template,
                 {
                     "student":student,"student_user":student_user,"age":age,
                     "ens":ens, "shi":shi,"amh":amh,"smh":smh,"cid":cid,
@@ -242,8 +240,7 @@ def student_detail(request, cid=None, medium=None, content=None):
                     "sports":sports,"my_sports":my_sports,
                     "next_year":NEXT_YEAR,"stype":stype,"managers":managers,
                     "manager":manager,"MedicalStaff":True
-                },
-                context_instance=RequestContext(request)
+                }
             )
         else:
             raise Http404
@@ -262,10 +259,9 @@ def advanced_search(request):
         students = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL).fetchall()
     else:
         students = None
-    return render_to_response(
-        "dashboard/advanced_search.html",
-        {"students":students,},
-        context_instance=RequestContext(request)
+    return render(
+        request, "dashboard/advanced_search.html",
+        {"students":students,}
     )
 
 
