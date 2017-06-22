@@ -322,6 +322,15 @@ column tertiary_policy_address     varchar(255)
         (
         )
 
+column tertiary_card varchar(128)
+    comments        ""
+    desc            "Insurance card image (front and back)"
+    heading         "Insurance Card"
+    text            "Insurance Card"
+    attributes
+        (
+        )
+
 index           { Index names must be unique across database }
                 cc_student_health_insurance01 on (id)
                 cc_student_health_insurance_college_id on (college_id)
