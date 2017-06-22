@@ -197,7 +197,7 @@ class AthleteForm(forms.Form):
         cd = self.cleaned_data
         insurance = self.insurance
         manager = self.manager
-        if manager.athlete:
+        if manager.athlete and not cd['opt_out']:
             if not cd.get('primary_card_front') or not cd.get('primary_card_back'):
                 if not insurance:
                     error =  "Required Field"

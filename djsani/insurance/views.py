@@ -103,20 +103,21 @@ def form(request, stype, cid=None):
             # opt out of insurance
             oo = form.get('opt_out')
             if oo:
-                if manager.athlete and not staff:
-                    # alert email to staff
-                    if settings.DEBUG:
-                        TO_LIST = [settings.SERVER_EMAIL,]
-                    else:
-                        TO_LIST = settings.INSURANCE_RECIPIENTS
-                    send_mail(
-                        request, TO_LIST,
-                        u"[Health Insurance] Opt Out: {} {} ({})".format(
+                if manager.athlete:
+                    if not staff:
+                        # alert email to staff
+                        if settings.DEBUG:
+                            TO_LIST = [settings.SERVER_EMAIL,]
+                        else:
+                            TO_LIST = settings.INSURANCE_RECIPIENTS
+                        send_mail(
+                          request, TO_LIST,
+                          u"[Health Insurance] Opt Out: {} {} ({})".format(
                             request.user.first_name,request.user.last_name,cid
-                        ), request.user.email,
-                        'alert_email.html',
-                        request, settings.MANAGERS
-                    )
+                          ), request.user.email,
+                          'alert_email.html',
+                          request, settings.MANAGERS
+                        )
                 else:
                     # empty table
                     form = STUDENT_HEALTH_INSURANCE

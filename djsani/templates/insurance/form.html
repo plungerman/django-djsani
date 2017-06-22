@@ -44,12 +44,16 @@ $(function() {
     $('#id_opt_out').change(function() {
         if($(this).is(":checked")) {
             {% if manager.athlete == 1 %}
-              $.fancybox.open([{
-                href : '#athlete-warning'
-              }]);
+              {% ifusergroup MedicalStaff %}
               $("#tertiary-insurance-header").text("Athlete Insurance");
               $('#insurance-card').slideUp(200);
               $('#tertiary-form').slideDown(200);
+              {% else %}
+              $.fancybox.open([{
+                href : '#athlete-warning'
+              }]);
+              $('#tertiary-form').slideUp(200);
+              {% endifusergroup %}
             {% else %}
               $('#tertiary-form').slideUp(200);
             {% endif %}
@@ -75,7 +79,7 @@ $(function() {
     });
     $('#athletic-policy-data').click(function() {
         $('#id_tertiary_policy_holder').val('{{student.firstname}} {{student.lastname}}');
-        $('#id_tertiary_dob').val('{{student.birth_date}}');
+        $('#id_tertiary_dob').val('{{student.birth_date|date:"m/d/Y"}}');
         $('#id_tertiary_company').val('US Fire Insurance Company');
         $('#id_tertiary_phone').val('877-497-4980');
         $('#id_tertiary_member_id').val('{{student.id}}');
@@ -147,9 +151,12 @@ $(function() {
     {% if oo == True %}
         {% if manager.athlete == 1 %}
             {% if not tertiary %}
-            $.fancybox.open([{
-                href : '#athlete-warning'
-            }]);
+              {% ifusergroup MedicalStaff %}
+              {% else %}
+                $.fancybox.open([{
+                    href : '#athlete-warning'
+                }]);
+               {% endifusergroup %}
             {% endif %}
             $("#tertiary-insurance-header").text("Athlete Insurance");
             $('#insurance-card').slideUp(200);
