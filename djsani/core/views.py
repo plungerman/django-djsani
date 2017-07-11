@@ -95,9 +95,13 @@ def set_val(request):
         pk = request.POST.get("pk")
         # create our dictionary to hold name/value pairs
         dic = { name: value }
-        if table == "cc_athlete_sicklecell_waiver" and name == "results":
-            dic["proof"] = 1
-            dic["waive"] = 0
+        if table == "cc_athlete_sicklecell_waiver":
+            if name == "results":
+                dic["proof"] = 1
+                dic["waive"] = 0
+            elif name == "waive":
+                dic["proof"] = 0
+                dic["waive"] = 1
         # create database session
         session = get_session(EARL)
         # retrieve student manager

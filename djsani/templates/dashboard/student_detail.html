@@ -98,12 +98,10 @@
                     spinner.stop(target);
                     if (data == "success") {
                         $.growlUI('Success', "Data saved.");
-                        if ( $name == "athlete" || $name == "opt_out" || $name == "proof" ) {
-                            window.location.reload(true);
-                        }
                     } else {
                         $.growlUI('Error', data);
                     }
+                    location.reload();
                 },
                 error: function(data) {
                     spinner.stop(target);
