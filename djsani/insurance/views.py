@@ -100,6 +100,11 @@ def form(request, stype, cid=None):
         )(request.POST, request.FILES, manager=manager, insurance=insurance)
         if form.is_valid():
             form = form.cleaned_data
+            # update the manager
+            manager.cc_student_health_insurance=True
+            # commit, because the above has not been saving properly
+            # for some reason when opt-out
+            session.commit()
             # opt out of insurance
             oo = form.get('opt_out')
             if oo:
@@ -169,8 +174,6 @@ def form(request, stype, cid=None):
                 for key, value in form.iteritems():
                     setattr(obj, key, value)
 
-            # update the manager
-            manager.cc_student_health_insurance=True
             # lastly, commit and redirect
             session.commit()
             if staff:
