@@ -216,7 +216,8 @@ $(function() {
     }
     // disable submit button after users clicks it
     //$('form#profile').bind('submit', function (e) {
-    $('form#profile').on('submit', function (e) {
+    //$('form#profile').on('submit', function (e) {
+    $('form#profile').submit(function (e) {
         $('#id_submit').prop('disabled', true);
         return true;
     });
