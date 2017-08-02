@@ -214,49 +214,49 @@
     {% if student %}
     <div class="row">
         <div class="col-lg-8">
-            <h1 class="page-header">
+            <h3>
                 {{student.firstname}} {{student.lastname}}
                 <small>
                     ({{student.sex}}) &mdash;
                     DOB: {{student.birth_date}}
                     ({{age}}) [{{student.cl}}]
                 </small>
-                <form id="profile" class="form">
-                    {% if student.athlete %}
-                    <select name="sports" class="selectpicker set-val"
-                        id="sports" size="5" data-pk="{{manager.id}}"
-                        data-table="cc_student_medical_manager"
-                        multiple="multiple" title="Choose sport(s)&hellip;">
-                        {% for s in sports %}
-                        {% if not forloop.first %}
-                        <option
-                        {% if not s.0 %}
-                            disabled
-                        {% else %} value="{{s.0}}"
-                            {% if s.0 in my_sports %}
-                                selected="selected"
-                            {% endif %}
+            </h3>
+            <form id="profile" class="form">
+                {% if student.athlete %}
+                <select name="sports" class="selectpicker set-val"
+                    id="sports" size="5" data-pk="{{manager.id}}"
+                    data-table="cc_student_medical_manager"
+                    multiple="multiple" title="Choose sport(s)&hellip;">
+                    {% for s in sports %}
+                    {% if not forloop.first %}
+                    <option
+                    {% if not s.0 %}
+                        disabled
+                    {% else %} value="{{s.0}}"
+                        {% if s.0 in my_sports %}
+                            selected="selected"
                         {% endif %}
-                        >
-                        {{s.1|safe}}
-                        </option>
-                        {% endif %}
-                        {% endfor %}
-                    </select>
                     {% endif %}
-                    <small> Athlete: </small>
-                    <input type="checkbox" name="athlete" class="set-val"
-                        data-table="cc_student_medical_manager"
-                        data-pk="{{manager.id}}"
-                    {% if student.athlete %}
-                        value="0"
-                        checked="checked"
-                    {% else %}
-                        value="1"
+                    >
+                    {{s.1|safe}}
+                    </option>
                     {% endif %}
-                    />
-                </form>
-            </h1>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                <small> Athlete: </small>
+                <input type="checkbox" name="athlete" class="set-val"
+                    data-table="cc_student_medical_manager"
+                    data-pk="{{manager.id}}"
+                {% if student.athlete %}
+                    value="0"
+                    checked="checked"
+                {% else %}
+                    value="1"
+                {% endif %}
+                />
+            </form>
             <h3>
                 All Forms Complete?
                 <input type="checkbox" name="sitrep"
