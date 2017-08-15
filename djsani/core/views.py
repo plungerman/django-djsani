@@ -148,7 +148,7 @@ def set_val(request):
         if staff:
             message = ""
             for n,v in dic.items():
-                message += "{} = {}\n".format(n,v)
+                message += u"{} = {}\n".format(n,v)
             log = {
                 "college_id": request.user.id,
                 "content_type_id": get_content_type(session, table).id,
