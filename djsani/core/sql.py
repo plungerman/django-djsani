@@ -22,8 +22,8 @@ SELECT
         END
     AS
         residency_status,
-    id_rec.lastname, id_rec.firstname, id_rec.id,
-    profile_rec.birth_date,
+    id_rec.lastname, id_rec.firstname, id_rec.middlename,
+    id_rec.id, profile_rec.birth_date,
     cc_student_medical_manager.id as manid,
     cc_student_medical_manager.created_at,
     cc_student_medical_manager.staff_notes,
@@ -96,7 +96,7 @@ SELECT
         END
     AS
         residency_status,stu_serv_rec.stusv_no,
-    id_rec.lastname, id_rec.firstname, id_rec.id,
+    id_rec.id, id_rec.lastname, id_rec.firstname, id_rec.middlename,
     id_rec.addr_line1, id_rec.addr_line2, id_rec.city, id_rec.st,
     id_rec.zip, id_rec.ctry, id_rec.phone, cvid_rec.ldap_name,
     cc_student_medical_manager.id as manid,
