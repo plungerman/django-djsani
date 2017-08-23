@@ -29,17 +29,6 @@ def get_content_type(session, name):
         cache.set(name, ct, None)
     return ct
 
-def facstaff(cid):
-    """
-    is user faculty or staff?
-    """
-    try:
-        user = User.objects.get(pk=cid)
-        status = in_group(user, "carthageStaffStatus","carthageFacultyStatus")
-    except:
-        status = False
-    return status
-
 def _doop(session, mod, man):
     """
     check for an object and duplicate it.

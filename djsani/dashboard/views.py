@@ -13,7 +13,7 @@ from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
 from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENTS_ALPHA, STUDENT_VITALS
-from djsani.core.utils import get_manager, get_term, facstaff
+from djsani.core.utils import get_manager, get_term
 from djsani.emergency.models import AARec
 
 from djzbar.utils.informix import do_sql as do_esql, get_session
@@ -21,7 +21,7 @@ from djtools.decorators.auth import group_required
 from djtools.utils.convert import str_to_class
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
-from djtools.utils.users import in_group
+from djtools.utils.users import in_group, facstaff
 from djtools.utils.mail import send_mail
 from djtools.fields import NEXT_YEAR
 from djmaidez.core.models import ENS_CODES
