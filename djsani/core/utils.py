@@ -8,7 +8,6 @@ from djsani.medical_history.waivers.models import Sicklecell
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import StudentMedicalContentType
 from djsani.core.models import StudentMedicalManager
-from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
 from sqlalchemy.orm.session import make_transient
