@@ -21,7 +21,7 @@ from djtools.decorators.auth import group_required
 from djtools.utils.convert import str_to_class
 from djtools.utils.date import calculate_age
 from djtools.utils.database import row2dict
-from djtools.utils.users import in_group, facstaff
+from djtools.utils.users import in_group, faculty_staff
 from djtools.utils.mail import send_mail
 from djtools.fields import NEXT_YEAR
 from djmaidez.core.models import ENS_CODES
@@ -161,7 +161,7 @@ def student_detail(request, cid=None, medium=None, content=None):
         filter_by(college_id=cid).all()
     # we do not want to display faculty/staff details
     # nor do we want to create a manager for them
-    if cid and not facstaff(cid):
+    if cid and not faculty_staff(cid):
         # manager ID comes from profile switcher POST from form
         manid = request.POST.get("manid")
         # or from URL with GET variable
