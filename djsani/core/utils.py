@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.core.cache import cache
-from django.contrib.auth.models import User
 
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
