@@ -16,7 +16,6 @@ django.setup()
 from django.conf import settings
 from django.contrib.auth.models import Group, User
 
-from djzbar.utils.informix import do_sql
 from djtools.utils.users import in_group
 
 import argparse

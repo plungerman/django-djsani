@@ -23,7 +23,7 @@ def main():
     """
     main method
     """
-    txt = "{}/data/sql/no_medical_forms.sql".format(settings.ROOT_DIR)
+    txt = "{}/database/sql/no_medical_forms.sql".format(settings.ROOT_DIR)
     print txt
     f = open (txt,"r")
     sequel = f.read()
@@ -32,7 +32,9 @@ def main():
     print settings.INFORMIX_DEBUG
     print settings.INFORMIX_EARL
     """
-    objs = do_sql(sequel,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL)
+    objs = do_sql(
+        sequel,key=settings.INFORMIX_DEBUG,earl=settings.INFORMIX_EARL
+    )
     for o in objs:
         print "{} {}<{}@carthage.edu>,".format(
             o.firstname, o.lastname, o.ldap_name
