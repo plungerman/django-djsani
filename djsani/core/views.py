@@ -33,28 +33,24 @@ from datetime import datetime
 
 import Image
 
-
-"""
-table names are the key, base model classes are the value
-"""
+# table names are the key, base model classes are the value
 
 WAIVERS = {
-    "cc_student_meni_waiver": Meni,
-    "cc_athlete_privacy_waiver": Privacy,
-    "cc_athlete_reporting_waiver": Reporting,
-    "cc_athlete_risk_waiver": Risk,
-    "cc_athlete_sicklecell_waiver": Sicklecell,
+    'cc_student_meni_waiver': Meni,
+    'cc_athlete_privacy_waiver': Privacy,
+    'cc_athlete_reporting_waiver': Reporting,
+    'cc_athlete_risk_waiver': Risk,
+    'cc_athlete_sicklecell_waiver': Sicklecell,
 }
 BASES = {
-    "cc_student_medical_manager": StudentMedicalManager,
-    "cc_student_health_insurance": StudentHealthInsurance,
-    "cc_student_medical_history": StudentMedicalHistory,
-    "cc_athlete_medical_history": AthleteMedicalHistory,
+    'cc_student_medical_manager': StudentMedicalManager,
+    'cc_student_health_insurance': StudentHealthInsurance,
+    'cc_student_medical_history': StudentMedicalHistory,
+    'cc_athlete_medical_history': AthleteMedicalHistory,
 }
-
 BASES.update(WAIVERS)
-
 EARL = settings.INFORMIX_EARL
+
 
 @csrf_exempt
 @login_required
@@ -72,49 +68,49 @@ def set_val(request):
     table
     """
 
-    staff = in_group(request.user, "MedicalStaff")
+    staff = in_group(request.user, 'MedicalStaff')
 
     # we need a college ID to insure no funny stuff
-    cid = request.POST.get("college_id")
+    cid = request.POST.get('college_id')
     if not cid:
         return HttpResponse("Error")
     elif not staff and int(cid) != request.user.id:
         return HttpResponse("Not staff")
     else:
         # name/value pair
-        name = request.POST.get("name")
+        name = request.POST.get('name')
         # sports field is a list
-        if name == "sports":
-            value = ','.join(request.POST.getlist("value[]"))
+        if name == 'sports':
+            value = ','.join(request.POST.getlist('value[]'))
         else:
-            value = request.POST.get("value")
+            value = request.POST.get('value')
 
         # table name
-        table = request.POST.get("table")
+        table = request.POST.get('table')
         # primary key
-        pk = request.POST.get("pk")
+        pk = request.POST.get('pk')
         # create our dictionary to hold name/value pairs
         dic = { name: value }
-        if table == "cc_athlete_sicklecell_waiver":
-            if name == "results":
-                dic["proof"] = 1
-                dic["waive"] = 0
-            elif name == "waive":
-                dic["proof"] = 0
-                dic["waive"] = 1
+        if table == 'cc_athlete_sicklecell_waiver':
+            if name == 'results':
+                dic['proof'] = 1
+                dic['waive'] = 0
+            elif name == 'waive':
+                dic['proof'] = 0
+                dic['waive'] = 1
         # create database session
         session = get_session(EARL)
         # retrieve student manager
         man = get_manager(session, cid)
 
-        # set value = 1 if field name = "results" since that value is
+        # set value = 1 if field name = 'results' since that value is
         # either Positive or Negative
-        if table == "cc_athlete_sicklecell_waiver" and name == "results":
+        if table == 'cc_athlete_sicklecell_waiver' and name == 'results':
             value = 1
         if WAIVERS.get(table) and not pk:
             # create new waiver
-            dic["college_id"] = cid
-            dic["manager_id"] = man.id
+            dic['college_id'] = cid
+            dic['manager_id'] = man.id
             obj = WAIVERS[table](**dic)
             session.add(obj)
             # update the manager
@@ -127,15 +123,15 @@ def set_val(request):
             if not obj:
                 return HttpResponse(
                     "No object found associated with ID: {}".format(pk),
-                    content_type="text/plain; charset=utf-8"
+                    content_type='text/plain; charset=utf-8'
                 )
             else:
-                if name == "athlete" and value == "0":
-                    dic["sports"] = ""
+                if name == 'athlete' and value == '0':
+                    dic['sports'] = ''
                 # remove the test results if a staff member is changing
                 # from proof to waive or nothing
-                if name == "proof" and value == "0":
-                    dic["results"] = ""
+                if name == 'proof' and value == '0':
+                    dic['results'] = ''
                 # update existing object
                 for key, value in dic.iteritems():
                     setattr(obj, key, value)
@@ -146,16 +142,16 @@ def set_val(request):
 
         # update the log entry for staff modifications
         if staff:
-            message = ""
+            message = ''
             for n,v in dic.items():
-                message += u"{} = {}\n".format(n,v)
+                message += u'{} = {}\n'.format(n,v)
             log = {
-                "college_id": request.user.id,
-                "content_type_id": get_content_type(session, table).id,
-                "object_id": obj.id,
-                "object_repr": "{}".format(obj),
-                "action_flag": CHANGE,
-                "action_message": message
+                'college_id': request.user.id,
+                'content_type_id': get_content_type(session, table).id,
+                'object_id': obj.id,
+                'object_repr': '{}'.format(obj),
+                'action_flag': CHANGE,
+                'action_message': message
             }
             obj = StudentMedicalLogEntry(**log)
             session.add(obj)
@@ -164,27 +160,27 @@ def set_val(request):
         session.close()
 
         return HttpResponse(
-            "success", content_type="text/plain; charset=utf-8"
+            "success", content_type='text/plain; charset=utf-8'
         )
 
 
 @portal_auth_required(
-    session_var="DJSANI_AUTH", redirect_url=reverse_lazy("access_denied")
+    session_var='DJSANI_AUTH', redirect_url=reverse_lazy('access_denied')
 )
 def home(request):
     now = datetime.now()
     if settings.ACADEMIC_YEAR_LIMBO:
         return render(
-            request, "closed.html",
+            request, 'closed.html',
         )
 
     # check for medical staff
-    medical_staff = in_group(request.user, "MedicalStaff")
+    medical_staff = in_group(request.user, 'MedicalStaff')
     if medical_staff:
         request.session['medical_staff'] = True
     # check for carthage staff: broken in Novell
     """
-    staff = in_group(request.user, "carthageStaffStatus")
+    staff = in_group(request.user, 'carthageStaffStatus')
     if staff:
         request.session['staff'] = True
     """
@@ -192,21 +188,21 @@ def home(request):
     # fetch college id from user object
     cid = request.user.id
     # intialise some things
-    my_sports = ""
+    my_sports = ''
     student = None
     adult = False
-    if staff and not request.GET.get("adult"):
+    if staff and not request.GET.get('adult'):
         adult = True
     # get academic term
     term = get_term()
     # get student
     sql = ''' {}
         WHERE
-        id_rec.id = '{}'
+        id_rec.id = "{}"
         AND stu_serv_rec.yr = "{}"
         AND UPPER(stu_serv_rec.sess) = "{}"
     '''.format(
-        STUDENT_VITALS, cid, term["yr"], term["sess"]
+        STUDENT_VITALS, cid, term['yr'], term['sess']
     )
     engine = get_engine(EARL)
     obj = engine.execute(sql)
@@ -221,7 +217,7 @@ def home(request):
 
         # sports needs a python list
         if manager.sports:
-            my_sports = manager.sports.split(",")
+            my_sports = manager.sports.split(',')
 
         # adult or minor? if we do not have a DOB, default to minor
         if student.birth_date:
@@ -230,23 +226,23 @@ def home(request):
                 adult = True
 
         # show the corresponding list of sports
-        if student.sex == "F":
+        if student.sex == 'F':
             sports = SPORTS_WOMEN
         else:
             sports = SPORTS_MEN
 
         # quick switch for minor age students
-        if request.GET.get("minor"):
+        if request.GET.get('minor'):
             adult = False
 
         # context dict
         data = {
-            "switch_earl": reverse_lazy("set_val"),
-            "student":student,
-            "manager":manager,
-            "sports":sports,
-            "my_sports":my_sports,
-            "adult":adult,
+            'switch_earl': reverse_lazy('set_val'),
+            'student':student,
+            'manager':manager,
+            'sports':sports,
+            'my_sports':my_sports,
+            'adult':adult,
         }
 
         # emergency contact modal form
@@ -255,40 +251,40 @@ def home(request):
 
         for o in objs:
             data[o.aa] = row2dict(o)
-        data["mobile_carrier"] = MOBILE_CARRIER
-        data["relationship"] = RELATIONSHIP
-        data["solo"] = True
+        data['mobile_carrier'] = MOBILE_CARRIER
+        data['relationship'] = RELATIONSHIP
+        data['solo'] = True
     else:
         # could not find student by college_id
         data = {
-            "student":student,"staff":staff,"medical_staff":medical_staff,
-            "sports":SPORTS,"solo":True, "adult":adult,
+            'student':student,'staff':staff,'medical_staff':medical_staff,
+            'sports':SPORTS,'solo':True, 'adult':adult,
         }
         # notify admin
         '''
         if not staff:
             send_mail(
                 request, [settings.MANAGERS[0][1],],
-                u"[Lost] Student: {} {} ({})".format(
+                u'[Lost] Student: {} {} ({})'.format(
                     request.user.first_name, request.user.last_name, cid
                 ), request.user.email,
-                "alert_email.html",
+                'alert_email.html',
                 request, settings.MANAGERS
             )
         '''
 
     # template depends on student or staff
-    template = "home.html"
+    template = 'home.html'
     if staff:
-        template = "home_staff.html"
+        template = 'home_staff.html'
         # emergency contact modal form
         objs = session.query(AARec).filter_by(id=request.user.id).\
             filter(AARec.aa.in_(ENS_CODES)).all()
 
         for o in objs:
             data[o.aa] = row2dict(o)
-        data["mobile_carrier"] = MOBILE_CARRIER
-        data["relationship"] = RELATIONSHIP
+        data['mobile_carrier'] = MOBILE_CARRIER
+        data['relationship'] = RELATIONSHIP
 
     session.close()
 
@@ -305,7 +301,7 @@ def rotate_photo(request):
     phile = request.POST.get('phile')
     if phile:
         if phile.lower().split('.')[-1] in ['jpg','jpeg','png']:
-            path = "{}/files/{}".format(settings.MEDIA_ROOT,phile)
+            path = '{}/files/{}'.format(settings.MEDIA_ROOT,phile)
             try:
                 src_im = Image.open(path)
                 im = src_im.rotate(90, expand=True)
@@ -317,12 +313,12 @@ def rotate_photo(request):
             msg = "Fail. The file is not a graphics file."
 
     return HttpResponse(
-        msg, content_type="text/plain; charset=utf-8"
+        msg, content_type='text/plain; charset=utf-8'
     )
 
 def responsive_switch(request,action):
-    if action=="go":
+    if action=='go':
         request.session['desktop_mode']=True
-    elif action=="leave":
+    elif action=='leave':
         request.session['desktop_mode']=False
-    return HttpResponseRedirect(request.META.get("HTTP_REFERER", ""))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', ''))
