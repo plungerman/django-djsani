@@ -300,10 +300,10 @@
     </div>
     <!-- /.tab-content -->
 {% endif %}
-{% if data.opt_out == False %}
 <div id="healthInsuranceEmailData">
   <h4>Date of submission</h4>
   <p>{{data.created_at}}</p>
+  {% if data.secondary_policy_holder %}
   <h3>Primary Health Insurance</h3>
   <dl class="dl-horizontal">
     <dt style="font-weight:700;">Policy holder</dt>
@@ -325,6 +325,7 @@
     <dt style="font-weight:700;">Address</dt>
     <dd>{{data.primary_policy_address|default_if_none:"&nbsp;"}}</dd>
   </dl>
+  {% endif %}
   {% if data.secondary_policy_holder %}
   <h3>Secondary Health Insurance</h3>
   <dl class="dl-horizontal">
@@ -349,7 +350,7 @@
   </dl>
   {% endif %}
   {% if data.tertiary_policy_holder %}
-  <h3>Tertiary Health Insurance</h3>
+  <h3>Athlete Health Insurance</h3>
   <dl class="dl-horizontal">
     <dt style="font-weight:700;">Policy holder</dt>
     <dd>{{data.tertiary_policy_holder|default_if_none:""}}</dd>
@@ -370,6 +371,5 @@
     <dt style="font-weight:700;">Address</dt>
     <dd>{{data.tertiary_policy_address|default_if_none:"&nbsp;"}}</dd>
   </dl>
-  {% endif %}
 </div>
 {% endif %}
