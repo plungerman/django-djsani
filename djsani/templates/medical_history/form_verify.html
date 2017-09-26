@@ -101,6 +101,9 @@ $(document).ready(function() {
                     }
                 }
             }
+            // disable submit
+            //$(this).children('input[type=submit]').attr('disabled', 'disabled');
+            $('#id_submit').prop('disabled', true);
         }
         if (error) {
             if(event.preventDefault) {

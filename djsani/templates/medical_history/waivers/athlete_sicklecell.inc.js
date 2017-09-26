@@ -20,7 +20,8 @@ $(function() {
             if ($('#proof').is(':checked')) {
                 if ($('input:radio', this).is(':checked')) {
                     // disable submit
-                    $(this).children('input[type=submit]').attr('disabled', 'disabled');
+                    //$(this).children('input[type=submit]').attr('disabled', 'disabled');
+                    $('#id_submit').prop('disabled', true);
                     return true;
                 } else {
                     alert('You must indicate "Positive or Negative" results');

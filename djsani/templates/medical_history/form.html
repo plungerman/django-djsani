@@ -101,7 +101,8 @@ $(document).ready(function() {
                 }
             }
             // disable submit
-            $(this).children('input[type=submit]').attr('disabled', 'disabled');
+            //$(this).children('input[type=submit]').attr('disabled', 'disabled');
+            $('#id_submit').prop('disabled', true);
         } else {
             if(event.preventDefault) {
                 event.preventDefault();

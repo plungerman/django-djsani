@@ -10,7 +10,8 @@ $(function() {
     $('#reporting-waiver').submit(function() {
         if ($('#agree').is(':checked')) {
             // disable submit
-            $(this).children('input[type=submit]').attr('disabled', 'disabled');
+            //$(this).children('input[type=submit]').attr('disabled', 'disabled');
+            $('#id_submit').prop('disabled', true);
             return true;
         } else {
             alert('You must agree by checking the checkbox.');
