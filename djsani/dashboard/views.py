@@ -176,7 +176,6 @@ def student_detail(request, cid=None, medium=None, content=None):
         else:
             sql = '''
                 {} WHERE id_rec.id = "{}"
-                END
                 ORDER BY cc_student_medical_manager.created_at DESC
             '''.format(STUDENT_VITALS, cid)
         obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
