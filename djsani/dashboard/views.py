@@ -176,10 +176,16 @@ def student_detail(request, cid=None, medium=None, content=None):
         else:
             sql = '''
                 {} WHERE id_rec.id = "{}"
-                AND stu_serv_rec.yr = "{}"
-                AND UPPER(stu_serv_rec.sess) = "{}"
+                AND
+                    stu_serv_rec.yr = year(CURRENT)
+                AND
+                    stu_serv_rec.sess =
+                CASE
+                    WHEN month(CURRENT) > 7 THEN "RA"
+                    ELSE "RC"
+                END
                 ORDER BY cc_student_medical_manager.created_at DESC
-            '''.format(STUDENT_VITALS, cid, term["yr"], term["sess"])
+            '''.format(STUDENT_VITALS, cid)
         obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
         if obj:
             student = obj.fetchone()
