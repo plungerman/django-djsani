@@ -12,7 +12,6 @@ from djtools.fields import TODAY
 from sqlalchemy.orm.session import make_transient
 from sqlalchemy import desc
 
-EARL = settings.INFORMIX_EARL
 
 def get_content_type(session, name):
     """
