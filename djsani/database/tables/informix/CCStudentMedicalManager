@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalManager,v 8.0.17100.11 2016/05/17 15:30:07 stevek Released $
+ $Header: CCStudentMedicalManager,v 8.0.17100.14 2018/04/17 11:38:50 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -45,9 +45,18 @@ column created_at   datetime year to second default current year to second not n
 
 column sitrep       smallint
     comments        "Can't use 'status' since it is a keyword"
-    desc            "Is the student profile complete?"
+    desc            "Have Health and Counseling approved the student?"
     heading         "Sitrep"
     text            "Sitrep"
+    attributes
+        (
+        )
+
+column sitrep_athlete	smallint
+    comments            "We can't use 'status' since it is a keyword"
+    desc                "Have Athletics approved the student?"
+    heading             "Sitrep Athlete"
+    text                "Sitrep Athlete"
     attributes
         (
         )
