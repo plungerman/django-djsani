@@ -72,6 +72,7 @@ class StudentMedicalManager(Base):
     college_id = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=NOW, nullable=False)
     sitrep = Column(Boolean)
+    sitrep_athlete = Column(Boolean)
     athlete = Column(Boolean)
     sports = Column(String)
     medical_consent_agreement = Column(String)

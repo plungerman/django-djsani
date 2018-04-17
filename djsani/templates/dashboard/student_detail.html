@@ -194,7 +194,11 @@
 {% endblock %}
 {% block manager %}
 <li>
-    <form action="." method="post">
+    <div>
+    <h4 style="display:inline;margin-right:20px; font-weight:700;color:blueviolet;">
+    {{manager.created_at|date:"Y F"}}
+    </h4>
+    <form action="." method="post" style="display:inline">
         {% csrf_token %}
         Year:
         <select name="manid" id="manager-switch">
@@ -207,6 +211,7 @@
             {% endfor %}
         </select>
     </form>
+    </div>
 </li>
 {% endblock %}
 {% block content %}
@@ -245,7 +250,6 @@
                     {% endfor %}
                 </select>
                 {% endif %}
-                <small> Athlete: </small>
                 <input type="checkbox" name="athlete" class="set-val"
                     data-table="cc_student_medical_manager"
                     data-pk="{{manager.id}}"
@@ -256,30 +260,44 @@
                     value="1"
                 {% endif %}
                 />
+                {% if not student.athlete %}
+                <h3 style="display:inline;">Athlete</h3>
+                {% endif %}
             </form>
             <h3>
-                All Forms Complete?
                 <input type="checkbox" name="sitrep"
                     class="set-val" data-pk="{{manager.id}}"
                     data-table="cc_student_medical_manager"
                 {% if student.sitrep %}
-                        value="0"
-                        checked="checked"
+                    value="0"
+                    checked="checked"
                 {% else %}
-                        value="1"
+                    value="1"
                 {% endif %}
                     />
-                Immunization status:
+                HCC Status |
+                <input type="checkbox" name="sitrep_athlete"
+                    class="set-val" data-pk="{{manager.id}}"
+                    data-table="cc_student_medical_manager"
+                {% if student.sitrep_athlete %}
+                    value="0"
+                    checked="checked"
+                {% else %}
+                    value="1"
+                {% endif %}
+                />
+                AT Status |
                 <input type="checkbox" name="cc_student_immunization"
                     class="set-val" data-pk="{{manager.id}}"
                     data-table="cc_student_medical_manager"
                 {% if student.cc_student_immunization %}
-                        value="0"
-                        checked="checked"
+                    value="0"
+                    checked="checked"
                 {% else %}
-                        value="1"
+                    value="1"
                 {% endif %}
-                    />
+                />
+                Immunization status
             </h3>
         </div>
         <!-- /.col-lg-12 -->

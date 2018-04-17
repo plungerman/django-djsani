@@ -22,6 +22,7 @@ form textarea {width: 300px !important;height:90px !important;}
 .ui-datepicker-calendar { display: none; }
 .center{text-align:center;}
 .red, .glyphicon {color:#800;}
+.yellow, .glyphicon-ok {color:#c5b32f;}
 .green, .glyphicon-ok {color:#008000;}
 .white, .glyphicon-ok {color:#fff;}
 .hidden {display:none;}

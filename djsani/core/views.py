@@ -136,6 +136,7 @@ def set_val(request):
                 for key, value in dic.iteritems():
                     setattr(obj, key, value)
 
+                session.flush()
             # if waiver, update manager table
             if WAIVERS.get(table):
                 setattr(man, table, value)
@@ -153,8 +154,8 @@ def set_val(request):
                 'action_flag': CHANGE,
                 'action_message': message
             }
-            obj = StudentMedicalLogEntry(**log)
-            session.add(obj)
+            log_entry = StudentMedicalLogEntry(**log)
+            session.add(log_entry)
 
         session.commit()
         session.close()

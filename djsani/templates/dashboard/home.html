@@ -29,7 +29,7 @@
     table.dataTable tfoot th, table.dataTable tfoot td { padding: 2px 6px; }
     .editable-pre-wrapped { white-space: normal; }
     .editable-input textarea {width:375px !important;}
-    .editable-container.editable-popup { z-index: 10000; }
+    .editable-container.editable-popup { left: 0 !important; }
     .editable-click, a.editable-click, a.editable-click:hover {border-bottom: 0; text-decoration: none; }
     .navbar-default {z-index:100;}
     address { margin-bottom: 0; }
@@ -116,7 +116,7 @@
             "drawCallback": function() {
                 $('[data-toggle="popover"]').popover({
                     trigger: 'hover',
-                    'placement': 'top'
+                    'placement': 'right'
                 });
                 /* x-editable jquery plugin: pronounced 'sheditable' */
                 $.fn.editable.defaults.mode = 'popup';
@@ -189,7 +189,7 @@
                             "drawCallback": function() {
                                 $('[data-toggle="popover"]').popover({
                                     trigger: 'hover',
-                                    'placement': 'top'
+                                    'placement': 'right'
                                 });
                                 /* x-editable jquery plugin: pronounced 'sheditable' */
                                 $.fn.editable.defaults.mode = 'popup';
@@ -257,7 +257,6 @@
                                         $.growlUI('Success', "Data saved.");
                                     } else {
                                         $.growlUI('Error?', data);
-                                        console.log("data = '" + data + "'");
                                     }
                                 },
                                 error: function(data) {
@@ -307,7 +306,6 @@
                         $.growlUI('Success', "Data saved.");
                     } else {
                         $.growlUI('Error?', data);
-                        console.log("data = '" + data + "'");
                     }
                 },
                 error: function(data) {
@@ -341,9 +339,6 @@
 {% block navbar-top-links %}
     <ul class="nav navbar-top-links navbar-right">
         {% block manager %}{% endblock %}
-        <li>
-            <a href="{% if not request.session.desktop_mode %}{% url 'responsive_switch' "go" %}{% else %}{% url 'responsive_switch' "leave" %}{% endif %}/">{% if not request.session.desktop_mode %}Go to Desktop mode{% else %}Leave Desktop mode{% endif %}</a>
-        </li>
         <li class="dropdown user-dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-user"></i> {{user.first_name}}
