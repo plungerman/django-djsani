@@ -185,6 +185,11 @@
             data: {"phile":$phile},
             success: function(data) {
               $dis.html($html);
+              if (data == "Success") {
+                $.growlUI('Photo Rotated', "Shift-reload to see the results");
+              } else {
+                $.growlUI('Photo Rotation Failed', data);
+              }
             }
           });
 
