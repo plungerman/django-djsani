@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentHealthInsurance,v 8.0.17100.8 2017/06/22 15:01:49 stevek Released $
+ $Header: CCStudentHealthInsurance,v 8.0.17100.9 2018/04/18 15:27:11 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -151,11 +151,29 @@ column primary_card_front varchar(128)
         (
         )
 
+column primary_card_front_status smallint
+    comments        ""
+    desc            "Did the student upload a proper file?"
+    heading         "Insurance Card Front Status"
+    text            "Insurance Card Front Status"
+    attributes
+        (
+        )
+
 column primary_card_back varchar(128)
     comments        ""
     desc            "Insurance card image (back)"
     heading         "Insurance Card Back"
     text            "Insurance Card Back"
+    attributes
+        (
+        )
+
+column primary_card_back_status smallint
+    comments        ""
+    desc            "Did the student upload a proper file?"
+    heading         "Insurance Card Back Status"
+    text            "Insurance Card Back Status"
     attributes
         (
         )
