@@ -14,19 +14,6 @@
     href="https://my.carthage.edu/ics/UI/Common/Styles/jQuery/jquery-ui.custom.css" />
 <link href="/static/djmaidez/css/index.css"
     rel="stylesheet" type="text/css" />
-<style type="text/css">
-    div.growlUI { position:relative;margin-top:60px; }
-    div.growlUI:before { color:green; font-size: 4em;position: absolute; font-family: 'FontAwesome'; top: 0; left: 10px; content: "\f00c"; }
-    div.growlUI h1, div.growlUI h2 {
-    color: white; padding: 5px 5px 5px 75px; text-align: left;font-size:2em;}
-    div.growlUI h2 { font-size:1.4em;}
-    .althlete-header: {margin-bottom:-10px;margin-left:9px;}
-    #page-content-wrap .content p, #page-content-wrap .content ul, #page-content-wrap .content ol {
-    margin-bottom: .7em;}
-    #djforms #athlete h2, #djforms #athlete h3 {margin-top:19px !important;}
-    #djforms #page-content-wrap .content .big-arrow-bullets{margin:1em 0;}
-    .table thead {background-color:#00556a;color:#fff;font-size:1.3em;}
-</style>
 {% endblock %}
 {% block extra_javascript %}
 <!-- from portal head -->
@@ -238,73 +225,89 @@ $(function() {
           </thead>
           <tbody>
             <tr>
-                <td>
-                    <a class="ens-link" style="cursor: pointer; cursor: hand;">
-                        Emergency contact information
-                    </a>
-                </td>
-                <td class="djsani">
+              <td>
+                <a class="ens-link" style="cursor: pointer; cursor: hand;">
+                  Emergency contact information
+                </a>
+              </td>
+              <td class="djsani">
                 {% if manager.emergency_contact %}
+                  {% if manager.sitrep %}
                     <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
                 {% endif %}
-                </td>
+              </td>
             </tr>
             <tr>
-                <td>
-                    <a href="{% url 'insurance_form' 'student' %}">
-                        Health insurance information
-                    </a>
-                </td>
-                <td>
+              <td>
+                <a href="{% url 'insurance_form' 'student' %}">
+                  Health insurance information
+                </a>
+              </td>
+              <td>
                 {% if manager.cc_student_health_insurance %}
+                  {% if manager.sitrep %}
                     <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
                 {% endif %}
-                </td>
+              </td>
             </tr>
             <tr>
-                <td>
-                    <a href="{% url 'medical_history_form' 'student' %}">
-                        General Medical History
-                    </a>
-                </td>
-                <td>
+              <td>
+                <a href="{% url 'medical_history_form' 'student' %}">
+                  General Medical History
+                </a>
+              </td>
+              <td>
                 {% if manager.cc_student_medical_history %}
+                  {% if manager.sitrep %}
                     <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
                 {% endif %}
-                </td>
+              </td>
             </tr>
             {% if student.residency_status == "Resident" %}
             <tr class="slider-container" id="adult_student">
-                <td>
-                    {% if manager.cc_student_meni_waiver %}
-                        Meningococcal meningitis/Hepatitis B response
-                    {% else %}
-                        <a href="{% url 'waiver_form' 'student' 'meni' %}">
-                            Meningococcal meningitis/Hepatitis B response
-                        </a>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if manager.cc_student_meni_waiver %}
+              <td>
+                {% if manager.cc_student_meni_waiver %}
+                  Meningococcal meningitis/Hepatitis B response
+                {% else %}
+                  <a href="{% url 'waiver_form' 'student' 'meni' %}">
+                    Meningococcal meningitis/Hepatitis B response
+                  </a>
+                {% endif %}
+              </td>
+              <td>
+                {% if manager.cc_student_meni_waiver %}
+                  {% if manager.sitrep %}
                     <i class="fa fa-check green"></i>
-                    {% endif %}
-                </td>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
+                {% endif %}
+              </td>
             </tr>
             {% endif %}
           </tbody>
         </table>
         <h2>Printable forms for Campus Nurse</h2>
         <ul class="big-arrow-bullets">
-            <li>
-                <a href="//www.carthage.edu/live/files/3426-pdf">
-                    Immunization history
-                </a>
-            </li>
-            <li>
-                <a href="//www.carthage.edu/live/files/3440-pdf">
-                    Parent/Legal guardian consent form
-                </a>
-            </li>
+          <li>
+            <a href="//www.carthage.edu/live/files/3426-pdf">
+              Immunization history
+            </a>
+          </li>
+          <li>
+            <a href="//www.carthage.edu/live/files/3440-pdf">
+              Parent/Legal guardian consent form
+            </a>
+          </li>
         </ul>
     </div>
     <!-- /#student -->
@@ -313,150 +316,200 @@ $(function() {
         {% get_lw_content as athlete_directions blurbs 2008 %}
         {{athlete_directions.body}}
         {% if not adult %}
-            {% get_lw_content as sicklecell blurbs 2226 %}
-            {{sicklecell.body}}
+          {% get_lw_content as sicklecell blurbs 2226 %}
+          {{sicklecell.body}}
         {% endif %}
         {% if student.residency_status == "Resident" and not adult %}
-            <h3>
-                Meningococcal meningitis/Hepatitis B response and
-                Parent/Legal Guardian Consent Form
-            </h3>
-            {% get_lw_content as menihep blurbs 2013 %}
-            {{menihep.body}}
+          <h3>
+            Meningococcal meningitis/Hepatitis B response and
+            Parent/Legal Guardian Consent Form
+          </h3>
+          {% get_lw_content as menihep blurbs 2013 %}
+          {{menihep.body}}
         {% endif %}
         {% if not adult %}
-            <h3>Assumption of Risk</h3>
-            {% get_lw_content as risk blurbs 2010 %}
-            {{risk.body}}
+          <h3>Assumption of Risk</h3>
+          {% get_lw_content as risk blurbs 2010 %}
+          {{risk.body}}
         {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
         {% get_lw_content as progress blurbs 2478 %}
         {{progress.body}}
+        {% if manager.sitrep %}
+        {% get_lw_content as progress blurbs 2610 %}
+        {{progress.body}}
+        {% endif %}
         <table class="table table-bordered table-hover">
           <thead>
             <tr><th colspan="2">Online Forms and Waivers</th></tr>
           </thead>
           <tbody>
             <tr>
-                <td>
-                    <a class="ens-link" style="cursor: pointer; cursor: hand;">
-                        Emergency contact information
-                    </a>
-                </td>
-                <td class="djsani">
-                {% if manager.emergency_contact %}
-                    <i class="fa fa-check green"></i>
-                {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="{% url 'insurance_form' 'athlete' %}">
-                        Health insurance information
-                    </a>
-                </td>
-                <td>
-                {% if manager.cc_student_health_insurance %}
-                    <i class="fa fa-check green"></i>
-                {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {% if manager.cc_student_meni_waiver or not adult %}
-                        Meningococcal meningitis/Hepatitis B response
-                    {% else %}
-                        <a href="{% url 'waiver_form' 'student' 'meni' %}">
-                            Meningococcal meningitis/Hepatitis B response
-                        </a>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if manager.cc_student_meni_waiver %}
-                    <i class="fa fa-check green"></i>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="{% url 'medical_history_form' 'student' %}">
-                        General Medical History
-                    </a>
-                </td>
-                <td>
-                {% if manager.cc_student_medical_history %}
-                    <i class="fa fa-check green"></i>
-                {% endif %}
-                </td> </tr> <tr> <td> <a href="{% url 'medical_history_form' 'athlete' %}">
-                        Athlete Medical History
-                    </a>
-                </td>
-                <td>
-                {% if manager.cc_athlete_medical_history %}
-                    <i class="fa fa-check green"></i>
-                {% endif %}
-                </td>
-            </tr>
-            <tr>
-                {% if manager.cc_athlete_privacy_waiver %}
-                <td>HIPAA and FERPA waiver</td>
-                <td><i class="fa fa-check green"></i></td>
-                {% else %}
-                <td>
-                    <a href="{% url 'waiver_form' 'athlete' 'privacy' %}">
-                        HIPAA and FERPA waiver
-                    </a>
-                </td>
-                <td></td>
-                {% endif %}
-            </tr>
-            <tr>
-                {% if manager.cc_athlete_reporting_waiver %}
-                <td>
-                    CCIW Injury and Illness Reporting Acknowledgement waiver
-                </td>
-                <td><i class="fa fa-check green"></i></td>
-                {% else %}
-                <td>
-                    <a href="{% url 'waiver_form' 'athlete' 'reporting' %}">
-                        CCIW Injury and Illness Reporting Acknowledgement waiver 
-                    </a>
-                </td>
-                <td></td>
-                {% endif %}
-            </tr>
-            {% if manager.cc_athlete_risk_waiver %}
-            <tr>
-            <td>Assumption of risk waiver</td>
-            <td><i class="fa fa-check green"></i></td>
-            {% else %}
-            <td>
-                {% if adult %}
-                <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
-                    Assumption of risk waiver
+              <td>
+                <a class="ens-link" style="cursor: pointer; cursor: hand;">
+                  Emergency contact information
                 </a>
-                {% else %}
-                    Assumption of risk waiver
-                {% endif %}
-            </td>
-            <td></td>
-            </tr>
-            {% endif %}
-            <tr>
-                <td>
-                    {% if adult %}
-                    <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
-                        Sickle cell trait testing waiver
-                    </a>
-                    {% else %}
-                        Sickle cell trait testing waiver
-                    {% endif %}
-                </td>
-                <td>
-                {% if manager.cc_athlete_sicklecell_waiver %}
+              </td>
+              <td class="djsani">
+                {% if manager.emergency_contact %}
+                  {% if manager.sitrep %}
                     <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
                 {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="{% url 'insurance_form' 'athlete' %}">
+                  Health insurance information
+                </a>
+              </td>
+              <td>
+                {% if manager.cc_student_health_insurance %}
+                  {% if manager.sitrep_athlete %}
+                    <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                {% if manager.cc_student_meni_waiver or not adult %}
+                  Meningococcal meningitis/Hepatitis B response
+                {% else %}
+                  <a href="{% url 'waiver_form' 'student' 'meni' %}">
+                    Meningococcal meningitis/Hepatitis B response
+                  </a>
+                {% endif %}
+              </td>
+              <td>
+                {% if manager.cc_student_meni_waiver %}
+                  {% if manager.sitrep %}
+                    <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="{% url 'medical_history_form' 'student' %}">
+                  General Medical History
+                </a>
+              </td>
+              <td>
+                {% if manager.cc_student_medical_history %}
+                  {% if manager.sitrep %}
+                    <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="{% url 'medical_history_form' 'athlete' %}">
+                  Athlete Medical History
+                </a>
+              </td>
+              <td>
+                {% if manager.cc_athlete_medical_history %}
+                  {% if manager.sitrep_athlete %}
+                    <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              {% if manager.cc_athlete_privacy_waiver %}
+              <td>HIPAA and FERPA waiver</td>
+              <td>
+                {% if manager.sitrep_athlete %}
+                  <i class="fa fa-check green"></i>
+                {% else %}
+                  <i class="fa fa-check yellow"></i>
+                {% endif %}
+              </td>
+              {% else %}
+              <td>
+                <a href="{% url 'waiver_form' 'athlete' 'privacy' %}">
+                  HIPAA and FERPA waiver
+                </a>
+              </td>
+              <td></td>
+              {% endif %}
+            </tr>
+            <tr>
+              {% if manager.cc_athlete_reporting_waiver %}
+              <td>
+                CCIW Injury and Illness Reporting Acknowledgement waiver
+              </td>
+              <td>
+                {% if manager.sitrep_athlete %}
+                  <i class="fa fa-check green"></i>
+                {% else %}
+                  <i class="fa fa-check yellow"></i>
+                {% endif %}
+              </td>
+              {% else %}
+              <td>
+                <a href="{% url 'waiver_form' 'athlete' 'reporting' %}">
+                  CCIW Injury and Illness Reporting Acknowledgement waiver
+                </a>
+              </td>
+              <td></td>
+              {% endif %}
+            </tr>
+            <tr>
+              {% if manager.cc_athlete_risk_waiver %}
+                <td>Assumption of risk waiver</td>
+                <td>
+                  {% if manager.sitrep_athlete %}
+                    <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
                 </td>
+              {% else %}
+                <td>
+                  {% if adult %}
+                    <a href="{% url 'waiver_form' 'athlete' 'risk' %}">
+                      Assumption of risk waiver
+                    </a>
+                  {% else %}
+                    Assumption of risk waiver
+                  {% endif %}
+                </td>
+                <td></td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td>
+                {% if adult %}
+                  <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
+                    Sickle cell trait testing waiver
+                  </a>
+                  {% else %}
+                    Sickle cell trait testing waiver
+                  {% endif %}
+              </td>
+              <td>
+                {% if manager.cc_athlete_sicklecell_waiver %}
+                  {% if manager.sitrep_athlete %}
+                    <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
+                {% endif %}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -466,42 +519,53 @@ $(function() {
           </thead>
           <tbody>
             <tr>
-                <td>
-                    <a href="{% url 'file_upload' 'physical-evaluation' %}">
-                    Pre-Participation Physical Evaluation Upload Form
-                    </a>
-                </td>
-                <td>
+              <td>
+                <a href="{% url 'file_upload' 'physical-evaluation' %}">
+                  Pre-Participation Physical Evaluation Upload Form
+                  </a>
+              </td>
+              <td>
                 {% if manager.physical_evaluation_1 and manager.physical_evaluation_2 %}
+                  {% if manager.sitrep_athlete %}
                     <i class="fa fa-check green"></i>
-                {% endif %}
-                </td>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
+              {% endif %}
+              </td>
             </tr>
             <tr>
-                <td>
-                    <a href="{% url 'file_upload' 'medical-consent-agreement' %}">
-                    Medical Consent and Insurance Agreement Upload Form
-                    </a>
-                </td>
-                <td>
+              <td>
+                <a href="{% url 'file_upload' 'medical-consent-agreement' %}">
+                  Medical Consent and Insurance Agreement Upload Form
+                  </a>
+              </td>
+              <td>
                 {% if manager.medical_consent_agreement %}
+                  {% if manager.sitrep_athlete %}
                     <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
                 {% endif %}
-                </td>
+              </td>
             </tr>
             <tr>
-                <td>
-                    <a href="{% url 'insurance_form' 'athlete' %}#insurance-card">
-                    Health Insurance Card
-                    </a>
-                </td>
-                <td>
+              <td>
+                <a href="{% url 'insurance_form' 'athlete' %}#insurance-card">
+                  Health Insurance Card
+                </a>
+              </td>
+              <td>
                 {% if manager.cc_student_health_insurance %}
+                  {% if manager.sitrep_athlete %}
                     <i class="fa fa-check green"></i>
+                  {% else %}
+                    <i class="fa fa-check yellow"></i>
+                  {% endif %}
                 {% endif %}
-                </td>
+              </td>
             </tr>
-
           </tbody>
         </table>
         {% get_lw_content as questions blurbs 2014 %}
@@ -513,25 +577,25 @@ $(function() {
     {% else %}
     <h2>We could not find your student record</h2>
     <ul>
-        <li>
-            If you are living on campus, have you completed the housing process?
-        </li>
-        <li>
-            Have you completed your registration?
-        </li>
+      <li>
+        If you are living on campus, have you completed the housing process?
+      </li>
+      <li>
+        Have you completed your registration?
+      </li>
     </ul>
     <p>
-        Please contact the
-        <a href="mailto:nwinkler@carthage.edu">Dean of Students Office</a>
-        for questions about your on-campus housing status or the
-        <a href="mailto:registrar@carthage.edu">Registrar's Office</a> for
-        registration questions.
+      Please contact the
+      <a href="mailto:nwinkler@carthage.edu">Dean of Students Office</a>
+      for questions about your on-campus housing status or the
+      <a href="mailto:registrar@carthage.edu">Registrar's Office</a> for
+      registration questions.
     </p>
     {% endif %}
 </div>
 {% if student %}
 <div id="emergencyContactFiller">
-    {% include "emergency/modal.html" %}
+  {% include "emergency/modal.html" %}
 </div>
 {% endif %}
 {% endblock %}
