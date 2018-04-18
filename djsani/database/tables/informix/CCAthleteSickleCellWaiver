@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCAthleteSickleCellWaiver,v 8.0.17100.5 2017/04/21 09:00:34 stevek Released $
+ $Header: CCAthleteSickleCellWaiver,v 8.0.17100.6 2018/04/18 16:11:43 mkishlin Released $
  -------------------------------------------------------------------------
 }
 
@@ -92,6 +92,15 @@ column results_file varchar(128)
     desc            "Test results file upload"
     heading         "Test results file upload"
     text            "Test results file upload"
+    attributes
+        (
+        )
+
+column results_file_status smallint
+    comments        "Did the student upload a valid photo/scan?"
+    desc            "Test results file upload status"
+    heading         "Test results file upload status"
+    text            "Test results file upload status"
     attributes
         (
         )
