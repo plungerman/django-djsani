@@ -22,7 +22,7 @@ class Sicklecell(Base):
     proof = Column(Boolean)
     results = Column(String)
     results_file = Column(String)
-    #status = Column(Boolean)
+    results_file_status = Column(Boolean)
 
     def __repr__(self):
         return str(self.college_id)

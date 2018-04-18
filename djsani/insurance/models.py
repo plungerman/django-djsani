@@ -34,7 +34,9 @@ class StudentHealthInsurance(Base):
     primary_policy_state = Column(String)
     primary_policy_address = Column(String)
     primary_card_front = Column(String)
+    primary_card_front_status = Column(Boolean)
     primary_card_back = Column(String)
+    primary_card_back_status = Column(Boolean)
     # secondary
     secondary_policy_holder = Column(String)
     secondary_dob = Column(Date, default="")

@@ -1,5 +1,6 @@
 li.ctrlHolder div ul li {display:inline;}
 .form .blockLabels label.error {display:none !important;}
+label[for=id_results_file] {color: #337ab7;}
 .placeholder {color:#800;}
 h1,h2,h3 {font-weight:normal;}
 .form li {

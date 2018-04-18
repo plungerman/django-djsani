@@ -258,8 +258,7 @@
                     checked="checked"
                 {% else %}
                     value="1"
-                {% endif %}
-                />
+                {% endif %}>
                 {% if not student.athlete %}
                 <h3 style="display:inline;">Athlete</h3>
                 {% endif %}
@@ -273,8 +272,7 @@
                     checked="checked"
                 {% else %}
                     value="1"
-                {% endif %}
-                    />
+                {% endif %}>
                 HCC Status |
                 <input type="checkbox" name="sitrep_athlete"
                     class="set-val" data-pk="{{manager.id}}"
@@ -284,8 +282,7 @@
                     checked="checked"
                 {% else %}
                     value="1"
-                {% endif %}
-                />
+                {% endif %}>
                 AT Status |
                 <input type="checkbox" name="cc_student_immunization"
                     class="set-val" data-pk="{{manager.id}}"
@@ -295,8 +292,7 @@
                     checked="checked"
                 {% else %}
                     value="1"
-                {% endif %}
-                />
+                {% endif %}>
                 Immunization status
             </h3>
         </div>
@@ -458,48 +454,82 @@
                             </div>
                             <div id="athlete_files" class="tab-pane fade">
                                 <ul>
-                                    {% if student.physical_evaluation_1 and student.physical_evaluation_2 %}
+                                    {% if manager.physical_evaluation_1 and manager.physical_evaluation_2 %}
                                     <li>
-                                        <a href="{{manager.physical_evaluation_1}}" class="rotate-photo">
-                                          <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                                        <a href="{{media_url}}files/{{manager.physical_evaluation_1}}"
+                                      <input type="checkbox" class="set-val" name="physical_evaluation_status_1"
+                                        {% if manager.physical_evaluation_status_1 == True %}
+                                        value="0"
+                                        checked="checked"
+                                        {% else %}
+                                        value="1"
+                                        {% endif %}
+                                        data-pk="{{manager.id}}"
+                                        data-table="cc_student_medical_manager">
+                                      <a href="{{manager.physical_evaluation_1}}" class="rotate-photo">
+                                        <i class="fa fa-repeat" aria-hidden="true"
+                                          title="Rotate photo: Shift reload after"></i></a>
+                                      <a href="{{media_url}}files/{{manager.physical_evaluation_1}}"
                                         class="fleft" style="margin-left:10px;margin-top:3px;"
                                         target="_blank" title="current file">
                                         <i class="fa fa-stethoscope green"></i>
-                                        Physical evaluation page 1
-                                        </a><br>
-                                        <a href="{{manager.physical_evaluation_2}}" class="rotate-photo">
-                                          <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                                        <a href="{{media_url}}files/{{manager.physical_evaluation_2}}"
+                                        Physical evaluation page 1</a>
+                                      <br>
+                                      <input type="checkbox" class="set-val" name="physical_evaluation_status_2"
+                                        {% if manager.physical_evaluation_status_2 == True %}
+                                        value="0"
+                                        checked="checked"
+                                        {% else %}
+                                        value="1"
+                                        {% endif %}
+                                        data-pk="{{manager.id}}"
+                                        data-table="cc_student_medical_manager">
+                                      <a href="{{manager.physical_evaluation_2}}" class="rotate-photo">
+                                        <i class="fa fa-repeat" aria-hidden="true"
+                                          title="Rotate photo: Shift reload after"></i></a>
+                                      <a href="{{media_url}}files/{{manager.physical_evaluation_2}}"
                                         class="fleft" style="margin-left:10px;margin-top:3px;"
                                         target="_blank" title="current file">
                                         <i class="fa fa-stethoscope green"></i>
-                                        Physical evaluation page 2
-                                        </a>
+                                        Physical evaluation page 2</a>
                                     </li>
                                     {% endif %}
                                     {% if student.medical_consent_agreement %}
                                     <li>
-                                        <a href="{{manager.medical_consent_agreement}}" class="rotate-photo">
-                                          <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                                        <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
+                                      <input type="checkbox" class="set-val" name="medical_consent_agreement_status"
+                                        {% if manager.medical_consent_agreement_status == True %}
+                                        value="0"
+                                        checked="checked"
+                                        {% else %}
+                                        value="1"
+                                        {% endif %}
+                                        data-pk="{{manager.id}}"
+                                        data-table="cc_student_medical_manager">
+                                      <a href="{{manager.medical_consent_agreement}}" class="rotate-photo">
+                                        <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
+                                      <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
                                         class="fleft" style="margin-left:10px;margin-top:3px;"
                                         target="_blank" title="current file">
                                         <i class="fa fa-umbrella green"></i>
-                                        Medical consent and insurance agreement
-                                        </a>
+                                        Medical consent and insurance agreement</a>
                                     </li>
                                     {% endif %}
                                     {% if student.results_file %}
                                     <li>
-                                        <a href="{{student.results_file}}" class="rotate-photo">
-                                          <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                                        <a href="{{media_url}}files/{{student.results_file}}"
+                                      <input type="checkbox" class="set-val" name="results_file_status"
+                                        {% if student.results_file_status == True %}
+                                        value="0" checked="checked"
+                                        {% else %}
+                                        value="1"
+                                        {% endif %}
+                                        data-pk="{{student.sicklecell_id}}"
+                                        data-table="cc_athlete_sicklecell_waiver">
+                                      <a href="{{student.results_file}}" class="rotate-photo">
+                                        <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
+                                      <a href="{{media_url}}files/{{student.results_file}}"
                                         class="fleft" style="margin-left:10px;margin-top:3px;"
                                         target="_blank" title="current file">
                                         <i class="fa fa-moon-o green"></i>
-                                        Sickle Cell Test Results
-                                        </a>
+                                        Sickle Cell Test Results</a>
                                     </li>
                                     {% endif %}
                                 </ul>

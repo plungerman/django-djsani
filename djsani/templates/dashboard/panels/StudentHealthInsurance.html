@@ -7,11 +7,29 @@
 {% else %}
   {% if data.primary_card_front %}
   <div style="float:right;" id="insuranceCard">
+    <input type="checkbox" class="set-val" name="primary_card_front_status"
+      {% if data.primary_card_front_status == True %}
+      value="0"
+      checked="checked"
+      {% else %}
+      value="1"
+      {% endif %}
+      data-pk="{{data.id}}"
+      data-table="cc_student_health_insurance">
     <a href="{{data.primary_card_front}}" class="rotate-photo">
       <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
     <a href="{{media_url}}files/{{data.primary_card_front}}" target="_blank">
       <i class="fa fa-credit-card"></i> Front</a>
     <br>
+    <input type="checkbox" class="set-val" name="primary_card_back_status"
+      {% if data.primary_card_back_status == True %}
+      value="0"
+      checked="checked"
+      {% else %}
+      value="1"
+      {% endif %}
+      data-pk="{{data.id}}"
+      data-table="cc_student_health_insurance">
     <a href="{{data.primary_card_back}}" class="rotate-photo">
       <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
     <a href="{{media_url}}files/{{data.primary_card_back}}" target="_blank">
@@ -35,7 +53,7 @@
         value="1"
         {% endif %}
         data-pk="{{data.id}}"
-        data-table="cc_student_health_insurance" />
+        data-table="cc_student_health_insurance">
     </form>
     <p>
         &nbsp;&nbsp;
@@ -56,11 +74,7 @@
     </li>
     <li>
         <a data-toggle="tab" href="#tertiary_insurance">
-            {% if data.opt_out == True and manager.athlete %}
             Athlete
-            {% else %}
-            Tertiary
-            {% endif %}
         </a>
     </li>
     </ul>
@@ -221,7 +235,7 @@
         </dl>
       </div>
       <div id="tertiary_insurance" class="tab-pane fade" style="clear:both;">
-        <h3>Tertiary Health Insurance</h3>
+        <h3>Athlete Health Insurance</h3>
         <dl class="dl-horizontal">
           <dt style="font-weight:700;">Policy holder</dt>
           <dd>
