@@ -309,9 +309,9 @@ def rotate_photo(request):
                 im.save(path)
                 msg = "Success"
             except:
-                msg = "Fail. Something is a miss with that file."
+                msg = "Something is a miss with that file."
         else:
-            msg = "Fail. The file is not a graphics file."
+            msg = "The file is not a graphics file."
 
     return HttpResponse(
         msg, content_type='text/plain; charset=utf-8'
