@@ -30,12 +30,12 @@ urlpatterns = [
     # simple ID search
     url(
         r'^student/$',
-        views.student_detail, name="student_search"
+        views.student_detail, name="search_students"
     ),
     # name search
     url(
         r'^student/search/$',
-        views.advanced_search, name="advanced_search"
+        views.advanced_search, name="search_advanced"
     ),
     # student detail
     url(

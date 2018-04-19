@@ -248,18 +248,29 @@ def student_detail(request, cid=None, medium=None, content=None):
 
 @group_required('MedicalStaff')
 def advanced_search(request):
-    q = request.POST.get("lastname", "").lower()
-    if q and len(q) >= 3:
+    student = request.POST.get("student", "")
+    sql = None
+    try:
+        q = int(student)
         sql = '''
-            {} WHERE LOWER(id_rec.lastname) LIKE "%%{}%%"
-            ORDER BY lastname
-        '''.format(STUDENT_VITALS, q)
-        students = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL).fetchall()
+            {} WHERE id_rec.id = "{}"
+            ORDER BY cc_student_medical_manager.created_at DESC
+        '''.format(STUDENT_VITALS, student)
+    except:
+        q = student.lower()
+        if q and len(q) >= 3:
+            sql = '''
+                {} WHERE LOWER(id_rec.lastname) LIKE "%%{}%%"
+                ORDER BY lastname
+            '''.format(STUDENT_VITALS, q)
+    if sql:
+        students = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
     else:
         students = None
+
     return render(
-        request, "dashboard/advanced_search.html",
-        {"students":students,}
+        request, 'dashboard/advanced_search.html',
+        {'students':students,}
     )
 
 
