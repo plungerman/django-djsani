@@ -1,0 +1,54 @@
+.bg-boot{background-color:#563d7c;}
+.d-none{display:none;}
+#page-wrapper{margin:0;padding:0;}
+.panel-primary > .panel-heading { color: inherit; }
+.btn {padding: .1rem .2rem;font-size:inherit;}
+.card-body { padding: .5rem; }
+.card-body select { width: 100%; }
+.card-header { font-size:1.2em; padding: .25rem .5rem;}
+.card-footer { padding: .25rem .5rem;}
+.card {min-height: 160px;}
+.content-wrapper { margin-top:60px; }
+nav a {color: #cbbde2;}
+nav a:hover {color:#fff;}
+nav .input-group-btn {font-size:1.3em;}
+.navbar-toggler-icon {color:yellow;}
+.dropdown-menu {padding: 5px; background-color:#563d7c;}
+.dropdown, .dropup { padding: 3px; }
+.success a { color: #007bff; }
+.panel-primary > .panel-heading {color: inherit;}
+.btn {padding: .1rem .2rem;font-size:inherit;}
+dt, dd {line-height:.85em;}
+dt {overflow: hidden; white-space: nowrap;}
+dd {overflow: hidden;white-space: nowrap;}
+dt:after {
+  content: " ..................................................................................";
+  color: #cacaca;
+}
+pre {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+#students-toggle{margin:10px 0;}
+/* DataTables */
+table.dataTable thead th {
+  background: transparent !important;
+  white-space: nowrap;
+}
+table.dataTable thead span.sort-icon {
+  display: inline-block;
+  padding-left: 5px;
+  width: 16px;
+  height: 16px;
+}
+.dataTables_wrapper{margin-bottom:20px;}
+.dataTables_length{margin-right:50px;}
+/* Overrides for BS form classes */
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+.form-group .control-label { font-weight:700; }
