@@ -1,4 +1,5 @@
 <div class="table-responsive">
+  <div class="card-body" style="margin-bottom:20px">
     <table class="dataTable display table-bordered table-hover" id="students-data">
         <thead>
             <tr>
@@ -7,8 +8,8 @@
                   <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
                 </th>
                 <th>Name</th>
-                <th class="hide">ID</th>
-                <th class="hide">Email</th>
+                <th class="d-none">ID</th>
+                <th class="d-none">Email</th>
                 <th>
                 <i class="fa fa-ambulance green" title="Emergency contact"></i>
                 </th>
@@ -65,8 +66,8 @@
                     </span>
                     {% endif %}
                 </td>
-                <th class="hide">{{s.id}}</th>
-                <th class="hide">{{s.ldap_name}}@carthage.edu</th>
+                <th class="d-none">{{s.id}}</th>
+                <th class="d-none">{{s.ldap_name}}@carthage.edu</th>
                 <td class="{{s.adult}}">
                     {% if s.emergency_contact %}
                         <i class="fa fa-check">
@@ -223,8 +224,8 @@
                   <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
                 </th>
                 <th>Name</th>
-                <th class="hide">ID</th>
-                <th class="hide">Email</th>
+                <th class="d-none">ID</th>
+                <th class="d-none">Email</th>
                 <th>
                 <i class="fa fa-ambulance green" title="Emergency contact"></i>
                 </th>
@@ -244,5 +245,6 @@
             </tr>
         </tfoot>
     </table>
+  </div>
 </div>
 <!-- /.table-responsive -->
