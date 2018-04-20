@@ -229,154 +229,156 @@ $(function() {
 {% block page_content %}class="content large-11 medium-12 small-12"{% endblock %}
 {% block content %}
 <div id="spotlight-wrap">
-<div class="spotlight forms-container">
-    <div class="large-7 medium-12 small-12">
+  <div class="spotlight forms-container">
+    <div class="large-9 medium-12 small-12">
     {% get_lw_content as insurance_intro blurbs 2456 %}
     {{insurance_intro.body}}
     {% include "includes/required_text.html" %}
-    <div style="border: 3px green solid;">
-        <p style="margin:5px;">
+    <div class="large-7 medium-12 small-12" style="border: 3px green solid;float:left;">
+      <p style="margin:5px;">
         <strong style="margin:5px;">
-            Click SUBMIT at the bottom of the page to complete this form
+          Click SUBMIT at the bottom of the page to complete this form
         </strong>
-        </p>
+      </p>
     </div>
+    {% ifusergroup MedicalStaff %}
+    <div id="athletic-policy" style="margin-left:20px;float:right">
+      <input type="button" id="athletic-policy-data"
+        value="Load Athletic Policy Data" class="btn btn-primary">
+    </div>
+    {% endifusergroup %}
     {% include "includes/errors_text.html" %}
     </div>
     <p class="cf">&nbsp;</p>
     <form method="post" action="." type="actionForm" class="form"
-         enctype="multipart/form-data" id="profile">
-        {% csrf_token %}
-        <input id="id_update" type="hidden"
-            value="{{update|default:''}}" name="update">
-        <div class="large-5 medium-12 small-12">
-            <label for="id_opt_out">
-                <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
-                <span style="color:#f00;">
-                    I attest that I do <strong><u>NOT</u></strong>
-                    have health insurance.
-                </span>
-                {% ifusergroup MedicalStaff %}
-                <div id="athletic-policy">
-                <input type="button" id="athletic-policy-data"
-                    value="Load Athletic Policy Data" class="btn btn-primary">
-                </div>
-                {% endifusergroup %}
-            </label>
+       enctype="multipart/form-data" id="profile">
+      {% csrf_token %}
+      <input id="id_update" type="hidden"
+        value="{{update|default:''}}" name="update">
+      <div class="large-5 medium-12 small-12">
+        <label for="id_opt_out">
+          <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
+          <span style="color:#f00;">
+            I attest that I do <strong><u>NOT</u></strong>
+            have health insurance.
+          </span>
+        </label>
+      </div>
+      <div class="large-5 medium-12 small-12">
+        <div id="secondary-box">
+          <label for="id_second" style="display:block;">
+            <input id="id_second" type="checkbox"
+              value="1" name="second_policy">
+            <span style="color:#800;">
+              <strong><u>Secondary Policy</u></strong>
+            </span>
+          </label>
         </div>
-        <div class="large-5 medium-12 small-12">
-            <div id="secondary-box">
-                <label for="id_second" style="display:block;">
-                    <input id="id_second" type="checkbox"
-                        value="1" name="second_policy">
-                    <span style="color:#800;">
-                        <strong><u>Secondary Policy</u></strong>
-                    </span>
-                </label>
-            </div>
-            <div id="tertiary-box">
-                <label for="id_third" style="display:block;">
-                    <input id="id_third" type="checkbox"
-                        value="1" name="third_policy">
-                    <span style="color:#800;">
-                        <strong><u>Athletes Policy</u></strong>
-                    </span>
-                    <a href="#tertiary-form" id="tertiary-form-anchor" style="display:none;">
-                        Athletes Form
-                    </a>
-                </label>
-            </div>
+        <div id="tertiary-box">
+          <label for="id_third" style="display:block;">
+            <input id="id_third" type="checkbox"
+              value="1" name="third_policy">
+            <span style="color:#800;">
+              <strong><u>Athletes Policy</u></strong>
+            </span>
+            <a href="#tertiary-form" id="tertiary-form-anchor" style="display:none;">
+              Athletes Form
+            </a>
+          </label>
         </div>
-        <div id="insurance-policies">
-            <div class="large-5 medium-12 small-12" id="primary-form">
-                <h2>
-                    Primary Insurance Policy
-                </h2>
-                <fieldset class="blockLabels">
-                  <ol>
-                    {% for field in form.visible_fields %}
-                      {% if field.name == "primary_card_front" %}
-                        <li class="form-group ctrlHolder anchor" id="insurance-card">
-                          <h3 class="help">
-                            Photo or scan of your insurance card
-                          </h3>
-                          <div class="clear">
-                            {% if form.primary_card_front.errors %}
-                                  <span class="error-message">
-                                    {{form.primary_card_front.errors|join:", "}}
-                                  </span>
-                            {% endif %}
-                            <strong class="fleft" style="width:35px;margin-right:5px;">Front</strong>
-                            <input type="file" name="primary_card_front"
-                              id="id_primary_card_front" class="fleft" style="width:300px">
-                              {% if form.primary_card_front.value %}
-                                <a href="{{media_url}}files/{{form.primary_card_front.value}}" class="fright">
-                                  <i class="fa fa-credit-card"></i></a>
-                              {% endif %}
-                          </div>
-                          <div class="clear">
-                            {% if form.primary_card_back.errors %}
-                                  <span class="error-message">
-                                    {{form.primary_card_back.errors|join:", "}}
-                                  </span>
-                            {% endif %}
-                            <strong class="fleft" style="width:35px;margin-right:5px;">Back</strong>
-                            <input type="file" name="primary_card_back"
-                              id="id_primary_card_back" class="fleft" style="width:300px">
-                              {% if form.primary_card_back.value %}
-                                <a href="{{media_url}}files/{{form.primary_card_back.value}}" class="fright">
-                                  <i class="fa fa-credit-card"></i></a>
-                              {% endif %}
-                          </div>
-                        </li>
-                        </ol></fieldset></div>
-                        <div class="large-5 medium-12 small-12" id="secondary-form">
-                          <h2>Secondary Insurance Policy</h2>
-                          <fieldset class="blockLabels">
-                            <ol>
-                      {% else %}
-                        {% if field.name != "primary_card_back" %}
-                        {% include "form_field.inc.html" %}
-                        {% endif %}
-                        {% if field.name == "secondary_policy_state" %}
-                        </ol></fieldset></div>
-                        <div class="large-5 medium-12 small-12 cf clear anchor" id="tertiary-form">
-                          <h2 id="tertiary-insurance-header">
-                            Athletes Insurance Policy
-                          </h2>
-                          <fieldset class="blockLabels">
-                            <ol>
-                        {% endif %}
+      </div>
+      <div id="insurance-policies">
+        <div class="large-5 medium-12 small-12" id="primary-form">
+          <h2>
+            Primary Insurance Policy
+          </h2>
+          <fieldset class="blockLabels">
+            <ol>
+              {% for field in form.visible_fields %}
+                {% if field.name == "primary_card_front" %}
+                  <li class="form-group ctrlHolder anchor" id="insurance-card">
+                    <h3 class="help">
+                      Photo or scan of your insurance card
+                    </h3>
+                    <div class="clear">
+                      {% if form.primary_card_front.errors %}
+                        <span class="error-message">
+                          {{form.primary_card_front.errors|join:", "}}
+                        </span>
                       {% endif %}
-                    {% endfor %}
-                  </ol>
-                </fieldset>
-            </div>
+                      <strong class="fleft" style="width:35px;margin-right:5px;">
+                        Front
+                      </strong>
+                      <input type="file" name="primary_card_front"
+                        id="id_primary_card_front" class="fleft" style="width:300px">
+                        {% if form.primary_card_front.value %}
+                        <a href="{{media_url}}files/{{form.primary_card_front.value}}" class="fright">
+                          <i class="fa fa-credit-card"></i></a>
+                        {% endif %}
+                    </div>
+                    <div class="clear">
+                      {% if form.primary_card_back.errors %}
+                        <span class="error-message">
+                          {{form.primary_card_back.errors|join:", "}}
+                        </span>
+                      {% endif %}
+                      <strong class="fleft" style="width:35px;margin-right:5px;">Back</strong>
+                      <input type="file" name="primary_card_back"
+                        id="id_primary_card_back" class="fleft" style="width:300px">
+                        {% if form.primary_card_back.value %}
+                          <a href="{{media_url}}files/{{form.primary_card_back.value}}" class="fright">
+                            <i class="fa fa-credit-card"></i></a>
+                        {% endif %}
+                    </div>
+                  </li>
+                  </ol></fieldset></div>
+                  <div class="large-5 medium-12 small-12" id="secondary-form">
+                    <h2>Secondary Insurance Policy</h2>
+                    <fieldset class="blockLabels">
+                      <ol>
+                {% else %}
+                  {% if field.name != "primary_card_back" %}
+                  {% include "form_field.inc.html" %}
+                  {% endif %}
+                  {% if field.name == "secondary_policy_state" %}
+                  </ol></fieldset></div>
+                  <div class="large-5 medium-12 small-12 cf clear anchor" id="tertiary-form">
+                    <h2 id="tertiary-insurance-header">
+                      Athletes Insurance Policy
+                    </h2>
+                    <fieldset class="blockLabels">
+                      <ol>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </ol>
+          </fieldset>
         </div>
-        <div class="large-11 medium-12 small-12r">
-            <div class="large-4">&nbsp;</div>
-            <div class="large-5 medium-12 small-12">
-            {% if update %}
-            <h3>
-                I verify that this information is accurate.
-            </h3>
-            {% endif %}
-            <div style="margin-left:45px;">
-            {% include "form_submit.inc.html" %}
-            </div>
-            </div>
+      </div>
+      <div class="large-11 medium-12 small-12">
+        <div class="large-4">&nbsp;</div>
+        <div class="large-5 medium-12 small-12">
+        {% if update %}
+        <h3>
+          I verify that this information is accurate.
+        </h3>
+        {% endif %}
+        <div style="margin-left:45px;">
+        {% include "form_submit.inc.html" %}
         </div>
+        </div>
+      </div>
     </form>
     <div id="athlete-warning" style="display:none;width:500px;">
-        <h2>Primary Insurance Required</h2>
-        <p>
-            {% get_lw_content as insurance_required blurbs 2173 %}
-            {{insurance_required.body}}
-        </p>
-        <p>
-            <a href="javascript:$.fancybox.close();">Close</a>
-        </p>
+      <h2>Primary Insurance Required</h2>
+      <p>
+        {% get_lw_content as insurance_required blurbs 2173 %}
+        {{insurance_required.body}}
+      </p>
+      <p>
+        <a href="javascript:$.fancybox.close();">Close</a>
+      </p>
     </div>
-</div>
+  </div>
 </div>
 {% endblock %}

@@ -13,7 +13,6 @@ list-style-image: none !important;
     padding-top: 9px;
 }
 .slider-container { display:none; width: 795px; }
-ol{margin:0;padding:0;}
 .form fieldset.btnHolder {background-color:#fff; }
 form textarea {width: 300px !important;height:90px !important;}
 .help {margin-top:-2px;}

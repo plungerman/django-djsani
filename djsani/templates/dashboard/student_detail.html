@@ -1,10 +1,10 @@
 {% extends "dashboard/home.html" %}
 {% block title %}
-    {% if student %}
-        {{student.lastname}}, {{student.firstname}}
-    {% else %}
-        Not found:{{cid}}
-    {% endif %}
+  {% if student %}
+    {{student.lastname}}, {{student.firstname}}
+  {% else %}
+    Not found:{{cid}}
+  {% endif %}
 {% endblock %}
 {% block extra_style %}
 {{block.super}}
@@ -555,8 +555,6 @@
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
-
-
       <div class="card mb-3">
         <div class="card-header">
           <h5 class="panel-title">

@@ -1,28 +1,33 @@
 <ul class="nav nav-tabs" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="MIS1-tab" data-toggle="tab" href="#MIS1" role="tab" aria-controls="MIS1" aria-selected="true">Missing 1</a>
+    <a class="nav-link active" id="MIS1-tab" data-toggle="tab" href="#MIS1"
+      role="tab" aria-controls="MIS1" aria-selected="true">Missing 1</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="MIS2-tab" data-toggle="tab" href="#MIS2" role="tab" aria-controls="MIS2" aria-selected="false">Missing 2</a>
+    <a class="nav-link" id="MIS2-tab" data-toggle="tab" href="#MIS2" role="tab"
+      aria-controls="MIS2" aria-selected="false">Missing 2</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="ENS-tab" data-toggle="tab" href="#ENS" role="tab" aria-controls="ENS" aria-selected="false">ENS</a>
+    <a class="nav-link" id="ENS-tab" data-toggle="tab" href="#ENS" role="tab"
+      aria-controls="ENS" aria-selected="false">ENS</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="ICE-tab" data-toggle="tab" href="#ICE" role="tab" aria-controls="ICE" aria-selected="false">Emerg 1</a>
+    <a class="nav-link" id="ICE-tab" data-toggle="tab" href="#ICE" role="tab"
+      aria-controls="ICE" aria-selected="false">Emerg 1</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="ICE2-tab" data-toggle="tab" href="#ICE2" role="tab" aria-controls="ICE2" aria-selected="false">Emerg 2</a>
+    <a class="nav-link" id="ICE2-tab" data-toggle="tab" href="#ICE2" role="tab"
+      aria-controls="ICE2" aria-selected="false">Emerg 2</a>
   </li>
 </ul>
 <div class="tab-content">
 {% for e in ens %}
-    <div class="tab-pane fade{% if forloop.first %} show active{% endif %}"
-        id="{{e.aa}}" role="tabpanel" aria-labelledby="{{e.aa}}">
-        <ul class="mt-3">
-            <li>{{e.line1|default:"&nbsp;"}}</li>
-            <li>{{e.phone|default:"&nbsp;"}}</li>
-        </ul>
-    </div>
+  <div class="tab-pane fade{% if forloop.first %} show active{% endif %}"
+    id="{{e.aa}}" role="tabpanel" aria-labelledby="{{e.aa}}">
+    <ul class="mt-3">
+      <li>{{e.line1|default:"&nbsp;"}}</li>
+      <li>{{e.phone|default:"&nbsp;"}}</li>
+    </ul>
+  </div>
 {% endfor %}
 </div>
