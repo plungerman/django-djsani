@@ -1,0 +1,439 @@
+{% extends "djdash/base.html" %}
+{% block extra_style %}
+    <!-- Page-Level Plugin CSS - Tables -->
+    <link href="//www.carthage.edu/static/vendor/dashboard/css/plugins/dataTables/jquery.dataTables.min.css"
+        rel="stylesheet">
+    <link href="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/css/dataTables.tableTools.min.css"
+        rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
+        rel="stylesheet"/>
+    <link href="/static/djsani/css/main.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block extra_javascript %}
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+    <script src="//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script src="https://malsup.github.io/min/jquery.blockUI.min.js"
+        type="text/javascript"></script>
+    <script src="//www.carthage.edu/static/vendor/js/spin.min.js"
+        type="text/javascript"></script>
+    <script>
+    $(function() {
+        /* spinner */
+        var opts = {
+            lines: 13, // The number of lines to draw
+            length: 20, // The length of each line
+            width: 10, // The line thickness
+            radius: 30, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 0, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#000', // #rgb or #rrggbb or array of colors
+            speed: 1, // Rounds per second
+            trail: 60, // Afterglow percentage
+            shadow: false, // Whether to render a shadow
+            hwaccel: false, // Whether to use hardware acceleration
+            className: 'search-results', // The CSS class to assign to spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: '50px', // Top position relative to parent in px
+            left: 'auto' // Left position relative to parent in px
+        };
+        var target = document.getElementById("students-data-panel");
+        var spinner = new Spinner(opts).spin(target);
+        spinner.stop(target);
+
+        /*  Initialise the DataTables:
+            we assign it to variable 'table' so that we can use it for
+            the 'on change' event handler below. if we do not do it this
+            way, then the 'on change' event does not work for items after
+            page 1 or for items returned by search.
+        */
+        var table = $('#students-data').dataTable({
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "sSwfPath": "//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    "print", "xls", {
+                        "sExtends": "pdf",
+                        "sPdfOrientation": "landscape"
+                    },
+                ],
+            },
+            "order": [[ 1, "asc" ]],
+            "lengthMenu": [
+                [100, 250, 500, 1000, 2000, -1],
+                [100, 250, 500, 1000, 2000, "All"]
+            ],
+            "drawCallback": function() {
+                $('[data-toggle="popover"]').popover({
+                    trigger: 'hover',
+                    'placement': 'right'
+                });
+                /* x-editable jquery plugin: pronounced 'sheditable' */
+                $.fn.editable.defaults.mode = 'popup';
+                $('.xeditable').editable({
+                    url: "{% url 'set_val' %}",
+                    emptytext: "Click to edit",
+                    params: function (params) {
+                        params.table = $(this).attr("data-table");
+                        params.college_id = $(this).attr("data-cid");
+                        params.name = $(this).attr("data-field");
+                        params.pk = $(this).attr("data-pk");
+                        return params
+                    },
+                    display: function(value, response) {
+                        //disable this method so we can update in 'success' method
+                        return false;
+                    },
+                    success: function(response, newValue) {
+                        $.growlUI('Success', "Data saved.");
+                        $icon = $(this).find("i");
+                        if ($icon.attr("data-content") == '') {
+                            $icon.attr("class",'fa fa-commenting green');
+                        }
+                        if (newValue == "") {
+                            $icon.attr("class",'fa fa-commenting-o green');
+                        }else{
+                            $icon.attr("class",'fa fa-commenting red');
+                        }
+                        $icon.attr("data-content", newValue);
+                        $(this).find("span").text(newValue);
+                    }
+                });
+            }
+        });
+        $( "#students-toggle" ).submit(function( event ) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_students' %}",
+                data: $("#students-toggle").serialize(),
+                cache: false,
+                beforeSend: function(){
+                // disable form submit button
+                    $('#submit-toggle').attr('disabled', 'disabled');
+                    spinner.spin(target);
+                },
+                success: function(data) {
+                    spinner.stop(target);
+                    // enable form submit button
+                    $('#submit-toggle').removeAttr('disabled');
+                    if (data != "error") {
+                        $("#students-data-panel").html(data);
+                        // initialise the datatable
+                        var table = $('#students-data').dataTable({
+                            "sDom": 'T<"clear">lfrtip',
+                            "oTableTools": {
+                                "sSwfPath": "//www.carthage.edu/static/vendor/dashboard/js/plugins/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                                "aButtons": [
+                                    "print", "xls", {
+                                        "sExtends": "pdf",
+                                        "sPdfOrientation": "landscape"
+                                    },
+                                ],
+                            },
+                            //"order": [[ 0, "asc" ]],
+                            "order": [[ 1, "asc" ]],
+                            "lengthMenu": [
+                                [100, 250, 500, 1000, 2000, -1],
+                                [100, 250, 500, 1000, 2000, "All"]
+                            ],
+                            "drawCallback": function() {
+                                $('[data-toggle="popover"]').popover({
+                                    trigger: 'hover',
+                                    'placement': 'right'
+                                });
+                                /* x-editable jquery plugin: pronounced 'sheditable' */
+                                $.fn.editable.defaults.mode = 'popup';
+                                $('.xeditable').editable({
+                                    url: "{% url 'set_val' %}",
+                                    emptytext: "Click to edit",
+                                    params: function (params) {
+                                        params.table = $(this).attr("data-table");
+                                        params.college_id = $(this).attr("data-cid");
+                                        params.name = $(this).attr("data-field");
+                                        params.pk = $(this).attr("data-pk");
+                                        return params
+                                    },
+                                    display: function(value, response) {
+                                        //disable this method so we can update in 'success' method
+                                        return false;
+                                    },
+                                    success: function(response, newValue) {
+                                        $.growlUI('Success', "Data saved.");
+                                        $icon = $(this).find("i");
+                                        if ($icon.attr("data-content") == '') {
+                                            $icon.attr("class",'fa fa-commenting green');
+                                        }
+                                        if (newValue == "") {
+                                            $icon.attr("class",'fa fa-commenting-o green');
+                                        }else{
+                                            $icon.attr("class",'fa fa-commenting red');
+                                        }
+                                        $icon.attr("data-content", newValue);
+                                        $(this).find("span").text(newValue);
+                                    }
+                                });
+                            }
+                        });
+                        $(table).on( 'click', 'tr', function () {
+                            if ( $(this).hasClass('selected') ) {
+                                $(this).removeClass('selected');
+                            } else {
+                                table.$('tr.selected').removeClass('selected');
+                                $(this).addClass('selected');
+                            }
+                        });
+                        $(table).on( 'change', 'input', function () {
+                            var $dis = $(this);
+                            var $data = {
+                                'college_id': $dis.attr("data-cid"),
+                                'value': $dis.val(),
+                                'name': $dis.attr("name"),
+                                'table': $dis.attr("data-table"),
+                                'pk': $dis.attr("data-pk")
+                            }
+                            $.ajax({
+                                type: "POST",
+                                url: "{% url 'set_val' %}",
+                                data: $data,
+                                cache: false,
+                                beforeSend: function(){
+                                    spinner.spin(target);
+                                },
+                                success: function(data) {
+                                    spinner.stop(target);
+                                    if (data == "success") {
+                                        check ='<i class="fa fa-check"></i>';
+                                        $dis.replaceWith(check);
+                                        $.growlUI('Success', "Data saved.");
+                                    } else {
+                                        $.growlUI('Error?', data);
+                                    }
+                                },
+                                error: function(data) {
+                                    spinner.stop(target);
+                                    $.growlUI('Error?', data);
+                                }
+                            });
+                        });
+                    } else {
+                        alert("There was a problem retrieving the data.\n\
+                        Please execute your search again.");
+                    }
+                }
+            });
+            return false;
+        });
+        $(table).on( 'click', 'tr', function () {
+            if ( $(this).hasClass('selected') ) {
+                $(this).removeClass('selected');
+            } else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+        $(table).on( 'change', 'input', function () {
+            var $dis = $(this);
+            var $data = {
+                'college_id': $dis.attr("data-cid"),
+                'value': $dis.val(),
+                'name': $dis.attr("name"),
+                'table': $dis.attr("data-table"),
+                'pk': $dis.attr("data-pk")
+            }
+            $.ajax({
+                type: "POST",
+                url: "{% url 'set_val' %}",
+                data: $data,
+                cache: false,
+                beforeSend: function(){
+                    spinner.spin(target);
+                },
+                success: function(data) {
+                    spinner.stop(target);
+                    if (data == "success") {
+                        check ='<i class="fa fa-check"></i>';
+                        $dis.replaceWith(check);
+                        $.growlUI('Success', "Data saved.");
+                    } else {
+                        $.growlUI('Error?', data);
+                    }
+                },
+                error: function(data) {
+                    spinner.stop(target);
+                    /* does not work */
+                    $('div.growlUI').addClass('gerror');
+                    $.growlUI('Error?', data);
+                }
+            });
+        });
+        {% if not students and not student %}
+            alert("\
+               There was a problem fetching the student data.\n\
+               Please reload the page or try your search again.\
+            ");
+        {% endif %}
+    });
+    </script>
+{% endblock %}
+{% block navbar-header %}
+    <div class="navbar-header">
+        <a href="/" style="float:left;">
+            <img src="https://www.carthage.edu/themes/korra/assets/images/carthage-logo-main.png" height="50">
+        </a>
+        <a class="navbar-brand"
+            href="http://www.carthage.edu/campus-life/health-counseling/">
+            Carthage Health &amp; Counseling Center
+        </a>
+    </div>
+{% endblock %}
+{% block navbar-top-links %}
+    <ul class="nav navbar-top-links navbar-right">
+        {% block manager %}{% endblock %}
+        <li class="dropdown user-dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-user"></i> {{user.first_name}}
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="divider"></li>
+                <li>
+                    <a href="{% url 'auth_logout' %}">
+                        <i class="fa fa-power-off"></i> Sign Out
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- /.user-dropdown -->
+    </ul>
+{% endblock %}
+{% block navbar-static-side %}
+    <div class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                    <div class="input-group custom-search-form">
+                        <h4>Search</h4>
+                        <form action="{% url 'search_advanced' %}" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="cid" class="form-control" placeholder="Last Name or ID">
+                        </form>
+                        <small>Hit 'return' to submit</small>
+                    </div>
+                </li>
+                <li>
+                    <a href="{% url 'dashboard_home' %}">
+                        <i class="fa fa-dashboard fa-fw"></i> Dashboard
+                    </a>
+                </li>
+                {% if user.is_superuser %}
+                <li>
+                    <a href="/campus-life/medical/forms/admin/">
+                        <i class="fa fa-gears"></i> Administration
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'home' %}">
+                        <i class="fa fa-edit"></i> Medical Forms
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.carthage.edu/">
+                        <i class="fa fa-home fa-fw"></i> Carthage
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.carthage.edu/my/">
+                        <i class="fa fa-lemon-o fa-fw"></i> My.Carthage
+                    </a>
+                </li>
+            </ul>
+            <!-- /#side-menu -->
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Student Medical Information
+                <small>
+                    <span class="minor">Lavender rows are minors</span>
+                    <i class="fa fa-star green"></i> = Athlete
+                    <br>Click on a row to highlight it for easy viewing.
+                </small>
+            </h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <form id="students-toggle" class="form-inline"
+                        role="form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Only show</label>
+                            <select name="class" class="form-control">
+                                <option value="'FN','FF','FR','UT'">
+                                    Freshman and Transfers
+                                </option>
+                                <option value="'SO','JR','SR','GD','UT'">
+                                    Sophomores, Juniors, Seniors
+                                </option>
+                                <option value="'FN','FF','FR','SO','JR','SR','GD','UT'">
+                                    All Current Students
+                                </option>
+                                <option value="3">
+                                    All Current Athletes
+                                </option>
+                                <option value="" disabled>-----Status Reports-----</option>
+                                <option value="1">
+                                    Have completed all forms
+                                </option>
+                                <option value="0">
+                                    Have not completed all forms
+                                </option>
+                                <option value="2">
+                                    Have not started
+                                </option>
+                                <option value="4">
+                                    Have government insurance
+                                </option>
+                            </select>
+                            <label>Participating in</label>
+                            <select name="sport" class="form-control">
+                            <option value="">----Select----</option>
+                            {% for s in sports %}
+                            <option
+                            {% if s.0 == "0" %}
+                                disabled{% else %} value="{{s.0}}"
+                            {% endif %}>
+                            {{s.1|safe}}
+                            </option>
+                            {% endfor %}
+                            </select>
+                            <input type="submit" name="submit"
+                                value="submit" id="submit-toggle"
+                                class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body" id="students-data-panel">
+                    {% include "dashboard/students_data.inc.html" %}
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock content %}

@@ -8,31 +8,27 @@
 {% endblock %}
 {% block extra_style %}
 {{block.super}}
-<link href="/static/djsani/css/print.css"
-    rel="stylesheet" type="text/css" media="print" />
-<link href="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.css"
-    rel="stylesheet" type="text/css" />
+<link href="/static/djsani/css/print.css" rel="stylesheet" type="text/css" media="print">
+<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.0/css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
 <style type="text/css">
     .dl-horizontal dt.widus { width: 300px; margin-right:9px; }
     .dl-horizontal dd.yes { margin-left: 0; }
-    .bootstrap-select { width: 300px !important; }
     /* show the move cursor as the user moves the mouse over the panel header.*/
     #draggablePanelList .panel-heading { cursor: move; }
     li { list-style: none; }
-    .editable-input textarea {width:375px !important;}
+    .editable-input textarea {width:375px !important; height:200px;}
     .editable-container.editable-popup { z-index: 10000; }
     #healthInsuranceEmailData, #StudentContactEmailHeader, #id_results_file {display:none;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-<script src="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="//www.carthage.edu/static/vendor/js/spin.min.js"
-    type="text/javascript"></script>
-<script src="https://malsup.github.io/min/jquery.blockUI.min.js"
-    type="text/javascript"></script>
+<script type="text/javascript" language="javascript" src="//www.carthage.edu/static/vendor/x-editable/bootstrap4-editable/js/bootstrap-editable.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://malsup.github.io/min/jquery.blockUI.min.js"></script>
+<script type="text/javascript" language="javascript" src="//www.carthage.edu/static/vendor/js/spin.min.js"></script>
+<script type="text/javascript" language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.0/js/bootstrap-select.min.js"></script>
 <script>
     $(function() {
+        $("body").toggleClass("sidenav-toggled");
         /* spinner */
         var opts = {
             lines: 13, // The number of lines to draw
@@ -57,9 +53,9 @@
         spinner.stop(target);
 
         /* x-editable jquery plugin: pronounced 'sheditable' */
-        $.fn.editable.defaults.mode = 'popup';
         $('.xeditable').editable({
             url: "{% url 'set_val' %}",
+            mode: "inline",
             emptytext: "Click to edit",
             params: function (params) {
                 params.table = $(this).attr("data-table");
@@ -197,426 +193,438 @@
     });
 </script>
 {% endblock %}
-{% block manager %}
-<li>
-    <div>
-    <h4 style="display:inline;margin-right:20px; font-weight:700;color:blueviolet;">
+{% block navbar-top-links %}
+<ul class="navbar-nav ml-auto">
+  <li>
+    <h4 style="display:inline;margin-right:20px;font-weight:700;color:#cbbde2;">
     {{manager.created_at|date:"Y F"}}
     </h4>
-    <form action="." method="post" style="display:inline">
-        {% csrf_token %}
-        Year:
-        <select name="manid" id="manager-switch">
-            <option value="">---Select Profile Year---</option>
-            {% for m in managers %}
-            <option value="{{m.id}}"
-                {% if m.id == manager.id %}selected="selected"{% endif %}>
-                {{m.created_at|date:"Y F"}}
-            </option>
-            {% endfor %}
-        </select>
+    <form action="." method="post" style="margin-right:8px; display:inline">
+      {% csrf_token %}
+      Year:
+      <select name="manid" id="manager-switch">
+        <option value="">---Select Profile Year---</option>
+        {% for m in managers %}
+        <option value="{{m.id}}"
+          {% if m.id == manager.id %}selected="selected"{% endif %}>
+          {{m.created_at|date:"Y F"}}
+        </option>
+        {% endfor %}
+      </select>
     </form>
-    </div>
-</li>
-{% endblock %}
+  </li>
+  <li class="dropdown user-dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <i class="fa fa-user"></i> {{user.first_name|default:"Dashboard"}}
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li class="divider"></li>
+      <li>
+        {% if user.is_anonymous %}
+        <a href="{% url 'auth_login' %}">
+          <i class="fa fa-sign-in"></i> Sign In
+        </a>
+        {% else %}
+        <a href="{% url 'auth_logout' %}">
+          <i class="fa fa-sign-out"></i> Sign Out
+        </a>
+        {% endif %}
+      </li>
+    </ul>
+  </li>
+</ul>
+{% endblock navbar-top-links %}
 {% block content %}
 <div id="student-container">
-    {% if student %}
-    <div class="row">
-        <div class="col-lg-8">
-            <h3>
-                {{student.firstname}} {{student.lastname}}
-                <small>
-                    ({{student.sex}}) &mdash;
-                    DOB: {{student.birth_date}}
-                    ({{age}}) [{{student.cl}}]
-                </small>
-            </h3>
-            <form id="profile" class="form">
-                {% if student.athlete %}
-                <select name="sports" class="selectpicker set-val"
-                    id="sports" size="5" data-pk="{{manager.id}}"
-                    data-table="cc_student_medical_manager"
-                    multiple="multiple" title="Choose sport(s)&hellip;">
-                    {% for s in sports %}
-                    {% if not forloop.first %}
-                    <option
-                    {% if not s.0 %}
-                        disabled
-                    {% else %} value="{{s.0}}"
-                        {% if s.0 in my_sports %}
-                            selected="selected"
-                        {% endif %}
-                    {% endif %}
-                    >
-                    {{s.1|safe}}
-                    </option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-                {% endif %}
-                <input type="checkbox" name="athlete" class="set-val"
-                    data-table="cc_student_medical_manager"
-                    data-pk="{{manager.id}}"
-                {% if student.athlete %}
-                    value="0"
-                    checked="checked"
-                {% else %}
-                    value="1"
-                {% endif %}>
-                {% if not student.athlete %}
-                <h3 style="display:inline;">Athlete</h3>
-                {% endif %}
-            </form>
-            <h3>
-                <input type="checkbox" name="sitrep"
-                    class="set-val" data-pk="{{manager.id}}"
-                    data-table="cc_student_medical_manager"
-                {% if student.sitrep %}
-                    value="0"
-                    checked="checked"
-                {% else %}
-                    value="1"
-                {% endif %}>
-                HCC Status |
-                <input type="checkbox" name="sitrep_athlete"
-                    class="set-val" data-pk="{{manager.id}}"
-                    data-table="cc_student_medical_manager"
-                {% if student.sitrep_athlete %}
-                    value="0"
-                    checked="checked"
-                {% else %}
-                    value="1"
-                {% endif %}>
-                AT Status |
-                <input type="checkbox" name="cc_student_immunization"
-                    class="set-val" data-pk="{{manager.id}}"
-                    data-table="cc_student_medical_manager"
-                {% if student.cc_student_immunization %}
-                    value="0"
-                    checked="checked"
-                {% else %}
-                    value="1"
-                {% endif %}>
-                Immunization status
-            </h3>
-        </div>
-        <!-- /.col-lg-12 -->
-        <div class="col-lg-4">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <i class="fa fa-globe fa-4x"></i>
-                        </div>
-                        <div class="col-xs-8" id="student-contact">
-                            <h4 id="StudentContactEmailHeader">Student Contact Information</h4>
-                            <address>
-                            {{student.addr_line1}} {{student.addr_line2}}<br>
-                            {{student.city}}, {{student.st}}<br>
-                            {{student.zip}} {{student.ctry}}<br>
-                            <abbr title="Phone">Phone:</abbr>
-                            {{student.phone}}<br>
-                            <abbr title="Phone">Mobile:</abbr>
-                            {{student.mobile}}<br>
-                            <a href="mailto:{{student.ldap_name}}@carthage.edu">
-                                {{student.ldap_name}}@carthage.edu
-                            </a><br>
-                            Residency Status:
-                            <strong>
-                                {{student.residency_status}}
-                            </strong><br>
-                            Signed in: {{student_user.last_login|date:"m/d/Y, fA"}}
-                            </address>
-                        </div>
-                        <div class="col-xs-1">
-                            <a href="{% url 'student_detail_medium' cid 'print' 'travel' %}?manid={{manager.id}}"
-                                title="Print travel kit">
-                                <i class="fa fa-print fa-4x"></i>
-                            </a>
-                        </div>
-                    </div> <!-- /.row -->
-                </div> <!--/.panel-heading -->
-            </div> <!-- /.panel-success -->
-        </div> <!-- /.col-lg-4 -->
+  {% if student %}
+  <div class="row">
+    <div class="col-lg-7">
+      <h3>
+        {{student.firstname}} {{student.lastname}}
+        <small>
+          ({{student.sex}}) &mdash;
+          DOB: {{student.birth_date}}
+          ({{age}}) [{{student.cl}}]
+        </small>
+      </h3>
+      <form class="form mb-2">
+        {% if student.athlete %}
+        <select name="sports" class="selectpicker set-val"
+            data-width="300px" id="sports" data-pk="{{manager.id}}"
+            data-table="cc_student_medical_manager" data-style="btn-secondary"
+            multiple title="Choose sport(s)&hellip;">
+            {% for s in sports %}
+            {% if not forloop.first %}
+            <option {% if not s.0 %} disabled {% else %} value="{{s.0}}" {% if s.0 in my_sports %} selected="selected" {% endif %} {% endif %}>
+            {{s.1|safe}}
+            </option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        {% endif %}
+        <input type="checkbox" name="athlete" class="set-val"
+          data-table="cc_student_medical_manager"
+          data-pk="{{manager.id}}"
+        {% if student.athlete %}
+          value="0"
+          checked="checked"
+        {% else %}
+          value="1"
+        {% endif %}>
+        {% if not student.athlete %}
+        <h3 style="display:inline;">Athlete</h3>
+        {% endif %}
+      </form>
+      <h3>
+        <input type="checkbox" name="sitrep"
+          class="set-val" data-pk="{{manager.id}}"
+          data-table="cc_student_medical_manager"
+        {% if student.sitrep %}
+          value="0"
+          checked="checked"
+        {% else %}
+          value="1"
+        {% endif %}>
+        HCC Status |
+        <input type="checkbox" name="sitrep_athlete"
+          class="set-val" data-pk="{{manager.id}}"
+          data-table="cc_student_medical_manager"
+        {% if student.sitrep_athlete %}
+          value="0"
+          checked="checked"
+        {% else %}
+          value="1"
+        {% endif %}>
+        AT Status |
+        <input type="checkbox" name="cc_student_immunization"
+          class="set-val" data-pk="{{manager.id}}"
+          data-table="cc_student_medical_manager"
+        {% if student.cc_student_immunization %}
+          value="0"
+          checked="checked"
+        {% else %}
+          value="1"
+        {% endif %}>
+        Immunization status
+      </h3>
     </div>
-    <!-- /.row -->
-    <div class="row" class="draggablePanelList">
-        <div class="col-lg-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-ambulance"></i>
-                        Emergency Contact Information
-                        <a href="{% url 'student_detail_medium' cid 'print' 'emergency' %}?manid={{manager.id}}"
-                            title="Print emergency contact">
-                            <i class="fa fa-print"></i>
-                        </a>
-                    </h3>
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div id="emergency_information">
-                        {% include "dashboard/panels/emergency_information.html" %}
-                    </div>
-                </div>
-                <!-- /.panel-body -->
+    <!-- /.col-lg-7 -->
+    <div class="col-lg-5">
+      <div class="card mb-3 panel-success">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12" id="student-contact" style="font-size:.9em;">
+              <h4 id="StudentContactEmailHeader">Student Contact Information</h4>
+              <div class="float-left" style="width:50%;">
+              {{student.addr_line1}} {{student.addr_line2}}<br>
+              {{student.city}}, {{student.st}}<br>
+              {{student.zip}} {{student.ctry}}<br>
+              <abbr title="Phone">Phone:</abbr>
+              <a href="tel:{{student.phone}}">{{student.phone}}</a>
+              <br>
+              <abbr title="Phone">Mobile:</abbr>
+              <a href="tel:{{student.mobile}}">{{student.mobile}}</a>
+              </div>
+              <div class="float-right" style="width:50%;">
+              <a class="float-right" href="{% url 'student_detail_medium' cid 'print' 'travel' %}?manid={{manager.id}}"
+                title="Print travel kit">
+                <i class="fa fa-print fa-2x"></i></a>
+              <strong>
+                {{student.residency_status}}
+              </strong><br>
+              <a href="mailto:{{student.ldap_name}}@carthage.edu">
+                {{student.ldap_name}}@carthage.edu
+              </a><br>
+              Signed in: {{student_user.last_login|date:"m/d/Y, fA"}}
+              </div>
             </div>
-            <!-- /.panel-info -->
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-comments-o"></i>
-                        Staff Notes and Comments
-                    </h3>
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div id="staff_notes">
-                        {% include "dashboard/panels/staff_notes.html" %}
-                    </div>
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel-info -->
+            <!-- /.col-12 -->
+          </div>
+          <!-- /.row -->
         </div>
-        <!-- /.col-lg-6 -->
-        <div class="col-lg-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-umbrella"></i>
-                        Health Insurance
-                        <a href="{% url 'student_detail_medium' cid 'print' 'insurance' %}?manid={{manager.id}}"
-                            title="Print health insurance">
-                            <i class="fa fa-print"></i>
-                        </a>
-                        <a href="#" data-toggle="modal"
-                            data-target="#emailModal"
-                            title="Send information via email">
-                            <i class="fa fa-envelope"></i>
-                        </a>
-                        <a href="{% url 'insurance_form_dashboard' stype cid %}"
-                            title="Update insurance information">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                    </h3>
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div id="cc_student_health_insurance">
-                        {{shi}}
-                    </div>
-                    <!-- /.health-insurance -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel-info -->
-        </div>
-        <!-- /.col-lg-6 -->
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
     </div>
-    <!-- /.row -->
-    <div class="row" class="draggablePanelList">
-        <div class="col-lg-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-plus-square"></i>
-                        Medical History
-                        <a href="{% url 'student_detail_medium' cid 'print' 'history' %}?manid={{manager.id}}"
-                            title="Print medical history">
-                            <i class="fa fa-print"></i>
-                        </a>
-                    </h3>
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div id="student-medical-history">
-                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
-                            <li class="active">
-                                <a data-toggle="tab" href="#cc_student_medical_history">
-                                    Student
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#cc_athlete_medical_history" data-toggle="tab">
-                                    Athlete
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#athlete_files" data-toggle="tab">
-                                    Files
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- /.nav-tabs -->
-                        <div class="tab-content" id="medical-history-content">
-                            <div id="cc_student_medical_history" class="tab-pane fade active in">
-                                {{smh}}
-                            </div>
-                            <div id="cc_athlete_medical_history" class="tab-pane fade">
-                                {{amh}}
-                            </div>
-                            <div id="athlete_files" class="tab-pane fade">
-                                <ul>
-                                    {% if manager.physical_evaluation_1 and manager.physical_evaluation_2 %}
-                                    <li>
-                                      <input type="checkbox" class="set-val" name="physical_evaluation_status_1"
-                                        {% if manager.physical_evaluation_status_1 == True %}
-                                        value="0"
-                                        checked="checked"
-                                        {% else %}
-                                        value="1"
-                                        {% endif %}
-                                        data-pk="{{manager.id}}"
-                                        data-table="cc_student_medical_manager">
-                                      <a href="{{manager.physical_evaluation_1}}" class="rotate-photo">
-                                        <i class="fa fa-repeat" aria-hidden="true"
-                                          title="Rotate photo: Shift reload after"></i></a>
-                                      <a href="{{media_url}}files/{{manager.physical_evaluation_1}}"
-                                        class="fleft" style="margin-left:10px;margin-top:3px;"
-                                        target="_blank" title="current file">
-                                        <i class="fa fa-stethoscope green"></i>
-                                        Physical evaluation page 1</a>
-                                      <br>
-                                      <input type="checkbox" class="set-val" name="physical_evaluation_status_2"
-                                        {% if manager.physical_evaluation_status_2 == True %}
-                                        value="0"
-                                        checked="checked"
-                                        {% else %}
-                                        value="1"
-                                        {% endif %}
-                                        data-pk="{{manager.id}}"
-                                        data-table="cc_student_medical_manager">
-                                      <a href="{{manager.physical_evaluation_2}}" class="rotate-photo">
-                                        <i class="fa fa-repeat" aria-hidden="true"
-                                          title="Rotate photo: Shift reload after"></i></a>
-                                      <a href="{{media_url}}files/{{manager.physical_evaluation_2}}"
-                                        class="fleft" style="margin-left:10px;margin-top:3px;"
-                                        target="_blank" title="current file">
-                                        <i class="fa fa-stethoscope green"></i>
-                                        Physical evaluation page 2</a>
-                                    </li>
-                                    {% endif %}
-                                    {% if student.medical_consent_agreement %}
-                                    <li>
-                                      <input type="checkbox" class="set-val" name="medical_consent_agreement_status"
-                                        {% if manager.medical_consent_agreement_status == True %}
-                                        value="0"
-                                        checked="checked"
-                                        {% else %}
-                                        value="1"
-                                        {% endif %}
-                                        data-pk="{{manager.id}}"
-                                        data-table="cc_student_medical_manager">
-                                      <a href="{{manager.medical_consent_agreement}}" class="rotate-photo">
-                                        <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                                      <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
-                                        class="fleft" style="margin-left:10px;margin-top:3px;"
-                                        target="_blank" title="current file">
-                                        <i class="fa fa-umbrella green"></i>
-                                        Medical consent and insurance agreement</a>
-                                    </li>
-                                    {% endif %}
-                                    {% if student.results_file %}
-                                    <li>
-                                      <input type="checkbox" class="set-val" name="results_file_status"
-                                        {% if student.results_file_status == True %}
-                                        value="0" checked="checked"
-                                        {% else %}
-                                        value="1"
-                                        {% endif %}
-                                        data-pk="{{student.sicklecell_id}}"
-                                        data-table="cc_athlete_sicklecell_waiver">
-                                      <a href="{{student.results_file}}" class="rotate-photo">
-                                        <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                                      <a href="{{media_url}}files/{{student.results_file}}"
-                                        class="fleft" style="margin-left:10px;margin-top:3px;"
-                                        target="_blank" title="current file">
-                                        <i class="fa fa-moon-o green"></i>
-                                        Sickle Cell Test Results</a>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- /.tab-content -->
-                    </div>
-                    <!-- /.medical-history -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel-info -->
+    <!-- /.col-lg-5 -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="panel-title">
+            <i class="fa fa-ambulance"></i>
+            Emergency Contact Information
+            <a href="{% url 'student_detail_medium' cid 'print' 'emergency' %}?manid={{manager.id}}"
+              title="Print emergency contact">
+              <i class="fa fa-print"></i>
+            </a>
+          </h5>
         </div>
-        <!-- /.col-lg-6 -->
-        <div class="col-lg-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-edit"></i>
-                        Waivers
-                        <a href="{% url 'student_detail_medium' cid 'print' 'waivers' %}?manid={{manager.id}}"
-                            title="Print waivers">
-                            <i class="fa fa-print"></i>
-                        </a>
-                    </h3>
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div id="student-waivers">
-                        <ul style="margin-bottom: 15px;" class="nav nav-tabs">
-                            <li class="active">
-                                <a data-toggle="tab"
-                                    href="#cc_student_meni_waiver">
-                                    Meni/Hep B
-                                </a>
-                            </li>
-                            <li{% if not student.cc_athlete_privacy_waiver %}
-                                class="disabled"{% endif %}>
-                                <a href="#cc_athlete_privacy_waiver"
-                                    data-toggle="tab">
-                                    Privacy
-                                </a>
-                            </li>
-                            <li{% if not student.cc_athlete_sicklecell_waiver %}
-                                class="disabled"{% endif %}>
-                                <a href="#cc_athlete_sickle_waiver"
-                                    data-toggle="tab">
-                                    Sickle
-                                </a>
-                            </li>
-                            <li{% if not student.cc_athlete_reporting_waiver %}
-                                class="disabled"{% endif %}>
-                                <a href="#cc_athlete_reporting_waiver"
-                                    data-toggle="tab">
-                                    Reporting
-                                </a>
-                            </li>
-                            <li{% if not student.cc_athlete_risk_waiver %}
-                                class="disabled"{% endif %}>
-                                <a href="#cc_athlete_risk_waiver"
-                                    data-toggle="tab">
-                                    Risk
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- /.nav-tabs -->
-                        <div class="tab-content" id="student-waivers-content">
-                            {% include "dashboard/waivers.inc.html" %}
-                        </div>
-                        <!-- /.tab-content -->
-                    </div>
-                    <!-- /.medical-history -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel-info -->
+        <div class="card-body">
+          <div id="emergency_information">
+            {% include "dashboard/panels/emergency_information.html" %}
+          </div>
         </div>
-        <!-- /.col-lg-6 -->
+      </div>
+      <!-- /.card -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="panel-title">
+            <i class="fa fa-comments-o"></i>
+            Staff Notes and Comments
+            <a href="{% url 'student_detail_medium' cid 'print' 'emergency' %}?manid={{manager.id}}"
+              title="Print emergency contact">
+              <i class="fa fa-print"></i>
+            </a>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div id="emergency_information">
+            <div id="staff_notes">
+              {% include "dashboard/panels/staff_notes.html" %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.card -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="panel-title">
+            <i class="fa fa-plus-square"></i>
+            Medical History
+            <a href="{% url 'student_detail_medium' cid 'print' 'history' %}?manid={{manager.id}}"
+              title="Print medical history">
+              <i class="fa fa-print"></i>
+            </a>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div id="student-medical-history">
+            <ul class="nav nav-tabs mb-3" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="cc_student_medical_history-tab" data-toggle="tab" href="#cc_student_medical_history" role="tab" aria-controls="cc_student_medical_history" aria-selected="true">
+                  Student
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="cc_athlete_medical_history-tab" data-toggle="tab" href="#cc_athlete_medical_history" role="tab" aria-controls="cc_athlete_medical_history" aria-selected="false">
+                  Athlete
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="athlete_files-tab" data-toggle="tab" href="#athlete_files" role="tab" aria-controls="athlete_files" aria-selected="false">
+                  Files
+                </a>
+              </li>
+            </ul>
+            <!-- /.nav-tabs -->
+            <div class="tab-content" id="medical-history-content">
+              <div id="cc_student_medical_history" class="tab-pane fade show active" role="tabpanel" aria-labelledby="cc_student_medical_history">
+                {{smh}}
+              </div>
+              <div id="cc_athlete_medical_history" class="tab-pane fade" ole="tabpanel" aria-labelledby="cc_athlete_medical_history">
+                {{amh}}
+              </div>
+              <div id="athlete_files" class="tab-pane fade" role="tabpanel" aria-labelledby="athlete_files">
+                <ul>
+                  {% if manager.physical_evaluation_1 and manager.physical_evaluation_2 %}
+                  <li>
+                    <input type="checkbox" class="set-val" name="physical_evaluation_status_1"
+                      {% if manager.physical_evaluation_status_1 == True %}
+                      value="0"
+                      checked="checked"
+                      {% else %}
+                      value="1"
+                      {% endif %}
+                      data-pk="{{manager.id}}"
+                      data-table="cc_student_medical_manager">
+                    <a href="{{manager.physical_evaluation_1}}" class="rotate-photo">
+                      <i class="fa fa-repeat" aria-hidden="true"
+                        title="Rotate photo: Shift reload after"></i></a>
+                    <a href="{{media_url}}files/{{manager.physical_evaluation_1}}"
+                      class="fleft" style="margin-left:10px;margin-top:3px;"
+                      target="_blank" title="current file">
+                      <i class="fa fa-stethoscope green"></i>
+                      Physical evaluation page 1</a>
+                    <br>
+                    <input type="checkbox" class="set-val" name="physical_evaluation_status_2"
+                      {% if manager.physical_evaluation_status_2 == True %}
+                      value="0"
+                      checked="checked"
+                      {% else %}
+                      value="1"
+                      {% endif %}
+                      data-pk="{{manager.id}}"
+                      data-table="cc_student_medical_manager">
+                    <a href="{{manager.physical_evaluation_2}}" class="rotate-photo">
+                      <i class="fa fa-repeat" aria-hidden="true"
+                        title="Rotate photo: Shift reload after"></i></a>
+                    <a href="{{media_url}}files/{{manager.physical_evaluation_2}}"
+                      class="fleft" style="margin-left:10px;margin-top:3px;"
+                      target="_blank" title="current file">
+                      <i class="fa fa-stethoscope green"></i>
+                      Physical evaluation page 2</a>
+                  </li>
+                  {% endif %}
+                  {% if student.medical_consent_agreement %}
+                  <li>
+                    <input type="checkbox" class="set-val" name="medical_consent_agreement_status"
+                      {% if manager.medical_consent_agreement_status == True %}
+                      value="0"
+                      checked="checked"
+                      {% else %}
+                      value="1"
+                      {% endif %}
+                      data-pk="{{manager.id}}"
+                      data-table="cc_student_medical_manager">
+                    <a href="{{manager.medical_consent_agreement}}" class="rotate-photo">
+                      <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
+                    <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
+                      class="fleft" style="margin-left:10px;margin-top:3px;"
+                      target="_blank" title="current file">
+                      <i class="fa fa-umbrella green"></i>
+                      Medical consent and insurance agreement</a>
+                  </li>
+                  {% endif %}
+                  {% if student.results_file %}
+                  <li>
+                    <input type="checkbox" class="set-val" name="results_file_status"
+                      {% if student.results_file_status == True %}
+                      value="0" checked="checked"
+                      {% else %}
+                      value="1"
+                      {% endif %}
+                      data-pk="{{student.sicklecell_id}}"
+                      data-table="cc_athlete_sicklecell_waiver">
+                    <a href="{{student.results_file}}" class="rotate-photo">
+                      <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
+                    <a href="{{media_url}}files/{{student.results_file}}"
+                      class="fleft" style="margin-left:10px;margin-top:3px;"
+                      target="_blank" title="current file">
+                      <i class="fa fa-moon-o green"></i>
+                      Sickle Cell Test Results</a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </div>
+              <!-- /#athlete_files -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- /#student-medical-history -->
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
     </div>
-    {% else %}
-    <h1>No student found with the ID: {{cid}}</h1>
-    {% endif %}
+    <!-- /.col-lg-6 -->
+    <div class="col-lg-6">
+
+
+
+
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="panel-title">
+            <i class="fa fa-umbrella"></i>
+            Health Insurance
+            <a href="{% url 'student_detail_medium' cid 'print' 'insurance' %}?manid={{manager.id}}"
+              title="Print health insurance">
+              <i class="fa fa-print"></i>
+            </a>
+            <a href="#" data-toggle="modal"
+              data-target="#emailModal"
+              title="Send information via email">
+              <i class="fa fa-envelope"></i>
+            </a>
+            <a href="{% url 'insurance_form_dashboard' stype cid %}"
+              title="Update insurance information">
+              <i class="fa fa-edit"></i>
+            </a>
+          </h5>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div id="cc_student_health_insurance">
+            {{shi}}
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+
+
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="panel-title">
+            <i class="fa fa-edit"></i>
+            Waivers
+            <a href="{% url 'student_detail_medium' cid 'print' 'waivers' %}?manid={{manager.id}}"
+              title="Print waivers">
+              <i class="fa fa-print"></i>
+            </a>
+          </h5>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div id="student-waivers">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="cc_student_meni_waiver-tab"
+                  data-toggle="tab" href="#cc_student_meni_waiver" role="tab"
+                  aria-controls="cc_student_meni_waiver" aria-selected="true">
+                  Meni/Hep B</a>
+              </li>
+              <li class="nav-item"{% if not student.cc_athlete_privacy_waiver %}
+                class="disabled"{% endif %}>
+                <a class="nav-link" id="cc_athlete_privacy_waiver-tab"
+                  data-toggle="tab" href="#cc_athlete_privacy_waiver" role="tab"
+                  aria-controls="cc_athlete_privacy_waiver" aria-selected="false">
+                  Privacy</a>
+              </li>
+              <li class="nav-item"{% if not student.cc_athlete_sicklecell_waiver %}
+                class="disabled"{% endif %}>
+                <a class="nav-link" id="cc_athlete_sicklecell_waiver-tab"
+                  data-toggle="tab" href="#cc_athlete_sicklecell_waiver" role="tab"
+                  aria-controls="cc_athlete_sicklecell_waiver" aria-selected="false">
+                  Sickle Cell</a>
+              </li>
+              <li class="nav-item"{% if not student.cc_athlete_reporting_waiver %}
+                class="disabled"{% endif %}>
+                <a class="nav-link" id="cc_athlete_reporting_waiver-tab"
+                  data-toggle="tab" href="#cc_athlete_reporting_waiver" role="tab"
+                  aria-controls="cc_athlete_reporting_waiver" aria-selected="false">
+                  Reporting</a>
+              </li>
+              <li class="nav-item"{% if not student.cc_athlete_risk_waiver %}
+                class="disabled"{% endif %}>
+                <a class="nav-link" id="cc_athlete_risk_waiver-tab"
+                  data-toggle="tab" href="#cc_athlete_risk_waiver" role="tab"
+                  aria-controls="cc_athlete_risk_waiver" aria-selected="false">
+                  Risk</a>
+              </li>
+            </ul>
+            <!-- /.nav-tabs -->
+            <div class="tab-content" id="student-waivers-content">
+                {% include "dashboard/waivers.inc.html" %}
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- /.student-waivers -->
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.col-lg-6 -->
+  </div>
+  <!-- /.row -->
+  {% else %}
+  <h1>No student found with the ID: {{cid}}</h1>
+  {% endif %}
 </div>
 <!-- /#student-container -->
 <!-- #emailModal -->

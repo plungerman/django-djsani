@@ -1,4 +1,3 @@
-.bg-boot{background-color:#563d7c;}
 .d-none{display:none;}
 #page-wrapper{margin:0;padding:0;}
 .panel-primary > .panel-heading { color: inherit; }
@@ -7,32 +6,29 @@
 .card-body select { width: 100%; }
 .card-header { font-size:1.2em; padding: .25rem .5rem;}
 .card-footer { padding: .25rem .5rem;}
-.card {min-height: 160px;}
 .content-wrapper { margin-top:60px; }
 nav a {color: #cbbde2;}
 nav a:hover {color:#fff;}
 nav .input-group-btn {font-size:1.3em;}
 .navbar-toggler-icon {color:yellow;}
-.dropdown-menu {padding: 5px; background-color:#563d7c;}
-.dropdown, .dropup { padding: 3px; }
+.navbar-nav .dropdown-menu {padding: 5px; background-color:#563d7c;}
+.navbar-nav .dropdown, .dropup { padding: 3px; }
 .success a { color: #007bff; }
 .panel-primary > .panel-heading {color: inherit;}
 .btn {padding: .1rem .2rem;font-size:inherit;}
-dt, dd {line-height:.85em;}
-dt {overflow: hidden; white-space: nowrap;}
-dd {overflow: hidden;white-space: nowrap;}
-dt:after {
-  content: " ..................................................................................";
-  color: #cacaca;
-}
-pre {
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
 #students-toggle{margin:10px 0;}
+/* bootstrap overrides */
+.card-header {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+.bg-boot{background-color:#563d7c;}
+.panel-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
 /* DataTables */
 table.dataTable thead th {
   background: transparent !important;
