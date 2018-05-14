@@ -29,8 +29,6 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
-from datetime import datetime
-
 import Image
 
 # table names are the key, base model classes are the value
@@ -169,7 +167,6 @@ def set_val(request):
     session_var='DJSANI_AUTH', redirect_url=reverse_lazy('access_denied')
 )
 def home(request):
-    now = datetime.now()
     if settings.ACADEMIC_YEAR_LIMBO:
         return render(
             request, 'closed.html',
@@ -179,21 +176,12 @@ def home(request):
     medical_staff = in_group(request.user, 'MedicalStaff')
     if medical_staff:
         request.session['medical_staff'] = True
-    # check for carthage staff: broken in Novell
-    """
-    staff = in_group(request.user, 'carthageStaffStatus')
-    if staff:
-        request.session['staff'] = True
-    """
-    staff = False
     # fetch college id from user object
     cid = request.user.id
     # intialise some things
     my_sports = ''
     student = None
     adult = False
-    if staff and not request.GET.get('adult'):
-        adult = True
     # get academic term
     term = get_term()
     # get student
@@ -202,8 +190,9 @@ def home(request):
         id_rec.id = "{}"
         AND stu_serv_rec.yr = "{}"
         AND UPPER(stu_serv_rec.sess) = "{}"
+        AND cc_student_medical_manager.created_at > "{}"
     '''.format(
-        STUDENT_VITALS, cid, term['yr'], term['sess']
+        STUDENT_VITALS, cid, term['yr'], term['sess'], settings.START_DATE
     )
     engine = get_engine(EARL)
     obj = engine.execute(sql)
@@ -243,7 +232,7 @@ def home(request):
             'manager':manager,
             'sports':sports,
             'my_sports':my_sports,
-            'adult':adult,
+            'adult':adult,'sql':sql
         }
 
         # emergency contact modal form
@@ -258,38 +247,22 @@ def home(request):
     else:
         # could not find student by college_id
         data = {
-            'student':student,'staff':staff,'medical_staff':medical_staff,
-            'sports':SPORTS,'solo':True, 'adult':adult,
+            'student':student,'medical_staff':medical_staff,
+            'sports':SPORTS,'solo':True, 'adult':adult
         }
-        # notify admin
-        '''
-        if not staff:
-            send_mail(
-                request, [settings.MANAGERS[0][1],],
-                u'[Lost] Student: {} {} ({})'.format(
-                    request.user.first_name, request.user.last_name, cid
-                ), request.user.email,
-                'alert_email.html',
-                request, settings.MANAGERS
-            )
-        '''
-
-    # template depends on student or staff
-    template = 'home.html'
-    if staff:
-        template = 'home_staff.html'
-        # emergency contact modal form
-        objs = session.query(AARec).filter_by(id=request.user.id).\
-            filter(AARec.aa.in_(ENS_CODES)).all()
-
-        for o in objs:
-            data[o.aa] = row2dict(o)
-        data['mobile_carrier'] = MOBILE_CARRIER
-        data['relationship'] = RELATIONSHIP
+        # notify managers
+        send_mail(
+            request, [settings.MANAGERS[0][1],],
+            u'[Lost] Student: {} {} ({})'.format(
+                request.user.first_name, request.user.last_name, cid
+            ), request.user.email,
+            'alert_email.html',
+            request
+        )
 
     session.close()
 
-    return render( request, template, data)
+    return render(request, 'home.html', data)
 
 
 @csrf_exempt

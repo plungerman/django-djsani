@@ -117,6 +117,8 @@ SELECT
     cc_student_medical_manager.cc_athlete_reporting_waiver,
     cc_student_medical_manager.cc_athlete_risk_waiver,
     cc_student_medical_manager.cc_athlete_sicklecell_waiver,
+    cc_student_health_insurance.primary_card_front_status,
+    cc_student_health_insurance.primary_card_back_status,
     cc_athlete_sicklecell_waiver.id as sicklecell_id,
     cc_athlete_sicklecell_waiver.updated_at,
     cc_athlete_sicklecell_waiver.waive,
@@ -138,29 +140,54 @@ SELECT
 FROM
     id_rec
 INNER JOIN
-    prog_enr_rec ON  id_rec.id = prog_enr_rec.id
+    prog_enr_rec
+ON
+    id_rec.id = prog_enr_rec.id
 LEFT JOIN
-    cvid_rec     ON  id_rec.id = cvid_rec.cx_id
+    cvid_rec
+ON
+    id_rec.id = cvid_rec.cx_id
 LEFT JOIN
-    cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
+    cc_student_medical_manager
+ON
+    id_rec.id = cc_student_medical_manager.college_id
 LEFT JOIN
-    cc_student_meni_waiver ON cc_student_medical_manager.id = cc_student_meni_waiver.manager_id
+    cc_student_meni_waiver
+ON
+    cc_student_medical_manager.id = cc_student_meni_waiver.manager_id
 LEFT JOIN
-    cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
-    AND
-        (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > "{}")
+    cc_student_health_insurance
+ON
+    cc_student_medical_manager.id = cc_student_health_insurance.manager_id
 LEFT JOIN
-    cc_athlete_privacy_waiver ON cc_student_medical_manager.id = cc_athlete_privacy_waiver.manager_id
+    cc_athlete_sicklecell_waiver
+ON
+    id_rec.id = cc_athlete_sicklecell_waiver.college_id
+AND
+    (cc_athlete_sicklecell_waiver.proof = 1 OR cc_athlete_sicklecell_waiver.created_at > "{}")
 LEFT JOIN
-    cc_athlete_risk_waiver ON cc_student_medical_manager.id = cc_athlete_risk_waiver.manager_id
+    cc_athlete_privacy_waiver
+ON
+    cc_student_medical_manager.id = cc_athlete_privacy_waiver.manager_id
 LEFT JOIN
-    cc_athlete_reporting_waiver ON cc_student_medical_manager.id = cc_athlete_reporting_waiver.manager_id
+    cc_athlete_risk_waiver
+ON
+    cc_student_medical_manager.id = cc_athlete_risk_waiver.manager_id
 LEFT JOIN
-    profile_rec  ON  id_rec.id = profile_rec.id
+    cc_athlete_reporting_waiver
+ON
+    cc_student_medical_manager.id = cc_athlete_reporting_waiver.manager_id
 LEFT JOIN
-    stu_serv_rec    ON  id_rec.id   =   stu_serv_rec.id
+    profile_rec
+ON
+    id_rec.id = profile_rec.id
 LEFT JOIN
-    aa_rec as mobile_rec on
+    stu_serv_rec
+ON
+    id_rec.id = stu_serv_rec.id
+LEFT JOIN
+    aa_rec as mobile_rec
+ON
     (id_rec.id = mobile_rec.id AND mobile_rec.aa = "ENS")
 """.format(START_DATE)
 
