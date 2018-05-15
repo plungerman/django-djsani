@@ -368,7 +368,7 @@ $(function() {
               </td>
               <td>
                 {% if manager.cc_student_health_insurance %}
-                  {% if manager.sitrep_athlete %}
+                  {% if student.primary_card_front_status and student.primary_card_back_status %}
                     <i class="fa fa-check green"></i>
                   {% else %}
                     <i class="fa fa-check yellow"></i>
@@ -526,7 +526,7 @@ $(function() {
               </td>
               <td>
                 {% if manager.physical_evaluation_1 and manager.physical_evaluation_2 %}
-                  {% if manager.sitrep_athlete %}
+                  {% if student.physical_evaluation_status_1 and student.physical_evaluation_status_2 %}
                     <i class="fa fa-check green"></i>
                   {% else %}
                     <i class="fa fa-check yellow"></i>
@@ -542,7 +542,7 @@ $(function() {
               </td>
               <td>
                 {% if manager.medical_consent_agreement %}
-                  {% if manager.sitrep_athlete %}
+                  {% if student.medical_consent_agreement_status %}
                     <i class="fa fa-check green"></i>
                   {% else %}
                     <i class="fa fa-check yellow"></i>
@@ -558,7 +558,7 @@ $(function() {
               </td>
               <td>
                 {% if manager.cc_student_health_insurance %}
-                  {% if manager.sitrep_athlete %}
+                  {% if student.primary_card_front_status and student.primary_card_back_status %}
                     <i class="fa fa-check green"></i>
                   {% else %}
                     <i class="fa fa-check yellow"></i>
