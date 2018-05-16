@@ -8,7 +8,10 @@ sys.path.append('/usr/local/lib/python2.7/dist-packages/')
 sys.path.append('/data2/django_1.7/')
 sys.path.append('/data2/django_projects/')
 sys.path.append('/data2/django_third/')
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings')
+
+import django
+django.setup()
 
 from django.conf import settings
 
@@ -22,7 +25,8 @@ from djsani.core.views import BASES
 
 from djzbar.utils.informix import get_session
 
-from optparse import OptionParser
+import argparse
+
 
 EARL = settings.INFORMIX_EARL
 
@@ -33,9 +37,11 @@ Accepts as input database table name related to medical forms:
 python find_dupes.py --table=cc_student_meni_waiver
 """
 
-parser = OptionParser(description=desc)
-parser.add_option(
+parser = argparse.ArgumentParser(description=desc)
+
+parser.add_argument(
     "-t", "--table",
+    required=True,
     help="Database table",
     dest="table"
 )
@@ -50,13 +56,15 @@ def main():
 
     model = BASES[table]
 
-    print "select all managers"
+    print("select all managers")
     managers = session.query(StudentMedicalManager).all()
     for man in managers:
         try:
             obj = session.query(model).filter_by(college_id=man.college_id).all()
             if len(obj) > 1:
-                print "Manager ID {} has more than 1 rec".format(man.college_id)
+                print("Manager ID {} has more than 1 rec: {}".format(
+                    man.college_id, len(obj)
+                ))
         except:
             pass
 
@@ -67,15 +75,9 @@ def main():
 # shell command line
 ######################
 
-if __name__ == "__main__":
-    (options, args) = parser.parse_args()
-    table = options.table
+if __name__ == '__main__':
 
-    mandatories = ['table']
-    for m in mandatories:
-        if not options.__dict__[m]:
-            print "mandatory option is missing: %s\n" % m
-            parser.print_help()
-            exit(-1)
+    args = parser.parse_args()
+    table = args.table
 
     sys.exit(main())
