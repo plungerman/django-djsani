@@ -172,12 +172,17 @@ def home(request):
             request, 'closed.html',
         )
 
+    # create database session
+    session = get_session(EARL)
+
     # check for medical staff
     medical_staff = in_group(request.user, 'MedicalStaff')
     if medical_staff:
         request.session['medical_staff'] = True
     # fetch college id from user object
     cid = request.user.id
+    # retrieve student manager (or create a new one if none exists)
+    manager = get_manager(session, cid)
     # intialise some things
     my_sports = ''
     student = None
@@ -197,13 +202,9 @@ def home(request):
     engine = get_engine(EARL)
     obj = engine.execute(sql)
     student = obj.fetchone()
-    # create database session
-    session = get_session(EARL)
     if student:
         # save some things to Django session:
         request.session['gender'] = student.sex
-        # retrieve student manager
-        manager = get_manager(session, cid)
 
         # sports needs a python list
         if manager.sports:
