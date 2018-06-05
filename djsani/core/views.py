@@ -174,13 +174,13 @@ def home(request):
 
     # create database session
     session = get_session(EARL)
-
+    user = request.user
     # check for medical staff
-    medical_staff = in_group(request.user, 'MedicalStaff')
+    medical_staff = in_group(user, 'MedicalStaff')
     if medical_staff:
         request.session['medical_staff'] = True
     # fetch college id from user object
-    cid = request.user.id
+    cid = user.id
     # retrieve student manager (or create a new one if none exists)
     manager = get_manager(session, cid)
     # intialise some things
@@ -246,20 +246,22 @@ def home(request):
         data['relationship'] = RELATIONSHIP
         data['solo'] = True
     else:
-        # could not find student by college_id
-        data = {
-            'student':student,'medical_staff':medical_staff,
-            'sports':SPORTS,'solo':True, 'adult':adult
-        }
-        # notify managers
-        send_mail(
-            request, [settings.MANAGERS[0][1],],
-            u'[Lost] Student: {} {} ({})'.format(
-                request.user.first_name, request.user.last_name, cid
-            ), request.user.email,
-            'alert_email.html',
-            request
-        )
+        if not in_group(user, 'carthageStaffStatus') and \
+          not in_group(user, 'carthageFacultyStatus'):
+            # could not find student by college_id
+            data = {
+                'student':student,'medical_staff':medical_staff,
+                'sports':SPORTS,'solo':True, 'adult':adult
+            }
+            # notify managers
+            send_mail(
+                request, [settings.MANAGERS[0][1],],
+                u'[Lost] Student: {} {} ({})'.format(
+                    user.first_name, user.last_name, cid
+                ), user.email,
+                'alert_email.html',
+                request
+            )
 
     session.close()
 
