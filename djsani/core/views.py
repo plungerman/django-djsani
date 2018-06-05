@@ -172,6 +172,8 @@ def home(request):
             request, 'closed.html',
         )
 
+    # for when faculty/staff sign in here or not student found
+    data = {}
     # create database session
     session = get_session(EARL)
     user = request.user
