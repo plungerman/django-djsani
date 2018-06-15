@@ -14,17 +14,17 @@ from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import ADDITION, CHANGE
 from djsani.insurance.models import StudentHealthInsurance
-from djsani.emergency.models import AARec
 from djsani.medical_history.waivers.models import Meni, Privacy, Reporting
 from djsani.medical_history.waivers.models import Risk, Sicklecell
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
 
-from djmaidez.core.models import ENS_CODES, MOBILE_CARRIER, RELATIONSHIP
+from djmaidez.core.models import (
+    ENS_CODES, ENS_FIELDS, MOBILE_CARRIER, RELATIONSHIP
+)
 from djzbar.utils.informix import get_engine, get_session
 from djzbar.decorators.auth import portal_auth_required
 from djtools.utils.date import calculate_age
-from djtools.utils.database import row2dict
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from djtools.fields import TODAY
@@ -239,11 +239,21 @@ def home(request):
         }
 
         # emergency contact modal form
-        objs = session.query(AARec).filter_by(id=cid).\
-            filter(AARec.aa.in_(ENS_CODES)).all()
+
+        sql = 'SELECT * FROM aa_rec WHERE aa in {} AND id="{}"'.format(
+            ENS_CODES, cid
+        )
+        objs = session.execute(sql)
 
         for o in objs:
-            data[o.aa] = row2dict(o)
+            row = {}
+            for field in ENS_FIELDS:
+                try:
+                    value = getattr(o, field).decode('cp1252').encode('utf-8')
+                except:
+                    value = getattr(o, field)
+                row[field] = value
+            data[o.aa] = row
         data['mobile_carrier'] = MOBILE_CARRIER
         data['relationship'] = RELATIONSHIP
         data['solo'] = True

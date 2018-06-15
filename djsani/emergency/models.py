@@ -4,6 +4,7 @@ from sqlalchemy import Integer, String
 
 Base = declarative_base()
 
+
 class AARec(Base):
     __tablename__ = 'aa_rec'
 
