@@ -4,8 +4,6 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.template import Context, RequestContext, loader
 
-from djsani.emergency.models import AARec
-
 from djzbar.utils.informix import get_session
 from djmaidez.core.models import ENS_CODES, MOBILE_CARRIER, RELATIONSHIP
 
