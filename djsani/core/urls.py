@@ -51,6 +51,10 @@ urlpatterns = [
     url(
         r'^dashboard/', include("djsani.dashboard.urls")
     ),
+    # emergency contact manager
+    url(
+        r'^emergency/', include("djsani.emergency.urls")
+    ),
     # insurance forms
     url(
         r'^insurance/', include("djsani.insurance.urls")

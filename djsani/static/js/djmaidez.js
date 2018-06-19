@@ -12,7 +12,7 @@ function makeDialog() {
         buttons: { "Save": function(){
             var uid = GetUserID();
             if(isValid() && !isNaN(uid)) {
-                $.getJSON('/emergency/contact/save?callback=?', {
+                $.getJSON('/campus-life/medical/forms/emergency/save/?callback=?', {
                     MIS1_NAME: $("#MIS1_NAME").val(),
                     MIS1_REL: $("#MIS1_REL").val(),
                     MIS1_PHONE1: $("#MIS1_PHONE1").val(),
@@ -39,8 +39,8 @@ function makeDialog() {
                     ICE2_REL: $("#ICE2_REL").val(),
                     DJSANI: "True"
                 });
-                // set green checkmark
-                $(".djsani").html('<i class="fa fa-check green"></i>');
+                // set yellow checkmark
+                $(".djsani").html('<i class="fa fa-check yellow"></i>');
             }
         }}
     });
