@@ -19,6 +19,9 @@ form textarea {width: 300px !important;height:90px !important;}
 .form select {width:200px;}
 .form .bootstrap-select { width: 350px; }
 .form ul li.error { display:none !important;}
+input[type="radio"]{
+    -webkit-appearance: radio;
+}
 .ui-datepicker-calendar { display: none; }
 .center{text-align:center;}
 .red, .glyphicon {color:#800;}
