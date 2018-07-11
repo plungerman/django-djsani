@@ -319,7 +319,7 @@ $(function() {
   </li>
   {% if user.is_superuser %}
   <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Administration">
-    <a class="nav-link" href="/campus-life/medical/forms/admin/">
+    <a class="nav-link" href="{% url 'admin:index' %}">
       <i class="fa fa-fw fa fa-cog" aria-hidden="true"></i>
       <span class="nav-link-text">Administration</span>
     </a>
