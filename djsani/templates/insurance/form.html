@@ -125,7 +125,7 @@ $(function() {
         }
     });
     $("[id$='policy_type']").change(function() {
-        if( $(this).val()=="Gov" || $(this).val()=="Mil" ) {
+        if( $(this).val()=="Gov" ) {
             $.fancybox.open([{
                 href : '#athlete-warning'
             }]);
