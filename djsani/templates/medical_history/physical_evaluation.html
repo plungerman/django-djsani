@@ -70,9 +70,7 @@
             </li>
           </ol>
         </fieldset>
-        {% if not user.is_staff %}
         {% include "form_submit.inc.html" %}
-        {% endif %}
     </form>
 </div>
 {% endblock %}
