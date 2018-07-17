@@ -22,7 +22,7 @@ form textarea {width: 300px !important;height:90px !important;}
 input[type="radio"]{
     -webkit-appearance: radio;
 }
-.ui-datepicker-calendar { display: none; }
+/* .ui-datepicker-calendar { display: none; } */
 .center{text-align:center;}
 .red, .glyphicon {color:#800;}
 .yellow, .glyphicon-ok {color:#c5b32f;}
