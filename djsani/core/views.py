@@ -177,10 +177,6 @@ def home(request):
     # create database session
     session = get_session(EARL)
     user = request.user
-    # check for medical staff
-    medical_staff = in_group(user, 'MedicalStaff')
-    if medical_staff:
-        request.session['medical_staff'] = True
     # fetch college id from user object
     cid = user.id
     # retrieve student manager (or create a new one if none exists)
@@ -262,8 +258,7 @@ def home(request):
           not in_group(user, 'carthageFacultyStatus'):
             # could not find student by college_id
             data = {
-                'student':student,'medical_staff':medical_staff,
-                'sports':SPORTS,'solo':True, 'adult':adult
+                'student':student,'sports':SPORTS,'solo':True,'adult':adult
             }
             # notify managers
             send_mail(
