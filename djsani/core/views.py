@@ -68,10 +68,14 @@ def set_val(request):
 
     staff = in_group(request.user, 'MedicalStaff')
 
+    # we need a table name
+    table = request.POST.get('table')
+    if not table:
+        return HttpResponse("Error: no table name")
     # we need a college ID to insure no funny stuff
     cid = request.POST.get('college_id')
     if not cid:
-        return HttpResponse("Error")
+        return HttpResponse("Error: no college ID")
     elif not staff and int(cid) != request.user.id:
         return HttpResponse("Not staff")
     else:
@@ -83,8 +87,6 @@ def set_val(request):
         else:
             value = request.POST.get('value')
 
-        # table name
-        table = request.POST.get('table')
         # primary key
         pk = request.POST.get('pk')
         # create our dictionary to hold name/value pairs
