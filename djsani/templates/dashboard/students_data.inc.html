@@ -2,33 +2,37 @@
   <div class="card-body" style="margin-bottom:20px">
     <table class="dataTable display table-bordered table-hover" id="students-data">
         <thead>
-            <tr>
-                <th style="width:55px;">
-                  <i class="fa fa-thumbs-up green" title="Student Status"></i>
-                  <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
-                </th>
-                <th>Name</th>
-                <th class="d-none">ID</th>
-                <th class="d-none">Email</th>
-                <th>
-                <i class="fa fa-ambulance green" title="Emergency contact"></i>
-                </th>
-                <th><i class="fa fa-bug green" title="Immunization"></i></th>
-                <th title="Insurance"><i class="fa fa-umbrella green"></i></th>
-                <th title="Meningococcal meningitis/Hepatitis B response">
-                    Meni
-                </th>
-                <th title="General medical history">Gen hist</th>
-                <th title="Athlete Medical History / Physical Evaluation / Medial consent and insurance agreement">Ath hist</th>
-                <th title="Privacy waiver">
-                  <i class="fa fa-unlock" aria-hidden="true"></i>
-                </th>
-                <th title="Sickle cell waiver"><i class="fa fa-moon-o green"></i> cell</th>
-                <th title="CCIW Injury and Illness Reporting Acknowledgement waiver">
-                    Rprtng
-                </th>
-                <th title="Assumption of risk waiver">Risk</th>
-            </tr>
+          <tr>
+            <th style="width:55px;">
+              <i class="fa fa-thumbs-up green" title="Student Status"></i>
+              <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
+            </th>
+            <th>Name</th>
+            <th class="d-none">ID</th>
+            <th class="d-none">Email</th>
+            <th>
+              <i class="fa fa-ambulance green" title="Emergency contact"></i>
+            </th>
+            <th><i class="fa fa-bug green" title="Immunization"></i></th>
+            <th title="Insurance"><i class="fa fa-umbrella green"></i></th>
+            <th title="Meningococcal meningitis/Hepatitis B response">
+              Meni
+            </th>
+            <th title="General medical history">Gen hist</th>
+            <th title="Athlete Medical History / Physical Evaluation / Medial consent and insurance agreement">
+              Ath hist
+            </th>
+            <th title="Privacy waiver">
+              <i class="fa fa-unlock" aria-hidden="true"></i>
+            </th>
+            <th title="Sickle cell waiver"><i class="fa fa-moon-o green"></i>
+              cell
+            </th>
+            <th title="CCIW Injury and Illness Reporting Acknowledgement waiver">
+              Rprtng
+            </th>
+            <th title="Assumption of risk waiver">Risk</th>
+          </tr>
         </thead>
         <tbody>
         {% for s in students %}
@@ -60,11 +64,11 @@
                 </td>
                 <td class="{{s.adult}} student-name" style="text-align:left;">
                     <a href="{% url 'student_detail' s.id %}">
-                        {{s.lastname}}, {{s.firstname}}
+                      {{s.lastname}}, {{s.firstname}}
                     </a>
                     {% if s.athlete %}
                     <span style="float:right;margin-left:3px;">
-                        <i class="fa fa-star green"></i>
+                      <i class="fa fa-star green"></i>
                     </span>
                     {% endif %}
                 </td>

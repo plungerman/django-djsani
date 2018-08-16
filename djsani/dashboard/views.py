@@ -28,92 +28,85 @@ from djmaidez.core.models import ENS_CODES
 
 EARL = settings.INFORMIX_EARL
 
-@group_required('MedicalStaff')
-def home(request):
-    """
-    dashboard home with a list of students
-    """
-    students = None
-    # get academic term
-    term = get_term()
-    sql = ''' {}
-        AND stu_serv_rec.yr = "{}"
-        AND stu_serv_rec.sess = "{}"
-        AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")
-        ORDER BY lastname
-    '''.format(
-        STUDENTS_ALPHA, term["yr"], term["sess"]
-    )
-
-    objs = do_esql(sql,key=settings.INFORMIX_DEBUG,earl=EARL)
-    if objs:
-        students = [dict(row) for row in objs.fetchall()]
-        for s in students:
-            adult = "minor"
-            if s["birth_date"]:
-                age = calculate_age(s["birth_date"])
-                if age > 17:
-                    adult = "adult"
-            s["adult"] = adult
-    return render(
-        request, "dashboard/home.html",
-        {"students":students,"sports":SPORTS}
-    )
 
 def get_students(request):
     """
     ajax POST returns a list of students
     """
-    if request.POST and (in_group(request.user,"MedicalStaff") \
-      or request.user.is_superuser):
-        sport = request.POST.get("sport")
-        # get academic term
-        term = get_term()
+
+    # get academic term
+    term = get_term()
+
+    if request.POST:
+      if in_group(request.user,'MedicalStaff') or request.user.is_superuser:
+        sport = request.POST.get('sport')
         sql = ''' {}
             AND stu_serv_rec.yr = "{}"
             AND stu_serv_rec.sess = "{}"
         '''.format(
             STUDENTS_ALPHA, term["yr"], term["sess"]
         )
-        c = request.POST["class"]
+        c = request.POST['class']
         if c in ['0','1','2','3','4']:
             if c == '1':
-                sql += "AND cc_student_medical_manager.sitrep = 1"
+              sql += "AND cc_student_medical_manager.sitrep = 1"
             elif c == '0':
-                sql += "AND cc_student_medical_manager.sitrep = 0"
+              sql += "AND cc_student_medical_manager.sitrep = 0"
             elif c == '3':
-                sql += "AND cc_student_medical_manager.athlete = 1"
+              sql += "AND cc_student_medical_manager.athlete = 1"
             elif c == '4':
-                sql += "AND cc_student_health_insurance.primary_policy_type='Gov'"
+              sql += "AND cc_student_health_insurance.primary_policy_type='Gov'"
             else:
-                sql += "AND cc_student_medical_manager.id IS NULL"
+              sql += "AND cc_student_medical_manager.id IS NULL"
         else:
             sql += "AND prog_enr_rec.cl IN ({})".format(c)
         if sport and sport != '0':
-            sql += """
-                AND cc_student_medical_manager.sports like '%%%s%%'
-            """ % sport
-        sql += " ORDER BY lastname"
-
-        objs = do_esql(
-            sql,key=settings.INFORMIX_DEBUG,earl=EARL
-        )
-        students = None
-        if objs:
-            students = [dict(row) for row in objs.fetchall()]
-            for s in students:
-                adult = "minor"
-                if s["birth_date"]:
-                    age = calculate_age(s["birth_date"])
-                    if age > 17:
-                        adult = "adult"
-                s["adult"] = adult
-        return render(
-            request, "dashboard/students_data.inc.html",
-            {"students":students,"sports":SPORTS,}
-        )
-    else:
+            sql += '''
+                AND cc_student_medical_manager.sports like "%{}%"
+            '''.format(sport)
+        sql += ' ORDER BY lastname'
+        template = 'dashboard/students_data.inc.html'
+      else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
+    else:
+        template = 'dashboard/home.html'
+        sql = ''' {}
+            AND stu_serv_rec.yr = "{}"
+            AND stu_serv_rec.sess = "{}"
+            AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")
+            ORDER BY lastname
+        '''.format(
+            STUDENTS_ALPHA, term['yr'], term['sess']
+        )
+
+    objs = do_esql(
+        sql, key=settings.INFORMIX_DEBUG, earl=EARL
+    )
+
+    students = None
+    if objs:
+        students = [dict(row) for row in objs.fetchall()]
+        for s in students:
+            adult = 'minor'
+            if s['birth_date']:
+                age = calculate_age(s['birth_date'])
+                if age > 17:
+                    adult = 'adult'
+            s['adult'] = adult
+
+    return render(
+        request, template, {'students':students, 'sports':SPORTS,}
+    )
+
+
+@group_required('MedicalStaff')
+def home(request):
+    """
+    dashboard home with a list of students
+    """
+
+    return get_students(request)
+
 
 def panels(request, session, mod, manager,content,gender=None):
     """
@@ -138,6 +131,7 @@ def panels(request, session, mod, manager,content,gender=None):
     return t.render(
         {'data':data,'form':form,'content':content,'manager':manager}, request
     )
+
 
 @group_required('MedicalStaff')
 def student_detail(request, cid=None, medium=None, content=None):

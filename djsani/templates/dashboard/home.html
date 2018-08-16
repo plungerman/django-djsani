@@ -275,7 +275,8 @@ $(function() {
 {% block navbar-top-links %}
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <form class="form-inline my-2 my-lg-0 mr-sm-3 mr-lg-3" action="{% url 'search_advanced' %}" method="post">
+      <form class="form-inline my-2 my-lg-0 mr-sm-3 mr-lg-3" method="post"
+        action="{% url 'search_advanced' %}">
         {% csrf_token %}
         <div class="input-group">
           <input class="form-control" name="student" placeholder="Last name or ID..." type="text">
@@ -311,40 +312,46 @@ $(function() {
 {% endblock navbar-top-links %}
 {% block navbar-sidenav %}
 <ul class="navbar-nav navbar-sidenav">
-  <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <li class="nav-item" data-toggle="tooltip" data-placement="right"
+    title="Dashboard">
     <a class="nav-link" href="{% url 'dashboard_home' %}">
       <i class="fa fa-fw fa fa-dashboard" aria-hidden="true"></i>
       <span class="nav-link-text">Dashboard</span>
     </a>
   </li>
   {% if user.is_superuser %}
-  <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Administration">
+  <li class="nav-item" data-toggle="tooltip" data-placement="right"
+    title="Administration">
     <a class="nav-link" href="{% url 'admin:index' %}">
       <i class="fa fa-fw fa fa-cog" aria-hidden="true"></i>
       <span class="nav-link-text">Administration</span>
     </a>
   </li>
   {% endif %}
-  <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Medical Forms">
+  <li class="nav-item" data-toggle="tooltip" data-placement="right"
+    title="Medical Forms">
     <a class="nav-link" href="{% url 'home' %}">
       <i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>
       <span class="nav-link-text">Medical Forms</span>
     </a>
   </li>
-  <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Carthage Home">
+  <li class="nav-item" data-toggle="tooltip" data-placement="right"
+    title="Carthage Home">
     <a class="nav-link" href="https://www.carthage.edu/">
       <i class="fa fa-fw fa fa-home" aria-hidden="true"></i>
       <span class="nav-link-text">Carthage Home</span>
     </a>
   </li>
-  <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My.Carthage">
+  <li class="nav-item" data-toggle="tooltip" data-placement="right"
+    title="My.Carthage">
     <a class="nav-link" href="https://my.carthage.edu/">
       <i class="fa fa-fw fa fa-lemon-o" aria-hidden="true"></i>
       <span class="nav-link-text">My.Carthage</span>
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link text-center" data-toggle="tooltip" data-placement="right" title="Expand Menu" id="sidenavToggler">
+    <a class="nav-link text-center" data-toggle="tooltip"
+      data-placement="right" title="Expand Menu" id="sidenavToggler">
       <i class="fa fa-fw fa-angle-double-left" aria-hidden="true"></i>
     </a>
   </li>
@@ -407,7 +414,9 @@ $(function() {
                                     Have government insurance
                                 </option>
                             </select>
-                            <label style="margin:0 10px;">Participating in</label>
+                            <label style="margin:0 10px;">
+                              Participating in
+                            </label>
                             <select name="sport" class="form-control">
                             <option value="">----Select----</option>
                             {% for s in sports %}
