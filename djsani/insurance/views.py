@@ -24,10 +24,11 @@ from os.path import join
 
 EARL = settings.INFORMIX_EARL
 
+
 @login_required
 def form(request, stype, cid=None):
     medical_staff=False
-    staff = in_group(request.user, "MedicalStaff")
+    staff = in_group(request.user, 'MedicalStaff')
     if not cid:
         cid = request.user.id
     else:
@@ -43,9 +44,9 @@ def form(request, stype, cid=None):
     # get student
     sql = ''' {}
         WHERE
-        id_rec.id = '{}'
-        AND stu_serv_rec.yr = '{}'
-        AND stu_serv_rec.sess = '{}'
+        id_rec.id = "{}"
+        AND stu_serv_rec.yr = "{}"
+        AND stu_serv_rec.sess = "{}"
     '''.format(
         STUDENT_VITALS, cid, term['yr'], term['sess']
     )

@@ -43,26 +43,39 @@ $(function() {
     {% endifusergroup %}
     $('#id_opt_out').change(function() {
         if($(this).is(":checked")) {
-            {% if manager.athlete == 1 %}
+            {% if manager.athlete == True %}
               {% ifusergroup MedicalStaff %}
-              $("#tertiary-insurance-header").text("Athlete Insurance");
-              $('#insurance-card').slideUp(200);
-              $('#tertiary-form').slideDown(200);
+                $("#tertiary-insurance-header").text("Athlete Insurance");
+                $('#insurance-card').slideUp(200);
+                $('#tertiary-form').slideDown(200);
               {% else %}
-              $.fancybox.open([{
-                href : '#athlete-warning'
-              }]);
-              $('#tertiary-form').slideUp(200);
+                $.fancybox.open([{
+                  href : '#athlete-warning'
+                }]);
+                $('#tertiary-form').slideDown(200);
+                $('#insurance-card').slideDown(200);
+                $('#tertiary-box').slideUp(200);
+                $('#id_tertiary_policy_holder').val('{{student.firstname}} {{student.lastname}}');
+                $('#id_tertiary_dob').val('{{student.birth_date|date:"m/d/Y"}}');
+                $('#id_tertiary_company').val('US Fire Insurance Company');
+                $('#id_tertiary_phone').val('877-497-4980');
+                $('#id_tertiary_member_id').val('{{student.id}}');
+                $('#id_tertiary_group_no').val('US950576');
+                $('#id_tertiary_policy_address').val('NAHGA\nPO BOX 189\nBridgton, ME 04009');
+                $('#id_tertiary_policy_type').val('PPO');
+                $('#id_tertiary_policy_state').val('ME');
               {% endifusergroup %}
             {% else %}
               $('#tertiary-form').slideUp(200);
+              $('#primary-form').slideUp(200);
+              $('#tertiary-box').slideUp(200);
             {% endif %}
-            $('#tertiary-box').slideUp(200);
-            $('#primary-form').slideUp(200);
             $('#secondary-box').slideUp(200);
             $('#secondary-form').slideUp(200);
         }else{
+            {% if manager.athlete != True %}
             $("#tertiary-insurance-header").text("Tertiary Insurance");
+            {% endif %}
             $('#primary-form').slideDown(200);
             $('#insurance-card').slideDown(200);
             $('#secondary-box').slideDown(200);
@@ -149,7 +162,7 @@ $(function() {
         }
     });
     {% if oo == True %}
-        {% if manager.athlete == 1 %}
+        {% if manager.athlete == True %}
             {% if not tertiary %}
               {% ifusergroup MedicalStaff %}
               {% else %}
@@ -159,15 +172,19 @@ $(function() {
                {% endifusergroup %}
             {% endif %}
             $("#tertiary-insurance-header").text("Athlete Insurance");
-            $('#insurance-card').slideUp(200);
             $('#tertiary-form').slideDown(200);
         {% else %}
             $('#tertiary-form').slideUp(200);
+            $('#insurance-card').slideUp(200);
         {% endif %}
+        $('#secondary-box').slideUp(200);
+        $('#secondary-form').slideUp(200);
         $('#tertiary-box').slideUp(200);
+        {% if manager.athlete != True %}
         $('#primary-form').slideUp(200);
         $('#secondary-box').slideUp(200);
         $('#secondary-form').slideUp(200);
+        {% endif %}
         $("#id_opt_out").prop("checked", true);
     {% else %}
         {% if secondary == None %}
@@ -194,7 +211,7 @@ $(function() {
             $('#tertiary-form').slideDown(200);
         {% endif %}
     {% endif %}
-    {% if manager.athlete == 1 %}
+    {% if manager.athlete == True %}
         {% if not form.primary_card_front.value %}
         $("#id_primary_card_front").addClass("required");
         {% endif %}
@@ -255,7 +272,7 @@ $(function() {
       {% csrf_token %}
       <input id="id_update" type="hidden"
         value="{{update|default:''}}" name="update">
-      <div class="large-5 medium-12 small-12">
+      <div class="large-12 medium-12 small-12">
         <label for="id_opt_out">
           <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
           <span style="color:#f00;">
@@ -264,7 +281,7 @@ $(function() {
           </span>
         </label>
       </div>
-      <div class="large-5 medium-12 small-12">
+      <div class="large-12 medium-12 small-12">
         <div id="secondary-box">
           <label for="id_second" style="display:block;">
             <input id="id_second" type="checkbox"
