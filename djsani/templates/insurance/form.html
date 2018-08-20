@@ -67,9 +67,9 @@ $(function() {
               {% endifusergroup %}
             {% else %}
               $('#tertiary-form').slideUp(200);
-              $('#primary-form').slideUp(200);
               $('#tertiary-box').slideUp(200);
             {% endif %}
+            $('#primary-form').slideUp(200);
             $('#secondary-box').slideUp(200);
             $('#secondary-form').slideUp(200);
         }else{
@@ -174,17 +174,13 @@ $(function() {
             $("#tertiary-insurance-header").text("Athlete Insurance");
             $('#tertiary-form').slideDown(200);
         {% else %}
+            $('#secondary-box').slideUp(200);
+            $('#secondary-form').slideUp(200);
             $('#tertiary-form').slideUp(200);
             $('#insurance-card').slideUp(200);
         {% endif %}
-        $('#secondary-box').slideUp(200);
-        $('#secondary-form').slideUp(200);
-        $('#tertiary-box').slideUp(200);
-        {% if manager.athlete != True %}
         $('#primary-form').slideUp(200);
-        $('#secondary-box').slideUp(200);
-        $('#secondary-form').slideUp(200);
-        {% endif %}
+        $('#tertiary-box').slideUp(200);
         $("#id_opt_out").prop("checked", true);
     {% else %}
         {% if secondary == None %}

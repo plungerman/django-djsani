@@ -26,7 +26,7 @@
         {% block proof_checkbox %}
         <div class="large-1 col-lg-1">
             <input id="proof" type="checkbox" name="proof"
-            {% if student.proof %}
+            {% if student.proof or student.proof == 1 %}
                 checked="checked" value="0" class="set-val"
             {% else %}
                 value="1"
@@ -78,7 +78,7 @@
         </div>
         <div class="large-1 col-lg-1">
             <input id="waive" type="checkbox" name="waive" class="set-val"
-            {% if student.waive %}
+            {% if student.waive or student.waiver == 1 %}
                 checked="checked" value="0"
             {% else %}
                 value="1"

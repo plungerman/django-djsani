@@ -92,21 +92,24 @@ def set_val(request):
         # create our dictionary to hold name/value pairs
         dic = { name: value }
         if table == 'cc_athlete_sicklecell_waiver':
+            # set value = 1 if field name = 'waive'or
+            # if it = 'results' since that value is
+            # either Positive or Negative
             if name == 'results':
                 dic['proof'] = 1
                 dic['waive'] = 0
+                value = 1
             elif name == 'waive':
                 dic['proof'] = 0
-                dic['waive'] = 1
+                dic['waive'] = value
+                dic['results'] = ''
+            elif name == 'proof':
+                dic['results'] = ''
         # create database session
         session = get_session(EARL)
         # retrieve student manager
         man = get_manager(session, cid)
 
-        # set value = 1 if field name = 'results' since that value is
-        # either Positive or Negative
-        if table == 'cc_athlete_sicklecell_waiver' and name == 'results':
-            value = 1
         if WAIVERS.get(table) and not pk:
             # create new waiver
             dic['college_id'] = cid
@@ -126,12 +129,8 @@ def set_val(request):
                     content_type='text/plain; charset=utf-8'
                 )
             else:
-                if name == 'athlete' and value == '0':
+                if name == 'athlete' and str(value) == '0':
                     dic['sports'] = ''
-                # remove the test results if a staff member is changing
-                # from proof to waive or nothing
-                if name == 'proof' and value == '0':
-                    dic['results'] = ''
                 # update existing object
                 for key, value in dic.iteritems():
                     setattr(obj, key, value)

@@ -81,8 +81,8 @@ def form(request, stype, wtype):
                 )
                 s = model(**data)
                 session.add(s)
-                # update the manager
-                setattr(manager, table, True)
+            # update the manager
+            setattr(manager, table, True)
 
             session.commit()
             session.close()
