@@ -22,7 +22,8 @@ from os.path import join
 @login_required
 def form(request, stype, wtype):
     cid = request.user.id
-    table = "cc_{}_{}_waiver".format(stype, wtype)
+    # user student type and waiver type to build table name
+    table = 'cc_{}_{}_waiver'.format(stype, wtype)
 
     # create database session
     session = get_session(settings.INFORMIX_EARL)
@@ -31,11 +32,11 @@ def form(request, stype, wtype):
     manager = get_manager(session, cid)
     # form name
     fname = str_to_class(
-        "djsani.medical_history.waivers.forms",
-        "{}Form".format(wtype.capitalize())
+        'djsani.medical_history.waivers.forms',
+        '{}Form'.format(wtype.capitalize())
     )
     sicklecell = None
-    if wtype == "sicklecell":
+    if wtype == 'sicklecell':
         sicklecell = session.query(Sicklecell).\
             filter_by(college_id=cid).filter(\
                 (Sicklecell.proof == 1) | \
@@ -45,8 +46,9 @@ def form(request, stype, wtype):
     # check to see if they already submitted this form.
     # redirect except for sicklecell waiver
     # or wtype does not return a form class (fname)
-    if (manager and getattr(manager, table, None) and not sicklecell) or not fname:
-        return HttpResponseRedirect( reverse_lazy("home") )
+    if (manager and getattr(manager, table, None) and wtype != 'sicklecell') \
+      or not fname:
+        return HttpResponseRedirect( reverse_lazy('home') )
 
     if request.method=='POST':
         form = fname(request.POST, request.FILES)
@@ -55,8 +57,8 @@ def form(request, stype, wtype):
 
             # deal with file uploads
             if request.FILES.get('results_file'):
-                folder = "sicklecell/{}/{}".format(
-                    cid, manager.created_at.strftime("%Y%m%d%H%M%S%f")
+                folder = 'sicklecell/{}/{}'.format(
+                    cid, manager.created_at.strftime('%Y%m%d%H%M%S%f')
                 )
                 p = join(settings.UPLOADS_DIR, folder)
                 phile = handle_uploaded_file(
@@ -66,15 +68,15 @@ def form(request, stype, wtype):
 
             if sicklecell:
                 # update student's sicklecell waiver record
-                data["updated_at"] = datetime.datetime.now()
+                data['updated_at'] = datetime.datetime.now()
                 for key, value in data.iteritems():
                     setattr(sicklecell, key, value)
             else:
                 # insert
-                data["college_id"] = cid
-                data["manager_id"] = manager.id
+                data['college_id'] = cid
+                data['manager_id'] = manager.id
                 model = str_to_class(
-                    "djsani.medical_history.waivers.models",
+                    'djsani.medical_history.waivers.models',
                     wtype.capitalize()
                 )
                 s = model(**data)
@@ -86,7 +88,7 @@ def form(request, stype, wtype):
             session.close()
 
             return HttpResponseRedirect(
-                reverse_lazy("waiver_success")
+                reverse_lazy('waiver_success')
             )
     else:
         form = fname
@@ -95,14 +97,14 @@ def form(request, stype, wtype):
 
     # check for a valid template or redirect home
     try:
-        template = "medical_history/waivers/{}_{}.html".format(stype, wtype)
-        os.stat(os.path.join(settings.ROOT_DIR, "templates", template))
+        template = 'medical_history/waivers/{}_{}.html'.format(stype, wtype)
+        os.stat(os.path.join(settings.ROOT_DIR, 'templates', template))
     except:
-        return HttpResponseRedirect( reverse_lazy("home") )
+        return HttpResponseRedirect( reverse_lazy('home') )
 
     return render(
         request, template,
         {
-            "form":form,"next_year":NEXT_YEAR,"student":sicklecell
+            'form':form,'next_year':NEXT_YEAR,'student':sicklecell
         }
     )
