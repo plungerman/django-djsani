@@ -166,6 +166,7 @@ SERVER_EMAIL = ''
 SERVER_MAIL=''
 # app settings
 INSURANCE_RECIPIENTS = []
+HOUSING_EMAIL_LIST = []
 DEFAULT_HASH = ""
 DEFAULT_CID = ""
 START_DATE = datetime(NOW.year, 6, 1)
