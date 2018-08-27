@@ -263,12 +263,11 @@ def home(request):
             }
             # notify managers
             send_mail(
-                request, [settings.MANAGERS[0][1],],
+                request, settings.HOUSING_EMAIL_LIST,
                 u'[Lost] Student: {} {} ({})'.format(
                     user.first_name, user.last_name, cid
-                ), user.email,
-                'alert_email.html',
-                request
+                ), user.email, 'alert_email.html', request,
+                [settings.MANAGERS[0][1],]
             )
 
     session.close()
