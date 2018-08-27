@@ -108,7 +108,7 @@ def form(request, stype, cid=None):
             oo = form.get('opt_out')
             if oo:
                 if manager.athlete:
-                    if not staff:
+                    if not medical_staff:
                         # alert email to staff
                         if settings.DEBUG:
                             TO_LIST = [settings.SERVER_EMAIL,]
