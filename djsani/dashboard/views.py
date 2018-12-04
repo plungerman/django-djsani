@@ -31,7 +31,7 @@ EARL = settings.INFORMIX_EARL
 
 def get_students(request):
     """
-    ajax POST returns a list of students
+    POST or GET: returns a list of students
     """
 
     # get academic term

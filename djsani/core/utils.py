@@ -26,6 +26,7 @@ def get_content_type(session, name):
         cache.set(name, ct, None)
     return ct
 
+
 def _doop(session, mod, man):
     """
     check for an object and duplicate it.
@@ -47,15 +48,17 @@ def _doop(session, mod, man):
         session.flush()
     return obj
 
+
 def get_term():
     sd = settings.START_DATE
-    r = "RA"
+    r = 'RA'
     year = TODAY.year
-    if (TODAY.month < sd.month or TODAY.month == 12):
-        r = "RC"
+    if ((TODAY.month < sd.month) or (TODAY.month == 12 and TODAY.day > 15)):
+        r = 'RC'
         if TODAY.month == 12:
-            year = year+1
-    return {"yr": year, "sess":r}
+            year = year + 1
+    return {'yr': year, 'sess':r}
+
 
 def get_manager(session, cid):
     """
