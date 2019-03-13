@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 from djtools.fields import REQ_CSS
 
@@ -8,6 +9,8 @@ BINARY_CHOICES = (
     ('No', 'No'),
     ('Yes', 'Yes'),
 )
+ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
+
 
 class StudentMedicalHistoryForm(forms.Form):
     """
@@ -917,6 +920,7 @@ class PhysicalEvaluationForm(forms.Form):
         help_text = """
             Photo or scan of your physical evaluation form signed by your doctor
         """,
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=True
     )
     physical_evaluation_2 = forms.FileField(
@@ -924,6 +928,7 @@ class PhysicalEvaluationForm(forms.Form):
         help_text = """
             Photo or scan of your physical evaluation form signed by your doctor
         """,
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=True
     )
 
@@ -935,6 +940,7 @@ class MedicalConsentAgreementForm(forms.Form):
             Photo or scan of your signed medical consent and
             medical insurance agreement form
         """,
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=True
     )
 

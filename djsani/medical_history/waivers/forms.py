@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 BINARY_CHOICES = (
     ('Positive', 'Positive'),
     ('Negative', 'Negative'),
 )
+ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
+
 
 class SicklecellForm(forms.Form):
     waive = forms.BooleanField(
@@ -22,6 +25,7 @@ class SicklecellForm(forms.Form):
     results_file = forms.FileField(
         label="Results File",
         help_text="Photo/Scan of your test results",
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=False
     )
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 from djtools.fields import STATE_CHOICES, REQ_CSS
 from localflavor.us.forms import USPhoneNumberField
@@ -14,6 +15,8 @@ POLICY_CHOICES = (
     ('Mil', 'Military'),
     ('Int', 'International')
 )
+ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
+
 
 class AthleteForm(forms.Form):
 
@@ -79,11 +82,13 @@ class AthleteForm(forms.Form):
     primary_card_front = forms.FileField(
         label="Insurance Card Front",
         help_text="Photo/Scan of your insurance card",
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=False
     )
     primary_card_back = forms.FileField(
         label="Insurance Card Back",
         help_text="Photo/Scan of your insurance card",
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=False
     )
 
