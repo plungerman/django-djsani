@@ -24,7 +24,7 @@ MANAGERS = ADMINS
 SECRET_KEY = ''
 ALLOWED_HOSTS = []
 ALLOWED_IMAGE_EXTENSIONS = [
-    'jpg','jpeg','png','JPG','JPEG','PNG'
+    'jpg','jpeg','png','JPG','JPEG','PNG','pdf','PDF'
 ]
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/Chicago'
