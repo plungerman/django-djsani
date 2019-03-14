@@ -29,7 +29,7 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from djtools.fields import TODAY
 
-import Image
+from PIL import Image
 
 # table names are the key, base model classes are the value
 
