@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator
 
 from djtools.fields import STATE_CHOICES, REQ_CSS
-from localflavor.us.forms import USPhoneNumberField
+from djtools.fields.localflavor import USPhoneNumberField
 
 POLICY_CHOICES = (
     ('', '---select---'),
