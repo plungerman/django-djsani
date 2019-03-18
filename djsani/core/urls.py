@@ -86,3 +86,4 @@ urlpatterns = [
         r'^login-required/?cid=@@UserID', auth.login_required, name="login_required"
     ),
 ]
+urlpatterns += url("admin/", include('loginas.urls')),

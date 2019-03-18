@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalManager,v 8.0.17100.16 2018/04/18 17:20:05 mkishlin Released $
+ $Header: CCStudentMedicalManager,v 8.0.17100.18 2019/03/18 12:08:11 stevek Released $
  -------------------------------------------------------------------------
 }
 
@@ -52,7 +52,7 @@ column sitrep       smallint
         (
         )
 
-column sitrep_athlete	smallint
+column sitrep_athlete   smallint
     comments            "We can't use 'status' since it is a keyword"
     desc                "Have Athletics approved the student?"
     heading             "Sitrep Athlete"
@@ -138,6 +138,15 @@ column emergency_contact            smallint
     desc            "Has the student completed the emergency contact information?"
     heading         "Emergency Contact Information"
     text            "Emergency Contact Information"
+    attributes
+        (
+        )
+
+column concussion_baseline          smallint
+    comments        ""
+    desc            "Has the athlete submitted the concussion baseline?"
+    heading         "Concussion"
+    text            "Concussion"
     attributes
         (
         )

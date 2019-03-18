@@ -6,6 +6,7 @@
             <th style="width:55px;">
               <i class="fa fa-thumbs-up green" title="Student Status"></i>
               <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
+              <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
             </th>
             <th>Name</th>
             <th class="d-none">ID</th>
@@ -56,6 +57,17 @@
                     <input type="checkbox" name="sitrep_athlete"
                         data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
                         data-table="cc_student_medical_manager" />
+                    {% endif %}
+                  {% endif %}
+                  {% if s.concussion_baseline %}
+                    <i class="fa fa-check blue"></i>
+                  {% else %}
+                    {% if s.athlete %}
+                    <input type="checkbox" name="concussion_baseline"
+                      data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                      data-table="cc_student_medical_manager" />
+                    {% else %}
+                    <i class="fa fa-times red"></i>
                     {% endif %}
                   {% endif %}
                   <span style="float:right;"><!-- all one line required -->
@@ -228,6 +240,7 @@
                 <th style="width:55px;">
                   <i class="fa fa-thumbs-up green" title="Student Status"></i>
                   <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
+                  <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
                 </th>
                 <th>Name</th>
                 <th class="d-none">ID</th>

@@ -24,11 +24,12 @@ input[type="radio"]{
 }
 /* .ui-datepicker-calendar { display: none; } */
 .center{text-align:center;}
-.red, .glyphicon {color:#800;}
-.yellow, .glyphicon-ok {color:#c5b32f;}
-.green, .glyphicon-ok {color:#008000;}
-.white, .glyphicon-ok {color:#fff;}
-.grey, .glyphicon-ok {color:#cacaca;}
+.red, .red .glyphicon {color:#800;}
+.yellow, .yellow .glyphicon-ok {color:#c5b32f;}
+.green, .green .glyphicon-ok {color:#008000;}
+.white, .white .glyphicon-ok {color:#fff;}
+.grey, .grey .glyphicon-ok {color:#cacaca;}
+.blue, .blue .glyphicon-ok {color:#085ab1;}
 div.growlUI { position:relative;margin-top:60px; }
 div.growlUI:before { color:green; font-size: 4em;position: absolute; font-family: 'FontAwesome'; top: 0; left: 10px; content: "\f0f3"; }
 div.growlUI h1, div.growlUI h2 {

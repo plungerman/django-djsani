@@ -74,6 +74,7 @@ class StudentMedicalManager(Base):
     sitrep = Column(Boolean)
     sitrep_athlete = Column(Boolean)
     athlete = Column(Boolean)
+    concussion_baseline = Column(Boolean)
     sports = Column(String)
     medical_consent_agreement = Column(String)
     medical_consent_agreement_status = Column(Boolean)

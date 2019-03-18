@@ -263,7 +263,9 @@
             {% endfor %}
         </select>
         {% endif %}
+        <h5>
         <input type="checkbox" name="athlete" class="set-val"
+          title="Is the student an athlete or not?"
           data-table="cc_student_medical_manager"
           data-pk="{{manager.id}}"
         {% if student.athlete %}
@@ -272,12 +274,9 @@
         {% else %}
           value="1"
         {% endif %}>
-        {% if not student.athlete %}
-        <h3 style="display:inline;">Athlete</h3>
-        {% endif %}
-      </form>
-      <h3>
+          Athlete |
         <input type="checkbox" name="sitrep"
+          title="Health and Counseling Status"
           class="set-val" data-pk="{{manager.id}}"
           data-table="cc_student_medical_manager"
         {% if student.sitrep %}
@@ -288,6 +287,7 @@
         {% endif %}>
         HCC Status |
         <input type="checkbox" name="sitrep_athlete"
+          title="Athletics Training Status"
           class="set-val" data-pk="{{manager.id}}"
           data-table="cc_student_medical_manager"
         {% if student.sitrep_athlete %}
@@ -298,6 +298,7 @@
         {% endif %}>
         AT Status |
         <input type="checkbox" name="cc_student_immunization"
+          title="Immunization Status"
           class="set-val" data-pk="{{manager.id}}"
           data-table="cc_student_medical_manager"
         {% if student.cc_student_immunization %}
@@ -306,8 +307,20 @@
         {% else %}
           value="1"
         {% endif %}>
-        Immunization status
-      </h3>
+        Immunization status |
+        <input type="checkbox" name="concussion_baseline" class="set-val"
+          title="Has the concussion baseline been set?"
+          data-table="cc_student_medical_manager"
+          data-pk="{{manager.id}}"
+        {% if student.concussion_baseline %}
+          value="0"
+          checked="checked"
+        {% else %}
+          value="1"
+        {% endif %}>
+        Concussion
+        </h5>
+      </form>
     </div>
     <!-- /.col-lg-7 -->
     <div class="col-lg-5">
