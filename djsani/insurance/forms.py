@@ -55,8 +55,8 @@ class AthleteForm(forms.Form):
     )
     primary_policy_address = forms.CharField(
         label="Insurance address",
-        widget=forms.Textarea,
-        required=False
+        widget=forms.Textarea(attrs=REQ_CSS),
+        required=False,
     )
     primary_member_id = forms.CharField(
         label = "Member ID",
@@ -120,8 +120,8 @@ class AthleteForm(forms.Form):
     )
     secondary_policy_address = forms.CharField(
         label="Insurance address",
-        widget=forms.Textarea,
-        required=False
+        widget=forms.Textarea(attrs=REQ_CSS),
+        required=False,
     )
     secondary_member_id = forms.CharField(
         label = "Member ID",
@@ -212,9 +212,4 @@ class AthleteForm(forms.Form):
 
 
 class StudentForm(AthleteForm):
-
-    def __init__(self,*args,**kwargs):
-        super(StudentForm,self).__init__(*args,**kwargs)
-        self.fields.pop('primary_policy_address')
-        self.fields.pop('secondary_policy_address')
-        self.fields.pop('tertiary_policy_address')
+    pass
