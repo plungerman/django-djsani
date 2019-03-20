@@ -174,6 +174,8 @@ DEFAULT_CID = ""
 START_DATE = datetime(NOW.year, 6, 1)
 #ACADEMIC_YEAR_LIMBO = True
 ACADEMIC_YEAR_LIMBO = False
+STAFF_GROUP = 'MedicalStaff'
+COACH_GROUP = 'Athletics Coach'
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(__file__), "logs/")
 LOG_FILENAME = LOG_FILEPATH + "debug.log"

@@ -7,7 +7,276 @@
               <i class="fa fa-thumbs-up green" title="Student Status"></i>
               <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
               <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
+              <span class="d-none">Notes</span>
             </th>
+            <th class="d-none">Student Status</th>
+            <th class="d-none">Athlete Status</th>
+            <th class="d-none">Concussion Baseline</th>
+            <th>Name</th>
+            <th class="d-none">ID</th>
+            <th class="d-none">Email</th>
+            <th>
+              <i class="fa fa-ambulance green" title="Emergency contact"></i>
+              <span class="d-none">Emergency contact</span>
+            </th>
+            <th>
+              <i class="fa fa-bug green" title="Immunization"></i>
+              <span class="d-none">Immunization</span>
+            </th>
+            <th title="Insurance">
+              <i class="fa fa-umbrella green"></i>
+              <span class="d-none">Insurance</span>
+            </th>
+            <th title="Meningococcal meningitis/Hepatitis B response">
+              <strong title="Meningococcal meningitis/Hepatitis B response" class="green">B</strong>
+              <span class="d-none">Meningococcal meningitis/Hepatitis B response</span>
+            </th>
+            <th title="Medical history">
+              <i class="fa fa-book green" title="Medical History"></i>
+              <span class="d-none">Medical History</span>
+            </th>
+            <th title="Athlete Medical History">
+              <i class="fa fa-book green" title="Athlete Medical History"></i>
+              <i class="fa fa-futbol-o green" title="Athlete Medical History"></i>
+              <span class="d-none">Athlete Medical History</span>
+            </th>
+            <th title="Pre-Participation Physical">
+              <i class="fa fa-stethoscope green" title="Pre-Participation Physical"></i>
+              <span class="d-none">Physical</span>
+            </th>
+            <th title="Medical consent and insurance agreement">
+              <i class="fa fa-handshake-o green" title="Medical consent and insurance agreement"></i>
+              <span class="d-none">Medical consent and insurance agreement</span>
+            </th>
+            <th title="Privacy waiver">
+              <i class="fa fa-unlock" aria-hidden="true"></i>
+              <span class="d-none">Privacy waiver</span>
+            </th>
+            <th title="Sickle cell waiver">
+              <i class="fa fa-moon-o green"></i>
+              <span class="d-none">Sickle cell wiaver</span>
+            </th>
+            <th title="CCIW Injury and Illness Reporting Acknowledgement waiver">
+              <i class="fa fa-microphone" aria-hidden="true"></i>
+              <span class="d-none">CCIW Injury and Illness Reporting Acknowledgement waiver</span>
+            </th>
+            <th title="Assumption of risk waiver">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span class="d-none">Assumption of Risk Waiver</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for s in students %}
+          <tr>
+            <td class="{{s.adult}}" style="text-align:left;">
+              {% if s.sitrep %}
+                <i class="fa fa-check green" title="Student Status"></i>
+              {% else %}
+                {% if s.manid %}
+                <input type="checkbox" name="sitrep"
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="cc_student_medical_manager" title="Student Status">
+                {% else %}
+                <i class="fa fa-times red" title="Student Status"></i>
+                {% endif %}
+              {% endif %}
+              {% if s.sitrep_athlete %}
+                <i class="fa fa-check red" title="Athlete Status"></i>
+              {% else %}
+                {% if s.athlete %}
+                <input type="checkbox" name="sitrep_athlete"
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="cc_student_medical_manager" title="Athlete Status">
+                {% endif %}
+              {% endif %}
+              {% if s.concussion_baseline %}
+                <i class="fa fa-check blue" title="Concussion Baseline"></i>
+              {% else %}
+                {% if s.athlete %}
+                <input type="checkbox" name="concussion_baseline"
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="cc_student_medical_manager" title="Concussion Baseline">
+                {% else %}
+                <i class="fa fa-times red" title="Concussion Baseline"></i>
+                {% endif %}
+              {% endif %}
+              <span style="float:right;"><!-- all one line required -->
+                <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting yellow{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-placement="right" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-10000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
+              </span>
+            </td>
+            <td class="d-none">{% if s.sitrep %}x{% endif %}</td>
+            <td class="d-none">{% if s.sitrep_athlete %}x{% endif %}</td>
+            <td class="d-none">{% if s.concussion_baseline %}x{% endif %}</td>
+            <td class="{{s.adult}} student-name" style="text-align:left;">
+            {% if staff %}
+              <a href="{% url 'student_detail' s.id %}">
+                {{s.lastname}}, {{s.firstname}}
+              </a>
+            {% else %}
+              {{s.lastname}}, {{s.firstname}}
+            {% endif %}
+              {% if s.athlete %}
+              <span style="float:right;margin-left:3px;">
+                <i class="fa fa-star green" title="Athlete"></i>
+              </span>
+              {% endif %}
+            </td>
+            <td class="d-none">{{s.id}}</td>
+            <td class="d-none">{{s.ldap_name}}@carthage.edu</td>
+            <td class="{{s.adult}}">
+              {% if s.emergency_contact %}
+                <i class="fa fa-check" title="Emergency Contact">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                <i class="fa fa-times red" title="Emergency Contact"></i>
+              {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.cc_student_immunization %}
+                <i class="fa fa-check" title="Immunization">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                {% if s.manid %}
+                <input type="checkbox" name="cc_student_immunization"
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="cc_student_medical_manager" title="Immunization">
+                {% else %}
+                  <i class="fa fa-times red" title="Immunization"></i>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.cc_student_health_insurance %}
+                <i class="fa fa-check" title="Health Insurance">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                <i class="fa fa-times red" title="Health Insurance"></i>
+              {% endif %}
+            </td>
+            {% if s.residency_status == "Resident" %}
+            <td class="{{s.adult}}">
+              {% if s.cc_student_meni_waiver %}
+                <i class="fa fa-check" title="Meningococcal meningitis/Hepatitis B response">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                {% if s.manid %}
+                  <input type="checkbox" name="agree" value="1"
+                    data-cid="{{s.id}}" data-pk=""
+                    data-table="cc_student_meni_waiver"
+                    title="Meningococcal meningitis/Hepatitis B response">
+                {% else %}
+                  <i class="fa fa-times red" title="Meningococcal meningitis/Hepatitis B response"></i>
+                {% endif %}
+              {% endif %}
+            </td>
+            {% else %}
+            <td class="{{s.adult}}" style="background-color:#cacaca;">
+              <i class="fa fa-ban red" title="Meningococcal meningitis/Hepatitis B response"></i>
+            </td>
+            {% endif %}
+            <td class="{{s.adult}}">
+              {% if s.cc_student_medical_history %}
+                <i class="fa fa-check" title="Medical History">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                <i class="fa fa-times red" title="Medical History"></i>
+              {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.cc_athlete_medical_history %}
+                <i class="fa fa-check" title="Athlete Medical History">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                <i class="fa fa-times red" title="Athlete Medical History"></i>
+              {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.physical_evaluation_1 and s.physical_evaluation_2 %}
+                <i class="fa fa-check" title="Pre-participation Physical">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                <i class="fa fa-times red" title="Pre-participation Physical"></i>
+              {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.medical_consent_agreement %}
+                <i class="fa fa-check" title="Medical consent and insurance agreement">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                <i class="fa fa-times red" title="Medical consent and insurance agreement"></i>
+              {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.cc_athlete_privacy_waiver %}
+                <i class="fa fa-check" title="Privacy Waiver">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                <i class="fa fa-times red" title="Privacy Waiver"></i>
+              {% endif %}
+            </td>
+            {% if s.waive or s.proof %}
+              <td class="{{s.adult}}" style="background-color:#cacaca;">
+                {% if s.results_file %}<i class="fa fa-moon-o green" title="Sickle cell results">{% else %}<i class="fa fa-check" title="Sickle cell waiver">{% endif %}<span style="display:none;">x</span></i>{% if s.proof %} <strong>/</strong> {% if s.results == "Positive" %}<i class="fa fa-plus" title="Sickle cell positive"><span style="display:none;">+</span></i>{% else %}<i class="fa fa-minus" title="Sickle cell negative"><span style="display:none;">-</span></i>{% endif %}<strong title="Sickle cell results Date"> {{s.updated_at|date:"Y"}}</strong>{% endif %}
+            {% else %}
+              <td class="{{s.adult}}">
+              <i class="fa fa-times red" title="Sickle Cell Waiver"></i>
+            {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.cc_athlete_reporting_waiver %}
+                <i class="fa fa-check" title="CCIW Injury and Illness Reporting Acknowledgement waiver">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                {% if s.manid %}
+                  <input type="checkbox" name="agree" value="1"
+                    data-cid="{{s.id}}" data-pk=""
+                    data-table="cc_athlete_reporting_waiver"
+                    title="CCIW Injury and Illness Reporting Acknowledgement waiver">
+                {% else %}
+                  <i class="fa fa-times red"></i>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td class="{{s.adult}}">
+              {% if s.cc_athlete_risk_waiver %}
+                <i class="fa fa-check" title="Assumption of risk waiver">
+                  <span style="display:none;">x</span>
+                </i>
+              {% else %}
+                {% if s.manid %}
+                  <input type="checkbox" name="agree" value="1"
+                    data-cid="{{s.id}}" data-pk=""
+                    data-table="cc_athlete_risk_waiver"
+                    title="Assumption of risk waiver">
+                {% else %}
+                  <i class="fa fa-times red" title="Assumption of risk waiver"></i>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th style="width:55px;">
+              <i class="fa fa-thumbs-up green" title="Student Status"></i>
+              <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
+              <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
+            </th>
+            <th class="d-none">Student Status</th>
+            <th class="d-none">Athlete Status</th>
+            <th class="d-none">Concussion Baseline</th>
             <th>Name</th>
             <th class="d-none">ID</th>
             <th class="d-none">Email</th>
@@ -17,254 +286,35 @@
             <th><i class="fa fa-bug green" title="Immunization"></i></th>
             <th title="Insurance"><i class="fa fa-umbrella green"></i></th>
             <th title="Meningococcal meningitis/Hepatitis B response">
-              Meni
+              <strong title="Meningococcal meningitis/Hepatitis B response" class="green">B</strong>
             </th>
-            <th title="General medical history">Gen hist</th>
-            <th title="Athlete Medical History / Physical Evaluation / Medial consent and insurance agreement">
-              Ath hist
+            <th title="Medical History">
+              <i class="fa fa-book green" title="Medical History"></i>
+            </th>
+            <th title="Athlete Medical History">
+              <i class="fa fa-book green" title="Athlete Medical History"></i>
+              <i class="fa fa-futbol-o green" title="Athlete Medical History"></i>
+            </th>
+            <th title="Pre-Participation Physical">
+              <i class="fa fa-stethoscope green" title="Pre-Participation Physical"></i>
+            </th>
+            <th title="Medical consent and insurance agreement">
+              <i class="fa fa-handshake-o green" title="Medical consent and insurance agreement"></i>
             </th>
             <th title="Privacy waiver">
               <i class="fa fa-unlock" aria-hidden="true"></i>
             </th>
-            <th title="Sickle cell waiver"><i class="fa fa-moon-o green"></i>
-              cell
+            <th title="Sickle cell waiver">
+              <i class="fa fa-moon-o green"></i>
             </th>
             <th title="CCIW Injury and Illness Reporting Acknowledgement waiver">
               Rprtng
             </th>
-            <th title="Assumption of risk waiver">Risk</th>
+            <th title="Assumption of risk waiver">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span class="d-none">Assumption of Risk Waiver</span>
+            </th>
           </tr>
-        </thead>
-        <tbody>
-        {% for s in students %}
-            <tr>
-                <td class="{{s.adult}}" style="text-align:left;">
-                  {% if s.sitrep %}
-                      <i class="fa fa-check green"></i>
-                  {% else %}
-                    {% if s.manid %}
-                    <input type="checkbox" name="sitrep"
-                        data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
-                        data-table="cc_student_medical_manager" />
-                    {% else %}
-                    <i class="fa fa-times red"></i>
-                    {% endif %}
-                  {% endif %}
-                  {% if s.sitrep_athlete %}
-                      <i class="fa fa-check red"></i>
-                  {% else %}
-                    {% if s.athlete %}
-                    <input type="checkbox" name="sitrep_athlete"
-                        data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
-                        data-table="cc_student_medical_manager" />
-                    {% endif %}
-                  {% endif %}
-                  {% if s.concussion_baseline %}
-                    <i class="fa fa-check blue"></i>
-                  {% else %}
-                    {% if s.athlete %}
-                    <input type="checkbox" name="concussion_baseline"
-                      data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
-                      data-table="cc_student_medical_manager" />
-                    {% else %}
-                    <i class="fa fa-times red"></i>
-                    {% endif %}
-                  {% endif %}
-                  <span style="float:right;"><!-- all one line required -->
-                    <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting yellow{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-placement="right" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-10000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
-                  </span>
-                </td>
-                <td class="{{s.adult}} student-name" style="text-align:left;">
-                    <a href="{% url 'student_detail' s.id %}">
-                      {{s.lastname}}, {{s.firstname}}
-                    </a>
-                    {% if s.athlete %}
-                    <span style="float:right;margin-left:3px;">
-                      <i class="fa fa-star green"></i>
-                    </span>
-                    {% endif %}
-                </td>
-                <th class="d-none">{{s.id}}</th>
-                <th class="d-none">{{s.ldap_name}}@carthage.edu</th>
-                <td class="{{s.adult}}">
-                    {% if s.emergency_contact %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        <i class="fa fa-times red"></i>
-                    {% endif %}
-                </td>
-                <td class="{{s.adult}}">
-                    {% if s.cc_student_immunization %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        {% if s.manid %}
-                        <input type="checkbox" name="cc_student_immunization"
-                            data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
-                            data-table="cc_student_medical_manager" />
-                        {% else %}
-                            <i class="fa fa-times red"></i>
-                        {% endif %}
-                    {% endif %}
-                </td>
-                <td class="{{s.adult}}">
-                    {% if s.cc_student_health_insurance %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        <i class="fa fa-times red"></i>
-                    {% endif %}
-                </td>
-                {% if s.residency_status == "Resident" %}
-                <td class="{{s.adult}}">
-                    {% if s.cc_student_meni_waiver %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        {% if s.manid %}
-                        <input type="checkbox" name="agree" value="1"
-                            data-cid="{{s.id}}" data-pk=""
-                            data-table="cc_student_meni_waiver">
-                        {% else %}
-                            <i class="fa fa-times red"></i>
-                        {% endif %}
-                    {% endif %}
-                </td>
-                {% else %}
-                <td class="{{s.adult}}" style="background-color:#cacaca;">
-                    <i class="fa fa-ban red"></i>
-                </td>
-                {% endif %}
-                <td class="{{s.adult}}">
-                    {% if s.cc_student_medical_history %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        <i class="fa fa-times red"></i>
-                    {% endif %}
-                </td>
-                <td class="{{s.adult}}">
-                    {% if s.cc_athlete_medical_history %}
-                        <i class="fa fa-check" title="athlete medical history">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        <i class="fa fa-times red" title="athlete medical history"></i>
-                    {% endif %}
-                    {% if s.athlete %}
-                        {% if s.physical_evaluation_1 and s.physical_evaluation_2 %}
-                        / <i class="fa fa-stethoscope green" title="pre-participation physical"></i>
-                        {% else %}
-                        / <i class="fa fa-stethoscope grey" title="pre-participation physical"></i>
-                        {% endif %}
-                        {% if s.medical_consent_agreement %}
-                        / <i class="fa fa-umbrella green" title="medical consent agreement"></i>
-                        {% else %}
-                        / <i class="fa fa-umbrella grey" title="medical consent agreement"></i>
-                        {% endif %}
-                    {% endif %}
-                </td>
-                <td class="{{s.adult}}">
-                    {% if s.cc_athlete_privacy_waiver %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        <i class="fa fa-times red"></i>
-                    {% endif %}
-                </td>
-                {% if s.waive or s.proof %}
-                    <td class="{{s.adult}}" style="background-color:#cacaca;">
-                        {% if s.results_file %}
-                            <i class="fa fa-moon-o green"></i>
-                        {% else %}
-                            <i class="fa fa-check">
-                        {% endif %}
-                        <span style="display:none;">x</span>
-                    </i>
-                    {% if s.proof %}
-                        <strong>/</strong>
-                        {% if s.results == "Positive" %}
-                            <i class="fa fa-plus"></i>
-                        {% else %}
-                            <i class="fa fa-minus"></i>
-                        {% endif %}
-                        {{s.updated_at|date:"Y"}}
-                    {% endif %}
-                {% else %}
-                    <td class="{{s.adult}}">
-                    <i class="fa fa-times red"></i>
-                {% endif %}
-                </td>
-                <td class="{{s.adult}}">
-                    {% if s.cc_athlete_reporting_waiver %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                        {% if s.manid %}
-                        <input type="checkbox" name="agree" value="1"
-                            data-cid="{{s.id}}" data-pk=""
-                            data-table="cc_athlete_reporting_waiver">
-                        {% else %}
-                            <i class="fa fa-times red"></i>
-                        {% endif %}
-                    {% endif %}
-                </td>
-                <td class="{{s.adult}}">
-                    {% if s.cc_athlete_risk_waiver %}
-                        <i class="fa fa-check">
-                            <span style="display:none;">x</span>
-                        </i>
-                    {% else %}
-                       {% if s.manid %}
-                        <input type="checkbox" name="agree" value="1"
-                            data-cid="{{s.id}}" data-pk=""
-                            data-table="cc_athlete_risk_waiver">
-                        {% else %}
-                            <i class="fa fa-times red"></i>
-                        {% endif %}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th style="width:55px;">
-                  <i class="fa fa-thumbs-up green" title="Student Status"></i>
-                  <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
-                  <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
-                </th>
-                <th>Name</th>
-                <th class="d-none">ID</th>
-                <th class="d-none">Email</th>
-                <th>
-                <i class="fa fa-ambulance green" title="Emergency contact"></i>
-                </th>
-                <th><i class="fa fa-bug green" title="Immunization"></i></th>
-                <th title="Insurance"><i class="fa fa-umbrella green"></i></th>
-                <th title="Meningococcal meningitis/Hepatitis B response">
-                    Meni
-                </th>
-                <th title="General Medical History">Gen hist</th>
-                <th title="Athlete Medical History / Physical Evaluation / Medial consent and insurance agreement">Ath hist</th>
-                <th title="Privacy waiver">
-                  <i class="fa fa-unlock" aria-hidden="true"></i>
-                </th>
-                <th title="Sickle cell waiver">
-                  <i class="fa fa-moon-o green"></i> cell</th>
-                <th title="CCIW Injury and Illness Reporting Acknowledgement waiver">
-                  Rprtng
-                </th>
-                <th title="Assumption of risk waiver">Risk</th>
-            </tr>
         </tfoot>
     </table>
   </div>

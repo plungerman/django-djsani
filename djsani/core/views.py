@@ -66,7 +66,7 @@ def set_val(request):
     table
     """
 
-    staff = in_group(request.user, 'MedicalStaff')
+    staff = in_group(request.user, settings.STAFF_GROUP)
 
     # we need a table name
     table = request.POST.get('table')

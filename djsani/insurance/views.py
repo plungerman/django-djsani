@@ -28,7 +28,7 @@ EARL = settings.INFORMIX_EARL
 @login_required
 def form(request, stype, cid=None):
     medical_staff=False
-    staff = in_group(request.user, 'MedicalStaff')
+    staff = in_group(request.user, settings.STAFF_GROUP)
     if not cid:
         cid = request.user.id
     else:
