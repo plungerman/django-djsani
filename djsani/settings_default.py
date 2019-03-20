@@ -72,11 +72,12 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.messages',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.staticfiles',
     'djsani',
     'djsani.core',
     'djtools',
+    # third party apps
+    'loginas'
 )
 
 MIDDLEWARE_CLASSES = (

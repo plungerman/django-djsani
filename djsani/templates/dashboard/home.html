@@ -100,7 +100,10 @@ $(function() {
           });
       }
   });
-  $( "#students-toggle" ).submit(function( event ) {
+  $( "#students-toggle" ).on('submit', function(e) {
+    if ($('#athletes-print').is(":checked")) {
+      return true;
+    } else {
       $.ajax({
           type: "POST",
           url: "{% url 'get_students' %}",
@@ -215,6 +218,7 @@ $(function() {
           }
       });
       return false;
+    }
   });
   $('#students-data').on( 'click', 'tr', function () {
       if ( $(this).hasClass('selected') ) {
@@ -386,8 +390,8 @@ $(function() {
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <form id="students-toggle" class="form-inline"
-                        role="form">
+                    <form id="students-toggle" class="form-inline" type="POST"
+                        action="." role="form">
                         {% csrf_token %}
                         <div class="form-group">
                             <label style="margin-right:10px;">
@@ -440,10 +444,13 @@ $(function() {
                             </option>
                             {% endfor %}
                             </select>
-                            <input type="submit" name="submit"
-                                value="submit" id="submit-toggle"
-                                style="margin:0 10px;"
-                                class="btn btn-primary">
+                            {% if staff %}
+                            <input type="checkbox" name="print" value="print"
+                              id="athletes-print" style="margin:0 10px;"> Print
+                            {% endif %}
+                            <input type="submit" name="submit" value="submit"
+                              id="submit-toggle" style="margin:0 10px;"
+                              class="btn btn-primary">
                         </div>
                     </form>
                 </div>

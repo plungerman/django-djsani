@@ -27,6 +27,9 @@ from djtools.utils.mail import send_mail
 from djtools.fields import NEXT_YEAR
 from djmaidez.core.models import ENS_CODES
 
+import logging
+logger = logging.getLogger(__name__)
+
 EARL = settings.INFORMIX_EARL
 STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
@@ -34,56 +37,77 @@ COACH = settings.COACH_GROUP
 
 def get_students(request):
     """
-    GET or AJAX POST: returns a list of students
+    GET or POST: returns a list of students
     """
 
     sport = None
     term = get_term()
     staff = in_group(request.user, STAFF)
     coach = in_group(request.user, COACH)
-
     if request.POST:
+      logger.debug('post')
       if staff or coach:
         # simple protection against sql injection
-        sport = int(request.POST.get('sport'))
-        sql = ''' {}
-            AND stu_serv_rec.yr = "{}"
-            AND stu_serv_rec.sess = "{}"
-        '''.format(
-            STUDENTS_ALPHA, term['yr'], term['sess']
-        )
-        c = request.POST['class']
-        if c in ['0','1','2','3','4']:
-            if c == '1':
-              sql += 'AND cc_student_medical_manager.sitrep = 1'
-            elif c == '0':
-              sql += 'AND cc_student_medical_manager.sitrep = 0'
-            elif c == '3':
-              sql += 'AND cc_student_medical_manager.athlete = 1'
-            elif c == '4':
-              sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
-            else:
-              sql += 'AND cc_student_medical_manager.id IS NULL'
-        else:
-            sql += 'AND prog_enr_rec.cl IN ({})'.format(c)
-        if sport and sport != 0:
-            sql += '''
+        '''
+        try:
+            sport = int(request.POST.get('sport'))
+        except:
+            sport = 0
+        '''
+        sport = request.POST.get('sport')
+
+        if sport and sport !=0 and staff and request.POST.get('print'):
+            sql = ''' {}
+                WHERE stu_serv_rec.yr = "{}"
+                AND stu_serv_rec.sess = "{}"
+                AND cc_student_medical_manager.created_at > "{}"
                 AND cc_student_medical_manager.sports like "%{}%"
-            '''.format(str(sport))
-        sql += ' ORDER BY lastname'
-        template = 'dashboard/students_data.inc.html'
+                ORDER BY lastname
+            '''.format(
+                STUDENT_VITALS, term['yr'], term['sess'], settings.START_DATE,
+                str(sport)
+            )
+            template = 'dashboard/athletes_print.html'
+        else:
+            sql = ''' {}
+                AND stu_serv_rec.yr = "{}"
+                AND stu_serv_rec.sess = "{}"
+            '''.format(
+                STUDENTS_ALPHA, term['yr'], term['sess']
+            )
+            c = request.POST.get('class')
+            if c in ['0','1','2','3','4']:
+                if c == '1':
+                    sql += 'AND cc_student_medical_manager.sitrep = 1'
+                elif c == '0':
+                    sql += 'AND cc_student_medical_manager.sitrep = 0'
+                elif c == '3':
+                    sql += 'AND cc_student_medical_manager.athlete = 1'
+                elif c == '4':
+                    sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
+                else:
+                    sql += 'AND cc_student_medical_manager.id IS NULL'
+            else:
+                sql += 'AND prog_enr_rec.cl IN ({})'.format(c)
+            if sport and sport != 0:
+                sql += '''
+                    AND cc_student_medical_manager.sports like "%{}%"
+                '''.format(str(sport))
+            sql += ' ORDER BY lastname'
+            template = 'dashboard/students_data.inc.html'
       else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
     else:
-        template = 'dashboard/home.html'
-        sql = ''' {}
-            AND stu_serv_rec.yr = "{}"
-            AND stu_serv_rec.sess = "{}"
-            AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")
-            ORDER BY lastname
-        '''.format(
-            STUDENTS_ALPHA, term['yr'], term['sess']
-        )
+      logger.debug('get')
+      template = 'dashboard/home.html'
+      sql = ''' {}
+        AND stu_serv_rec.yr = "{}"
+        AND stu_serv_rec.sess = "{}"
+        AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")
+        ORDER BY lastname
+      '''.format(
+        STUDENTS_ALPHA, term['yr'], term['sess']
+      )
 
     objs = do_esql(
         sql, key=settings.INFORMIX_DEBUG, earl=EARL

@@ -1,14 +1,7 @@
-@page {
-    margin: 0.5in;
-}
+@page { margin: 0.5in; }
 
-*:before, *:after {
-    box-sizing: border-box;
-}
-*:before, *:after {
-    box-sizing: border-box;
-}
-
+*:before, *:after { box-sizing: border-box; }
+*:before, *:after { box-sizing: border-box; }
 * {
     background: none          !important;
     direction:  ltr           !important;
@@ -23,12 +16,12 @@
     width:      0             !important;
     white-space:normal        !important;
 }
-
-html, body, div, #specificimage {
+html, body, div, {
     display:    block         !important;
     width:      100%;
 }
-
+.student-contact,.emergency_information,.cc_student_health_insurance,
+#students-data-panel,#healthInsuranceEmailData,
 #student-contact,#emergency_information,
 #primary_insurance,#secondary_insurance,
 #cc_student_medical_history,#cc_student_medical_history,

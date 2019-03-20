@@ -1,0 +1,6 @@
+{% extends "dashboard/student_print_travel.html" %}
+{% block content %}
+  {% for student in students %}
+    {% include "dashboard/student_print_travel.inc.html" %}
+  {% endfor %}
+{% endblock %}
