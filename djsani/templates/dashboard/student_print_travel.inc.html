@@ -18,15 +18,31 @@
 </div>
 <div class="emergency_information">
     <h2>Emergency Contact Information</h2>
-    {% for e in ens %}
-    <h4>Contact {{forloop.counter}}</h4>
-    <ul>
-        <li>{{e.line1}}</li>
-        <li>{{e.phone}}</li>
-    </ul>
-    {% endfor %}
+    {% if ens %}
+        {% for e in ens %}
+        <h4>Contact {{forloop.counter}}</h4>
+        <ul>
+          <li>{{e.line1}}</li>
+          <li>{{e.phone}}</li>
+        </ul>
+        {% endfor %}
+    {% else %}
+      {% with ens=student.ens %}
+        {% for e in ens %}
+        <h4>Contact {{forloop.counter}}</h4>
+        <ul>
+          <li>{{e.line1}}</li>
+          <li>{{e.phone}}</li>
+        </ul>
+        {% endfor %}
+      {% endwith %}
+    {% endif %}
 </div>
 <div class="cc_student_health_insurance">
     <h2>Health Insurance</h2>
-    {{shi}}
+    {% if shi %}
+      {{shi}}
+    {% else %}
+      {{student.shi}}
+    {% endif %}
 </div>

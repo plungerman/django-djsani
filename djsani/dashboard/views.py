@@ -35,113 +35,7 @@ STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
 
 
-def get_students(request):
-    """
-    GET or POST: returns a list of students
-    """
-
-    sport = None
-    term = get_term()
-    staff = in_group(request.user, STAFF)
-    coach = in_group(request.user, COACH)
-    if request.POST:
-      logger.debug('post')
-      if staff or coach:
-        # simple protection against sql injection
-        '''
-        try:
-            sport = int(request.POST.get('sport'))
-        except:
-            sport = 0
-        '''
-        sport = request.POST.get('sport')
-
-        if sport and sport !=0 and staff and request.POST.get('print'):
-            sql = ''' {}
-                WHERE stu_serv_rec.yr = "{}"
-                AND stu_serv_rec.sess = "{}"
-                AND cc_student_medical_manager.created_at > "{}"
-                AND cc_student_medical_manager.sports like "%{}%"
-                ORDER BY lastname
-            '''.format(
-                STUDENT_VITALS, term['yr'], term['sess'], settings.START_DATE,
-                str(sport)
-            )
-            template = 'dashboard/athletes_print.html'
-        else:
-            sql = ''' {}
-                AND stu_serv_rec.yr = "{}"
-                AND stu_serv_rec.sess = "{}"
-            '''.format(
-                STUDENTS_ALPHA, term['yr'], term['sess']
-            )
-            c = request.POST.get('class')
-            if c in ['0','1','2','3','4']:
-                if c == '1':
-                    sql += 'AND cc_student_medical_manager.sitrep = 1'
-                elif c == '0':
-                    sql += 'AND cc_student_medical_manager.sitrep = 0'
-                elif c == '3':
-                    sql += 'AND cc_student_medical_manager.athlete = 1'
-                elif c == '4':
-                    sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
-                else:
-                    sql += 'AND cc_student_medical_manager.id IS NULL'
-            else:
-                sql += 'AND prog_enr_rec.cl IN ({})'.format(c)
-            if sport and sport != 0:
-                sql += '''
-                    AND cc_student_medical_manager.sports like "%{}%"
-                '''.format(str(sport))
-            sql += ' ORDER BY lastname'
-            template = 'dashboard/students_data.inc.html'
-      else:
-        return HttpResponse("error", content_type="text/plain; charset=utf-8")
-    else:
-      logger.debug('get')
-      template = 'dashboard/home.html'
-      sql = ''' {}
-        AND stu_serv_rec.yr = "{}"
-        AND stu_serv_rec.sess = "{}"
-        AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")
-        ORDER BY lastname
-      '''.format(
-        STUDENTS_ALPHA, term['yr'], term['sess']
-      )
-
-    objs = do_esql(
-        sql, key=settings.INFORMIX_DEBUG, earl=EARL
-    )
-
-    students = None
-    if objs:
-        students = [dict(row) for row in objs.fetchall()]
-        for s in students:
-            adult = 'minor'
-            if s['birth_date']:
-                age = calculate_age(s['birth_date'])
-                if age > 17:
-                    adult = 'adult'
-            s['adult'] = adult
-
-    return render(
-        request, template, {
-            'students':students,'sports':SPORTS,'sport':sport,'staff':staff,
-            'coach':coach
-        }
-    )
-
-
-@group_required(STAFF, COACH)
-def home(request):
-    """
-    dashboard home with a list of students
-    """
-
-    return get_students(request)
-
-
-def panels(request, session, mod, manager,content,gender=None):
+def panels(request, session, mod, manager, content=None, gender=None):
     """
     Accepts a data model class, manager object, optional gender.
     Returns the template data that paints the panels in the
@@ -164,6 +58,120 @@ def panels(request, session, mod, manager,content,gender=None):
     return t.render(
         {'data':data,'form':form,'content':content,'manager':manager}, request
     )
+
+
+def get_students(request):
+    """
+    GET or POST: returns a list of students
+    """
+
+    trees=sport=None
+    term = get_term()
+    staff = in_group(request.user, STAFF)
+    coach = in_group(request.user, COACH)
+    if request.POST:
+      post = request.POST
+      if staff or coach:
+        # simple protection against sql injection
+        try:
+            sport = int(post.get('sport'))
+        except:
+            sport = 0
+
+        trees = post.get('print')
+        if sport and sport !=0 and staff and trees:
+            # print all athletes from any given sport
+            sql = ''' {}
+                WHERE stu_serv_rec.yr = "{}"
+                AND stu_serv_rec.sess = "{}"
+                AND cc_student_medical_manager.created_at > "{}"
+                AND cc_student_medical_manager.sports like "%{}%"
+                ORDER BY lastname
+            '''.format(
+                STUDENT_VITALS, term['yr'], term['sess'], settings.START_DATE,
+                str(sport)
+            )
+            template = 'dashboard/athletes_print.html'
+        else:
+            sql = ''' {}
+                AND stu_serv_rec.yr = "{}"
+                AND stu_serv_rec.sess = "{}"
+            '''.format(
+                STUDENTS_ALPHA, term['yr'], term['sess']
+            )
+            c = post.get('class')
+            if c in ['0','1','2','3','4']:
+                if c == '1':
+                    sql += 'AND cc_student_medical_manager.sitrep = 1'
+                elif c == '0':
+                    sql += 'AND cc_student_medical_manager.sitrep = 0'
+                elif c == '3':
+                    sql += 'AND cc_student_medical_manager.athlete = 1'
+                elif c == '4':
+                    sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
+                else:
+                    sql += 'AND cc_student_medical_manager.id IS NULL'
+            else:
+                sql += 'AND prog_enr_rec.cl IN ({})'.format(c)
+            if sport and sport != 0:
+                sql += '''
+                    AND cc_student_medical_manager.sports like "%{}%"
+                '''.format(str(sport))
+            sql += ' ORDER BY lastname'
+            template = 'dashboard/students_data.inc.html'
+      else:
+        return HttpResponse("error", content_type="text/plain; charset=utf-8")
+    else:
+      template = 'dashboard/home.html'
+      sql = ''' {}
+        AND stu_serv_rec.yr = "{}"
+        AND stu_serv_rec.sess = "{}"
+        AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")
+        ORDER BY lastname
+      '''.format(
+        STUDENTS_ALPHA, term['yr'], term['sess']
+      )
+
+    objs = do_esql(
+        sql, key=settings.INFORMIX_DEBUG, earl=EARL
+    )
+
+    students = None
+    if objs:
+        session = get_session(EARL)
+        students = [dict(row) for row in objs.fetchall()]
+        for s in students:
+            adult = 'minor'
+            if s['birth_date']:
+                age = calculate_age(s['birth_date'])
+                if age > 17:
+                    adult = 'adult'
+            s['adult'] = adult
+            if trees:
+                manager = get_manager(session, s['id'])
+                # emergency notification system
+                s['ens'] = session.query(AARec).filter_by(id=s['id']).\
+                    filter(AARec.aa.in_(ENS_CODES)).all()
+                # health insurance
+                s['shi'] = panels(
+                    request, session, StudentHealthInsurance, manager
+                )
+
+    return render(
+        request, template, {
+            'students':students,'sports':SPORTS,'sport':sport,'staff':staff,
+            'coach':coach
+        }
+    )
+
+
+@group_required(STAFF, COACH)
+def home(request):
+    """
+    dashboard home with a list of students
+    """
+
+    return get_students(request)
 
 
 @login_required
@@ -229,7 +237,7 @@ def student_detail(request, cid=None, medium=None, content=None):
                         filter(AARec.aa.in_(ENS_CODES)).all()
                     # health insurance
                     shi = panels(
-                        request, session, StudentHealthInsurance, manager, content
+                        request,session,StudentHealthInsurance,manager,content
                     )
                     # student medical history
                     smh = panels(

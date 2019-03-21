@@ -2,5 +2,6 @@
 {% block content %}
   {% for student in students %}
     {% include "dashboard/student_print_travel.inc.html" %}
+    <div style="page-break-before: always;"></div>
   {% endfor %}
 {% endblock %}

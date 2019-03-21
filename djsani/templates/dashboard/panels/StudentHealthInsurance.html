@@ -164,6 +164,7 @@
         </dd>
       </dl>
     </div>
+    {% if data.secondary_policy_holder %}
     <div id="secondary-insurance" class="tab-pane fade" role="tabpanel"
       aria-labelledby="secondary-insurance">
       <h3>Secondary Health Insurance</h3>
@@ -242,6 +243,8 @@
         </dd>
       </dl>
     </div>
+    {% endif %}
+    {% if data.tertiary_policy_holder %}
     <div id="tertiary-insurance" class="tab-pane fade" role="tabpanel"
       aria-labelledby="tertiary-insurance">
       <h3>Athlete Health Insurance</h3>
@@ -320,6 +323,7 @@
         </dd>
       </dl>
     </div>
+    {% endif %}
   </div>
   <!-- /.tab-content -->
   <div id="healthInsuranceEmailData">
