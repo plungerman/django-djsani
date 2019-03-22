@@ -5,8 +5,13 @@
     Health and Counseling &mdash;
     Carthage College
 {% endblock %}
+{% block extra_style %}
+{{block.super}}
+<link href="https://www.carthage.edu/themes/toph/assets/css/magnific-popup.css" type="text/css" rel="stylesheet">
+{% endblock %}
 {% block extra_javascript %}
-    {% include "medical_history/waivers/athlete_sicklecell.inc.js" %}
+<script type="text/javascript" src="https://www.carthage.edu/themes/toph/assets/js/magnific-popup.js"></script>
+{% include "medical_history/waivers/athlete_sicklecell.inc.js" %}
 {% endblock %}
 {% block content %}
 <div class="forms-container">

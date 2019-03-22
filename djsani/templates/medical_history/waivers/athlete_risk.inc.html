@@ -13,6 +13,17 @@
     </p>
 {% endif %}
 <p>
+  <strong class="red">
+  Click the link below to watch a mandatory NCAA video.
+  You cannot submit this form until you watch the video.
+  </strong>
+</p>
+<h4>
+  <a href="https://www.youtube.com/watch?v=GSSN3WSNO3w" class="modal-video">
+      NCAA Drug Testing Video
+  </a>
+</h4>
+<p>
     <input id="agree" type="checkbox" name="agree"
     {% if student.cc_athlete_risk_waiver %}
         checked="checked" value="0"
@@ -20,10 +31,9 @@
         value="1"
     {% endif %}
     data-pk="{{student.risk_id|default:''}}"
-    data-table="cc_athlete_risk_waiver" class="set-val" />
+    data-table="cc_athlete_risk_waiver" class="set-val">
     <label for="id_agree" style="display:inline;">
-    I hereby acknowledge that I have read, understand and will
-    abide by each of the terms and conditions of this
-    Agreement.
+    I hereby acknowledge that I have read, understand, and will
+    abide by each of the terms and conditions of this Agreement.
     </label>
 </p>
