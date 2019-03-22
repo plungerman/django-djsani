@@ -7,6 +7,10 @@ BINARY_CHOICES = (
     ('Positive', 'Positive'),
     ('Negative', 'Negative'),
 )
+RESULTS_CHOICES = (
+    ('No positive drug test', 'No positive drug test'),
+    ('Positive drug test', 'Positive drug test'),
+)
 ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
 
 
@@ -50,20 +54,34 @@ class SicklecellForm(forms.Form):
 
         return cleaned_data
 
+
+class DopingForm(forms.Form):
+    part1 = forms.BooleanField()
+    part2 = forms.BooleanField()
+    part3_1 = forms.BooleanField()
+    part3_2 = forms.ChoiceField(
+        choices=RESULTS_CHOICES,
+        widget=forms.RadioSelect()
+    )
+
+
 class PrivacyForm(forms.Form):
     news_media = forms.BooleanField(required=False)
     parents_guardians = forms.BooleanField(required=False)
     disclose_records = forms.BooleanField()
+
 
 class ReportingForm(forms.Form):
     agree = forms.BooleanField(
         required=True
     )
 
+
 class RiskForm(forms.Form):
     agree = forms.BooleanField(
         required=True
     )
+
 
 class MeniForm(forms.Form):
     agree = forms.BooleanField(

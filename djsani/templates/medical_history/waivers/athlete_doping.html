@@ -1,0 +1,45 @@
+{% extends "home.html" %}
+{% block title %}
+    NCAA Student-Athlete Statement and Drug Testing Consent &mdash;
+    Health and Counseling &mdash;
+    Carthage College
+{% endblock %}
+{% block extra_style %}
+<style>
+#page-content-wrap .form ol { list-style: decimal; }
+.form li { list-style: decimal !important; margin-left:18px; }
+</style>
+{% endblock %}
+{% block extra_javascript %}
+<script type="text/javascript" charset="utf-8">
+$(function() {
+  var $box1 = $("input[name='box1']").is(':checked');
+  var $box2 = $("input[name='box2']").is(':checked');
+  var $box3 = $("input[name='box3']").is(':checked');
+  var $box4 = $("input[name='box4']").is(':checked');
+
+  $('#doping-waiver').submit(function(e) {
+    if ( $("input[name='disclose_records']").is(':checked') ) {
+      $('#id_submit').prop('disabled', true);
+      return true;
+    } else {
+      alert('You must check all boxes in order to proceed.')
+      return false;
+    }
+  });
+});
+</script>
+{% endblock %}
+{% block content %}
+<div class="forms-container">
+    <h2>NCAA Athlete Statement and Drug Testing Consent</h2>
+    <form method="post" action="." class="form" id="doping-waiver">
+        {% csrf_token %}
+        {% include "medical_history/waivers/athlete_doping.inc.html" %}
+        <fieldset class="btnHolder">
+          <label for="id_submit" style="display:none;">Submit</label>
+          <input id="id_submit" type="submit" value="Submit" class="button">
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

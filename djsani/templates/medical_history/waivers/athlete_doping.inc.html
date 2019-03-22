@@ -1,0 +1,91 @@
+{% load livewhale_api %}
+<div class="large-12 col-lg-12">
+    {% if form.errors %}
+    <p class="error">
+        The last checkbox is required.
+    </p>
+    {% endif %}
+    {% get_lw_content as preamble blurbs 2781 %}
+    {{preamble.body|safe}}
+    <h3>Part I. Statement Concerning Eligibility</h3>
+    <div class="large-1 col-lg-1">
+        <input type="checkbox" name="part1" class="set-val"
+        {% if student.part1 %}
+            checked="checked" value="0"
+        {% else %}
+            value="1"
+        {% endif %}
+        data-table="cc_athlete_doping_statement"
+        data-pk="{{student.doping_id|default:''}}">
+    </div>
+    <div class="large-11 col-lg-11">
+        <label for="doping_part1">
+            {% get_lw_content as part1 blurbs 2782 %}
+            {{part1.body|safe}}
+        </label>
+    </div>
+    <h3>Part II. Buckley Amendment Consent</h3>
+    <div class="large-1 col-lg-1">
+        <input type="checkbox" name="part2" class="set-val"
+        {% if student.part2 %}
+            checked="checked" value="0"
+        {% else %}
+            value="1"
+        {% endif %}
+        data-table="cc_athlete_doping_statement"
+        data-pk="{{student.doping_id|default:''}}">
+    </div>
+    <div class="large-11 col-lg-11">
+        <label for="doping_part2">
+            {% get_lw_content as part2 blurbs 2783 %}
+            {{part2.body|safe}}
+        </label>
+    </div>
+    <h3>Part III. Results of Drug Tests</h3>
+    <h4>
+      1. Future positive test – all student-athletes sign.
+    </h4>
+    <div class="large-1 col-lg-1">
+        <input type="checkbox" name="part3_1" class="set-val"
+        {% if student.part3_1 %}
+            checked="checked" value="0"
+        {% else %}
+            value="1"
+        {% endif %}
+        data-table="cc_athlete_doping_statement"
+        data-pk="{{student.doping_id|default:''}}">
+    </div>
+    <div class="large-11 col-lg-11">
+      <label for="doping_part3_1">
+        {% get_lw_content as part3_1 blurbs 2784 %}
+        {{part3_1.body|safe}}
+      </label>
+    </div>
+    <h4>
+      2. Positive test by NCAA or other sports governing body
+    </h4>
+    <div class="large-1 col-lg-1">
+      <input type="radio" name="part3_2" class="set-val" value="a" id="part3_2_1"
+        {% if student.part3_2 == 'a' %}checked="checked"{% endif %}
+        data-table="cc_athlete_doping_statement"
+        data-pk="{{student.doping_id|default:''}}">
+    </div>
+    <div class="large-11 col-lg-11">
+      <label for="part3_2_1">
+        {% get_lw_content as part3_2a blurbs 2785 %}
+        {{part3_2a.body|safe}}
+      </label>
+    </div>
+    <div class="large-1 col-lg-1">
+      <input type="radio" name="part3_2" class="set-val" value="b" id="part3_2_2"
+        {% if student.part3_2 == 'b' %}checked="checked"{% endif %}
+        data-table="cc_athlete_doping_statement"
+        data-pk="{{student.doping_id|default:''}}">
+    </div>
+    <div class="large-11 col-lg-11">
+      <label for="part3_2_2">
+        {% get_lw_content as part3_2b blurbs 2786 %}
+        {{part3_2b.body|safe}}
+      </label>
+    </div>
+</div>
