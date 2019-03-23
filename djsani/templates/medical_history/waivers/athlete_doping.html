@@ -1,4 +1,5 @@
 {% extends "home.html" %}
+{% load livewhale_api %}
 {% block title %}
     NCAA Student-Athlete Statement and Drug Testing Consent &mdash;
     Health and Counseling &mdash;
@@ -8,6 +9,7 @@
 <style>
 #page-content-wrap .form ol { list-style: decimal; }
 .form li { list-style: decimal !important; margin-left:18px; }
+.red {color:red;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -32,13 +34,16 @@ $(function() {
 {% endblock %}
 {% block content %}
 <div class="forms-container">
-    <h2>NCAA Athlete Statement and Drug Testing Consent</h2>
     <form method="post" action="." class="form" id="doping-waiver">
         {% csrf_token %}
         {% include "medical_history/waivers/athlete_doping.inc.html" %}
-        <fieldset class="btnHolder">
+        <fieldset class="btnHolder" style="padding-top:16px;">
           <label for="id_submit" style="display:none;">Submit</label>
           <input id="id_submit" type="submit" value="Submit" class="button">
+        </fieldset>
+        <fieldset class="btnHolder" style="padding-top:16px;">
+        {% get_lw_content as attachment blurbs 2789 %}
+        {{attachment.body|safe}}
         </fieldset>
     </form>
 </div>

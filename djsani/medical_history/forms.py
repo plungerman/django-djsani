@@ -3,12 +3,8 @@ from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 
-from djtools.fields import REQ_CSS
+from djtools.fields import BINARY_CHOICES, REQ_CSS
 
-BINARY_CHOICES = (
-    ('No', 'No'),
-    ('Yes', 'Yes'),
-)
 ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
 
 

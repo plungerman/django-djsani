@@ -3,11 +3,13 @@ from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 
-BINARY_CHOICES = (
+from djtools.fields import BINARY_CHOICES
+
+SICKLE_CELL_RESULTS = (
     ('Positive', 'Positive'),
     ('Negative', 'Negative'),
 )
-RESULTS_CHOICES = (
+DRUG_TEST_RESULTS = (
     ('No positive drug test', 'No positive drug test'),
     ('Positive drug test', 'Positive drug test'),
 )
@@ -22,14 +24,16 @@ class SicklecellForm(forms.Form):
         required=False
     )
     results = forms.ChoiceField(
-        choices=BINARY_CHOICES,
+        choices=SICKLE_CELL_RESULTS,
         widget=forms.RadioSelect(),
         required=False
     )
     results_file = forms.FileField(
         label="Results File",
         help_text="Photo/Scan of your test results",
-        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
+        ],
         required=False
     )
 
@@ -56,12 +60,22 @@ class SicklecellForm(forms.Form):
 
 
 class DopingForm(forms.Form):
-    part1 = forms.BooleanField()
-    part2 = forms.BooleanField()
-    part3_1 = forms.BooleanField()
+    part1 = forms.BooleanField(
+        label="Statement Concerning Eligibility"
+    )
+    part2 = forms.BooleanField(
+        label="Buckley Amendment Consent"
+    )
+    part3_1 = forms.BooleanField(
+        label="Future positive test – all student-athletes sign"
+    )
     part3_2 = forms.ChoiceField(
-        choices=RESULTS_CHOICES,
-        widget=forms.RadioSelect()
+        label="Positive test by NCAA or other sports governing body",
+        choices=DRUG_TEST_RESULTS, widget=forms.RadioSelect()
+    )
+    part3_3 = forms.ChoiceField(
+        label="Are you currently under such a drug-testing suspension?",
+        choices=BINARY_CHOICES, widget=forms.RadioSelect()
     )
 
 
