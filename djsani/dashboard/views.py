@@ -27,9 +27,6 @@ from djtools.utils.mail import send_mail
 from djtools.fields import NEXT_YEAR
 from djmaidez.core.models import ENS_CODES
 
-import logging
-logger = logging.getLogger(__name__)
-
 EARL = settings.INFORMIX_EARL
 STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
