@@ -120,7 +120,7 @@ $(function() {
 {% block left_nav  %}
 <ul>
     {% if not user.is_anonymous %}
-        {% ifusergroup MedicalStaff %}
+        {% ifusergroup MedicalStaff AthleticsCoach %}
         <li>
             <a href="{% url 'dashboard_home' %}">Dashboard</a>
         </li>
