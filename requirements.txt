@@ -10,3 +10,4 @@ Pillow==5.4.1
 simplejson==3.16.0
 django-localflavor==2.1
 informixdb==2.5
+django-loginas==0.3.6
