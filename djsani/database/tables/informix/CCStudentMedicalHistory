@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalHistory,v 8.0.17100.4 2015/05/20 12:12:46 mkishlin Released $
+ $Header: CCStudentMedicalHistory,v 8.0.17100.5 2019/04/08 13:28:19 stevek Released $
  -------------------------------------------------------------------------
 }
 
@@ -78,29 +78,11 @@ column anemia       varchar(255)
         (
         )
 
-column anxiety      varchar(255)
-    comments        ""
-    desc            "Anxiety"
-    heading         "Anxiety"
-    text            "Anxiety"
-    attributes
-        (
-        )
-
 column bronchospasm varchar(255)
     comments        ""
     desc            "Bronchospasm"
     heading         "Bronchospasm"
     text            "Bronchospasm"
-    attributes
-        (
-        )
-
-column adhd_add     varchar(255)
-    comments        ""
-    desc            "ADHD"
-    heading         "ADHD"
-    text            "ADHD"
     attributes
         (
         )
@@ -150,38 +132,11 @@ column chicken_pox  varchar(255)
         (
         )
 
-column counseling   varchar(255)
-    comments        ""
-    desc            "Counseling"
-    heading         "Counseling"
-    text            "Counseling"
-    attributes
-        (
-        )
-
-column depression   varchar(255)
-    comments        ""
-    desc            "Depression"
-    heading         "Depression"
-    text            "Depression"
-    attributes
-        (
-        )
-
 column diabetes     varchar(255)
     comments        ""
     desc            "Diabetes"
     heading         "Diabetes"
     text            "Diabetes"
-    attributes
-        (
-        )
-
-column eating_disorder  varchar(255)
-    comments        ""
-    desc            "Eating Disorder"
-    heading         "Eating Disorder"
-    text            "Eating Disorder"
     attributes
         (
         )
@@ -366,15 +321,6 @@ column stroke       varchar(255)
         (
         )
 
-column substance_abuse  varchar(255)
-    comments        ""
-    desc            "Substance abuse"
-    heading         "Substance abuse"
-    text            "Substance abuse"
-    attributes
-        (
-        )
-
 column thyroid_disorder varchar(255)
     comments        ""
     desc            "Thyroid disorder"
@@ -393,11 +339,184 @@ column tuberculosis varchar(255)
         (
         )
 
-column other_condition  varchar(255)
+column other_condition varchar(255)
     comments        ""
     desc            "Other Condition"
     heading         "Other Condition"
     text            "Other Condition"
+    attributes
+        (
+        )
+
+{-- Student Mental Health Screening --}
+
+column trouble_sleeping varchar(255)
+    comments        ""
+    desc            "I often have trouble sleeping"
+    heading         "Trouble sleeping"
+    text            "I often have trouble sleeping"
+    attributes
+        (
+        )
+
+column more_energy varchar(255)
+    comments        ""
+    desc            "I wish I had more energy most days of the week"
+    heading         "More energy"
+    text            "I wish I had more energy most days of the week"
+    attributes
+        (
+        )
+
+column recurring_thoughts varchar(255)
+    comments        ""
+    desc            "I think about things over and over"
+    heading         "Recurring thoughts"
+    text            "I think about things over and over"
+    attributes
+        (
+        )
+
+column anxious_nervious varchar(255)
+    comments        ""
+    desc            "I feel anxious and nervous much of the time"
+    heading         "Anxious nervious"
+    text            "I feel anxious and nervous much of the time"
+    attributes
+        (
+        )
+
+column depressed varchar(255)
+    comments        ""
+    desc            "I often feel sad or depressed"
+    heading         "Sad or depressed"
+    text            "I often feel sad or depressed"
+    attributes
+        (
+        )
+
+column lack_confidence varchar(255)
+    comments        ""
+    desc            "I struggle with being confident"
+    heading         "Lack confidence"
+    text            "I struggle with being confident"
+    attributes
+        (
+        )
+
+column overwhelmed varchar(255)
+    comments        ""
+    desc            "I constantly feel overwhelmed"
+    heading         "Overwhelmed"
+    text            "I constantly feel overwhelmed"
+    attributes
+        (
+        )
+
+column lack_emotional_control varchar(255)
+    comments        ""
+    desc            "I have a hard time managing my emotions (frustration, anger, etc.)"
+    heading         "Lack emotional control"
+    text            "I have a hard time managing my emotions (frustration, anger, etc.)"
+    attributes
+        (
+        )
+
+column self_others_harm varchar(255)
+    comments        ""
+    desc            "I have thoughts of hurting myself or others"
+    heading         "Self others harm"
+    text            "I have thoughts of hurting myself or others"
+    attributes
+        (
+        )
+
+column lost_interest varchar(255)
+    comments        ""
+    desc            "I have lost interest in things I typically enjoy"
+    heading         "Lost interest"
+    text            "I have lost interest in things I typically enjoy"
+    attributes
+        (
+        )
+
+column isolated_alone varchar(255)
+    comments        ""
+    desc            "I feel isolated and alone"
+    heading         "Isolated alone"
+    text            "I feel isolated and alone"
+    attributes
+        (
+        )
+
+column counseling varchar(255)
+    comments        ""
+    desc            "I have had Counseling/Mental Health Treatment in the past"
+    heading         "Counseling"
+    text            "I have had Counseling/Mental Health Treatment in the past"
+    attributes
+        (
+        )
+
+column depression   varchar(255)
+    comments        ""
+    desc            "Depression"
+    heading         "Depression"
+    text            "Depression"
+    attributes
+        (
+        )
+
+column anxiety      varchar(255)
+    comments        ""
+    desc            "Anxiety/Panic attacks"
+    heading         "Anxiety"
+    text            "Anxiety/Panic attacks"
+    attributes
+        (
+        )
+
+column eating_disorder  varchar(255)
+    comments        ""
+    desc            "Eating Disorder"
+    heading         "Eating Disorder"
+    text            "Eating Disorder"
+    attributes
+        (
+        )
+
+column adhd_add     varchar(255)
+    comments        ""
+    desc            "Attention Deficit Hyperactivity Disorder / Attention Deficit Disorder"
+    heading         "ADHD/ADD"
+    text            "Attention Deficit Hyperactivity Disorder / Attention Deficit Disorder"
+    attributes
+        (
+        )
+
+column substance_abuse  varchar(255)
+    comments        ""
+    desc            "Substance abuse"
+    heading         "Substance abuse"
+    text            "Substance abuse"
+    attributes
+        (
+        )
+
+column self_harm varchar(255)
+    comments        ""
+    desc            "Self harm"
+    heading         "Self harm"
+    text            "Self harm"
+    attributes
+        (
+        )
+
+column other_mental_health varchar(255)
+    comments        ""
+    desc            "Other mental health"
+    heading         "Other mental health"
+    text            "Other mental health"
     attributes
         (
         )

@@ -86,30 +86,11 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
-    anxiety_2 = forms.CharField(
-        widget=forms.HiddenInput(),required=False
-    )
-    anxiety = forms.CharField(
-        label = "Anxiety/Panic attacks",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-    )
     bronchospasm_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
     bronchospasm = forms.CharField(
         label = "Asthma/Exertion induced bronchospasm",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-    )
-    adhd_add_2 = forms.CharField(
-        widget=forms.HiddenInput(),required=False
-    )
-    adhd_add = forms.CharField(
-        label = """
-                Attention Deficit Hyperactivity Disorder
-                / Attention Deficit Disorder (ADHD/ADD)
-                """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
@@ -143,32 +124,10 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
-    counseling_2 = forms.CharField(
-        widget=forms.HiddenInput(),required=False
-    )
-    counseling = forms.CharField(
-        label = "Counseling/Mental health treatment",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-    )
-    depression_2 = forms.CharField(
-        widget=forms.HiddenInput(),required=False
-    )
-    depression = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-    )
     diabetes_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
     diabetes = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
-    )
-    eating_disorder_2 = forms.CharField(
-        widget=forms.HiddenInput(),required=False
-    )
-    eating_disorder = forms.CharField(
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
@@ -322,6 +281,157 @@ class StudentMedicalHistoryForm(forms.Form):
             Do you have any illness or medical condition not listed above
         """,
         max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    # Student Mental Health Screening
+    trouble_sleeping_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    trouble_sleeping = forms.CharField(
+        label="I often have trouble sleeping",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    more_energy_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    more_energy = forms.CharField(
+        label="I wish I had more energy most days of the week",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    recurring_thoughts_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    recurring_thoughts = forms.CharField(
+        label="I think about things over and over",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    anxious_nervious_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    anxious_nervious = forms.CharField(
+        label="I feel anxious and nervous much of the time",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    depressed_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    depressed = forms.CharField(
+        label="I often feel sad or depressed",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    lack_confidence_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    lack_confidence = forms.CharField(
+        label="I struggle with being confident",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    overwhelmed_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    overwhelmed = forms.CharField(
+        label="I constantly feel overwhelmed",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    lack_emotional_control_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    lack_emotional_control = forms.CharField(
+        label="I have a hard time managing my emotions (frustration, anger, etc.)",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    self_others_harm_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    self_others_harm = forms.CharField(
+        label="I have thoughts of hurting myself or others",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    lost_interest_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    lost_interest = forms.CharField(
+        label="I have lost interest in things I typically enjoy",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    isolated_alone_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    isolated_alone = forms.CharField(
+        label="I feel isolated and alone",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    counseling_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    counseling = forms.CharField(
+        label = "I have had Counseling/Mental Health Treatment in the past",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    depression_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    depression = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    anxiety_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    anxiety = forms.CharField(
+        label = "Anxiety/Panic attacks",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    eating_disorder_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    eating_disorder = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    adhd_add_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    adhd_add = forms.CharField(
+        label = """
+                Attention Deficit Hyperactivity Disorder
+                / Attention Deficit Disorder (ADHD/ADD)
+                """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    substance_abuse_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    substance_abuse = forms.CharField(
+        label="Alcohol/Substance Abuse Disorder",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    self_harm_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    self_harm = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
+    )
+    other_mental_health_2 = forms.CharField(
+        widget=forms.HiddenInput(),required=False
+    )
+    other_mental_health = forms.CharField(
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
 

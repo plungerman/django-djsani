@@ -15,7 +15,7 @@ import os.path
 #DEBUG = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-INFORMIX_DEBUG = "debug"
+INFORMIX_DEBUG = 'debug'
 ADMINS = (
     ('', ''),
 )
@@ -35,17 +35,17 @@ USE_TZ = False
 DEFAULT_CHARSET = 'utf-8'
 FILE_CHARSET = 'utf-8'
 
-SERVER_URL = ""
-API_URL = "%s/%s" % (SERVER_URL, "api")
+SERVER_URL = ''
+API_URL = '{}/{}'.format(SERVER_URL, 'api')
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ROOT_DIR = os.path.dirname(__file__)
-ROOT_URL = "/campus-life/medical/forms/"
+ROOT_URL = '/campus-life/medical/forms/'
 ROOT_URLCONF = 'djsani.core.urls'
 WSGI_APPLICATION = 'djsani.wsgi.application'
 MEDIA_ROOT = ''
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_ROOT = ''
-STATIC_URL = "/static/"
+STATIC_URL = '/static/'
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -94,14 +94,14 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(os.path.dirname(__file__), 'templates'),
-            "/data2/django_templates/djkorra/",
-            "/data2/django_templates/djcher/",
-            "/data2/django_templates/",
+            '/data2/django_templates/djkorra/',
+            '/data2/django_templates/djcher/',
+            '/data2/django_templates/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                "djtools.context_processors.sitevars",
+                'djtools.context_processors.sitevars',
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.media',
@@ -124,7 +124,7 @@ CACHES = {
         #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         #'LOCATION': '/var/tmp/django_djsani_cache',
         #'TIMEOUT': 60*20,
-        #'KEY_PREFIX': "DJSANI_",
+        #'KEY_PREFIX': 'DJSANI_',
         #'OPTIONS': {
         #    'MAX_ENTRIES': 80000,
         #}
@@ -134,27 +134,27 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 # LDAP Constants
 LDAP_SERVER = ''
 LDAP_PORT = '636'
-LDAP_PROTOCOL = "ldaps"
-LDAP_BASE = ""
-LDAP_USER = ""
-LDAP_PASS = ""
-LDAP_EMAIL_DOMAIN = ""
-LDAP_GROUPS = {"":"",}
-LDAP_OBJECT_CLASS = ""
-LDAP_OBJECT_CLASS_LIST = ["",""]
+LDAP_PROTOCOL = 'ldaps'
+LDAP_BASE = ''
+LDAP_USER = ''
+LDAP_PASS = ''
+LDAP_EMAIL_DOMAIN = ''
+LDAP_GROUPS = {'':'',}
+LDAP_OBJECT_CLASS = ''
+LDAP_OBJECT_CLASS_LIST = ['','']
 LDAP_RETURN = []
-LDAP_ID_ATTR=""
+LDAP_ID_ATTR=''
 # auth backends
 AUTHENTICATION_BACKENDS = (
     'djauth.ldapBackend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-LOGIN_URL = '%saccounts/login/' % ROOT_URL
-LOGIN_REDIRECT_URL = '%sdashboard/' % ROOT_URL
+LOGIN_URL = '{}accounts/login/'.format(ROOT_URL)
+LOGIN_REDIRECT_URL = '{}dashboard/'.format(ROOT_URL)
 USE_X_FORWARDED_HOST = True
-#SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_DOMAIN=".carthage.edu"
+SESSION_COOKIE_DOMAIN='.carthage.edu'
 SESSION_COOKIE_NAME ='django_djsani_cookie'
 SESSION_COOKIE_AGE = 86400
 # SMTP settings
@@ -170,27 +170,27 @@ SERVER_MAIL=''
 # app settings
 INSURANCE_RECIPIENTS = []
 HOUSING_EMAIL_LIST = []
-DEFAULT_HASH = ""
-DEFAULT_CID = ""
+DEFAULT_HASH = ''
+DEFAULT_CID = ''
 START_DATE = datetime(NOW.year, 6, 1)
 #ACADEMIC_YEAR_LIMBO = True
 ACADEMIC_YEAR_LIMBO = False
 STAFF_GROUP = 'MedicalStaff'
 COACH_GROUP = 'AthleticsCoach'
 # logging
-LOG_FILEPATH = os.path.join(os.path.dirname(__file__), "logs/")
-LOG_FILENAME = LOG_FILEPATH + "debug.log"
+LOG_FILEPATH = os.path.join(os.path.dirname(__file__), 'logs/')
+LOG_FILENAME = LOG_FILEPATH + 'debug.log'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%Y/%b/%d %H:%M:%S"
+            'format' : '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+            'datefmt' : '%Y/%b/%d %H:%M:%S'
         },
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
-            'datefmt' : "%Y/%b/%d %H:%M:%S"
+            'datefmt' : '%Y/%b/%d %H:%M:%S'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
