@@ -55,7 +55,7 @@ class AthleteForm(forms.Form):
     )
     primary_policy_address = forms.CharField(
         label="Insurance address",
-        widget=forms.Textarea(attrs=REQ_CSS),
+        widget=forms.Textarea(),
         required=False,
     )
     primary_member_id = forms.CharField(
@@ -120,7 +120,7 @@ class AthleteForm(forms.Form):
     )
     secondary_policy_address = forms.CharField(
         label="Insurance address",
-        widget=forms.Textarea(attrs=REQ_CSS),
+        widget=forms.Textarea(),
         required=False,
     )
     secondary_member_id = forms.CharField(

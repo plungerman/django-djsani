@@ -124,8 +124,6 @@ $(function() {
             $("[id^='id_tertiary']").addClass("required");
             // state is not required unless policy type is "state"
             $('#id_tertiary_policy_state').removeClass("required");
-            // address is not required
-            $('#id_tertiary_policy_address').removeClass("required");
             $('#tertiary-form').slideDown(200);
             // jump to tertiary form
             window.location = $('#tertiary-form-anchor').attr('href');

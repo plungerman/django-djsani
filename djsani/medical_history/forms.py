@@ -442,7 +442,7 @@ class StudentMedicalHistoryForm(forms.Form):
     def clean(self):
         cd = self.cleaned_data
         for field in cd:
-            if cd[field] == "Yes" and not cd.get("%s_2" % field):
+            if cd[field] == 'Yes' and not cd.get('{}_2'.format(field)):
                 self._errors[field] = self.error_class([
                     """
                         Explain your 'Yes' response or type 'No'
@@ -939,7 +939,7 @@ class AthleteMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(),required=False
     )
     contact_lenses = forms.CharField(
-        help_text='If yes, indicate hard or soft lenses',
+        help_text="If yes, indicate hard or soft lenses",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
@@ -962,10 +962,10 @@ class AthleteMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(),required=False
     )
     physician_prohibition = forms.CharField(
-        label='''
+        label="""
             Has a physician ever limited/restricted you
             from athletic participation?
-        ''',
+        """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
@@ -973,10 +973,10 @@ class AthleteMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(),required=False
     )
     other_information = forms.CharField(
-        label='''
+        label="""
             Any other health or medical related information
             not covered above?
-        ''',
+        """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
@@ -984,9 +984,9 @@ class AthleteMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(),required=False
     )
     supplements = forms.CharField(
-        label='''
+        label="""
             Are you taking any ergogenic aids/vitamin supplements?
-        ''',
+        """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
@@ -996,7 +996,6 @@ class AthleteMedicalHistoryForm(forms.Form):
     )
     menstrual_cycle = forms.CharField(
         label="Do you have an irregular menstrual cycle?",
-        #help_text='Males, select "No".',
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
         initial="No",
@@ -1006,14 +1005,14 @@ class AthleteMedicalHistoryForm(forms.Form):
     def __init__(self, *args, **kwargs):
         gender = kwargs.pop('gender',False)
         super(AthleteMedicalHistoryForm, self).__init__(*args, **kwargs)
-        if gender == "M":
-            self.fields.pop("menstrual_cycle")
-            self.fields.pop("menstrual_cycle_2")
+        if gender == 'M':
+            self.fields.pop('menstrual_cycle')
+            self.fields.pop('menstrual_cycle_2')
 
     def clean(self):
         cd = self.cleaned_data
         for field in cd:
-            if cd[field] == "Yes" and not cd.get("%s_2" % field):
+            if cd[field] == 'Yes' and not cd.get('{}_2'.format(field)):
                 self._errors[field] = self.error_class(
                     ["Explain your 'Yes' response"]
                 )
@@ -1049,5 +1048,3 @@ class MedicalConsentAgreementForm(forms.Form):
         validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=True
     )
-
-

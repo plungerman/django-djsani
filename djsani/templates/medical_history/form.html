@@ -18,6 +18,14 @@
 <script src="//www.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
+    var mentalHealth = false;
+    var mentalHealthList = [
+        "anxiety","depression","trouble_sleeping","more_energy","recurring_thoughts",
+        "anxious_nervious","depressed","lack_confidence","overwhelmed",
+        "lack_emotional_control","self_others_harm","lost_interest","isolated_alone",
+        "counseling","eating_disorder","adhd_add","substance_abuse","self_harm",
+        "other_mental_health"
+    ];
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
             event.preventDefault();
@@ -48,13 +56,15 @@ $(document).ready(function() {
     });
     $("input:radio").on('change', function() {
         nm = $(this).attr('name');
-        console.log("name = " + nm);
         id = nm + "_2";
         val = $(this).val();
         if (val == "Yes") {
             $("#" + id).show();
-            if (nm == "counseling" || nm == "anxiety" || nm == "depression") {
+            if (mentalHealth == false) {
+              if( $.inArray(nm, mentalHealthList) != -1){
                 $('#mentalHealthModal').modal('show');
+                mentalHealth = true;
+              }
             }
         }
         if (val == "No") {
@@ -103,7 +113,8 @@ $(document).ready(function() {
             // disable submit
             //$(this).children('input[type=submit]').attr('disabled', 'disabled');
             $('#id_submit').prop('disabled', true);
-        } else {
+        }
+        if (error) {
             if(event.preventDefault) {
                 event.preventDefault();
             } else {
@@ -138,16 +149,6 @@ $(document).ready(function() {
         <div>
             <fieldset class="blockLabels">
                 <ol class="nobull">
-                    {% if request.user.is_staff %}
-                    <li>
-                        <input
-                            type="checkbox"
-                            name="toggle_no" id="toggle_no" />
-                        <label for="toggle_no" style="display:inline;">
-                            Mark all as "No"
-                        </label>
-                    </li>
-                    {% endif %}
                     {% if stype == "athlete" %}
                         {% for field in form.visible_fields %}
                             {% include "medical_history/athlete_headers.inc.html" %}
@@ -158,33 +159,67 @@ $(document).ready(function() {
                             {% endif %}
                         {% endfor %}
                     {% else %}
-                        {% for field in form.visible_fields %}
-                            {% if forloop.first %}
-                            <li>
-                                <p>
-                                    Any item to which you answer "Yes",
-                                    please provide the name of medications, year,
-                                    side, diagnosis when appropriate.
-                                </p>
-                            </li>
-                            {% endif %}
-                            {% if field.name == "organ_loss" %}
-                            </li></ol></fieldset>
-                            <fieldset class="blockLabels">
-                            <p>
-                                Please check "yes" for any conditions with
-                                which you have been diagnosed. Please
-                                provide an explanation for item with a
-                                "yes" response.
-                            </p>
-                            <ol>
-                            {% endif %}
-                            {% if field.value == "No" or not field.value %}
-                                {% include "medical_history/form_field.inc.html" %}
-                            {% else %}
-                                {% include "medical_history/form_verify_field.inc.html" %}
-                            {% endif %}
-                        {% endfor %}
+                      {% for field in form.visible_fields %}
+                        {% if forloop.first %}
+                        <li>
+                          <p>
+                            For any item to which you answer "Yes",
+                            please provide an explanation, including:
+                            the name of medications, year,
+                            side effects, and diagnosis when appropriate.
+                          </p>
+                        </li>
+                        {% endif %}
+                        {% if field.name == "organ_loss" %}
+                          </li></ol></fieldset>
+                          <fieldset class="blockLabels">
+                          {% if not update %}
+                          <p>
+                            Please check "yes" for any conditions with
+                            which you have been diagnosed. Please
+                            provide an explanation for any item to which you would
+                            answer "yes".
+                          </p>
+                          {% else %}
+                          <p>
+                            For any item to which you would answer "Yes",
+                            please provide an explanation.
+                          </p>
+                          {% endif %}
+                          <ol>
+                        {% endif %}
+                        {% if field.name == "trouble_sleeping" %}
+                        </li></ol></fieldset>
+                        <fieldset class="blockLabels">
+                        <legend>
+                            Student Mental Health Screening
+                        </legend>
+                        <p>
+                        Please answer all questions honestly.
+                        All answers are <u>confidential</u> and
+                        will not be shared. For any item to which you
+                        would answer "Yes", please provide an explanation.
+                        </p>
+                        <ol>
+                        {% endif %}
+                        {% if field.name == "depression" %}
+                        <li class="form-group ctrlHolder">
+                        <h3 style="color: #000;font-weight:700;">
+                            I have been diagnosed by a medical professional
+                            with the following:
+                        </h3>
+                        </li>
+                        {% endif %}
+                        {% if field.value == "No" or not field.value %}
+                          {% include "medical_history/form_field.inc.html" %}
+                        {% else %}
+                          {% include "medical_history/form_verify_field.inc.html" %}
+                        {% endif %}
+                      {% endfor %}
+                      <li class="form-group ctrlHolder">
+                        {% get_lw_content as counseling blurbs 2174 %}
+                        {{counseling.body}}
+                      </li>
                     {% endif %}
                 </ol>
             </fieldset>
