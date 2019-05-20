@@ -131,6 +131,16 @@ def set_val(request):
             else:
                 if name == 'athlete' and str(value) == '0':
                     dic['sports'] = ''
+
+                # green check mark for athletes
+                if name == 'sitrep' and str(value) == '1':
+                    if obj.medical_consent_agreement:
+                        dic['medical_consent_agreement_status'] = 1
+                    if obj.physical_evaluation_1:
+                        dic['physical_evaluation_status_1'] = 1
+                    if obj.physical_evaluation_2:
+                        dic['physical_evaluation_status_2'] = 1
+
                 # update existing object
                 for key, value in dic.iteritems():
                     setattr(obj, key, value)
