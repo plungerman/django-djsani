@@ -84,7 +84,7 @@ def get_manager(session, cid):
     if not manager:
         immunization = False
         sicklecell = False
-        concussion_baseline = True
+        concussion_baseline = False
         # do we have a past manager?
         obj = session.query(StudentMedicalManager).filter_by(college_id=cid).\
             order_by(desc(StudentMedicalManager.id)).first()
