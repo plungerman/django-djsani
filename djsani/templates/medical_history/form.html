@@ -20,11 +20,11 @@
 $(document).ready(function() {
     var mentalHealth = false;
     var mentalHealthList = [
-        "anxiety","depression","trouble_sleeping","more_energy","recurring_thoughts",
-        "anxious_nervious","depressed","lack_confidence","overwhelmed",
-        "lack_emotional_control","self_others_harm","lost_interest","isolated_alone",
-        "counseling","eating_disorder","adhd_add","substance_abuse","self_harm",
-        "other_mental_health"
+      "anxiety","depression","trouble_sleeping","more_energy",
+      "recurring_thoughts","anxious_nervious","depressed","lack_confidence",
+      "overwhelmed","lack_emotional_control","self_others_harm","lost_interest",
+      "isolated_alone","counseling","eating_disorder","adhd_add",
+      "substance_abuse","self_harm","other_mental_health"
     ];
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -177,8 +177,8 @@ $(document).ready(function() {
                           <p>
                             Please check "yes" for any conditions with
                             which you have been diagnosed. Please
-                            provide an explanation for any item to which you would
-                            answer "yes".
+                            provide an explanation for any item to which you
+                            would answer "yes".
                           </p>
                           {% else %}
                           <p>

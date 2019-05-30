@@ -284,6 +284,7 @@ class StudentMedicalHistoryForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
     # Student Mental Health Screening
+    '''
     trouble_sleeping_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
@@ -380,6 +381,7 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
+    '''
     depression_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
@@ -407,9 +409,9 @@ class StudentMedicalHistoryForm(forms.Form):
     )
     adhd_add = forms.CharField(
         label = """
-                Attention Deficit Hyperactivity Disorder
-                / Attention Deficit Disorder (ADHD/ADD)
-                """,
+            Attention Deficit Hyperactivity Disorder
+            / Attention Deficit Disorder (ADHD/ADD)
+        """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
@@ -421,6 +423,7 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
+    '''
     self_harm_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
@@ -428,6 +431,7 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES,attrs=REQ_CSS),
     )
+    '''
     other_mental_health_2 = forms.CharField(
         widget=forms.HiddenInput(),required=False
     )
