@@ -3,7 +3,9 @@ Django settings for project.
 """
 
 from djzbar.settings import INFORMIX_EARL_TEST as INFORMIX_EARL
-#from djzbar.settings import INFORMIX_EARL
+# sqlserver connection string
+MSSQL_EARL = ''
+
 from djtools.fields import NOW
 
 from datetime import datetime
