@@ -93,6 +93,9 @@
                   data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
                   data-table="cc_student_medical_manager" title="Athlete Status">
                 {% endif %}
+                {% if s.athlete and coach %}
+                <i class="fa fa-times red" title="Athlete Status"></i>
+                {% endif %}
               {% endif %}
               {% if s.concussion_baseline %}
                 <i class="fa fa-check blue" title="Concussion Baseline"></i>

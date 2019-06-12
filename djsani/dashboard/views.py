@@ -68,12 +68,15 @@ def get_students(request):
     coach = in_group(request.user, COACH)
     if request.POST:
       post = request.POST
+      c = post.get('class')
+      if coach:
+          c = '3'
       if staff or coach:
         # simple protection against sql injection
         try:
             sport = int(post.get('sport'))
         except:
-            sport = 0
+            sport = '0'
 
         trees = post.get('print')
         if sport and sport !=0 and staff and trees:
@@ -96,7 +99,6 @@ def get_students(request):
             '''.format(
                 STUDENTS_ALPHA, term['yr'], term['sess']
             )
-            c = post.get('class')
             if c in ['0','1','2','3','4']:
                 if c == '1':
                     sql += 'AND cc_student_medical_manager.sitrep = 1'
@@ -119,15 +121,19 @@ def get_students(request):
       else:
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
     else:
-      template = 'dashboard/home.html'
-      sql = ''' {}
-        AND stu_serv_rec.yr = "{}"
-        AND stu_serv_rec.sess = "{}"
-        AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")
-        ORDER BY lastname
-      '''.format(
-        STUDENTS_ALPHA, term['yr'], term['sess']
-      )
+        template = 'dashboard/home.html'
+
+        cl = 'AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")'
+        if coach:
+            cl = ''
+        sql = ''' {}
+            AND stu_serv_rec.yr = "{}"
+            AND stu_serv_rec.sess = "{}"
+            {}
+            ORDER BY lastname
+        '''.format(
+            STUDENTS_ALPHA, term['yr'], term['sess'], cl
+        )
 
     objs = do_esql(
         sql, key=settings.INFORMIX_DEBUG, earl=EARL
