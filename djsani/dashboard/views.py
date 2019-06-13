@@ -31,9 +31,6 @@ EARL = settings.INFORMIX_EARL
 STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
 
-import logging
-logger = logging.getLogger(__name__)
-
 
 def panels(request, session, mod, manager, content=None, gender=None):
     """
@@ -140,7 +137,6 @@ def get_students(request):
             STUDENTS_ALPHA, term['yr'], term['sess'], cl
         )
 
-    logger.debug('sql = {} '.format(sql))
     objs = do_esql(
         sql, key=settings.INFORMIX_DEBUG, earl=EARL
     )
