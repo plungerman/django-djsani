@@ -192,7 +192,8 @@ def form(request, stype, cid=None):
         request, 'insurance/form.html', {
             'form':form,'update':update,'oo':oo,'student':student,
             'medical_staff':medical_staff, 'manager':manager,
-            'primary':primary,'secondary':secondary,'tertiary':tertiary
+            'primary':primary,'secondary':secondary,'tertiary':tertiary,
+            'group_number':settings.INSURANCE_GROUP_NUMBER
         }
     )
 

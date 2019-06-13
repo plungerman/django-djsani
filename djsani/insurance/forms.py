@@ -91,7 +91,6 @@ class AthleteForm(forms.Form):
         validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
         required=False
     )
-
     # secondary
     secondary_policy_holder = forms.CharField(
         label = "Policy holder",
