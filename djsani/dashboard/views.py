@@ -31,6 +31,9 @@ EARL = settings.INFORMIX_EARL
 STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def panels(request, session, mod, manager, content=None, gender=None):
     """
@@ -62,10 +65,13 @@ def get_students(request):
     GET or POST: returns a list of students
     """
 
-    trees=sport=None
+    user = request.user
+    trees=sport = None
     term = get_term()
-    staff = in_group(request.user, STAFF)
-    coach = in_group(request.user, COACH)
+    staff = in_group(user, STAFF)
+    coach = in_group(user, COACH)
+    if coach and user.is_superuser:
+        coach = False
     if request.POST:
       post = request.POST
       c = post.get('class')
@@ -79,7 +85,7 @@ def get_students(request):
             sport = '0'
 
         trees = post.get('print')
-        if sport and sport !=0 and staff and trees:
+        if sport and sport != '0' and staff and trees:
             # print all athletes from any given sport
             sql = ''' {}
                 WHERE stu_serv_rec.yr = "{}"
@@ -112,7 +118,7 @@ def get_students(request):
                     sql += 'AND cc_student_medical_manager.id IS NULL'
             else:
                 sql += 'AND prog_enr_rec.cl IN ({})'.format(c)
-            if sport and sport != 0:
+            if sport and sport != '0':
                 sql += '''
                     AND cc_student_medical_manager.sports like "%{}%"
                 '''.format(str(sport))
@@ -122,7 +128,6 @@ def get_students(request):
         return HttpResponse("error", content_type="text/plain; charset=utf-8")
     else:
         template = 'dashboard/home.html'
-
         cl = 'AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")'
         if coach:
             cl = ''
@@ -135,6 +140,7 @@ def get_students(request):
             STUDENTS_ALPHA, term['yr'], term['sess'], cl
         )
 
+    logger.debug('sql = {} '.format(sql))
     objs = do_esql(
         sql, key=settings.INFORMIX_DEBUG, earl=EARL
     )
