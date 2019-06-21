@@ -133,7 +133,7 @@ def set_val(request):
                     dic['sports'] = ''
 
                 # green check mark for athletes
-                if name == 'sitrep' and str(value) == '1':
+                if name == 'sitrep_athlete' and str(value) == '1':
                     if obj.medical_consent_agreement:
                         dic['medical_consent_agreement_status'] = 1
                     if obj.physical_evaluation_1:
