@@ -69,7 +69,11 @@ def set_val(request):
     staff = in_group(request.user, settings.STAFF_GROUP)
 
     # we need a table name
-    table = request.POST.get('table')
+    try:
+        table = request.POST.get('table')
+    except:
+        table = None
+
     if not table:
         return HttpResponse("Error: no table name")
     # we need a college ID to insure no funny stuff
