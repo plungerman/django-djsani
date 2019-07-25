@@ -231,7 +231,8 @@ def student_detail(request, cid=None, medium=None, content=None):
                         # execute student vitals sql again in case we just created
                         # a new manager
                         obj = do_esql(sql, key=settings.INFORMIX_DEBUG, earl=EARL)
-                        student = obj.fetchone()
+                        if obj:
+                            student = obj.fetchone()
                     # calculate student's age
                     try:
                         age = calculate_age(student.birth_date)
