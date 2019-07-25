@@ -14,6 +14,8 @@ SELECT
         OR
             NVL(stu_serv_rec.bldg, '') = 'undc'
         OR
+            NVL(UPPER(stu_serv_rec.bldg), '') = 'OFF'
+        OR
             NVL(UPPER(stu_serv_rec.bldg), '') = ''
         THEN
             'Commuter'
