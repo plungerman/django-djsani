@@ -93,8 +93,7 @@
                 <input type="checkbox" name="sitrep_athlete"
                   data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
                   data-table="cc_student_medical_manager" title="Athlete Status">
-                {% endif %}
-                {% if s.athlete and coach %}
+                {% else %}
                 <i class="fa fa-times red" title="Athlete Status"></i>
                 {% endif %}
               {% endif %}
@@ -115,9 +114,9 @@
               </span>
               {% endif %}
             </td>
-            <td class="d-none">{% if s.sitrep %}x{% endif %}</td>
-            <td class="d-none">{% if s.sitrep_athlete %}x{% endif %}</td>
-            <td class="d-none">{% if s.concussion_baseline %}x{% endif %}</td>
+            <td class="d-none">{% if s.sitrep %}x{% else %}&nbsp;{% endif %}</td>
+            <td class="d-none">{% if s.sitrep_athlete %}x{% else %}&nbsp;{% endif %}</td>
+            <td class="d-none">{% if s.concussion_baseline %}x{% else %}&nbsp;{% endif %}</td>
             <td class="{{s.adult}} student-name" style="text-align:left;">
             {% if staff %}
               <a href="{% url 'student_detail' s.id %}">
@@ -126,11 +125,11 @@
             {% else %}
               {{s.lastname}}, {{s.firstname}}
             {% endif %}
-              {% if s.athlete %}
+            {% if s.athlete %}
               <span style="float:right;margin-left:3px;">
                 <i class="fa fa-star green" title="Athlete"></i>
               </span>
-              {% endif %}
+            {% endif %}
             </td>
             {% if staff %}
             <td class="d-none">{{s.id}}</td>
@@ -282,10 +281,13 @@
         </tbody>
         <tfoot>
           <tr>
-            <th style="width:55px;">
+            <th style="width:55px;padding-right:30px;">
               <i class="fa fa-thumbs-up green" title="Student Status"></i>
               <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
               <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
+              {% if staff %}
+              <span class="d-none">Notes</span>
+              {% endif %}
             </th>
             <th class="d-none">Student Status</th>
             <th class="d-none">Athlete Status</th>
