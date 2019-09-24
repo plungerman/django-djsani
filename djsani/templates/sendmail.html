@@ -1,1 +1,6 @@
 {{data.content|safe}}
+{% if data.insurance.primary_card_front %}
+<a href="https://{{server_url}}/{{media_url}}files/{{data.insurance.primary_card_front}}" target="_blank">
+Primary Card Front
+</a>
+{% endif %}

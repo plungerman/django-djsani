@@ -138,6 +138,7 @@
             dict = {
                 'content': content,
                 'subject': subject,
+                'mid': {{manager.id}},
                 'email': $('input[name=destinationEmail]').val(),
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
             }
@@ -644,14 +645,14 @@
     <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
+        <h4 class="modal-title" id="modalLabel">
+          Send insurance information via email
+        </h4>
         <button type="button" class="close"
           data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
-        <h4 class="modal-title" id="myModalLabel">
-          Send insurance information via email
-        </h4>
       </div>
       <!-- Modal Body -->
       <div class="modal-body">

@@ -326,10 +326,17 @@ def advanced_search(request):
 @group_required(STAFF)
 def sendmail(request):
     message = 'error'
+    insurance = None
     if request.POST:
+        mid = request.POST.get('mid')
+        if mid:
+            session = get_session(EARL)
+            insurance = session.query(StudentHealthInsurance).filter_by(
+                manager_id=mid
+            ).first()
         email = request.POST['email']
         subject = request.POST['subject']
-        data = {'content': request.POST['content']}
+        data = {'content': request.POST['content'],'insurance':insurance}
         send_mail(
             request, [email], subject, request.user.email,
             'sendmail.html', data, settings.MANAGERS
