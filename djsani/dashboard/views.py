@@ -102,7 +102,7 @@ def get_students(request):
             '''.format(
                 STUDENTS_ALPHA, term['yr'], term['sess']
             )
-            if c in ['0','1','2','3','4','5']:
+            if c in ['0','1','2','3','4','5','6']:
                 if c == '1':
                     sql += 'AND cc_student_medical_manager.sitrep = 1'
                 elif c == '0':
@@ -113,6 +113,9 @@ def get_students(request):
                     sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
                 elif c == '5':
                     sql += 'AND cc_student_health_insurance.opt_out="1"'
+                elif c == '6':
+                    sql += 'AND cc_student_medical_manager.athlete = 1'
+                    sql += 'AND cc_student_health_insurance.tertiary_company="US Fire Insurance Company"'
                 else:
                     sql += 'AND cc_student_medical_manager.id IS NULL'
             else:
