@@ -2,5 +2,15 @@
 {% if data.insurance.primary_card_front %}
 <a href="https://{{server_url}}/{{media_url}}files/{{data.insurance.primary_card_front}}" target="_blank">
 Primary Card Front
+</a><br>
+{% endif %}
+{% if data.insurance.primary_card_back %}
+<a href="https://{{server_url}}/{{media_url}}files/{{data.insurance.primary_card_back}}" target="_blank">
+Primary Card Back
+</a><br>
+{% endif %}
+{% if data.insurance.tertiary_card %}
+<a href="https://{{server_url}}/{{media_url}}files/{{data.insurance.tertiary_card}}" target="_blank">
+Tertiary Card (Front and Back)
 </a>
 {% endif %}
