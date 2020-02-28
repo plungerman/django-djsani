@@ -15,12 +15,18 @@ handler404 = 'djtools.views.errors.four_oh_four_error'
 handler500 = 'djtools.views.errors.server_error'
 
 urlpatterns = [
+    # django admin
+    url(r'^rocinante/', include('loginas.urls')),
+    url(r'^rocinante/', admin.site.urls),
+    # admin honeypot
+    url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+
+
     # we don't want users created through django admin
     url(
-        r'^admin/auth/user/add/$',
+        r'^rocinante/auth/user/add/$',
         RedirectView.as_view(url=reverse_lazy("auth_login"))
     ),
-    url(r'^admin/', include(admin.site.urls)),
     # auth
     url(
         r'^accounts/login/$',auth_views.login,
@@ -86,4 +92,3 @@ urlpatterns = [
         r'^login-required/?cid=@@UserID', auth.login_required, name="login_required"
     ),
 ]
-urlpatterns += url("admin/", include('loginas.urls')),
