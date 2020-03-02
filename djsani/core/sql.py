@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
+
+"""URLs for all views."""
+
 from django.conf import settings
+
 
 # e.g. 2015-05-01 00:00:00
 START_DATE = settings.START_DATE
@@ -69,24 +74,34 @@ LEFT JOIN
 LEFT JOIN
     profile_rec  ON  id_rec.id = profile_rec.id
 LEFT JOIN
-    cc_student_medical_manager ON id_rec.id = cc_student_medical_manager.college_id
-    AND
-        cc_student_medical_manager.created_at > "{}"
+    cc_student_medical_manager
+ON
+    id_rec.id = cc_student_medical_manager.college_id
+AND
+    cc_student_medical_manager.created_at > "{0}"
 LEFT JOIN
     cc_student_health_insurance
   ON
     cc_student_medical_manager.id = cc_student_health_insurance.manager_id
 LEFT JOIN
-    cc_athlete_sicklecell_waiver ON id_rec.id = cc_athlete_sicklecell_waiver.college_id
-    AND
-        (cc_athlete_sicklecell_waiver.proof = 1 or cc_athlete_sicklecell_waiver.created_at > "{}")
+    cc_athlete_sicklecell_waiver
+ON
+    id_rec.id = cc_athlete_sicklecell_waiver.college_id
+AND
+    (
+        cc_athlete_sicklecell_waiver.proof = 1
+    OR
+        cc_athlete_sicklecell_waiver.created_at > "{1}"
+    )
 WHERE
-    prog_enr_rec.subprog NOT IN  ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
+    prog_enr_rec.subprog
+NOT IN ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
 AND
-    prog_enr_rec.lv_date IS  NULL
+    prog_enr_rec.lv_date IS NULL
 AND
-    stu_acad_rec.sess IN  ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
-""".format(START_DATE,START_DATE)
+    stu_acad_rec.sess
+IN ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
+""".format(START_DATE, START_DATE)
 
 STUDENT_VITALS = """
 SELECT
@@ -173,7 +188,11 @@ LEFT JOIN
 ON
     id_rec.id = cc_athlete_sicklecell_waiver.college_id
 AND
-    (cc_athlete_sicklecell_waiver.proof = 1 OR cc_athlete_sicklecell_waiver.created_at > "{}")
+    (
+        cc_athlete_sicklecell_waiver.proof = 1
+    OR
+        cc_athlete_sicklecell_waiver.created_at > "{0}"
+    )
 LEFT JOIN
     cc_athlete_privacy_waiver
 ON
@@ -219,7 +238,6 @@ LEFT JOIN
 WHERE
     cc_student_medical_manager.college_id=
 """
-
 
 sports = """
 SELECT

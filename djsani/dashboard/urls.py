@@ -1,55 +1,37 @@
-from django.conf.urls import url
-from django.views.generic import TemplateView
+# -*- coding: utf-8 -*-
 
+"""URLs for all views."""
+
+from django.urls import path
+from django.views.generic import TemplateView
 from djsani.dashboard import views
 
+
 urlpatterns = [
-    url(
-        r'^success/$',
-        TemplateView.as_view(
-            template_name='dashboard/success.html'
-        ),
-        name='admin_success'
+    path(
+        'success/',
+        TemplateView.as_view(template_name='dashboard/success.html'),
+        name='admin_success',
     ),
     # generic send mail functions
-    url(
-        r'^send-mail/$',
-        views.sendmail, name="sendmail"
-    ),
+    path('send-mail/', views.sendmail, name='sendmail'),
     # ajax communication to paint the panels
-    url(
-        r'^panels/$',
-        views.panels, name="dashboard_panels"
-    ),
+    path('panels/', views.panels, name='dashboard_panels'),
     # ajax returns students because using home view is a
     # pain in the ass with security involved & spinner
-    url(
-        r'^get-students/$',
-        views.get_students, name="get_students"
-    ),
+    path('get-students/', views.get_students, name='get_students'),
     # simple ID search
-    url(
-        r'^student/$',
-        views.student_detail, name="search_students"
-    ),
+    path('student/', views.student_detail, name='search_students'),
     # name search
-    url(
-        r'^student/search/$',
-        views.advanced_search, name="search_advanced"
-    ),
+    path('student/search/', views.advanced_search, name='search_advanced'),
     # student detail
-    url(
-        r'^student/(?P<cid>\d+)/$',
-        views.student_detail, name="student_detail"
-    ),
+    path('student/<int:cid>/', views.student_detail, name='student_detail'),
     # student detail content specific
-    url(
-        r'^student/(?P<cid>\d+)/(?P<medium>[-\w]+)/(?P<content>[-\w]+)/$',
+    path(
+        'student/<int:cid>/<str:medium>/<str:content>/',
         views.student_detail,
-        name="student_detail_medium"
+        name='student_detail_medium',
     ),
     # home
-    url(
-        r'^$', views.home, name="dashboard_home"
-    ),
+    path('', views.home, name='dashboard_home'),
 ]

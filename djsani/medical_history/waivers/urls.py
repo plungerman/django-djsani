@@ -1,26 +1,24 @@
-from django.conf.urls import include, url
-from django.core.urlresolvers import reverse_lazy
-from django.views.generic import TemplateView
-from django.views.generic import RedirectView
+# -*- coding: utf-8 -*-
 
+"""URLs for all views."""
+
+from django.urls import path
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView
+from django.views.generic import TemplateView
 from djsani.medical_history.waivers import views
+
 
 urlpatterns = [
     # generic waiver successfull submission redirect
-    url(
-        r'^success/$',
+    path(
+        'success/',
         TemplateView.as_view(
-            template_name='medical_history/waivers/success.html'
+            template_name='medical_history/waivers/success.html',
         ),
-        name='waiver_success'
+        name='waiver_success',
     ),
     # medical history waiver forms
-    url(
-        r'^(?P<stype>[a-zA-Z0-9_-]+)/(?P<wtype>[a-zA-Z0-9_-]+)/$',
-        views.form, name="waiver_form"
-    ),
-    url(
-        r'^$',
-        RedirectView.as_view(url=reverse_lazy("home"))
-    ),
+    path('<str:stype>/<str:wtype>/', views.form, name='waiver_form'),
+    path('', RedirectView.as_view(url=reverse_lazy('home'))),
 ]

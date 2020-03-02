@@ -1,24 +1,20 @@
+# -*- coding: utf-8 -*-
+
+"""Utilities that are used in views."""
+
 from django.conf import settings
 from django.core.cache import cache
-
-from djsani.medical_history.models import StudentMedicalHistory
-from djsani.medical_history.models import AthleteMedicalHistory
-from djsani.medical_history.waivers.models import Sicklecell
-from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import StudentMedicalContentType
 from djsani.core.models import StudentMedicalManager
+from djsani.insurance.models import StudentHealthInsurance
+from djsani.medical_history.models import AthleteMedicalHistory
+from djsani.medical_history.models import StudentMedicalHistory
+from djsani.medical_history.waivers.models import Sicklecell
 from djtools.fields import TODAY
-
-from sqlalchemy.orm.session import make_transient
-from sqlalchemy import desc
 
 
 def get_content_type(session, name):
-    """
-    simple function to return a content type from cache
-    or get and set it if it does not exist in cache.
-    default is never to expire.
-    """
+    """Return a content type from cache or fetch and set it in cache."""
     ct = cache.get(name)
     if not ct:
         ct = session.query(StudentMedicalContentType).\
@@ -28,10 +24,12 @@ def get_content_type(session, name):
 
 
 def _doop(session, mod, man):
-    """
-    check for an object and duplicate it.
-    returns the new object or None
-    """
+    """Check for an object and duplicate it. Returns the new object or None."""
+    # django duplicate object
+    # obj = Foo.objects.get(pk=<some_existing_pk>)
+    # obj.pk = None
+    # obj.save()
+
     obj = session.query(mod).filter_by(college_id=man.college_id).\
         order_by(desc(mod.id)).first()
 
@@ -50,25 +48,27 @@ def _doop(session, mod, man):
 
 
 def get_term():
+    """Obtain the current academic term."""
     sd = settings.START_DATE
-    r = 'RA'
+    term = 'RA'
     year = TODAY.year
     if ((TODAY.month < sd.month) or (TODAY.month == 12 and TODAY.day > 10)):
-        r = 'RC'
+        term = 'RC'
         if TODAY.month == 12:
             year = year + 1
-    return {'yr': year, 'sess':r}
+    return {'yr': year, 'sess': term}
 
 
 def get_manager(session, cid):
     """
-    returns the current student medical manager based on the date
-    it was created in relation to the medical forms collection
-    process start date.
+    Returns the current student medical manager.
+
+    it is based on the date created in relation to the medical forms
+    collection process start date.
 
     if we don't have a current manager, we create one.
 
-    Accepts a session object and the student's college ID.
+    accepts a session object and the student's college ID.
     Requires START_DATE in settings file
     """
     # try to fetch a current manager

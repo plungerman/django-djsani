@@ -1,13 +1,17 @@
-from django.contrib import admin
-from django.views.generic import RedirectView, TemplateView
-from django.core.urlresolvers import reverse_lazy
-from django.conf.urls import include, url
-from django.contrib.auth import views as auth_views
+# -*- coding: utf-8 -*-
 
+"""URLs for all views."""
+
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.urls import include
+from django.urls import path
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView
+from django.views.generic import TemplateView
+from djauth.views import loggedout
 from djsani.core import views
 
-from djauth.views import loggedout
-from djzbar.views import auth
 
 admin.autodiscover()
 
@@ -16,79 +20,61 @@ handler500 = 'djtools.views.errors.server_error'
 
 urlpatterns = [
     # django admin
-    url(r'^rocinante/', include('loginas.urls')),
-    url(r'^rocinante/', admin.site.urls),
+    path('rocinante/', include('loginas.urls')),
+    path('rocinante/', admin.site.urls),
     # admin honeypot
-    url(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-
-
+    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     # we don't want users created through django admin
-    url(
-        r'^rocinante/auth/user/add/$',
-        RedirectView.as_view(url=reverse_lazy("auth_login"))
+    path(
+        'rocinante/auth/user/add/',
+        RedirectView.as_view(url=reverse_lazy('auth_login')),
     ),
     # auth
-    url(
-        r'^accounts/login/$',auth_views.login,
-        {'template_name': 'accounts/login.html'},
-        name='auth_login'
+    path(
+        'accounts/login/',
+        auth_views.LoginView.as_view(),
+        {'template_name': 'registration/login.html'},
+        name='auth_login',
     ),
-    url(
-        r'^accounts/logout/$',auth_views.logout,
-        {'next_page': reverse_lazy("auth_loggedout")},
-        name="auth_logout"
+    path(
+        'accounts/logout/',
+        auth_views.LogoutView.as_view(),
+        {'next_page': reverse_lazy('auth_loggedout')},
+        name='auth_logout',
     ),
-    url(
-        r'^accounts/loggedout/$', loggedout,
-        {'template_name': 'accounts/logged_out.html'},
-        name="auth_loggedout"
+    path(
+        'accounts/loggedout/',
+        loggedout,
+        {'template_name': 'registration/logged_out.html'},
+        name='auth_loggedout',
     ),
-    url(
-        r'^accounts/$',
-        RedirectView.as_view(url=reverse_lazy("auth_login"))
+    path(
+        'accounts/',
+        RedirectView.as_view(url=reverse_lazy('auth_login')),
     ),
-    url(
-        r'^denied/$',
-        TemplateView.as_view(
-            template_name="denied.html"
-        ), name="access_denied"
+    path(
+        'denied/',
+        TemplateView.as_view(template_name='denied.html'),
+        name='access_denied',
     ),
     # admin manager
-    url(
-        r'^dashboard/', include("djsani.dashboard.urls")
-    ),
+    path('dashboard/', include('djsani.dashboard.urls')),
     # emergency contact manager
-    url(
-        r'^emergency/', include("djsani.emergency.urls")
-    ),
+    path('emergency/', include('djsani.emergency.urls')),
     # insurance forms
-    url(
-        r'^insurance/', include("djsani.insurance.urls")
-    ),
+    path('insurance/', include('djsani.insurance.urls')),
     # medical history
-    url(
-        r'^history/', include("djsani.medical_history.urls")
-    ),
+    path('history/', include('djsani.medical_history.urls')),
     # override mobile first responsive UI
-    url(
-        r'^responsive/(?P<action>[-\w]+)/',
-        views.responsive_switch, name="responsive_switch"
+    path(
+        'responsive/<str:action>/',
+        views.responsive_switch,
+        name='responsive_switch',
     ),
     # ajax post method to save various types characteristics to db and session
-    url(
-        r'^set-val/$', views.set_val, name="set_val"
-    ),
+    path('set-val/', views.set_val, name='set_val'),
     # ajax post method to rotate an image 90 degress clockwise
-    url(
-        r'^rotate-photo/$', views.rotate_photo, name="rotate_photo"
-    ),
+    path('rotate-photo/', views.rotate_photo, name='rotate_photo'),
     # home
-    url(
-        r'^$', views.home, name="home"
-    ),
-    # authentication views
-    # login required error page
-    url(
-        r'^login-required/?cid=@@UserID', auth.login_required, name="login_required"
-    ),
+    path('', views.home, name='home'),
 ]

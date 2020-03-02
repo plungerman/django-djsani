@@ -28,7 +28,6 @@ desc = "Obtain the current data manager given the user's college ID."
 parser = argparse.ArgumentParser(
     description=desc, formatter_class=argparse.RawTextHelpFormatter,
 )
-
 parser.add_argument(
     '-c',
     '--cid',
@@ -56,7 +55,6 @@ def main():
         immunization = False
         sicklecell = False
         concussion_baseline = False
-
         # do we have a past manager?
         past_man = StudentMedicalManager.objects.using('informix').filter(
             college_id=cid,
@@ -91,10 +89,18 @@ def main():
         )
         logger.debug("new manager")
         if test:
-            logger.debug(manager.__dict__)
+            logger.debug(manager)
         else:
             manager.save(using='informix')
-            logger.debug(manager.__dict__)
+            logger.debug(manager)
+
+        # check for insurance object
+        ins = _doop(session, StudentHealthInsurance, manager)
+        # check for student medical history
+        smh = _doop(session, StudentMedicalHistory, manager)
+        # check for athlete medical history
+        amh = _doop(session, AthleteMedicalHistory, manager)
+
     else:
         logger.debug("current manager")
         logger.debug(manager)

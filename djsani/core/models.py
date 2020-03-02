@@ -29,7 +29,6 @@ class StudentMedicalContentType(models.Model):
         """Attributes about the data model and admin options."""
 
         db_table = 'cc_student_medical_content_type'
-        app_label = 'djsani.core'
 
     def __repr__(self):
         """Default data for display."""
@@ -54,7 +53,6 @@ class StudentMedicalLogEntry(models.Model):
         """Attributes about the data model and admin options."""
 
         db_table = 'cc_student_medical_log_entry'
-        app_label = 'djsani.core'
 
     def __repr__(self):
         """Default data for display."""
@@ -134,7 +132,6 @@ class StudentMedicalManager(models.Model):
         """Attributes about the data model and admin options."""
 
         db_table = 'cc_student_medical_manager'
-        app_label = 'djsani.core'
 
     def __repr__(self):
         """Default data for display."""
