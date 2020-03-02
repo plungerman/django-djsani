@@ -83,6 +83,7 @@ class Risk(models.Model):
         db_table = 'cc_athlete_risk_waiver'
 
     def __repr__(self):
+        """Default data for display."""
         return self.college_id
 
     def current(self, day):
@@ -106,6 +107,7 @@ class Reporting(models.Model):
         db_table = 'cc_athlete_reporting_waiver'
 
     def __repr__(self):
+        """Default data for display."""
         return self.college_id
 
     def current(self, day):
@@ -114,6 +116,8 @@ class Reporting(models.Model):
 
 
 class Privacy(models.Model):
+    """Privacy waiver."""
+
     # core
     college_id = models.IntegerField()
     manager_id = models.IntegerField()
@@ -129,6 +133,7 @@ class Privacy(models.Model):
         db_table = 'cc_athlete_privacy_waiver'
 
     def __repr__(self):
+        """Default data for display."""
         return self.college_id
 
     def current(self, day):

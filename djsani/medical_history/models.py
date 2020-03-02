@@ -1,169 +1,174 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import BigInteger, Boolean, Column, DateTime
-from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.ext.hybrid import hybrid_method
+# -*- coding: utf-8 -*-
 
-import datetime
-NOW = datetime.datetime.now()
+"""Data models."""
 
-Base = declarative_base()
+from django.db import models
+from djsani.core.models import StudentMedicalManager
 
-class StudentMedicalHistory(Base):
-    __tablename__ = 'cc_student_medical_history'
+
+class StudentMedicalHistory(models.Model):
+    """Student Medical History data model."""
 
     # core
-    id = Column(BigInteger, primary_key=True)
-    college_id = Column(Integer, nullable=False)
-    manager_id = Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=NOW, nullable=False)
+    college_id = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    manager_id = models.ForeignKey(StudentMedicalManager)
     # medical history fields
-    allergies_medical = Column(String)
-    allergies_other = Column(String)
-    anemia = Column(String)
-    bronchospasm = Column(String)
-    birth_defect = Column(String)
-    blood_disorder = Column(String)
-    bronchitis = Column(String)
-    cancer = Column(String)
-    chicken_pox = Column(String)
-    diabetes = Column(String)
-    ent_disorder = Column(String)
-    headaches = Column(String)
-    head_injury = Column(String)
-    heart_condition = Column(String)
-    hepatitis = Column(String)
-    hernia = Column(String)
-    hyper_tension = Column(String)
-    hiv_aids = Column(String)
-    hospitalizations = Column(String)
-    ibd = Column(String)
-    kidney_urinary = Column(String)
-    medications = Column(String)
-    meningitis = Column(String)
-    mononucleosis = Column(String)
-    mrsa = Column(String)
-    organ_loss = Column(String)
-    pneumonia = Column(String)
-    rheumatic_fever = Column(String)
-    seizure_disorder = Column(String)
-    stroke = Column(String)
-    thyroid_disorder = Column(String)
-    tuberculosis = Column(String)
-    other_condition = Column(String)
+    allergies_medical = models.CharField(max_length=255)
+    allergies_other = models.CharField(max_length=255)
+    anemia = models.CharField(max_length=255)
+    bronchospasm = models.CharField(max_length=255)
+    birth_defect = models.CharField(max_length=255)
+    blood_disorder = models.CharField(max_length=255)
+    bronchitis = models.CharField(max_length=255)
+    cancer = models.CharField(max_length=255)
+    chicken_pox = models.CharField(max_length=255)
+    diabetes = models.CharField(max_length=255)
+    ent_disorder = models.CharField(max_length=255)
+    headaches = models.CharField(max_length=255)
+    head_injury = models.CharField(max_length=255)
+    heart_condition = models.CharField(max_length=255)
+    hepatitis = models.CharField(max_length=255)
+    hernia = models.CharField(max_length=255)
+    hyper_tension = models.CharField(max_length=255)
+    hiv_aids = models.CharField(max_length=255)
+    hospitalizations = models.CharField(max_length=255)
+    ibd = models.CharField(max_length=255)
+    kidney_urinary = models.CharField(max_length=255)
+    medications = models.CharField(max_length=255)
+    meningitis = models.CharField(max_length=255)
+    mononucleosis = models.CharField(max_length=255)
+    mrsa = models.CharField(max_length=255)
+    organ_loss = models.CharField(max_length=255)
+    pneumonia = models.CharField(max_length=255)
+    rheumatic_fever = models.CharField(max_length=255)
+    seizure_disorder = models.CharField(max_length=255)
+    stroke = models.CharField(max_length=255)
+    thyroid_disorder = models.CharField(max_length=255)
+    tuberculosis = models.CharField(max_length=255)
+    other_condition = models.CharField(max_length=255)
     # student mental health
-    #trouble_sleeping = Column(String)
-    #more_energy = Column(String)
-    #recurring_thoughts = Column(String)
-    #anxious_nervious = Column(String)
-    #depressed = Column(String)
-    #lack_confidence = Column(String)
-    #overwhelmed = Column(String)
-    #lack_emotional_control = Column(String)
-    #self_others_harm = Column(String)
-    #lost_interest = Column(String)
-    #isolated_alone = Column(String)
-    #counseling = Column(String)
-    depression = Column(String)
-    anxiety = Column(String)
-    eating_disorder = Column(String)
-    adhd_add = Column(String)
-    substance_abuse = Column(String)
-    #self_harm = Column(String)
-    other_mental_health = Column(String)
+    # trouble_sleeping = models.CharField(max_length=255)
+    # more_energy = models.CharField(max_length=255)
+    # recurring_thoughts = models.CharField(max_length=255)
+    # anxious_nervious = models.CharField(max_length=255)
+    # depressed = models.CharField(max_length=255)
+    # lack_confidence = models.CharField(max_length=255)
+    # overwhelmed = models.CharField(max_length=255)
+    # lack_emotional_control = models.CharField(max_length=255)
+    # self_others_harm = models.CharField(max_length=255)
+    # lost_interest = models.CharField(max_length=255)
+    # isolated_alone = models.CharField(max_length=255)
+    # counseling = models.CharField(max_length=255)
+    depression = models.CharField(max_length=255)
+    anxiety = models.CharField(max_length=255)
+    eating_disorder = models.CharField(max_length=255)
+    adhd_add = models.CharField(max_length=255)
+    substance_abuse = models.CharField(max_length=255)
+    # self_harm = models.CharField(max_length=255)
+    other_mental_health = models.CharField(max_length=255)
+
+    class Meta:
+        """Attributes about the data model and admin options."""
+
+        db_table = 'cc_student_medical_history'
 
     def __repr__(self):
-        return str(self.college_id)
+        """Default data for display."""
+        return self.college_id
 
-    @hybrid_method
     def current(self, day):
-        """Is this the current medical history for academic year?"""
+        """Determine if this is the current medical history academic year."""
         return self.created_at > day
 
 
-class AthleteMedicalHistory(Base):
-    __tablename__ = 'cc_athlete_medical_history'
+class AthleteMedicalHistory(models.Model):
+    """Athlete Medical History data model."""
 
     # core
-    id = Column(BigInteger, primary_key=True)
-    college_id = Column(Integer, nullable=False)
-    manager_id = Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=NOW, nullable=False)
+    college_id = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    manager_id = models.ForeignKey(StudentMedicalManager)
     # athlete medical history
-    exertional_syncope = Column(String)
-    heat_illness = Column(String)
-    intense_chest_pain = Column(String)
+    exertional_syncope = models.CharField(max_length=255)
+    heat_illness = models.CharField(max_length=255)
+    intense_chest_pain = models.CharField(max_length=255)
     # Heart Health Questions about You and Your Family
-    passed_out = Column(String)
-    chest_pain = Column(String)
-    skip_beats = Column(String)
-    high_cholesterol = Column(String)
-    kawasaki_disease = Column(String)
-    heart_infection = Column(String)
-    heart_test = Column(String)
-    lightheaded = Column(String)
-    unexplained_seizure = Column(String)
-    tired_quickly = Column(String)
-    sudden_death = Column(String)
-    sudden_cardiac_death = Column(String)
-    family_heart_problems = Column(String)
-    fainting_seizures = Column(String)
+    passed_out = models.CharField(max_length=255)
+    chest_pain = models.CharField(max_length=255)
+    skip_beats = models.CharField(max_length=255)
+    high_cholesterol = models.CharField(max_length=255)
+    kawasaki_disease = models.CharField(max_length=255)
+    heart_infection = models.CharField(max_length=255)
+    heart_test = models.CharField(max_length=255)
+    lightheaded = models.CharField(max_length=255)
+    unexplained_seizure = models.CharField(max_length=255)
+    tired_quickly = models.CharField(max_length=255)
+    sudden_death = models.CharField(max_length=255)
+    sudden_cardiac_death = models.CharField(max_length=255)
+    family_heart_problems = models.CharField(max_length=255)
+    fainting_seizures = models.CharField(max_length=255)
     # Head and Neck Injury
-    concussion = Column(String)
-    suspected_concussion = Column(String)
-    head_injuries = Column(String)
-    season_ending = Column(String)
-    cervical_injury = Column(String)
-    stinger_injury = Column(String)
-    neurologist_treatment = Column(String)
-    spine_injury = Column(String)
-    history_headaches = Column(String)
-    history_migraines = Column(String)
-    abdomen_injury = Column(String)
-    rib_injury = Column(String)
-    lumbar_injury = Column(String)
+    concussion = models.CharField(max_length=255)
+    suspected_concussion = models.CharField(max_length=255)
+    head_injuries = models.CharField(max_length=255)
+    season_ending = models.CharField(max_length=255)
+    cervical_injury = models.CharField(max_length=255)
+    stinger_injury = models.CharField(max_length=255)
+    neurologist_treatment = models.CharField(max_length=255)
+    spine_injury = models.CharField(max_length=255)
+    history_headaches = models.CharField(max_length=255)
+    history_migraines = models.CharField(max_length=255)
+    abdomen_injury = models.CharField(max_length=255)
+    rib_injury = models.CharField(max_length=255)
+    lumbar_injury = models.CharField(max_length=255)
     # Upper Extremity Injury
-    shoulder_fracture = Column(String)
-    shoulder_dislocation = Column(String)
-    shoulder_muscle = Column(String)
-    labrum_injury = Column(String)
-    forearm_injury = Column(String)
-    elbow_injury = Column(String)
-    wrist_injury = Column(String)
-    finger_injury = Column(String)
+    shoulder_fracture = models.CharField(max_length=255)
+    shoulder_dislocation = models.CharField(max_length=255)
+    shoulder_muscle = models.CharField(max_length=255)
+    labrum_injury = models.CharField(max_length=255)
+    forearm_injury = models.CharField(max_length=255)
+    elbow_injury = models.CharField(max_length=255)
+    wrist_injury = models.CharField(max_length=255)
+    finger_injury = models.CharField(max_length=255)
     # Lower Extremity Injury
-    hip_pelvis = Column(String)
-    hamstring = Column(String)
-    quadriceps = Column(String)
-    thigh_other = Column(String)
-    knee_ligaments = Column(String)
-    meniscus = Column(String)
-    patella = Column(String)
-    knee_other = Column(String)
-    shin_splints = Column(String)
-    stress_fractures = Column(String)
-    compartment_syndrome = Column(String)
-    lower_leg_other = Column(String)
-    ankle_fracture = Column(String)
-    ankle_sprain = Column(String)
-    foot = Column(String)
-    toe = Column(String)
+    hip_pelvis = models.CharField(max_length=255)
+    hamstring = models.CharField(max_length=255)
+    quadriceps = models.CharField(max_length=255)
+    thigh_other = models.CharField(max_length=255)
+    knee_ligaments = models.CharField(max_length=255)
+    meniscus = models.CharField(max_length=255)
+    patella = models.CharField(max_length=255)
+    knee_other = models.CharField(max_length=255)
+    shin_splints = models.CharField(max_length=255)
+    stress_fractures = models.CharField(max_length=255)
+    compartment_syndrome = models.CharField(max_length=255)
+    lower_leg_other = models.CharField(max_length=255)
+    ankle_fracture = models.CharField(max_length=255)
+    ankle_sprain = models.CharField(max_length=255)
+    foot = models.CharField(max_length=255)
+    toe = models.CharField(max_length=255)
     # Ears, Eyes, Dental
-    glasses = Column(String)
-    contact_lenses = Column(String)
-    hearing_aids = Column(String)
-    dental_appliances = Column(String)
-    previous_year_change = Column(String)
-    physician_prohibition = Column(String)
-    other_information = Column(String)
-    supplements = Column(String)
+    glasses = models.CharField(max_length=255)
+    contact_lenses = models.CharField(max_length=255)
+    hearing_aids = models.CharField(max_length=255)
+    dental_appliances = models.CharField(max_length=255)
+    previous_year_change = models.CharField(max_length=255)
+    physician_prohibition = models.CharField(max_length=255)
+    other_information = models.CharField(max_length=255)
+    supplements = models.CharField(max_length=255)
     # Female Athletes Only
-    menstrual_cycle = Column(String)
+    menstrual_cycle = models.CharField(max_length=255)
+
+    class Meta:
+        """Attributes about the data model and admin options."""
+
+        db_table = 'cc_athlete_medical_history'
 
     def __repr__(self):
-        return str(self.college_id)
+        """Default data for display."""
+        return self.college_id
 
-    @hybrid_method
     def current(self, day):
-        """Is this the current medical history for academic year?"""
+        """Determine if this is the current medical history academic year."""
         return self.created_at > day
-

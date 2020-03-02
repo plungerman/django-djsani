@@ -65,8 +65,10 @@ EARL = settings.INFORMIX_EARL
 @login_required
 def set_val(request):
     """
-    Ajax POST for to set a single name/value pair, used mostly for
-    jquery xeditable and ajax updates for student medical manager.
+    Ajax POST for to set a single name/value pair.
+
+    Used mostly for jquery xeditable and ajax updates for
+    student medical manager.
 
     Requires via POST:
 
@@ -76,7 +78,6 @@ def set_val(request):
     pk (primary key of object to be updated)
     table
     """
-
     staff = in_group(request.user, settings.STAFF_GROUP)
 
     # we need a table name
@@ -172,7 +173,7 @@ def set_val(request):
                 message += '{0} = {1}\n'.format(n, v)
             log = {
                 'college_id': request.user.id,
-                'content_type_id': get_content_type(session, table).id,
+                'content_type_id': get_content_type(table).id,
                 'object_id': obj.id,
                 'object_repr': '{0}'.format(obj),
                 'action_flag': CHANGE,
