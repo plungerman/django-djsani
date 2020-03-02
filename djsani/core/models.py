@@ -1,141 +1,185 @@
 # -*- coding: utf-8 -*-
-from django.utils.encoding import smart_text
 
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import BigInteger, SmallInteger, Boolean, Column, DateTime, Text
-from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+"""Data models."""
 
-import datetime
-NOW = datetime.datetime.now()
+from django.core.validators import FileExtensionValidator
+from django.db import models
+from djtools.fields.helpers import upload_to_path
 
+
+ALLOWED_EXTENSIONS = (
+    'xls', 'xlsx', 'doc', 'docx', 'pdf', 'txt', 'png', 'jpg', 'jpeg',
+)
+FILE_VALIDATORS = [
+    FileExtensionValidator(allowed_extensions=ALLOWED_EXTENSIONS),
+]
 ADDITION = 1
 CHANGE = 2
 DELETION = 3
 
-Base = declarative_base()
 
-class StudentMedicalContentType(Base):
-    __tablename__ = 'cc_student_medical_content_type'
+class StudentMedicalContentType(models.Model):
+    """Content types for the data models."""
 
-    id = Column(BigInteger, primary_key=True)
-    name = Column(String)
-    app_label = Column(String)
-    model = Column(String)
+    name = models.CharField(max_length=200)
+    app_label = models.CharField(max_length=200)
+    model = models.CharField(max_length=200)
 
-    def __repr__(self):
-        return self.model
+    class Meta:
+        """Attributes about the data model and admin options."""
 
-class StudentMedicalLogEntry(Base):
-    __tablename__ = 'cc_student_medical_log_entry'
-
-    id = Column(BigInteger, primary_key=True)
-    college_id = Column(Integer, nullable=False)
-    action_time = Column(DateTime, default=NOW, nullable=False)
-    content_type_id = Column(Integer)
-    object_id = Column(Integer)
-    object_repr = Column(String)
-    action_flag = Column(SmallInteger)
-    action_message = Column(Text)
+        db_table = 'cc_student_medical_content_type'
+        app_label = 'djsani.core'
 
     def __repr__(self):
-        return smart_text(self.action_time)
+        """Default data for display."""
+        return self.name
 
-    def __str__(self):
+
+class StudentMedicalLogEntry(models.Model):
+    """Audit trail logs."""
+
+    college_id = models.IntegerField()
+    action_time = models.DateTimeField(auto_now_add=True)
+    content_type = models.ForeignKey(
+        StudentMedicalContentType,
+        on_delete=models.CASCADE,
+    )
+    object_id = models.IntegerField()
+    object_repr = models.CharField(max_length=255)
+    action_flag = models.PositiveSmallIntegerField()
+    action_message = models.TextField()
+
+    class Meta:
+        """Attributes about the data model and admin options."""
+
+        db_table = 'cc_student_medical_log_entry'
+        app_label = 'djsani.core'
+
+    def __repr__(self):
+        """Default data for display."""
         if self.action_flag == ADDITION:
-            return ('Added "%(object)s".') % {'object': self.object_repr}
+            return ('Added "{0}".'.format(self.object_repr))
         elif self.action_flag == CHANGE:
-            return ('Changed "%(object)s" - %(changes)s') % {
-                'object': self.object_repr,
-                'changes': self.change_message,
-            }
+            return ('Changed "{0}" - {1}'.format(
+                self.object_repr, self.change_message,
+            ))
         elif self.action_flag == DELETION:
-            return ('Deleted "%(object)s."') % {'object': self.object_repr}
+            return ('Deleted "{0}."'.format(self.object_repr))
 
-        return ugettext('LogEntry Object')
+        return 'LogEntry Object'
 
     def is_addition(self):
+        """Check if the action is new."""
         return self.action_flag == ADDITION
 
     def is_change(self):
+        """Check if the action is an update."""
         return self.action_flag == CHANGE
 
     def is_deletion(self):
+        """Check if the action is a deletion."""
         return self.action_flag == DELETION
 
 
-class StudentMedicalManager(Base):
-    __tablename__ = 'cc_student_medical_manager'
+class StudentMedicalManager(models.Model):
+    """Manager class for tracking meta data about other data models."""
 
     # core
-    id = Column(BigInteger, primary_key=True)
-    college_id = Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=NOW, nullable=False)
-    sitrep = Column(Boolean)
-    sitrep_athlete = Column(Boolean)
-    athlete = Column(Boolean)
-    concussion_baseline = Column(Boolean)
-    sports = Column(String)
-    medical_consent_agreement = Column(String)
-    medical_consent_agreement_status = Column(Boolean)
-    physical_evaluation_1 = Column(String)
-    physical_evaluation_status_1 = Column(Boolean)
-    physical_evaluation_2 = Column(String)
-    physical_evaluation_status_2 = Column(Boolean)
-    emergency_contact = Column(Boolean)
+    college_id = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    sitrep = models.BooleanField()
+    sitrep_athlete = models.BooleanField()
+    athlete = models.BooleanField()
+    concussion_baseline = models.BooleanField()
+    sports = models.CharField(max_length=255, null=True, blank=True)
+    medical_consent_agreement = models.FileField(
+        upload_to=upload_to_path,
+        validators=FILE_VALIDATORS,
+        max_length=128,
+        null=True,
+        blank=True,
+    )
+    medical_consent_agreement_status = models.BooleanField()
+    physical_evaluation_1 = models.FileField(
+        upload_to=upload_to_path,
+        validators=FILE_VALIDATORS,
+        max_length=128,
+        null=True,
+        blank=True,
+    )
+    physical_evaluation_status_1 = models.BooleanField()
+    physical_evaluation_2 = models.FileField(
+        upload_to=upload_to_path,
+        validators=FILE_VALIDATORS,
+        max_length=128,
+        null=True,
+        blank=True,
+    )
+    physical_evaluation_status_2 = models.BooleanField()
+    emergency_contact = models.BooleanField()
     # forms and waivers
-    cc_student_immunization = Column(Boolean)
-    cc_student_medical_history = Column(Boolean)
-    cc_student_health_insurance = Column(Boolean)
-    cc_student_meni_waiver = Column(Boolean)
-    cc_athlete_medical_history = Column(Boolean)
-    cc_athlete_privacy_waiver = Column(Boolean)
-    cc_athlete_reporting_waiver = Column(Boolean)
-    cc_athlete_risk_waiver = Column(Boolean)
-    cc_athlete_sicklecell_waiver = Column(Boolean)
-    staff_notes = Column(Text)
+    cc_student_immunization = models.BooleanField()
+    cc_student_medical_history = models.BooleanField()
+    cc_student_health_insurance = models.BooleanField()
+    cc_student_meni_waiver = models.BooleanField()
+    cc_athlete_medical_history = models.BooleanField()
+    cc_athlete_privacy_waiver = models.BooleanField()
+    cc_athlete_reporting_waiver = models.BooleanField()
+    cc_athlete_risk_waiver = models.BooleanField()
+    cc_athlete_sicklecell_waiver = models.BooleanField()
+    staff_notes = models.TextField()
+
+    class Meta:
+        """Attributes about the data model and admin options."""
+
+        db_table = 'cc_student_medical_manager'
+        app_label = 'djsani.core'
 
     def __repr__(self):
-        return str(self.college_id)
+        """Default data for display."""
+        return self.college_id
 
-    #@hybrid_property
-    @hybrid_method
     def current(self, day):
-        """Is this the current manager for academic year?"""
+        """Determine if this is the current manager for academic year."""
         return self.created_at > day
-    #current = property(_get_current)
+
+    def get_slug(self):
+        """Used for the upload_to_path helper for file uplaods."""
+        return 'student-medical-manager'
+
 
 # IDs must be unique pattern that does not repeat in any other
 # item e.g 25 & 250 will not work.
 SPORTS_MEN = (
-    ("0","----Men's Sport----"),
-    ("15","Baseball"),
-    ("25","Basketball"),
-    ("35","Cross Country"),
-    ("45","Football"),
-    ("55","Golf"),
-    ("61","Ice Hockey"),
-    ("65","Lacrosse"),
-    ("75","Soccer"),
-    ("85","Swimming"),
-    ("95","Tennis"),
-    ("105","Track &amp; Field"),
-    ("120","Volleyball"),
+    ('0', "----Men's Sport----"),
+    ('15', 'Baseball'),
+    ('25', 'Basketball'),
+    ('35', 'Cross Country'),
+    ('45', 'Football'),
+    ('55', 'Golf'),
+    ('61', 'Ice Hockey'),
+    ('65', 'Lacrosse'),
+    ('75', 'Soccer'),
+    ('85', 'Swimming'),
+    ('95', 'Tennis'),
+    ('105', 'Track &amp; Field'),
+    ('120', 'Volleyball'),
 )
 SPORTS_WOMEN = (
-    ("0","----Women's Sports----"),
-    ("200","Basketball"),
-    ("210","Cross Country"),
-    ("220","Golf"),
-    ("225","Ice Hockey"),
-    ("230","Lacrosse"),
-    ("240","Soccer"),
-    ("260","Softball"),
-    ("270","Swimming"),
-    ("280","Tennis"),
-    ("290","Track &amp; Field"),
-    ("300","Volleyball"),
-    ("305","Water Polo")
+    ('0', "----Women's Sports----"),
+    ('200', 'Basketball'),
+    ('210', 'Cross Country'),
+    ('220', 'Golf'),
+    ('225', 'Ice Hockey'),
+    ('230', 'Lacrosse'),
+    ('240', 'Soccer'),
+    ('260', 'Softball'),
+    ('270', 'Swimming'),
+    ('280', 'Tennis'),
+    ('290', 'Track &amp; Field'),
+    ('300', 'Volleyball'),
+    ('305', 'Water Polo'),
 )
 
 SPORTS = SPORTS_WOMEN + SPORTS_MEN

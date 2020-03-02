@@ -21,12 +21,12 @@ class SicklecellForm(forms.Form):
         required=False
     )
     proof = forms.BooleanField(
-        required=False
+        required=False,
     )
     results = forms.ChoiceField(
         choices=SICKLE_CELL_RESULTS,
         widget=forms.RadioSelect(),
-        required=False
+        required=False,
     )
     results_file = forms.FileField(
         label="Results File",
@@ -34,7 +34,7 @@ class SicklecellForm(forms.Form):
         validators=[
             FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
         ],
-        required=False
+        required=False,
     )
 
     def clean(self):

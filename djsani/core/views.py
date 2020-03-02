@@ -1,35 +1,46 @@
+# -*- coding: utf-8 -*-
+
+"""Views and helpers for the project as a whole."""
+
 from django.conf import settings
-from django.template import RequestContext
-from django.shortcuts import render
-from django.core.urlresolvers import reverse_lazy
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
-
-from djsani.core.sql import STUDENT_VITALS
-from djsani.core.utils import get_content_type, get_manager, get_term
-
-from djsani.core.models import SPORTS_WOMEN, SPORTS_MEN, SPORTS
-from djsani.core.models import StudentMedicalManager
+from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from djimix.decorators.auth import portal_auth_required
+from djsani.core.models import CHANGE
+from djsani.core.models import SPORTS
+from djsani.core.models import SPORTS_MEN
+from djsani.core.models import SPORTS_WOMEN
 from djsani.core.models import StudentMedicalLogEntry
-from djsani.core.models import ADDITION, CHANGE
+from djsani.core.models import StudentMedicalManager
+from djsani.core.sql import STUDENT_VITALS
+from djsani.core.utils import get_content_type
+from djsani.core.utils import get_manager
+from djsani.core.utils import get_term
 from djsani.insurance.models import StudentHealthInsurance
-from djsani.medical_history.waivers.models import Meni, Privacy, Reporting
-from djsani.medical_history.waivers.models import Risk, Sicklecell
-from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
-
-from djmaidez.core.models import (
-    ENS_CODES, ENS_FIELDS, MOBILE_CARRIER, RELATIONSHIP
-)
-from djzbar.utils.informix import get_engine, get_session
-from djzbar.decorators.auth import portal_auth_required
+from djsani.medical_history.models import StudentMedicalHistory
+from djsani.medical_history.waivers.models import Meni
+from djsani.medical_history.waivers.models import Privacy
+from djsani.medical_history.waivers.models import Reporting
+from djsani.medical_history.waivers.models import Risk
+from djsani.medical_history.waivers.models import Sicklecell
 from djtools.utils.date import calculate_age
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
-from djtools.fields import TODAY
-
 from PIL import Image
+
+from djmaidez.core.models import ENS_CODES
+from djmaidez.core.models import ENS_FIELDS
+from djmaidez.core.models import MOBILE_CARRIER
+from djmaidez.core.models import RELATIONSHIP
+
+from djzbar.utils.informix import get_engine
+from djzbar.utils.informix import get_session
+
 
 # table names are the key, base model classes are the value
 
@@ -157,15 +168,15 @@ def set_val(request):
         # update the log entry for staff modifications
         if staff:
             message = ''
-            for n,v in dic.items():
-                message += u'{} = {}\n'.format(n,v)
+            for n, v in dic.items():
+                message += '{0} = {1}\n'.format(n, v)
             log = {
                 'college_id': request.user.id,
                 'content_type_id': get_content_type(session, table).id,
                 'object_id': obj.id,
-                'object_repr': '{}'.format(obj),
+                'object_repr': '{0}'.format(obj),
                 'action_flag': CHANGE,
-                'action_message': message
+                'action_message': message,
             }
             log_entry = StudentMedicalLogEntry(**log)
             session.add(log_entry)
@@ -174,21 +185,22 @@ def set_val(request):
         session.close()
 
         return HttpResponse(
-            "success", content_type='text/plain; charset=utf-8'
+            "success", content_type='text/plain; charset=utf-8',
         )
 
 
 @portal_auth_required(
-    session_var='DJSANI_AUTH', redirect_url=reverse_lazy('access_denied')
+    session_var='DJSANI_AUTH', redirect_url=reverse_lazy('access_denied'),
 )
 def home(request):
+    """Default home view when user signs in."""
     if settings.ACADEMIC_YEAR_LIMBO:
         return render(
             request, 'closed.html',
         )
 
     # for when faculty/staff sign in here or not student found
-    data = {}
+    context_data = {}
     # create database session
     session = get_session(EARL)
     user = request.user
@@ -240,7 +252,7 @@ def home(request):
             adult = False
 
         # context dict
-        data = {
+        context_data = {
             'switch_earl': reverse_lazy('set_val'),
             'student':student,
             'manager':manager,
@@ -261,62 +273,73 @@ def home(request):
             for field in ENS_FIELDS:
                 try:
                     value = getattr(o, field).decode('cp1252').encode('utf-8')
-                except:
+                except Exception:
                     value = getattr(o, field)
                 row[field] = value
-            data[o.aa] = row
-        data['mobile_carrier'] = MOBILE_CARRIER
-        data['relationship'] = RELATIONSHIP
-        data['solo'] = True
+            context_data[o.aa] = row
+        context_data['mobile_carrier'] = MOBILE_CARRIER
+        context_data['relationship'] = RELATIONSHIP
+        context_data['solo'] = True
     else:
-        if not in_group(user, 'carthageStaffStatus') and \
-          not in_group(user, 'carthageFacultyStatus'):
+        # returns False if not student, which returns True
+        facstaff = (
+            not in_group(user, 'carthageStaffStatus') and
+            not in_group(user, 'carthageFacultyStatus')
+        )
+        if facstaff:
             # could not find student by college_id
-            data = {
-                'student':student,'sports':SPORTS,'solo':True,'adult':adult
+            context_data = {
+                'student': student,
+                'sports': SPORTS,
+                'solo': True,
+                'adult': adult,
             }
             # notify managers
             send_mail(
-                request, settings.HOUSING_EMAIL_LIST,
-                u'[Lost] Student: {} {} ({})'.format(
-                    user.first_name, user.last_name, cid
-                ), user.email, 'alert_email.html', request,
-                [settings.MANAGERS[0][1],]
+                request,
+                settings.HOUSING_EMAIL_LIST,
+                '[Lost] Student: {0} {1} ({2})'.format(
+                    user.first_name, user.last_name, cid,
+                ),
+                user.email,
+                'alert_email.html',
+                request,
+                [settings.MANAGERS[0][1]],
             )
 
     session.close()
 
-    return render(request, 'home.html', data)
+    return render(request, 'home.html', context_data)
 
 
 @csrf_exempt
 @login_required
 def rotate_photo(request):
-    '''
-    AJAX Post request for rotating an image 90 degrees clockwise
-    '''
+    """AJAX Post request for rotating an image 90 degrees clockwise."""
     msg = "Error"
     phile = request.POST.get('phile')
     if phile:
-        if phile.lower().split('.')[-1] in ['jpg','jpeg','png']:
-            path = '{}/files/{}'.format(settings.MEDIA_ROOT,phile)
+        if phile.lower().split('.')[-1] in {'jpg', 'jpeg', 'png'}:
+            path = '{0}/files/{1}'.format(settings.MEDIA_ROOT, phile)
             try:
                 src_im = Image.open(path)
                 im = src_im.rotate(90, expand=True)
                 im.save(path)
                 msg = "Success"
-            except:
+            except Exception:
                 msg = "Something is a miss with that file."
         else:
             msg = "The file is not a graphics file."
 
     return HttpResponse(
-        msg, content_type='text/plain; charset=utf-8'
+        msg, content_type='text/plain; charset=utf-8',
     )
 
-def responsive_switch(request,action):
-    if action=='go':
-        request.session['desktop_mode']=True
-    elif action=='leave':
-        request.session['desktop_mode']=False
+
+def responsive_switch(request, action):
+    """Switch between desktop and responsive UI."""
+    if action == 'go':
+        request.session['desktop_mode'] = True
+    elif action == 'leave':
+        request.session['desktop_mode'] = False
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', ''))

@@ -139,11 +139,11 @@ def get_students(request):
             {}
             ORDER BY lastname
         '''.format(
-            STUDENTS_ALPHA, term['yr'], term['sess'], cl
+            STUDENTS_ALPHA, term['yr'], term['sess'], cl,
         )
 
     objs = do_esql(
-        sql, key=settings.INFORMIX_DEBUG, earl=EARL
+        sql, key=settings.INFORMIX_DEBUG, earl=EARL,
     )
 
     students = None
@@ -164,14 +164,17 @@ def get_students(request):
                     filter(AARec.aa.in_(ENS_CODES)).all()
                 # health insurance
                 s['shi'] = panels(
-                    request, session, StudentHealthInsurance, manager
+                    request, session, StudentHealthInsurance, manager,
                 )
 
     return render(
         request, template, {
-            'students':students,'sports':SPORTS,'sport':sport,'staff':staff,
-            'coach':coach
-        }
+            'students': students,
+            'sports': SPORTS,
+            'sport': sport,
+            'staff': staff,
+            'coach': coach,
+        },
     )
 
 
