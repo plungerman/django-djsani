@@ -15,10 +15,12 @@ from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.waivers.models import Sicklecell
+from djtools.fields import TODAY
 from djtools.utils.logging import seperator
 
 
 logger = logging.getLogger('debug_logfile')
+DEC = settings.DECEMBER
 
 
 class CoreUtilsTestCase(TestCase):
@@ -29,6 +31,17 @@ class CoreUtilsTestCase(TestCase):
         self.user = User.objects.get(pk=settings.TEST_STUDENT_ID)
         self.earl = settings.INFORMIX_ODBC_TRAIN
         self.factory = RequestFactory()
+
+    def test_get_term(self):
+        """Obtain the current academic term."""
+        sd = settings.START_DATE
+        term = 'RA'
+        year = TODAY.year
+        if (TODAY.month < sd.month) or (TODAY.month == DEC and TODAY.day > 10):
+            term = 'RC'
+            if TODAY.month == DEC:
+                year = year + 1
+        return {'yr': year, 'sess': term}
 
     def test_get_manager(self):
         """Obtain the users medical manager."""

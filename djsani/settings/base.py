@@ -198,6 +198,7 @@ HOUSING_EMAIL_LIST = []
 DEFAULT_HASH = ''
 DEFAULT_CID = '666'
 START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)
+DECEMBER = 12
 ACADEMIC_YEAR_LIMBO = False
 STAFF_GROUP = 'MedicalStaff'
 COACH_GROUP = 'AthleticsCoach'

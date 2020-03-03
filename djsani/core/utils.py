@@ -13,7 +13,7 @@ from djsani.medical_history.waivers.models import Sicklecell
 from djtools.fields import TODAY
 
 
-DEC = 12
+DEC = settings.DECEMBER
 
 
 def doop(mod, man):
