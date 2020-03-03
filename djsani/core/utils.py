@@ -16,7 +16,7 @@ from djtools.fields import TODAY
 DEC = 12
 
 
-def _doop(mod, man):
+def doop(mod, man):
     """Check for an object and duplicate it. Returns the new object or None."""
     instance = mod.objects.using('informix').filter(
         college_id=man.college_id,
@@ -56,7 +56,7 @@ def get_term():
     return {'yr': year, 'sess': term}
 
 
-def get_manager(session, cid):
+def get_manager(cid):
     """
     Returns the current student medical manager.
 
@@ -65,8 +65,7 @@ def get_manager(session, cid):
 
     if we don't have a current manager, we create one.
 
-    accepts a session object and the student's college ID.
-    Requires START_DATE in settings file
+    requires the student's college ID and START_DATE in settings file.
     """
     # try to fetch a current manager
     # from cache or database
@@ -112,17 +111,13 @@ def get_manager(session, cid):
             sitrep_athlete=False,
             concussion_baseline=concussion_baseline,
         )
-        # add manager
-        session.add(manager)
-        session.flush()
+        manager.save()
 
         # check for insurance object
-        _doop(StudentHealthInsurance, manager)
+        doop(StudentHealthInsurance, manager)
         # check for student medical history
-        _doop(StudentMedicalHistory, manager)
+        doop(StudentMedicalHistory, manager)
         # check for athlete medical history
-        _doop(AthleteMedicalHistory, manager)
-
-        session.commit()
+        doop(AthleteMedicalHistory, manager)
 
     return manager

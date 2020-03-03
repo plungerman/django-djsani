@@ -4,6 +4,7 @@
 
 from django.db import models
 from djsani.core.models import FILE_VALIDATORS
+from djsani.core.models import StudentMedicalManager
 from djtools.fields.helpers import upload_to_path
 
 
@@ -12,7 +13,9 @@ class Sicklecell(models.Model):
 
     # core
     college_id = models.IntegerField()
-    manager_id = models.IntegerField()
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # waiver fields
@@ -35,7 +38,7 @@ class Sicklecell(models.Model):
 
     def __repr__(self):
         """Default value for this object."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -47,7 +50,9 @@ class Meni(models.Model):
 
     # core
     college_id = models.IntegerField()
-    manager_id = models.IntegerField()
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # waiver fields
@@ -60,7 +65,7 @@ class Meni(models.Model):
 
     def __repr__(self):
         """Default value for this object."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -72,7 +77,9 @@ class Risk(models.Model):
 
     # core
     college_id = models.IntegerField()
-    manager_id = models.IntegerField()
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
     agree = models.BooleanField()
@@ -84,7 +91,7 @@ class Risk(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -96,7 +103,9 @@ class Reporting(models.Model):
 
     # core
     college_id = models.IntegerField()
-    manager_id = models.IntegerField()
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
     agree = models.BooleanField()
@@ -108,7 +117,7 @@ class Reporting(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -120,7 +129,9 @@ class Privacy(models.Model):
 
     # core
     college_id = models.IntegerField()
-    manager_id = models.IntegerField()
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
     news_media = models.BooleanField()  # not required
@@ -134,7 +145,7 @@ class Privacy(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""

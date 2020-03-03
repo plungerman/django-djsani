@@ -101,7 +101,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'djsani.core',
     'djsani.emergency',
-    # 'djsani.medical_history',
+    'djsani.insurance',
+    'djsani.medical_history',
     'djsani.medical_history.waivers',
     'djtools',
     # third party apps

@@ -12,7 +12,9 @@ class StudentHealthInsurance(models.Model):
     # core
     college_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    manager_id = models.ForeignKey(StudentMedicalManager)
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     opt_out = models.BooleanField()
     # primary
     primary_policy_holder = models.CharField()
@@ -56,7 +58,7 @@ class StudentHealthInsurance(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.college_id
+        return str(self.college_id)
 
     def get_slug(self):
         """Used for the upload_to_path helper for file uplaods."""
@@ -72,7 +74,7 @@ class StudentHealthInsurance(models.Model):
         for field in self._meta.fields:
             if field.name == 'opt_out':
                 setattr(self, field.name, True)
-            elif field.name not in {'manager_id', 'college_id', 'created_at'}:
+            elif field.name not in {'manager', 'college_id', 'created_at'}:
                 setattr(self, field.name, '')
 
     def current(self, day):

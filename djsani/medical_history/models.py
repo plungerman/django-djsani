@@ -12,7 +12,9 @@ class StudentMedicalHistory(models.Model):
     # core
     college_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    manager_id = models.ForeignKey(StudentMedicalManager)
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     # medical history fields
     allergies_medical = models.CharField(max_length=255)
     allergies_other = models.CharField(max_length=255)
@@ -75,7 +77,7 @@ class StudentMedicalHistory(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current medical history academic year."""
@@ -88,7 +90,9 @@ class AthleteMedicalHistory(models.Model):
     # core
     college_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    manager_id = models.ForeignKey(StudentMedicalManager)
+    manager = models.ForeignKey(
+        StudentMedicalManager, on_delete=models.CASCADE,
+    )
     # athlete medical history
     exertional_syncope = models.CharField(max_length=255)
     heat_illness = models.CharField(max_length=255)
@@ -167,7 +171,7 @@ class AthleteMedicalHistory(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current medical history academic year."""

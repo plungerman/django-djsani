@@ -37,7 +37,6 @@ from djmaidez.core.models import ENS_CODES
 from djmaidez.core.models import ENS_FIELDS
 from djmaidez.core.models import MOBILE_CARRIER
 from djmaidez.core.models import RELATIONSHIP
-
 from djzbar.utils.informix import get_engine
 from djzbar.utils.informix import get_session
 

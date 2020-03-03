@@ -37,4 +37,4 @@ class AARec(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.id
+        return str(self.id)

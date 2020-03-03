@@ -2,7 +2,6 @@
 
 """Fetch the user's medical manager based on ID and current date."""
 
-
 import argparse
 import django
 import logging
@@ -13,10 +12,12 @@ django.setup()
 
 from django.conf import settings
 from djsani.core.models import StudentMedicalManager
+from djsani.insurance.models import StudentHealthInsurance
+from djsani.medical_history.models import AthleteMedicalHistory
+from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.waivers.models import Sicklecell
+from djsani.core.utils import doop
 from djtools.utils.logging import seperator
-
-logger = logging.getLogger('debug_logfile')
 
 # env
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
@@ -42,6 +43,8 @@ parser.add_argument(
     dest='test',
 )
 
+logger = logging.getLogger('debug_logfile')
+
 
 def main():
     """Obtain the users medical manager."""
@@ -50,7 +53,11 @@ def main():
     manager = StudentMedicalManager.objects.using('informix').filter(
         college_id=cid,
     ).filter(created_at__gte=settings.START_DATE).first()
-    if not manager:
+    if manager:
+        logger.debug("current manager")
+        logger.debug(manager)
+        logger.debug(manager.created_at)
+    else:
         logger.debug("no current manager")
         immunization = False
         sicklecell = False
@@ -95,16 +102,11 @@ def main():
             logger.debug(manager)
 
         # check for insurance object
-        ins = _doop(session, StudentHealthInsurance, manager)
+        doop(StudentHealthInsurance, manager)
         # check for student medical history
-        smh = _doop(session, StudentMedicalHistory, manager)
+        doop(StudentMedicalHistory, manager)
         # check for athlete medical history
-        amh = _doop(session, AthleteMedicalHistory, manager)
-
-    else:
-        logger.debug("current manager")
-        logger.debug(manager)
-        logger.debug(manager.created_at)
+        doop(AthleteMedicalHistory, manager)
 
 
 if __name__ == '__main__':

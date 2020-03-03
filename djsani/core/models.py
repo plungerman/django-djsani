@@ -135,7 +135,7 @@ class StudentMedicalManager(models.Model):
 
     def __repr__(self):
         """Default data for display."""
-        return self.college_id
+        return str(self.college_id)
 
     def current(self, day):
         """Determine if this is the current manager for academic year."""
