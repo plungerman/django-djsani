@@ -3,12 +3,16 @@
 """Fetch the user's medical manager based on ID and current date."""
 
 import argparse
-import django
 import logging
 import os
 import sys
 
+import django
+
+
 django.setup()
+# env
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
 
 from django.conf import settings
 from djsani.core.models import StudentMedicalManager
@@ -18,9 +22,6 @@ from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.waivers.models import Sicklecell
 from djsani.core.utils import doop
 from djtools.utils.logging import seperator
-
-# env
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
 
 # set up command-line options
 desc = "Obtain the current data manager given the user's college ID."

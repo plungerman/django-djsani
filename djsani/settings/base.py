@@ -131,7 +131,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(os.path.dirname(__file__), 'templates'),
+            os.path.join(BASE_DIR, 'templates'),
             '/data2/django_templates/djkorra/',
             '/data2/django_templates/djcher/',
             '/data2/django_templates/',
@@ -199,6 +199,7 @@ DEFAULT_HASH = ''
 DEFAULT_CID = '666'
 START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)
 DECEMBER = 12
+ADULT_AGE = 18
 ACADEMIC_YEAR_LIMBO = False
 STAFF_GROUP = 'MedicalStaff'
 COACH_GROUP = 'AthleticsCoach'
