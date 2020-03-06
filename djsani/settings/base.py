@@ -204,6 +204,8 @@ ACADEMIC_YEAR_LIMBO = False
 STAFF_GROUP = 'MedicalStaff'
 COACH_GROUP = 'AthleticsCoach'
 TEST_STUDENT_ID = None
+TEST_STAFF_ID = None
+ROTATE_PHOTO =-90
 # logging
 LOG_FILEPATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/',

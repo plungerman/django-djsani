@@ -28,7 +28,7 @@ def doop(mod, man):
         instance.created_at = None
         # associate the new obj with the new manager
         instance.manager_id = man.id
-        instance.save()
+        instance.save(using='informix')
 
     return instance
 
@@ -111,7 +111,7 @@ def get_manager(cid):
             sitrep_athlete=False,
             concussion_baseline=concussion_baseline,
         )
-        manager.save()
+        manager.save(using='informix')
 
         # check for insurance object
         doop(StudentHealthInsurance, manager)

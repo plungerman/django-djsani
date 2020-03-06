@@ -4,7 +4,6 @@
 
 import argparse
 import django
-import logging
 import os
 import sys
 
@@ -25,7 +24,6 @@ from djsani.core.utils import get_term
 from djtools.utils.date import calculate_age
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
-
 from djmaidez.contact.data import ENS_CODES
 from djmaidez.contact.data import ENS_FIELDS
 from djmaidez.contact.data import MOBILE_CARRIER
@@ -57,7 +55,6 @@ if settings.DEBUG:
     EARL = settings.INFORMIX_ODBC_TRAIN
 else:
     EARL = settings.INFORMIX_ODBC
-logger = logging.getLogger('debug_logfile')
 
 
 def main():
@@ -75,8 +72,8 @@ def main():
     # get academic term
     term = get_term()
     # term = {'yr': 2017, 'sess': 'RC'}
-    logger.debug("get_term()")
-    logger.debug(term)
+    print("get_term()")
+    print(term)
     # get student
     sql = """ {0}
         WHERE
@@ -87,31 +84,31 @@ def main():
     """.format(
         STUDENT_VITALS, cid, term['yr'], term['sess'], settings.START_DATE,
     )
-    logger.debug('STUDENT_VITALS')
-    logger.debug(sql)
+    print('STUDENT_VITALS')
+    print(sql)
     with get_connection(EARL) as connection:
         student = xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchone()
         if student:
             # sports needs a python list
             if manager.sports:
                 my_sports = manager.sports.split(',')
-                logger.debug("my_sports")
-                logger.debug(my_sports)
+                print("my_sports")
+                print(my_sports)
             # adult or minor? if we do not have a DOB, default to minor
             if student.birth_date:
                 age = calculate_age(student.birth_date)
-                logger.debug("age")
-                logger.debug(age)
+                print("age")
+                print(age)
                 if age >= settings.ADULT_AGE:
                     adult = True
-                    logger.debug('adult')
+                    print('adult')
             # show the corresponding list of sports
             if student.sex == 'F':
                 sports = SPORTS_WOMEN
             else:
                 sports = SPORTS_MEN
-            logger.debug('sports')
-            logger.debug(sports)
+            print('sports')
+            print(sports)
             # context dict
             context_data = {
                 'switch_earl': reverse_lazy('set_val'),
@@ -122,8 +119,6 @@ def main():
                 'adult': adult,
                 'sql': sql,
             }
-            for key, cdata in context_data.items():
-                logger.debug(cdata)
             # emergency contact modal form
             sql = 'SELECT * FROM aa_rec WHERE aa in {0} AND id="{1}"'.format(
                 ENS_CODES, cid,
@@ -143,8 +138,8 @@ def main():
                 not in_group(user, 'carthageStaffStatus') and
                 not in_group(user, 'carthageFacultyStatus')
             )
-            logger.debug('anitstaff')
-            logger.debug(antistaff)
+            print('anitstaff')
+            print(antistaff)
             if antistaff:
                 # could not find student by college_id
                 context_data = {
@@ -152,6 +147,7 @@ def main():
                     'sports': SPORTS,
                     'solo': True,
                     'adult': adult,
+                    'user': user,
                 }
                 # notify managers
                 send_mail(
@@ -162,7 +158,7 @@ def main():
                     ),
                     user.email,
                     'alert_email.html',
-                    None,
+                    context_data,
                     [settings.MANAGERS[0][1]],
                 )
 
@@ -173,6 +169,6 @@ if __name__ == '__main__':
     test = args.test
 
     if test:
-        logger.debug(args)
+        print(args)
 
     sys.exit(main())

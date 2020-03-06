@@ -4,14 +4,18 @@
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djimix.decorators.auth import portal_auth_required
+from djmaidez.contact.data import ENS_CODES
+from djmaidez.contact.data import ENS_FIELDS
+from djmaidez.contact.data import MOBILE_CARRIER
+from djmaidez.contact.data import RELATIONSHIP
 from djsani.core.models import CHANGE
 from djsani.core.models import SPORTS
 from djsani.core.models import SPORTS_MEN
@@ -35,13 +39,6 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from PIL import Image
 
-from djmaidez.core.models import ENS_CODES
-from djmaidez.core.models import ENS_FIELDS
-from djmaidez.core.models import MOBILE_CARRIER
-from djmaidez.core.models import RELATIONSHIP
-from djzbar.utils.informix import get_engine
-from djzbar.utils.informix import get_session
-
 
 # table names are the key, base model classes are the value
 
@@ -59,14 +56,14 @@ BASES = {
     'cc_athlete_medical_history': AthleteMedicalHistory,
 }
 BASES.update(WAIVERS)
-EARL = settings.INFORMIX_EARL
+EARL = settings.INFORMIX_ODBC
 
 
 @csrf_exempt
 @login_required
 def set_val(request):
     """
-    Ajax POST for to set a single name/value pair.
+    Ajax POST to set a single name/value pair.
 
     Used mostly for jquery xeditable and ajax updates for
     student medical manager.
@@ -79,37 +76,31 @@ def set_val(request):
     pk (primary key of object to be updated)
     table
     """
-    staff = in_group(request.user, settings.STAFF_GROUP)
-
-    # we need a table name
-    try:
-        table = request.POST.get('table')
-    except Exception:
-        table = None
-
-    if not table:
-        return HttpResponse("Error: no table name")
-    # we need a college ID to insure no funny stuff
+    user = request.user
+    staff = in_group(user, settings.STAFF_GROUP)
+    # college ID
     cid = request.POST.get('college_id')
-    if not cid:
-        return HttpResponse("Error: no college ID")
-    elif not staff and int(cid) != request.user.id:
+    # name/value pair
+    name = request.POST.get('name')
+    # primary key
+    pk = request.POST.get('pk')
+    # table name
+    table = request.POST.get('table')
+    # value
+    # sports field is a list
+    if name == 'sports':
+        value = ','.join(request.POST.getlist('value[]'))
+    else:
+        value = request.POST.get('value')
+    if not cid or not name or not pk or not table or not value:
+        return HttpResponse("Missing required parameters.")
+    if not staff and int(cid) != user.id:
         return HttpResponse("Not staff")
     else:
-        # name/value pair
-        name = request.POST.get('name')
-        # sports field is a list
-        if name == 'sports':
-            value = ','.join(request.POST.getlist('value[]'))
-        else:
-            value = request.POST.get('value')
-
-        # primary key
-        pk = request.POST.get('pk')
         # create our dictionary to hold name/value pairs
         dic = {name: value}
         if table == 'cc_athlete_sicklecell_waiver':
-            # set value = 1 if field name = 'waive'or
+            # set value = 1 if field name = 'waive' or
             # if it = 'results' since that value is
             # either Positive or Negative
             if name == 'results':
@@ -122,33 +113,23 @@ def set_val(request):
                 dic['results'] = ''
             elif name == 'proof':
                 dic['results'] = ''
-        # create database session
-        session = get_session(EARL)
         # retrieve student manager
-        man = get_manager(session, cid)
-
+        manager = get_manager(cid)
         if WAIVERS.get(table) and not pk:
             # create new waiver
             dic['college_id'] = cid
             dic['manager_id'] = man.id
-            obj = WAIVERS[table](**dic)
-            session.add(obj)
+            nobj = WAIVERS[table](**dic)
+            nobj.save(using='informix')
             # update the manager
-            setattr(man, table, value)
-            session.flush()
+            setattr(manager, table, value)
+            manager.save(using='informix')
         else:
             model = BASES[table]
-            obj = session.query(model).\
-                filter_by(id=pk).first()
-            if not obj:
-                return HttpResponse(
-                    "No object found associated with ID: {}".format(pk),
-                    content_type='text/plain; charset=utf-8'
-                )
-            else:
+            nobj = model.objects.using('informix').filter(pk=pk).first()
+            if nobj:
                 if name == 'athlete' and str(value) == '0':
                     dic['sports'] = ''
-
                 # green check mark for athletes
                 if name == 'sitrep_athlete' and str(value) == '1':
                     if obj.medical_consent_agreement:
@@ -157,34 +138,34 @@ def set_val(request):
                         dic['physical_evaluation_status_1'] = 1
                     if obj.physical_evaluation_2:
                         dic['physical_evaluation_status_2'] = 1
-
                 # update existing object
-                for key, value in dic.iteritems():
-                    setattr(obj, key, value)
-
-                session.flush()
+                for key, value in dic.items():
+                    setattr(nobj, key, value)
+                nobj.save(using='informix')
+            else:
+                return HttpResponse(
+                    "No object found associated with ID: {}".format(pk),
+                    content_type='text/plain; charset=utf-8'
+                )
             # if waiver, update manager table
             if WAIVERS.get(table):
-                setattr(man, table, value)
+                setattr(manager, table, value)
+                manager.save(using='informix')
 
         # update the log entry for staff modifications
         if staff:
             message = ''
-            for n, v in dic.items():
-                message += '{0} = {1}\n'.format(n, v)
-            log = {
-                'college_id': request.user.id,
-                'content_type_id': get_content_type(table).id,
-                'object_id': obj.id,
-                'object_repr': '{0}'.format(obj),
-                'action_flag': CHANGE,
-                'action_message': message,
-            }
-            log_entry = StudentMedicalLogEntry(**log)
-            session.add(log_entry)
-
-        session.commit()
-        session.close()
+            for dkey, dval in dic.items():
+                message += '{0} = {1}\n'.format(dkey, dval)
+            log = StudentMedicalLogEntry(
+                college_id=user.id,
+                content_type_id=get_content_type(table).id,
+                object_id=nobj.id,
+                object_repr=nobj,
+                action_flag=CHANGE,
+                action_message=message,
+            )
+            log.save(using='informix')
 
         return HttpResponse(
             "success", content_type='text/plain; charset=utf-8',
@@ -310,7 +291,7 @@ def rotate_photo(request):
             path = '{0}/files/{1}'.format(settings.MEDIA_ROOT, phile)
             try:
                 src_im = Image.open(path)
-                im = src_im.rotate(90, expand=True)
+                im = src_im.rotate(settings.ROTATE_PHOTO, expand=True)
                 im.save(path)
                 msg = "Success"
             except Exception:
