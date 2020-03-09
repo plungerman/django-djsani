@@ -13,6 +13,10 @@ urlpatterns = [
         TemplateView.as_view(template_name='insurance/success.html'),
         name='insurance_success',
     ),
-    path('<str:stype>/<int:cid>/', views.form, name='insurance_form_dashboard'),
-    path('<str:stype>/', views.form, name='insurance_form'),
+    path(
+        '<str:stype>/<int:cid>/',
+        views.index,
+        name='insurance_form_dashboard',
+    ),
+    path('<str:stype>/', views.index, name='insurance_form'),
 ]
