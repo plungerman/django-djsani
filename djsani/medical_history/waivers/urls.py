@@ -19,6 +19,6 @@ urlpatterns = [
         name='waiver_success',
     ),
     # medical history waiver forms
-    path('<str:stype>/<str:wtype>/', views.form, name='waiver_form'),
+    path('<str:stype>/<str:wtype>/', views.index, name='waiver_form'),
     path('', RedirectView.as_view(url=reverse_lazy('home'))),
 ]

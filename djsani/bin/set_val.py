@@ -134,7 +134,7 @@ def main():
                 dic['results'] = ''
         # retrieve student manager
         manager = get_manager(cid)
-        # create database connection
+        # fetch the data
         if WAIVERS.get(table) and not pk:
             # create new waiver
             dic['college_id'] = cid

@@ -1,111 +1,66 @@
 # -*- coding: utf-8 -*-
-import os, sys
 
-# env
-sys.path.append('/usr/lib/python2.7/dist-packages/')
-sys.path.append('/usr/lib/python2.7/')
-sys.path.append('/usr/local/lib/python2.7/dist-packages/')
-sys.path.append('/data2/django_1.7/')
-sys.path.append('/data2/django_projects/')
-sys.path.append('/data2/django_third/')
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings")
-
-from django.conf import settings
-
-from djsani.medical_history.waivers.models import Meni, Privacy, Reporting
-from djsani.medical_history.waivers.models import Risk, Sicklecell
-from djsani.medical_history.models import StudentMedicalHistory
-from djsani.medical_history.models import AthleteMedicalHistory
-from djsani.insurance.models import StudentHealthInsurance
-from djsani.core.models import StudentMedicalManager
-from djsani.core.views import BASES
-
-from djzbar.utils.informix import get_session
-
-from sqlalchemy import exc
+"""Test for the set_val() view."""
 
 import argparse
+import django
+import os
+import sys
+django.setup()
+# env
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
 
-"""
-"""
+from djsani.core.models import StudentMedicalManager
+from djsani.core.views import BASES
+from djsani.insurance.models import StudentHealthInsurance
+from djsani.medical_history.models import AthleteMedicalHistory
+from djsani.medical_history.models import StudentMedicalHistory
+from djsani.medical_history.waivers.models import Meni
+from djsani.medical_history.waivers.models import Privacy
+from djsani.medical_history.waivers.models import Reporting
+from djsani.medical_history.waivers.models import Risk
+from djsani.medical_history.waivers.models import Sicklecell
 
-from djzbar.settings import INFORMIX_EARL_PROD as EARL
-#EARL = settings.INFORMIX_EARL
 
 # set up command-line options
 desc = """
-Accepts as input a student's college ID
+    Accepts as input a database table name
 """
 
 parser = argparse.ArgumentParser(description=desc)
 
 parser.add_argument(
-    "-t", "--table",
+    '-t',
+    '--table',
+    required=True,
     help="Database table",
-    dest="table"
+    dest='table',
 )
 parser.add_argument(
-    "--test",
+    '--test',
     action='store_true',
     help="Dry run?",
-    dest="test"
+    dest='test',
 )
 
+
 def main():
-    """
-    main function
-    """
+    """Obtain all the data from a database table."""
+    try:
+        model = BASES[table]
+    except Exception:
+        print("Invalid table name: {0}".format(table))
+        sys.exit()
 
-    # create database session
-    session = get_session(EARL)
-    print EARL
-    model = BASES[table]
+    rows = model.objects.using('informix').all().order_by('id')
+    print("select all from table: {0}".format(table))
+    for row in rows:
+        print(row.__dict__)
 
-    objects = session.query(model).order_by(model.id).all()
-    count = 1
-    error = False
-    print "select all from table: {}".format(table)
-    for obj in objects:
-        if test:
-            try:
-                manager = session.query(StudentMedicalManager).\
-                    filter_by(college_id=obj.college_id).one()
-                count += 1
-            except:
-                #pass
-                print "Error on manager with ID: {}".format(obj.college_id)
-        else:
-            try:
-                manager = session.query(StudentMedicalManager).\
-                    filter_by(college_id=obj.college_id).one()
-                obj.manager_id = manager.id
-                count += 1
-            except exc.SQLAlchemyError as e:
-                print e
-                print obj
-                print count
-                error = True
-                session.rollback()
-                pass
 
-    print count
-
-    if not error and not test:
-        session.commit()
-
-    session.close()
-
-######################
-# shell command line
-######################
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = parser.parse_args()
     table = args.table
     test = args.test
 
-    if not table:
-        print "mandatory option is missing: table name\n"
-        parser.print_help()
-        exit(-1)
     sys.exit(main())

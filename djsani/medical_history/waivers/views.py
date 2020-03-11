@@ -2,11 +2,12 @@
 
 """Forms for medical history."""
 
+import datetime
 import os
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -33,48 +34,51 @@ def index(request, stype, wtype):
     )
     sicklecell = None
     if wtype == 'sicklecell':
-        sicklecell = Sicklecell.objects.filter(college_id=cid).filter(
-            Q(proof=1) | Q(created_at > settings.START_DATE)
+        sicklecell = Sicklecell.objects.using('informix').filter(
+            college_id=cid,
+        ).filter(
+            Q(proof=1) | Q(created_at__gte=settings.START_DATE),
         ).first()
 
     # check to see if they already submitted this form.
     # redirect except for sicklecell waiver
     # or wtype does not return a form class (fname)
-    if (manager and getattr(manager, table, None) and wtype != 'sicklecell') \
-      or not fname:
-        return HttpResponseRedirect( reverse_lazy('home') )
+    status = getattr(manager, table, None)
+    if (manager and status and wtype != 'sicklecell') or not fname:
+        return HttpResponseRedirect(reverse_lazy('home'))
 
-    if request.method=='POST':
+    if request.method == 'POST':
         form = fname(request.POST, request.FILES)
         if form.is_valid():
-            data = form.cleaned_data
+            cd = form.cleaned_data
 
             # deal with file uploads
             if request.FILES.get('results_file'):
-                folder = 'sicklecell/{}/{}'.format(
-                    cid, manager.created_at.strftime('%Y%m%d%H%M%S%f')
+                folder = 'sicklecell/{0}/{1}'.format(
+                    cid, manager.created_at.strftime('%Y%m%d%H%M%S%f'),
                 )
                 phile = handle_uploaded_file(
                     request.FILES['results_file'],
                     os.path.join(settings.UPLOADS_DIR, folder),
                 )
-                data['results_file'] = '{0}/{1}'.format(folder, phile)
+                cd['results_file'] = '{0}/{1}'.format(folder, phile)
 
             if sicklecell:
                 # update student's sicklecell waiver record
-                data['updated_at'] = datetime.datetime.now()
-                for key, value in data.items():
-                    setattr(sicklecell, key, value)
+                cd['updated_at'] = datetime.datetime.now()
+                for key, form_val in cd.items():
+                    setattr(sicklecell, key, form_val)
+                sicklecell.save()
             else:
                 # insert
-                data['college_id'] = cid
-                data['manager_id'] = manager.id
+                cd['college_id'] = cid
+                cd['manager_id'] = manager.id
                 model = str_to_class(
                     'djsani.medical_history.waivers.models',
                     wtype.capitalize(),
                 )
-                s = model(**data)
-                session.add(s)
+                waiver = model(**cd)
+                waiver.save()
             # update the manager
             setattr(manager, table, True)
             manager.save()
