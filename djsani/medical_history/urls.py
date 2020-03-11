@@ -22,9 +22,9 @@ urlpatterns = [
     # medical history form: athletics or academics
     path(
         '<str:stype>/<str:display>/',
-        views.history,
+        views.index,
         name='medical_history_print',
     ),
     # medical history form: athletics or academics
-    path('<str:stype>/', views.history, name='medical_history_form'),
+    path('<str:stype>/', views.index, name='medical_history_form'),
 ]
