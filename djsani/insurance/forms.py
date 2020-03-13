@@ -156,7 +156,6 @@ class AthleteForm(forms.ModelForm):
         widget=forms.Select(choices=STATE_CHOICES),
         required=False,
     )
-
     # tertiary
     tertiary_policy_holder = forms.CharField(
         label="Policy holder",
@@ -210,6 +209,14 @@ class AthleteForm(forms.ModelForm):
         widget=forms.Select(choices=STATE_CHOICES),
         required=False,
     )
+    tertiary_card = forms.FileField(
+        label="Insurance Card",
+        help_text="Photo/Scan of your insurance card",
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
+        ],
+        required=False,
+    )
 
     class Meta:
         """Attributes about the form class."""
@@ -223,7 +230,9 @@ class AthleteForm(forms.ModelForm):
         insurance = self.insurance
         manager = self.manager
         if manager.athlete and not cd['opt_out']:
-            if not cd.get('primary_card_front') or not cd.get('primary_card_back'):
+            front = cd.get('primary_card_front')
+            back = cd.get('primary_card_back')
+            if not front or not back:
                 if not insurance:
                     error = "Required Field"
                     self._errors['primary_card_front'] = self.error_class(

@@ -1,7 +1,6 @@
 function GetUserType() {
     return "student";
 }
-
 function makeDialog() {
     $("#main_modal").dialog({
         autoOpen: true,
@@ -10,9 +9,10 @@ function makeDialog() {
         modal: true,
         top: 10,
         buttons: { "Save": function(){
-            var uid = GetUserID();
-            if(isValid() && !isNaN(uid)) {
-                $.getJSON('/campus-life/medical/forms/emergency/save/?callback=?', {
+            if(isValid() && !isNaN(GetUserID())) {
+                var subdomain = getSubdomain();
+                var earl = "https://" + subdomain + ".carthage.edu/emergency/contact/save?uid="+GetUuid()+"&callback=?";
+                $.getJSON(earl, {
                     MIS1_NAME: $("#MIS1_NAME").val(),
                     MIS1_REL: $("#MIS1_REL").val(),
                     MIS1_PHONE1: $("#MIS1_PHONE1").val(),
@@ -23,7 +23,7 @@ function makeDialog() {
                     MIS3_NAME: $("#MIS3_NAME").val(),
                     MIS3_PHONE1: $("#MIS3_PHONE1").val(),
                     ENS_SELF_CELL: $("#ENS_SELF_CELL").val(),
-                    ENS_SMS: $('input[name=ENS_SMS]:checked').val(),
+                    ENS_SMS: "1",
                     ENS_CARRIER: $("#ENS_CARRIER").val(),
                     ENS_EMAIL: $("#ENS_EMAIL").val(),
                     ICE_NAME: $("#ICE_NAME").val(),
@@ -32,15 +32,12 @@ function makeDialog() {
                     ICE_PHONE3: $("#ICE_PHONE3").val(),
                     ICE_REL: $("#ICE_REL").val(),
                     ICE2_NAME: $("#ICE2_NAME").val(),
-                    UserID: uid,
+                    UserID: GetUserID(),
                     ICE2_PHONE1: $("#ICE2_PHONE1").val(),
                     ICE2_PHONE2: $("#ICE2_PHONE2").val(),
                     ICE2_PHONE3: $("#ICE2_PHONE3").val(),
-                    ICE2_REL: $("#ICE2_REL").val(),
-                    DJSANI: "True"
+                    ICE2_REL: $("#ICE2_REL").val()
                 });
-                // set yellow checkmark
-                $(".djsani").html('<i class="fa fa-check yellow"></i>');
             }
         }}
     });

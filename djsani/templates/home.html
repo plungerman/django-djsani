@@ -333,6 +333,7 @@ $(function() {
           {{risk.body}}
         {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
+        {{sql}}
         {% get_lw_content as progress blurbs 2478 %}
         {{progress.body}}
         {% if manager.sitrep %}

@@ -231,6 +231,7 @@ $(function() {
     <div class="large-9 medium-12 small-12">
     {% get_lw_content as insurance_intro blurbs 2456 %}
     {{insurance_intro.body}}
+    {% include "includes/errors_text.html" %}
     {% include "includes/required_text.html" %}
     <div class="large-7 medium-12 small-12" style="border: 3px green solid;float:left;">
       <p style="margin:5px;">
@@ -245,7 +246,6 @@ $(function() {
         value="Load Athletic Policy Data" class="btn btn-primary">
     </div>
     {% endifusergroup %}
-    {% include "includes/errors_text.html" %}
     </div>
     <p class="cf">&nbsp;</p>
     <form method="post" action="." type="actionForm" class="form"

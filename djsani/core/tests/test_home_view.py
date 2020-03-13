@@ -4,10 +4,14 @@
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.urls import reverse_lazy
 from django.test import TestCase
+from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
+from djmaidez.contact.data import ENS_CODES
+from djmaidez.contact.data import ENS_FIELDS
+from djmaidez.contact.data import MOBILE_CARRIER
+from djmaidez.contact.data import RELATIONSHIP
 from djsani.core.models import SPORTS
 from djsani.core.models import SPORTS_MEN
 from djsani.core.models import SPORTS_WOMEN
@@ -17,11 +21,6 @@ from djsani.core.utils import get_term
 from djtools.utils.date import calculate_age
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
-
-from djmaidez.core.models import ENS_CODES
-from djmaidez.core.models import ENS_FIELDS
-from djmaidez.core.models import MOBILE_CARRIER
-from djmaidez.core.models import RELATIONSHIP
 
 
 if settings.DEBUG:

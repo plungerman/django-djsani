@@ -4,9 +4,9 @@
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djsani.core.sql import STUDENT_VITALS
@@ -74,7 +74,9 @@ def index(request, stype, cid=None):
         form_class = AthleteForm
 
     if request.method == 'POST':
-        form = form_class(request.POST, request.FILES, instance=instance)
+        form = form_class(
+            request.POST, request.FILES, manager=manager, instance=instance,
+        )
         if form.is_valid():
             insurance = form.save(commit=False)
             insurance.college_id = cid
@@ -111,7 +113,7 @@ def index(request, stype, cid=None):
             return HttpResponseRedirect(redirect)
     else:
         # form class
-        form = form_class(instance=instance)
+        form = form_class(instance=instance, manager=manager)
 
     return render(
         request,

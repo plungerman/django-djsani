@@ -2,6 +2,8 @@
 
 """Views and helpers for the project as a whole."""
 
+import logging
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -12,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djimix.decorators.auth import portal_auth_required
-from djmaidez.contact.data import ENS_CODES
+from djmaidez.contact.data import AA_REC
 from djmaidez.contact.data import ENS_FIELDS
 from djmaidez.contact.data import MOBILE_CARRIER
 from djmaidez.contact.data import RELATIONSHIP
@@ -39,6 +41,8 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from PIL import Image
 
+
+logger = logging.getLogger('debug_logfile')
 
 # table names are the key, base model classes are the value
 
@@ -118,7 +122,7 @@ def set_val(request):
         if WAIVERS.get(table) and not pk:
             # create new waiver
             dic['college_id'] = cid
-            dic['manager_id'] = man.id
+            dic['manager_id'] = manager.id
             nobj = WAIVERS[table](**dic)
             nobj.save(using='informix')
             # update the manager
@@ -132,20 +136,20 @@ def set_val(request):
                     dic['sports'] = ''
                 # green check mark for athletes
                 if name == 'sitrep_athlete' and str(value) == '1':
-                    if obj.medical_consent_agreement:
+                    if nobj.medical_consent_agreement:
                         dic['medical_consent_agreement_status'] = 1
-                    if obj.physical_evaluation_1:
+                    if nobj.physical_evaluation_1:
                         dic['physical_evaluation_status_1'] = 1
-                    if obj.physical_evaluation_2:
+                    if nobj.physical_evaluation_2:
                         dic['physical_evaluation_status_2'] = 1
                 # update existing object
-                for key, value in dic.items():
-                    setattr(nobj, key, value)
+                for key, dic_val in dic.items():
+                    setattr(nobj, key, dic_val)
                 nobj.save(using='informix')
             else:
                 return HttpResponse(
-                    "No object found associated with ID: {}".format(pk),
-                    content_type='text/plain; charset=utf-8'
+                    "No object found associated with ID: {0}".format(pk),
+                    content_type='text/plain; charset=utf-8',
                 )
             # if waiver, update manager table
             if WAIVERS.get(table):
@@ -235,12 +239,9 @@ def home(request):
                 'sports': sports,
                 'my_sports': my_sports,
                 'adult': adult,
-                'sql': sql,
             }
             # emergency contact modal form
-            sql = 'SELECT * FROM aa_rec WHERE aa in {0} AND id="{1}"'.format(
-                ENS_CODES, cid,
-            )
+            sql = '{0} AND id="{1}"'.format(AA_REC, cid)
             rows = xsql(sql, connection, key=settings.INFORMIX_DEBUG)
             for row in rows:
                 ens = {}
@@ -250,6 +251,8 @@ def home(request):
             context_data['mobile_carrier'] = MOBILE_CARRIER
             context_data['relationship'] = RELATIONSHIP
             context_data['solo'] = True
+            logger.debug('context data')
+            logger.debug(context_data)
         else:
             # returns False if not student, which returns True
             antistaff = (

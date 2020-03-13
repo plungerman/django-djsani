@@ -5,12 +5,13 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.urls import reverse_lazy
+from django.forms.models import model_to_dict
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
+from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djmaidez.contact.data import ENS_CODES
@@ -29,7 +30,6 @@ from djsani.medical_history.models import StudentMedicalHistory
 from djtools.decorators.auth import group_required
 from djtools.fields import NEXT_YEAR
 from djtools.utils.convert import str_to_class
-from djtools.utils.database import row2dict
 from djtools.utils.date import calculate_age
 from djtools.utils.mail import send_mail
 from djtools.utils.users import faculty_staff
@@ -54,7 +54,7 @@ def panels(request, mod, manager, content=None, gender=None):
     manid = manager.id
     modo = mod.objects.using('informix').filter(manager_id=manid).first()
     if modo:
-        panel = row2dict(modo)
+        panel = model_to_dict(modo)
         if gender:
             form = str_to_class(
                 'djsani.medical_history.forms',
@@ -161,13 +161,12 @@ def get_students(request):
             STUDENTS_ALPHA, term['yr'], term['sess'], cl,
         )
     with get_connection(EARL) as connection:
-        rows = xsql(
-            sql, connection, key=settings.INFORMIX_DEBUG,
-        ).fetchall()
-
-    students = None
-    if rows:
-        students = [dict(row) for row in rows]
+        cursor = connection.cursor().execute(sql)
+        # obtain the column names
+        columns = [column[0] for column in cursor.description]
+        students = []
+        for row in cursor.fetchall():
+            students.append(dict(zip(columns, row)))
         for stu in students:
             adult = 'minor'
             if stu['birth_date']:
@@ -302,7 +301,8 @@ def student_detail(request, cid=None, medium=None, content=None):
                 except Exception:
                     student_user = None
             else:
-                age=ens=shi=smh=amh=student=sports=stype=student_user=manager=None
+                age, ens, shi, smh, amh = (None,) * 5
+                student, sports, stype, student_user, manager = (None,) * 5
             return render(
                 request,
                 template,

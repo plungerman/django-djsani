@@ -22,12 +22,14 @@
 </ul>
 <div class="tab-content">
 {% for e in ens %}
+  {% if e.aa != "MIS3" %}
   <div class="tab-pane fade{% if forloop.first %} show active{% endif %}"
-    id="{{e.aa}}" role="tabpanel" aria-labelledby="{{e.aa}}">
+    id="{{e.aa.strip}}" role="tabpanel" aria-labelledby="{{e.aa.strip}}">
     <ul class="mt-3">
       <li>{{e.line1|default:"&nbsp;"}}</li>
       <li>{{e.phone|default:"&nbsp;"}}</li>
     </ul>
   </div>
+  {% endif %}
 {% endfor %}
 </div>

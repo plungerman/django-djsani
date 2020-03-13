@@ -15,17 +15,17 @@ class StudentHealthInsurance(models.Model):
     manager = models.ForeignKey(
         StudentMedicalManager, on_delete=models.CASCADE,
     )
-    opt_out = models.BooleanField()
+    opt_out = models.NullBooleanField()
     # primary
     primary_policy_holder = models.CharField(max_length=128)
     primary_dob = models.DateField(default='')
     primary_company = models.CharField(max_length=128)
     primary_phone = models.CharField(max_length=12)
+    primary_policy_address = models.CharField(max_length=255)
     primary_member_id = models.CharField(max_length=64)
     primary_group_no = models.CharField(max_length=64)
     primary_policy_type = models.CharField(max_length=128)
     primary_policy_state = models.CharField(max_length=2)
-    primary_policy_address = models.CharField(max_length=255)
     primary_card_front = models.CharField(max_length=128)
     primary_card_front_status = models.BooleanField()
     primary_card_back = models.CharField(max_length=128)
@@ -35,22 +35,22 @@ class StudentHealthInsurance(models.Model):
     secondary_dob = models.DateField(default='')
     secondary_company = models.CharField(max_length=128)
     secondary_phone = models.CharField(max_length=12)
+    secondary_policy_address = models.CharField(max_length=255)
     secondary_member_id = models.CharField(max_length=64)
     secondary_group_no = models.CharField(max_length=64)
     secondary_policy_type = models.CharField(max_length=128)
     secondary_policy_state = models.CharField(max_length=2)
-    secondary_policy_address = models.CharField(max_length=255)
     # tertiary
     tertiary_policy_holder = models.CharField(max_length=128)
     tertiary_dob = models.DateField(default='')
     tertiary_company = models.CharField(max_length=128)
     tertiary_phone = models.CharField(max_length=12)
+    tertiary_policy_address = models.CharField(max_length=255)
     tertiary_member_id = models.CharField(max_length=64)
     tertiary_group_no = models.CharField(max_length=64)
     tertiary_policy_type = models.CharField(max_length=128)
     tertiary_policy_state = models.CharField(max_length=2)
-    tertiary_policy_address = models.CharField(max_length=255)
-    tertiary_card = models.CharField(max_length=128)
+    tertiary_card = models.CharField(max_length=128, null=True, blank=True)
 
     class Meta:
         """Attributes about the data model and admin options."""
