@@ -45,7 +45,7 @@ def index(request, stype, display=None):
         'djsani.medical_history.models', mname,
     )
     if model:
-        history = model.filter(college_id=cid).filter(
+        history = model.objects.using('informix').filter(college_id=cid).filter(
             created_at__gte=settings.START_DATE,
         ).first()
     else:

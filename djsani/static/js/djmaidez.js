@@ -10,9 +10,7 @@ function makeDialog() {
         top: 10,
         buttons: { "Save": function(){
             if(isValid() && !isNaN(GetUserID())) {
-                var subdomain = getSubdomain();
-                var earl = "https://" + subdomain + ".carthage.edu/emergency/contact/save?uid="+GetUuid()+"&callback=?";
-                $.getJSON(earl, {
+                $.getJSON('/campus-life/medical/forms/emergency/save/?callback=?', {
                     MIS1_NAME: $("#MIS1_NAME").val(),
                     MIS1_REL: $("#MIS1_REL").val(),
                     MIS1_PHONE1: $("#MIS1_PHONE1").val(),
@@ -36,8 +34,12 @@ function makeDialog() {
                     ICE2_PHONE1: $("#ICE2_PHONE1").val(),
                     ICE2_PHONE2: $("#ICE2_PHONE2").val(),
                     ICE2_PHONE3: $("#ICE2_PHONE3").val(),
-                    ICE2_REL: $("#ICE2_REL").val()
+                    ICE2_REL: $("#ICE2_REL").val(),
+                    DJSANI: "True"
                 });
+                // set yellow checkmark
+                $(".djsani").html('<i class="fa fa-check yellow"></i>');
+                console.log('isvalid');
             }
         }}
     });

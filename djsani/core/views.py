@@ -2,8 +2,6 @@
 
 """Views and helpers for the project as a whole."""
 
-import logging
-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -41,8 +39,6 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from PIL import Image
 
-
-logger = logging.getLogger('debug_logfile')
 
 # table names are the key, base model classes are the value
 
@@ -251,8 +247,6 @@ def home(request):
             context_data['mobile_carrier'] = MOBILE_CARRIER
             context_data['relationship'] = RELATIONSHIP
             context_data['solo'] = True
-            logger.debug('context data')
-            logger.debug(context_data)
         else:
             # returns False if not student, which returns True
             antistaff = (
