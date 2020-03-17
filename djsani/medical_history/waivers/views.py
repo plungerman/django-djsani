@@ -7,10 +7,10 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from djsani.core.utils import get_manager
 from djsani.medical_history.waivers.models import Sicklecell
 from djtools.fields import NEXT_YEAR
@@ -68,7 +68,7 @@ def index(request, stype, wtype):
                 cd['updated_at'] = datetime.datetime.now()
                 for key, form_val in cd.items():
                     setattr(sicklecell, key, form_val)
-                sicklecell.save()
+                sicklecell.save(using='informix')
             else:
                 # insert
                 cd['college_id'] = cid
@@ -78,10 +78,10 @@ def index(request, stype, wtype):
                     wtype.capitalize(),
                 )
                 waiver = model(**cd)
-                waiver.save()
+                waiver.save(using='informix')
             # update the manager
             setattr(manager, table, True)
-            manager.save()
+            manager.save(using='informix')
 
             return HttpResponseRedirect(reverse_lazy('waiver_success'))
     else:
@@ -90,7 +90,7 @@ def index(request, stype, wtype):
     # check for a valid template or redirect home
     try:
         template = 'medical_history/waivers/{0}_{1}.html'.format(stype, wtype)
-        os.stat(os.path.join(settings.ROOT_DIR, 'templates', template))
+        os.stat(os.path.join(settings.BASE_DIR, 'templates', template))
     except Exception:
         return HttpResponseRedirect(reverse_lazy('home'))
 
