@@ -96,7 +96,8 @@
                     } else {
                         $.growlUI('Error', data);
                     }
-                    location.reload();
+                    // reload by redirecting to self
+                    window.location.href = window.location.href;
                 },
                 error: function(data) {
                     spinner.stop(target);

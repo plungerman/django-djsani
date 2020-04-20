@@ -81,7 +81,7 @@ $(document).ready(function() {
         }
     });
     {% endif %}
-    $('#medical-history').submit(function( event ) {
+    $('.medical-history').submit(function( event ) {
         var elem = document.getElementById('medical-history').elements;
         var radios = {};
         $(':radio').each(function() {
@@ -144,7 +144,7 @@ $(document).ready(function() {
         </p>
     </div>
     {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form" id="medical-history">
+    <form method="post" action="." class="form medical-history">
         {% csrf_token %}
         <div>
             <fieldset class="blockLabels">
