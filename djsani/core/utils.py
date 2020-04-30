@@ -2,8 +2,12 @@
 
 """Utilities that are used in views."""
 
+import os
+
 from django.conf import settings
 from django.core.cache import cache
+from djimix.core.utils import get_connection
+from djimix.core.utils import xsql
 from djsani.core.models import StudentMedicalContentType
 from djsani.core.models import StudentMedicalManager
 from djsani.insurance.models import StudentHealthInsurance
@@ -54,6 +58,20 @@ def get_term():
         if TODAY.month == DEC:
             year = year + 1
     return {'yr': year, 'sess': term}
+
+
+def get_sports(cid=None):
+    """Obtain the sports for a student or all the sports."""
+    if cid:
+        phile = os.path.join(settings.BASE_DIR, 'sql/sports_student.sql')
+        with open(phile) as incantation:
+            sql = '{0}{1}'.format(incantation.read(), cid)
+    else:
+        phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
+        with open(phile) as incantation:
+            sql = incantation.read()
+    with get_connection() as connection:
+        return xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchall()
 
 
 def get_manager(cid):

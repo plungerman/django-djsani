@@ -4,21 +4,34 @@ Student Medical Information
 {% endblock %}
 {% block extra_style %}
 {{block.super}}
-<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
-<link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css">
-<link href="//www.carthage.edu/static/vendor/x-editable/bootstrap4-editable/css/bootstrap-editable.css" rel="stylesheet" type="text/css">
-<link href="/static/djsani/css/main.css" rel="stylesheet" type="text/css">
-<link href="/static/djsani/css/dashboard.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"
+  rel="stylesheet" type="text/css">
+<link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css"
+  rel="stylesheet" type="text/css">
+<link href="//www.carthage.edu/static/vendor/x-editable/bootstrap4-editable/css/bootstrap-editable.css"
+  rel="stylesheet" type="text/css">
+<link href="/static/djsani/css/main.css"
+  rel="stylesheet" type="text/css">
+<link href="/static/djsani/css/dashboard.css"
+  rel="stylesheet" type="text/css">
 {% endblock %}
 {% block extra_javascript %}
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-<script type="text/javascript" language="javascript" src="//www.carthage.edu/static/vendor/x-editable/bootstrap4-editable/js/bootstrap-editable.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://malsup.github.io/min/jquery.blockUI.min.js"></script>
-<script type="text/javascript" language="javascript" src="//www.carthage.edu/static/vendor/js/spin.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"
+  type="text/javascript" language="javascript"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"
+  type="text/javascript" language="javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"
+  type="text/javascript" language="javascript"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"
+  type="text/javascript" language="javascript"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"
+  type="text/javascript" language="javascript"></script>
+<script src="//www.carthage.edu/static/vendor/x-editable/bootstrap4-editable/js/bootstrap-editable.min.js"
+  type="text/javascript" language="javascript"></script>
+<script src="https://malsup.github.io/min/jquery.blockUI.min.js"
+  type="text/javascript" language="javascript"></script>
+<script src="//www.carthage.edu/static/vendor/js/spin.min.js"
+  type="text/javascript" language="javascript"></script>
 <script>
 $(function() {
   $("body").toggleClass("sidenav-toggled");
@@ -54,7 +67,13 @@ $(function() {
 
   var table = $('#students-data').DataTable({
       buttons: [
-          'csv', 'excel'
+        {
+            text: 'CSV',
+            extend: 'csv',
+            fieldSeparator: '|',
+            extension: '.csv'
+        },
+        'excel'
       ],
       dom: 'lfrBtip',
       order: [[4, "asc"]],
@@ -122,9 +141,14 @@ $(function() {
                   $("#students-data-panel").html(data);
                   // initialise the datatable
                   var table = $('#students-data').DataTable({
-
                     buttons: [
-                        'csv', 'excel'
+                        {
+                            text: 'CSV',
+                            extend: 'csv',
+                            fieldSeparator: '|',
+                            extension: '.csv'
+                        },
+                        'excel'
                     ],
                     dom: 'lfrBtip',
                     order: [[4, "asc"]],
@@ -442,10 +466,7 @@ $(function() {
                             <select name="sport" class="form-control">
                             <option value="">----Select----</option>
                             {% for s in sports %}
-                            <option
-                            {% if s.0 == "0" %}
-                                disabled{% else %} value="{{s.0}}"
-                            {% endif %}>
+                            <option value="{{s.0}}">
                             {{s.1|safe}}
                             </option>
                             {% endfor %}

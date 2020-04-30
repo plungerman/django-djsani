@@ -67,9 +67,6 @@
             }
         });
 
-        /* multiple select picker */
-        $('#sports').selectpicker();
-
         /* function to update a name/value pair for models */
         $('.set-val').on('change', function() {
             var $dis = $(this);
@@ -251,18 +248,11 @@
       </h3>
       <form class="form mb-2">
         {% if student.athlete %}
-        <select name="sports" class="selectpicker set-val"
-            data-width="300px" id="sports" data-pk="{{manager.id}}"
-            data-table="cc_student_medical_manager" data-style="btn-secondary"
-            multiple title="Choose sport(s)&hellip;">
-            {% for s in sports %}
-            {% if not forloop.first %}
-            <option {% if not s.0 %} disabled {% else %} value="{{s.0}}" {% if s.0 in my_sports %} selected="selected" {% endif %} {% endif %}>
-            {{s.1|safe}}
-            </option>
-            {% endif %}
-            {% endfor %}
-        </select>
+        <div class="mb-1"><strong>Sports:</strong>
+        {% for sport in sports %}
+        {{sport.1}}{% if not forloop.last %},&nbsp;{% endif %}
+        {% endfor %}
+        </div>
         {% endif %}
         <h5>
         <input type="checkbox" name="athlete" class="set-val"

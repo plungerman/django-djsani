@@ -15,13 +15,11 @@ from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djmaidez.contact.data import ENS_CODES
-from djsani.core.models import SPORTS
-from djsani.core.models import SPORTS_MEN
-from djsani.core.models import SPORTS_WOMEN
 from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.sql import STUDENTS_ALPHA
 from djsani.core.utils import get_manager
+from djsani.core.utils import get_sports
 from djsani.core.utils import get_term
 from djsani.emergency.models import AARec
 from djsani.insurance.models import StudentHealthInsurance
@@ -41,7 +39,7 @@ STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
 
 
-def panels(request, mod, manager, content=None, gender=None):
+def panels(request, mod, manager, content_type=None, gender=None):
     """
     Accepts a data model class, manager object, optional gender.
 
@@ -66,7 +64,7 @@ def panels(request, mod, manager, content=None, gender=None):
         {
             'data': panel,
             'form': form,
-            'content': content,
+            'content': content_type,
             'manager': manager,
         },
         request,
@@ -161,6 +159,9 @@ def get_students(request):
             STUDENTS_ALPHA, term['yr'], term['sess'], cl,
         )
     with get_connection(EARL) as connection:
+        # fetch all the sports for search
+        sports = get_sports()
+        # fetch the students
         cursor = connection.cursor().execute(sql)
         # obtain the column names
         columns = [column[0] for column in cursor.description]
@@ -186,7 +187,7 @@ def get_students(request):
     return render(
         request, template, {
             'students': students,
-            'sports': SPORTS,
+            'sports': sports,
             'sport': sport,
             'staff': staff,
             'coach': coach,
@@ -201,15 +202,14 @@ def home(request):
 
 
 @login_required
-def student_detail(request, cid=None, medium=None, content=None):
+def student_detail(request, cid=None, medium=None, content_type=None):
     """Main method for displaying student data."""
     if in_group(request.user, STAFF):
         template = 'dashboard/student_detail.html'
-        if content:
+        if content_type:
             template = 'dashboard/student_{0}_{1}.html'.format(
-                medium, content,
+                medium, content_type,
             )
-        my_sports = None
         manager = None
         # search form, grab only numbers from string
         if not cid:
@@ -268,14 +268,14 @@ def student_detail(request, cid=None, medium=None, content=None):
                     request,
                     StudentHealthInsurance,
                     manager,
-                    content,
+                    content_type,
                 )
                 # student medical history
                 smh = panels(
                     request,
                     StudentMedicalHistory,
                     manager,
-                    content,
+                    content_type,
                     student.sex,
                 )
                 # athlete medical history
@@ -283,19 +283,14 @@ def student_detail(request, cid=None, medium=None, content=None):
                     request,
                     AthleteMedicalHistory,
                     manager,
-                    content,
+                    content_type,
                     student.sex,
                 )
                 # used for staff who update info on the dashboard
                 stype = 'student'
                 if student.athlete:
                     stype = 'athlete'
-                if student.sports:
-                    my_sports = student.sports.split(',')
-                if student.sex == 'F':
-                    sports = SPORTS_WOMEN
-                else:
-                    sports = SPORTS_MEN
+                sports = get_sports(student.id)
                 try:
                     student_user = User.objects.get(pk=cid)
                 except Exception:
@@ -317,7 +312,6 @@ def student_detail(request, cid=None, medium=None, content=None):
                     'cid': cid,
                     'switch_earl': reverse_lazy('set_val'),
                     'sports': sports,
-                    'my_sports': my_sports,
                     'next_year': NEXT_YEAR,
                     'stype': stype,
                     'managers': managers,
