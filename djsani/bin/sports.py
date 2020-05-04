@@ -49,7 +49,7 @@ parser.add_argument(
     dest='test'
 )
 
-PHILE = os.path.join(settings.BASE_DIR, 'sql/sports.sql')
+PHILE = os.path.join(settings.BASE_DIR, 'sql/sports_student.sql')
 
 
 def _xsql(cid):

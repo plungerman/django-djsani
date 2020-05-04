@@ -10,6 +10,30 @@ START_DATE = settings.START_DATE
 # Informix likes DATE("2015-06-01") when using an IDE like Squirrel or RazorSQL
 # or DATE("06/01/15")
 
+SPORTS_STUDENT="""
+SELECT
+    TRIM(IT.invl) AS sport_code,
+    TRIM(IT.txt) AS sport_name,
+    INR.id AS id,
+    INR.beg_date,
+    INR.end_date
+FROM
+    invl_table IT
+INNER JOIN
+    involve_rec INR
+ON
+    TRIM(IT.invl) = TRIM(INR.invl)
+AND
+    IT.sanc_sport = 'Y'
+WHERE
+    TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
+AND
+    YEAR(INR.end_date) = {year}
+AND
+    INR.id = {cid}
+""".format
+
+
 STUDENTS_ALPHA = """
 SELECT
     UNIQUE
@@ -29,18 +53,34 @@ SELECT
         END
     AS
         residency_status,
+    (
+        SELECT
+            count(*)
+        FROM
+            invl_table IT
+        INNER JOIN
+            involve_rec INR
+        ON
+            TRIM(IT.invl) = TRIM(INR.invl)
+        AND
+            IT.sanc_sport = 'Y'
+        WHERE
+            TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
+        AND
+            TODAY < INR.end_date
+        AND
+            INR.id = id_rec.id
+    ) as athlete,
     id_rec.lastname, id_rec.firstname, id_rec.middlename,
     id_rec.id, profile_rec.birth_date,
     TRIM(cvid_rec.ldap_name) as ldap_name,
     cc_student_medical_manager.id as manid,
     cc_student_medical_manager.created_at,
     cc_student_medical_manager.staff_notes,
-    cc_student_medical_manager.athlete,
     cc_student_medical_manager.sitrep,
     cc_student_medical_manager.sitrep_athlete,
     cc_student_medical_manager.concussion_baseline,
     cc_student_medical_manager.emergency_contact,
-    cc_student_medical_manager.sports,
     cc_student_medical_manager.medical_consent_agreement,
     cc_student_medical_manager.medical_consent_agreement_status,
     cc_student_medical_manager.physical_evaluation_1,
@@ -63,32 +103,40 @@ SELECT
 FROM
     id_rec
 INNER JOIN
-    prog_enr_rec ON  id_rec.id = prog_enr_rec.id
+    prog_enr_rec
+ON
+    id_rec.id = prog_enr_rec.id
 LEFT JOIN
     cvid_rec
 ON
     id_rec.id = cvid_rec.cx_id
 LEFT JOIN
-    stu_acad_rec    ON  id_rec.id   =   stu_acad_rec.id
+    stu_acad_rec
+ON
+    id_rec.id = stu_acad_rec.id
 LEFT JOIN
-    stu_serv_rec    ON  id_rec.id   =   stu_serv_rec.id
+    stu_serv_rec
+ON
+    id_rec.id = stu_serv_rec.id
 LEFT JOIN
-    profile_rec  ON  id_rec.id = profile_rec.id
+    profile_rec
+ON
+    id_rec.id = profile_rec.id
 LEFT JOIN
     cc_student_medical_manager
 ON
     id_rec.id = cc_student_medical_manager.college_id
-AND
+    AND
     cc_student_medical_manager.created_at > "{0}"
 LEFT JOIN
     cc_student_health_insurance
-  ON
+ON
     cc_student_medical_manager.id = cc_student_health_insurance.manager_id
 LEFT JOIN
     cc_athlete_sicklecell_waiver
 ON
     id_rec.id = cc_athlete_sicklecell_waiver.college_id
-AND
+    AND
     (
         cc_athlete_sicklecell_waiver.proof = 1
     OR
@@ -96,12 +144,14 @@ AND
     )
 WHERE
     prog_enr_rec.subprog
-NOT IN ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
+NOT IN
+    ("UWPK","RSBD","SLS","PARA","MSW","KUSD","ENRM","CONF","CHWK")
 AND
     prog_enr_rec.lv_date IS NULL
 AND
     stu_acad_rec.sess
-IN ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
+IN
+    ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
 """.format(START_DATE, START_DATE)
 
 STUDENT_VITALS = """
@@ -130,7 +180,8 @@ SELECT
     cc_student_medical_manager.sitrep,
     cc_student_medical_manager.sitrep_athlete,
     cc_student_medical_manager.concussion_baseline,
-    cc_student_medical_manager.athlete, cc_student_medical_manager.sports,
+    cc_student_medical_manager.athlete,
+    cc_student_medical_manager.sports,
     cc_student_medical_manager.medical_consent_agreement,
     cc_student_medical_manager.medical_consent_agreement_status,
     cc_student_medical_manager.physical_evaluation_1,

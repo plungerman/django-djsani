@@ -250,7 +250,7 @@
         {% if student.athlete %}
         <div class="mb-1"><strong>Sports:</strong>
         {% for sport in sports %}
-        {{sport.1}}{% if not forloop.last %},&nbsp;{% endif %}
+        {{sport.1}} [{{sport.4.year}}]{% if not forloop.last %},&nbsp;{% endif %}
         {% endfor %}
         </div>
         {% endif %}

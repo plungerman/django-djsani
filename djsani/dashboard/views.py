@@ -85,16 +85,13 @@ def get_students(request):
         post = request.POST
         cyear = post.get('class')
         if coach:
+            # option '3' in the select field is "All Current Athletes"
             cyear = '3'
         if staff or coach:
-            # simple protection against sql injection
-            try:
-                sport = int(post.get('sport'))
-            except Exception:
-                sport = '0'
-
+            sport = post.get('sport')
+            # are we in print view?
             trees = post.get('print')
-            if sport and sport != '0' and staff and trees:
+            if sport and staff and trees:
                 # print all athletes from any given sport
                 sql = """ {0}
                     WHERE stu_serv_rec.yr = "{1}"
@@ -123,21 +120,37 @@ def get_students(request):
                     elif cyear == '0':
                         sql += 'AND cc_student_medical_manager.sitrep = 0'
                     elif cyear == '3':
-                        sql += 'AND cc_student_medical_manager.athlete = 1'
+                        sql += 'AND athlete > 0'
                     elif cyear == '4':
                         sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
                     elif cyear == '5':
                         sql += 'AND cc_student_health_insurance.opt_out="1"'
                     elif cyear == '6':
-                        sql += 'AND cc_student_medical_manager.athlete = 1'
                         sql += 'AND cc_student_health_insurance.tertiary_company="US Fire Insurance Company"'
                     else:
                         sql += 'AND cc_student_medical_manager.id IS NULL'
                 else:
                     sql += 'AND prog_enr_rec.cl IN ({0})'.format(cyear)
-                if sport and sport != '0':
+                if sport:
                     sql += """
-                        AND cc_student_medical_manager.sports like "%{0}%"
+                        AND '{0}' IN (
+                        SELECT
+                            TRIM(IT.invl) AS sport_code
+                        FROM
+                            invl_table IT
+                        INNER JOIN
+                            involve_rec INR
+                        ON
+                            TRIM(IT.invl) = TRIM(INR.invl)
+                        AND
+                            IT.sanc_sport = 'Y'
+                        WHERE
+                            TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
+                        AND
+                            TODAY < NVL(INR.end_date, TODAY)
+                        AND
+                            INR.id = id_rec.id
+                        )
                     """.format(str(sport))
                 sql += ' ORDER BY lastname'
                 template = 'dashboard/students_data.inc.html'
@@ -288,9 +301,10 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                 )
                 # used for staff who update info on the dashboard
                 stype = 'student'
+                sports = get_sports(student.id, manager.created_at)
                 if student.athlete:
                     stype = 'athlete'
-                sports = get_sports(student.id)
+                    year = manager.created_at.year + 1
                 try:
                     student_user = User.objects.get(pk=cid)
                 except Exception:
