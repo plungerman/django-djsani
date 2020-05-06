@@ -247,25 +247,14 @@
         </small>
       </h3>
       <form class="form mb-2">
-        {% if student.athlete %}
+        {% if manager.sports %}
         <div class="mb-1"><strong>Sports:</strong>
-        {% for sport in sports %}
+        {% for sport in manager.sports %}
         <span title="{{sport.4.year}}">{{sport.1}}</span>{% if not forloop.last %},&nbsp;{% endif %}
         {% endfor %}
         </div>
         {% endif %}
         <h5>
-        <input type="checkbox" name="athlete" class="set-val"
-          title="Is the student an athlete or not?"
-          data-table="cc_student_medical_manager"
-          data-pk="{{manager.id}}"
-        {% if student.athlete %}
-          value="0"
-          checked="checked"
-        {% else %}
-          value="1"
-        {% endif %}>
-          Athlete |
         <input type="checkbox" name="sitrep"
           title="Health and Counseling Status"
           class="set-val" data-pk="{{manager.id}}"

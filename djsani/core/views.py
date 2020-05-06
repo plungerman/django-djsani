@@ -17,9 +17,6 @@ from djmaidez.contact.data import ENS_FIELDS
 from djmaidez.contact.data import MOBILE_CARRIER
 from djmaidez.contact.data import RELATIONSHIP
 from djsani.core.models import CHANGE
-from djsani.core.models import SPORTS
-from djsani.core.models import SPORTS_MEN
-from djsani.core.models import SPORTS_WOMEN
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENT_VITALS
@@ -87,11 +84,7 @@ def set_val(request):
     # table name
     table = request.POST.get('table')
     # value
-    # sports field is a list
-    if name == 'sports':
-        value = ','.join(request.POST.getlist('value[]'))
-    else:
-        value = request.POST.get('value')
+    value = request.POST.get('value')
     if not cid or not name or not pk or not table or not value:
         return HttpResponse("Missing required parameters.")
     if not staff and int(cid) != user.id:
@@ -128,8 +121,6 @@ def set_val(request):
             model = BASES[table]
             nobj = model.objects.using('informix').filter(pk=pk).first()
             if nobj:
-                if name == 'athlete' and str(value) == '0':
-                    dic['sports'] = ''
                 # green check mark for athletes
                 if name == 'sitrep_athlete' and str(value) == '1':
                     if nobj.medical_consent_agreement:
@@ -191,7 +182,6 @@ def home(request):
     # retrieve student manager (or create a new one if none exists)
     manager = get_manager(cid)
     # intialise some things
-    my_sports = ''
     student = None
     adult = False
     # get academic term
@@ -211,19 +201,11 @@ def home(request):
         if student:
             # save some things to Django session:
             request.session['gender'] = student.sex
-            # sports needs a python list
-            if manager.sports:
-                my_sports = manager.sports.split(',')
             # adult or minor? if we do not have a DOB, default to minor
             if student.birth_date:
                 age = calculate_age(student.birth_date)
                 if age >= settings.ADULT_AGE:
                     adult = True
-            # show the corresponding list of sports
-            if student.sex == 'F':
-                sports = SPORTS_WOMEN
-            else:
-                sports = SPORTS_MEN
             # quick switch for minor age students
             if request.GET.get('minor'):
                 adult = False
@@ -232,8 +214,6 @@ def home(request):
                 'switch_earl': reverse_lazy('set_val'),
                 'student': student,
                 'manager': manager,
-                'sports': sports,
-                'my_sports': my_sports,
                 'adult': adult,
             }
             # emergency contact modal form
@@ -257,7 +237,6 @@ def home(request):
                 # could not find student by college_id
                 context_data = {
                     'student': student,
-                    'sports': SPORTS,
                     'solo': True,
                     'adult': adult,
                 }

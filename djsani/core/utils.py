@@ -6,11 +6,8 @@ import os
 
 from django.conf import settings
 from django.core.cache import cache
-from djimix.core.utils import get_connection
-from djimix.core.utils import xsql
 from djsani.core.models import StudentMedicalContentType
 from djsani.core.models import StudentMedicalManager
-from djsani.core.sql import SPORTS_STUDENT
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
@@ -59,26 +56,6 @@ def get_term():
         if TODAY.month == DEC:
             year = year + 1
     return {'yr': year, 'sess': term}
-
-
-def get_sports(cid=None, date=None):
-    """Obtain the sports for a student or all the sports."""
-    if cid and date:
-        # sports end_date is always around mid-may so a manager created
-        # in august would correspond to an end_date in the following year,
-        # while a manager created in january or february would correspond
-        # to an end_date in the current year.
-        if date.month < 6:
-            year = date.year
-        else:
-            year = date.year + 1
-        sql = SPORTS_STUDENT(cid=cid, year=year)
-    else:
-        phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
-        with open(phile) as incantation:
-            sql = incantation.read()
-    with get_connection() as connection:
-        return xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchall()
 
 
 def get_manager(cid):

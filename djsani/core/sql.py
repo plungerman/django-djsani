@@ -180,8 +180,6 @@ SELECT
     cc_student_medical_manager.sitrep,
     cc_student_medical_manager.sitrep_athlete,
     cc_student_medical_manager.concussion_baseline,
-    cc_student_medical_manager.athlete,
-    cc_student_medical_manager.sports,
     cc_student_medical_manager.medical_consent_agreement,
     cc_student_medical_manager.medical_consent_agreement_status,
     cc_student_medical_manager.physical_evaluation_1,

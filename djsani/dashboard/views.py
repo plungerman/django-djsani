@@ -19,7 +19,6 @@ from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.sql import STUDENTS_ALPHA
 from djsani.core.utils import get_manager
-from djsani.core.utils import get_sports
 from djsani.core.utils import get_term
 from djsani.emergency.models import AARec
 from djsani.insurance.models import StudentHealthInsurance
@@ -173,7 +172,9 @@ def get_students(request):
         )
     with get_connection(EARL) as connection:
         # fetch all the sports for search
-        sports = get_sports()
+        phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
+        with open(phile) as incantation:
+            sports = xsql(incantation.read(), connection).fetchall()
         # fetch the students
         cursor = connection.cursor().execute(sql)
         # obtain the column names
@@ -301,17 +302,15 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                 )
                 # used for staff who update info on the dashboard
                 stype = 'student'
-                sports = get_sports(student.id, manager.created_at)
-                if student.athlete:
+                if manager.sports():
                     stype = 'athlete'
-                    year = manager.created_at.year + 1
                 try:
                     student_user = User.objects.get(pk=cid)
                 except Exception:
                     student_user = None
             else:
                 age, ens, shi, smh, amh = (None,) * 5
-                student, sports, stype, student_user, manager = (None,) * 5
+                student, stype, student_user, manager = (None,) * 5
             return render(
                 request,
                 template,
@@ -325,7 +324,6 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                     'smh': smh,
                     'cid': cid,
                     'switch_earl': reverse_lazy('set_val'),
-                    'sports': sports,
                     'next_year': NEXT_YEAR,
                     'stype': stype,
                     'managers': managers,

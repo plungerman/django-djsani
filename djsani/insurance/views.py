@@ -87,7 +87,7 @@ def index(request, stype, cid=None):
             manager.save()
             # opt out of insurance
             if insurance.opt_out:
-                if manager.athlete:
+                if manager.sports:
                     if not medical_staff:
                         # alert email to staff
                         if settings.DEBUG:

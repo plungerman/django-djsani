@@ -63,59 +63,26 @@ $(function() {
             }
         });
     }
-    // multiple select picker
-    $('#id_sports').selectpicker();
-    $('#id_sports').on('change', function(){
-        setVal( "sports", $(this).val() );
-        if ( $(this).val() ) {
-            $athlete.delay(200).slideDown(200);
-        }else{
-            $athlete.delay(200).slideUp(200);
-        }
-    });
-
     {% if adult %}
-        $('#adult_athlete').delay(200).slideDown(200);
-        $('#adult_student').delay(200).slideDown(200);
-        $('#minor').slideUp(200);
+      $('#adult_athlete').delay(200).slideDown(200);
+      $('#adult_student').delay(200).slideDown(200);
+      $('#minor').slideUp(200);
     {% endif %}
-
-    $stypes = $('.sTypes');
     $student = $('#student');
-    $athlete = $('#athlete');
     $("#sports-container").slideUp(200);
-    {% if manager.athlete == 0 %}
-        $athlete.slideUp(200);
-        $student.delay(200).slideDown(200);
-        $("#sports-container").slideUp(200);
+    {% if not manager.sports %}
+      $student.delay(200).slideDown(200);
+      $("#sports-container").slideUp(200);
     {% endif %}
-    {% if manager.athlete == 1 %}
-        $student.slideUp(200);
-        $("#sports-container").delay(200).slideDown(200);
-        {% if my_sports %}
-            $athlete.delay(200).slideDown(200);
-        {% endif %}
+    {% if manager.sports %}
+      $student.slideUp(200);
+      $("#sports-container").delay(200).slideDown(200);
     {% endif %}
-    $stypes.change(function() {
-        $val = $(this).val();
-        if ($val == "0") {
-            $athlete.slideUp(200);
-            $("#sports-container").slideUp(200);
-            $student.delay(200).slideDown(200);
-        }
-        else if ($val == "1") {
-            $student.slideUp(200);
-            $("#sports-container").delay(200).slideDown(200);
-        }
-        setVal("athlete", $val);
-    });
 });
 </script>
 {% endblock %}
 {% block group_name %}
-    <a href="/campus-life/health-counseling/">
-    Health &amp; Counseling Center
-    </a>
+  <a href="/campus-life/health-counseling/">Health &amp; Counseling Center</a>
 {% endblock %}
 {% block left_nav  %}
 <ul>
@@ -165,56 +132,6 @@ $(function() {
         {% get_lw_content as student_directions blurbs 2007 %}
         {{student_directions.body}}
     </div>
-    <h3>Do you plan to participate in NCAA Intercollegiate Athletics?</h3>
-    <form id="profile" class="form">
-    <ul class="nobull">
-        <li>
-            <label for="id_athlete_no">
-                <input id="id_athlete_no" type="radio" value="0"
-                    {% if manager.athlete == 0 %}
-                        checked="checked"
-                    {% endif %}
-                    class="sTypes" name="athlete" /> No
-            </label>
-        </li>
-        <li>
-            <label for="id_athlete_yes">
-                <input id="id_athlete_yes" type="radio" value="1"
-                    {% if manager.athlete == 1 %}
-                        checked="checked"
-                    {% endif %}
-                    class="sTypes" name="athlete" /> Yes
-            </label>
-        </li>
-        <li id="sports-container">
-            <h4>
-                Sports
-                <small>
-                    (use the Ctrl or Command key to select multiple sports)
-                </small>
-            </h4>
-            <select name="sports" class="selectpicker"
-                id="id_sports" size="5"
-                multiple="multiple" title="Choose your sport(s)&hellip;">
-                {% for s in sports %}
-                {% if not forloop.first %}
-                <option
-                {% if not s.0 %}
-                    disabled
-                {% else %} value="{{s.0}}"
-                    {% if s.0 in my_sports %}
-                        selected="selected"
-                    {% endif %}
-                {% endif %}
-                >
-                {{s.1|safe}}
-                </option>
-                {% endif %}
-                {% endfor %}
-            </select>
-        </li>
-    </ul>
-    </form>
     <div id="student" class="clear slider-container">
         <h2 class="clear">Online forms</h2>
         {% get_lw_content as progress blurbs 2478 %}
