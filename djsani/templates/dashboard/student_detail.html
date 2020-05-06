@@ -10,14 +10,14 @@
 {{block.super}}
 <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.0/css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
 <style type="text/css">
-    .dl-horizontal dt.widus { width: 300px; margin-right:9px; }
-    .dl-horizontal dd.yes { margin-left: 0; }
-    /* show the move cursor as the user moves the mouse over the panel header.*/
-    #draggablePanelList .panel-heading { cursor: move; }
-    li { list-style: none; }
-    .editable-input textarea {width:375px !important; height:200px;}
-    .editable-container.editable-popup { z-index: 10000; }
-    #healthInsuranceEmailData, #StudentContactEmailHeader, #id_results_file {display:none;}
+  .dl-horizontal dt.widus { width: 300px; margin-right:9px; }
+  .dl-horizontal dd.yes { margin-left: 0; }
+  /* show the move cursor as the user moves the mouse over the panel header.*/
+  #draggablePanelList .panel-heading { cursor: move; }
+  li { list-style: none; }
+  .editable-input textarea {width:375px !important; height:200px;}
+  .editable-container.editable-popup { z-index: 10000; }
+  #healthInsuranceEmailData, #StudentContactEmailHeader, #id_results_file {display:none;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -250,7 +250,7 @@
         {% if student.athlete %}
         <div class="mb-1"><strong>Sports:</strong>
         {% for sport in sports %}
-        {{sport.1}} [{{sport.4.year}}]{% if not forloop.last %},&nbsp;{% endif %}
+        <span title="{{sport.4.year}}">{{sport.1}}</span>{% if not forloop.last %},&nbsp;{% endif %}
         {% endfor %}
         </div>
         {% endif %}
