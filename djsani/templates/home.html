@@ -4,35 +4,38 @@
 {% block title %}Medical Forms &mdash; Carthage College{% endblock %}
 {% block extra_style %}
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
-    rel="stylesheet">
+  rel="stylesheet">
 <link href="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.css"
-    rel="stylesheet" type="text/css" />
+  rel="stylesheet" type="text/css" />
 <link href="/static/djsani/css/main.css"
-    rel="stylesheet" type="text/css" />
+  rel="stylesheet" type="text/css" />
 <!-- from portal head -->
 <link rel="stylesheet" type="text/css"
-    href="https://my.carthage.edu/ics/UI/Common/Styles/jQuery/jquery-ui.custom.css" />
+  href="https://my.carthage.edu/ics/UI/Common/Styles/jQuery/jquery-ui.custom.css" />
 <link href="/static/djmaidez/css/index.css"
-    rel="stylesheet" type="text/css" />
+  rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block extra_javascript %}
 <!-- from portal head -->
-<script type="text/javascript"
-    src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"
+  type="text/javascript"></script>
 <!-- bootstrap -->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"
+  type="text/javascript"></script>
+<script src="//www.carthage.edu/static/vendor/bootstrap-select/bootstrap-select.min.js"
+  type="text/javascript"></script>
 <script src="https://malsup.github.io/min/jquery.blockUI.min.js"
-    type="text/javascript"></script>
+  type="text/javascript"></script>
 <!-- ens -->
 <script type="text/javascript" charset="utf-8">
 function GetUserID() {
     return parseInt("{{request.user.id}}",10);
 }
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
-<script src="/static/djsani/js/djmaidez.js"></script>
-<script src="/static/djmaidez/js/validate.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"
+  type="text/javascript"></script>
+<script src="/static/djsani/js/djmaidez.js" type="text/javascript"></script>
+<script src="/static/djmaidez/js/validate.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     // build emergency contact modal
@@ -69,14 +72,14 @@ $(function() {
       $('#minor').slideUp(200);
     {% endif %}
     $student = $('#student');
-    $("#sports-container").slideUp(200);
+    $athlete = $('#athlete');
     {% if not manager.sports %}
+      $athlete.slideUp(200);
       $student.delay(200).slideDown(200);
-      $("#sports-container").slideUp(200);
     {% endif %}
     {% if manager.sports %}
       $student.slideUp(200);
-      $("#sports-container").delay(200).slideDown(200);
+      $athlete.delay(200).slideDown(200);
     {% endif %}
 });
 </script>
@@ -113,17 +116,15 @@ $(function() {
         </li>
     {% endif %}
 </ul>
-{% get_lw_content as nav blurbs 1971 %}
-{{nav.body}}
 {% endblock %}
 {% block sidebar %}{% endblock %}
 {% block content_head %}
-    <h1 id="page_title">
-    Medical Information Forms
-    <small class="fright" style="margin-right:20px;">
-        <a href="{% url 'home' %}"><i class="fa fa-home fa-2x green"></i></a>
-    </small>
-    </h1>
+<h1 id="page_title">
+  Medical Information Forms
+  <small class="fright" style="margin-right:20px;">
+    <a href="{% url 'home' %}"><i class="fa fa-home fa-2x green"></i></a>
+  </small>
+</h1>
 {% endblock %}
 {% block content %}
 <div>
@@ -250,7 +251,6 @@ $(function() {
           {{risk.body}}
         {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
-        {{sql}}
         {% get_lw_content as progress blurbs 2478 %}
         {{progress.body}}
         {% if manager.sitrep %}
