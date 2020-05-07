@@ -92,9 +92,7 @@ class StudentMedicalManager(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     sitrep = models.BooleanField()
     sitrep_athlete = models.BooleanField()
-    #athlete = models.BooleanField()
     concussion_baseline = models.BooleanField()
-    #sports = models.CharField(max_length=255, null=True, blank=True)
     medical_consent_agreement = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,

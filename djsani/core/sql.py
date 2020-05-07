@@ -55,7 +55,7 @@ SELECT
         residency_status,
     (
         SELECT
-            count(*)
+            COUNT(*)
         FROM
             invl_table IT
         INNER JOIN

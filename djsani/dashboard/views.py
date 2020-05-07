@@ -120,8 +120,6 @@ def get_students(request):
                         sql += 'AND cc_student_medical_manager.sitrep = 1'
                     elif cyear == '0':
                         sql += 'AND cc_student_medical_manager.sitrep = 0'
-                    elif cyear == '3':
-                        sql += 'AND athlete > 0'
                     elif cyear == '4':
                         sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
                     elif cyear == '5':
@@ -184,7 +182,7 @@ def get_students(request):
         students = []
         for row in cursor.fetchall():
             students.append(dict(zip(columns, row)))
-        for stu in students:
+        for num, stu in enumerate(students):
             adult = 'minor'
             if stu['birth_date']:
                 age = calculate_age(stu['birth_date'])
@@ -207,6 +205,7 @@ def get_students(request):
             'sport': sport,
             'staff': staff,
             'coach': coach,
+            'cyear': cyear,
         },
     )
 
