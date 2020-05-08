@@ -28,7 +28,7 @@ urlpatterns = [
     path('student/<int:cid>/', views.student_detail, name='student_detail'),
     # student detail content specific
     path(
-        'student/<int:cid>/<str:medium>/<str:content>/',
+        'student/<int:cid>/<str:medium>/<str:content_type>/',
         views.student_detail,
         name='student_detail_medium',
     ),
