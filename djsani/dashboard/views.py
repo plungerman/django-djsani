@@ -98,14 +98,11 @@ def get_students(request):
                     WHERE stu_serv_rec.yr = "{1}"
                     AND stu_serv_rec.sess = "{2}"
                     AND cc_student_medical_manager.created_at > "{3}"
-                    AND cc_student_medical_manager.sports like "%{4}%"
-                    ORDER BY lastname
                 """.format(
                     STUDENT_VITALS,
                     term['yr'],
                     term['sess'],
                     settings.START_DATE,
-                    str(sport),
                 )
                 template = 'dashboard/athletes_print.html'
             else:
@@ -132,29 +129,28 @@ def get_students(request):
                         sql += 'AND cc_student_medical_manager.id IS NULL'
                 else:
                     sql += 'AND prog_enr_rec.cl IN ({0})'.format(cyear)
-                if sport:
-                    sql += """
-                        AND '{0}' IN (
-                        SELECT
-                            TRIM(IT.invl) AS sport_code
-                        FROM
-                            invl_table IT
-                        INNER JOIN
-                            involve_rec INR
-                        ON
-                            TRIM(IT.invl) = TRIM(INR.invl)
-                        AND
-                            IT.sanc_sport = 'Y'
-                        WHERE
-                            TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
-                        AND
-                            TODAY < NVL(INR.end_date, TODAY)
-                        AND
-                            INR.id = id_rec.id
-                        )
-                    """.format(str(sport))
-                sql += ' ORDER BY lastname'
                 template = 'dashboard/students_data.inc.html'
+            if sport:
+                sql += """
+                    AND '{0}' IN (
+                    SELECT
+                        TRIM(IT.invl) AS sport_code
+                    FROM
+                        invl_table IT
+                    INNER JOIN
+                        involve_rec INR
+                    ON
+                        TRIM(IT.invl) = TRIM(INR.invl)
+                    AND
+                        IT.sanc_sport = 'Y'
+                    WHERE
+                        TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
+                    AND
+                        TODAY < NVL(INR.end_date, TODAY)
+                    AND
+                        INR.id = id_rec.id
+                    )
+                """.format(str(sport))
         else:
             return HttpResponse(
                 "error", content_type="text/plain; charset=utf-8",
@@ -168,10 +164,11 @@ def get_students(request):
             AND stu_serv_rec.yr = "{1}"
             AND stu_serv_rec.sess = "{2}"
             {3}
-            ORDER BY lastname
         """.format(
             STUDENTS_ALPHA, term['yr'], term['sess'], cl,
         )
+    # finally
+    sql += ' ORDER BY lastname'
     with get_connection(EARL) as connection:
         # fetch all the sports for search
         phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
