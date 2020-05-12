@@ -5,21 +5,37 @@
     Health and Counseling &mdash;
     Carthage College
 {% endblock %}
+{% block extra_style %}
+{{block.super}}
+<link href="https://www.carthage.edu/themes/toph/assets/css/magnific-popup.css" type="text/css" rel="stylesheet">
+{% endblock %}
 {% block extra_javascript %}
+<script type="text/javascript" src="https://www.carthage.edu/themes/toph/assets/js/magnific-popup.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
-    $('#privacy-waiver').submit(function(e) {
-        if ( $("input[name='disclose_records']").is(':checked') ) {
-            // disable submit
-            //$(this).children('input[type=submit]').attr('disabled', 'disabled');
-            $('#id_submit').prop('disabled', true);
-            return true;
-        } else {
-            alert('You must check the "Disclose Records" box in order to proceed.')
-            return false;
-        }
-    });
-
+  $('#id_submit').prop('disabled', true);
+  $('#privacy-waiver').submit(function(e) {
+    if ( $("input[name='disclose_records']").is(':checked') ) {
+      // disable submit
+      $('#id_submit').prop('disabled', true);
+      return true;
+    } else {
+      alert('You must check the "Disclose Records" box in order to proceed.')
+      return false;
+    }
+  });
+  /* must click to view the video before proceeding */
+  $('.modal-video').magnificPopup({
+    disableOn: 700,
+    type: 'iframe',
+    mainClass: 'mfp-fade',
+    removalDelay: 160,
+    preloader: false,
+    fixedContentPos: false
+  });
+  $('.modal-video').click(function(){
+    $('#id_submit').prop('disabled', false);
+  });
 });
 </script>
 {% endblock %}

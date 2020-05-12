@@ -1,39 +1,39 @@
 {% load livewhale_api %}
 <p>
-    I hereby acknowledge that I have voluntarily
-    elected to participate in the Intercollegiate Athletic
-    Program ("Program”), from August 1, {% now "Y" %} –
-    June 1, {{next_year}}.
+  I hereby acknowledge that I have voluntarily
+  elected to participate in the Intercollegiate Athletic
+  Program ("Program”), from August 1, {% now "Y" %} –
+  June 1, {{next_year}}.
 </p>
 {% get_lw_content as risk blurbs 2028 %}
 {{risk.body|safe}}
 {% if form.errors %}
-    <p class="error">
-        Please check the box below.
-    </p>
+<p class="error">
+  Please check the box below.
+</p>
 {% endif %}
 <p>
   <strong class="red">
-  Click the link below to watch a mandatory NCAA video.
-  You cannot submit this form until you watch the video.
+  Click the link below to read a mandatory NCAA document on concussions.
+  You cannot submit this form until you read it.
   </strong>
 </p>
 <h4>
-  <a href="https://www.youtube.com/watch?v=GSSN3WSNO3w" class="modal-video">
-      NCAA Drug Testing Video
+  <a href="https://www.carthage.edu/live/files/5209-pdf" class="modal-video">
+    NCAA concussion fact sheet
   </a>
 </h4>
 <p>
-    <input id="agree" type="checkbox" name="agree"
-    {% if student.cc_athlete_risk_waiver %}
-        checked="checked" value="0"
-    {% else %}
-        value="1"
-    {% endif %}
-    data-pk="{{student.risk_id|default:''}}"
-    data-table="cc_athlete_risk_waiver" class="set-val">
-    <label for="id_agree" style="display:inline;">
+  <input id="agree" type="checkbox" name="agree"
+  {% if student.cc_athlete_risk_waiver %}
+  checked="checked" value="0"
+  {% else %}
+  value="1"
+  {% endif %}
+  data-pk="{{student.risk_id|default:''}}"
+  data-table="cc_athlete_risk_waiver" class="set-val">
+  <label for="id_agree" style="display:inline;">
     I hereby acknowledge that I have read, understand, and will
     abide by each of the terms and conditions of this Agreement.
-    </label>
+  </label>
 </p>

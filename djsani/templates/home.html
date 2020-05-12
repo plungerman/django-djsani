@@ -250,6 +250,11 @@ $(function() {
           {% get_lw_content as risk blurbs 2010 %}
           {{risk.body}}
         {% endif %}
+        {% if not adult %}
+          <h3>HIPAA and FERPA waiver</h3>
+          {% get_lw_content as privacy blurbs 2960 %}
+          {{privacy.body}}
+        {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
         {% get_lw_content as progress blurbs 2478 %}
         {{progress.body}}
@@ -358,9 +363,13 @@ $(function() {
               </td>
               {% else %}
               <td>
-                <a href="{% url 'waiver_form' 'athlete' 'privacy' %}">
+                {% if adult %}
+                  <a href="{% url 'waiver_form' 'athlete' 'privacy' %}">
+                    HIPAA and FERPA waiver
+                  </a>
+                {% else %}
                   HIPAA and FERPA waiver
-                </a>
+                {% endif %}
               </td>
               <td></td>
               {% endif %}
