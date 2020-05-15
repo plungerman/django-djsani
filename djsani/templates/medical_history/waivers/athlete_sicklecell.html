@@ -1,9 +1,9 @@
 {% extends "home.html" %}
 {% load livewhale_api %}
 {% block title %}
-    Sickle Cell Trait Testing Form &mdash;
-    Health and Counseling &mdash;
-    Carthage College
+  Sickle Cell Trait Testing Form &mdash;
+  Health and Counseling &mdash;
+  Carthage College
 {% endblock %}
 {% block extra_style %}
 {{block.super}}
@@ -15,20 +15,20 @@
 {% endblock %}
 {% block content %}
 <div class="forms-container">
-    <h2>
-        Carthage College Athletic Training &mdash;<br />
-        Sickle Cell Trait Testing
-    </h2>
-    {% get_lw_content as sicklecell blurbs 2011 %}
-    {{sicklecell.body}}
-    {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form"
-         enctype="multipart/form-data" id="sickle_cell">
-        {% csrf_token %}
-        {% include "medical_history/waivers/athlete_sicklecell.inc.html" %}
-        <div class="large-12 cf">
-            {% include "form_submit.inc.html" %}
-        </div>
-    </form>
+  <h2>
+    Carthage College Athletic Training &mdash;<br>
+    Sickle Cell Trait Testing
+  </h2>
+  {% get_lw_content as sicklecell blurbs 2011 %}
+  {{sicklecell.body}}
+  {% include "includes/errors_text.html" %}
+  <form method="post" action="." class="form"
+    enctype="multipart/form-data" id="sickle_cell">
+    {% csrf_token %}
+    {% include "medical_history/waivers/athlete_sicklecell.inc.html" %}
+    <div class="large-12 cf">
+      {% include "form_submit.inc.html" %}
+    </div>
+  </form>
 </div>
 {% endblock %}

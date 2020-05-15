@@ -3,6 +3,7 @@ $(function() {
   var dict = {};
   dict.sickleCell1 = false;
   dict.sickleCell2 = false;
+  dict.sickleCell3 = false;
 
   $('.modal-video').magnificPopup({
     disableOn: 700,
@@ -15,10 +16,8 @@ $(function() {
   $('.modal-video').click(function(){
     $dis = $(this).attr('id');
     dict[$dis] = true;
-    console.log($dis);
-    if (dict.sickleCell1 == true && dict.sickleCell2 == true) {
+    if (dict.sickleCell1 == true && dict.sickleCell2 == true && dict.sickleCell3 == true) {
       $('#id_submit').prop('disabled', false);
-      console.log('done');
     }
   });
   $('#id_submit').prop('disabled', true);
