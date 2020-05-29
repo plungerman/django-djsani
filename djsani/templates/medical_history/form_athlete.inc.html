@@ -1,34 +1,32 @@
 <form class="form medical-history">
-    <div id="medical-history">
-        <fieldset class="blockLabels">
-            {% if not request.user.is_staff %}
-            <div style="float:right;">
-                <a href="{% url 'medical_history_print' 'athlete' 'print' %}">
-                    <i class="fa fa-print fa-4x"></i>
-                </a>
-            </div>
-            {% endif %}
-            <ol class="nobull" style="float:left;">
-                {% for field in form.visible_fields %}
-                    {% include "medical_history/athlete_headers.inc.html" %}
-                    <li class="form-group ctrlHolder">
-                    <h3>
-                        <label>
-                            {{ field.label }}
-                        </label>
-                    </h3>
-                    <a href="#" id="{{field.name}}" data-type="text"
-                        data-pk="{{pk}}"
-                        data-table="cc_athlete_medical_history"
-                        data-title="{{field.label}}" class="xeditable">
-                        {{field.value|default_if_none:"No"}}
-                    </a>
-                    {% if field.help_text %}
-                        <p class="help">{{field.help_text}}</p>
-                    {% endif %}
-                    </li>
-                {% endfor %}
-            </ol>
-        </fieldset>
-    </div>
+  <div id="medical-history">
+    <fieldset class="blockLabels">
+      {% if not request.user.is_staff %}
+      <div style="float:right;">
+        <a href="{% url 'medical_history_print' 'athlete' 'print' %}">
+          <i class="fa fa-print fa-4x"></i>
+        </a>
+      </div>
+      {% endif %}
+      <ol class="nobull" style="float:left;">
+        {% for field in form.visible_fields %}
+          {% include "medical_history/athlete_headers.inc.html" %}
+          <li class="form-group ctrlHolder">
+          <h3>
+            <label>{{field.label}}</label>
+          </h3>
+          <a href="#" id="{{field.name}}" data-type="text"
+            data-pk="{{data.id}}"
+            data-table="cc_athlete_medical_history"
+            data-title="{{field.label}}" class="xeditable">
+            {{field.value|default_if_none:"No"}}
+          </a>
+          {% if field.help_text %}
+            <p class="help">{{field.help_text}}</p>
+          {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </fieldset>
+  </div>
 </form>

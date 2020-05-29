@@ -62,30 +62,30 @@ $(document).ready(function() {
 {% endblock %}
 {% block content %}
 <div class="large-12 forms-container">
-    <h2>
-        Medical history
-        {% if stype == "athlete" %}
-        for athletes
-        {% endif %}
-    </h2>
-    {% get_lw_content as instructions blurbs 2223 %}
-    {{instructions.body}}
-    {% if update %}
-        <div class="alert alert-warning" role="alert">
-            <p>
-                All questions are 'yes' or 'no' answer,
-                where a 'yes' response requires an explanation.
-            </p>
-            <p>
-                Click on your response to any given question to update
-                your answer. Click the green check mark to save.
-            </p>
-        </div>
-    {% endif %}
+  <h2>
+    Medical history
     {% if stype == "athlete" %}
-        {% include "medical_history/form_athlete.inc.html" %}
-    {% else %}
-        {% include "medical_history/form_student.inc.html" %}
+    for athletes
     {% endif %}
+  </h2>
+  {% get_lw_content as instructions blurbs 2223 %}
+  {{instructions.body}}
+  {% if update %}
+    <div class="alert alert-warning" role="alert">
+      <p>
+        All questions are 'yes' or 'no' answer,
+        where a 'yes' response requires an explanation.
+      </p>
+      <p>
+        Click on your response to any given question to update
+        your answer. Click the green check mark to save.
+      </p>
+    </div>
+  {% endif %}
+  {% if stype == "athlete" %}
+    {% include "medical_history/form_athlete.inc.html" %}
+  {% else %}
+    {% include "medical_history/form_student.inc.html" %}
+  {% endif %}
 </div>
 {% endblock %}

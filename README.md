@@ -57,6 +57,11 @@ Start of the academic year is June 1st.
     CCStudentMedicalManager
     CCStudentMeniWaiver
 
+    cd /opt/carsi/schema/student
+    make co F=CCAthleteMedicalHistory
+    make tbuildy F=CCAthleteMedicalHistory
+    make ci F=CCAthleteMedicalHistory L="new fields for athlete health history"
+
 # Notes
 
 Reminder for sqlalchemy and informix with Django:

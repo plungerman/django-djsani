@@ -24,7 +24,7 @@ $(document).ready(function() {
       "recurring_thoughts","anxious_nervious","depressed","lack_confidence",
       "overwhelmed","lack_emotional_control","self_others_harm","lost_interest",
       "isolated_alone","counseling","eating_disorder","adhd_add",
-      "substance_abuse","self_harm","other_mental_health"
+      "substance_abuse","self_harm","other_mental_health","despair"
     ];
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
@@ -129,152 +129,138 @@ $(document).ready(function() {
 {% endblock %}
 {% block content %}
 <div class="large-12 forms-container">
-    <h2>
-        Medical history
-        {% if stype == "athlete" %}
-        for athletes
-        {% endif %}
-    </h2>
-    {% get_lw_content as instructions blurbs 2223 %}
-    {{instructions.body}}
-    <div class="alert alert-warning" role="alert">
-        <p>
-            All questions are 'yes' or 'no' answer,
-            where a 'yes' response requires an explanation.
-        </p>
+  <h2>
+    Medical history
+    {% if stype == "athlete" %}
+    for athletes
+    {% endif %}
+  </h2>
+  {% get_lw_content as instructions blurbs 2223 %}
+  {{instructions.body}}
+  <div class="alert alert-warning" role="alert">
+    <p>
+      All questions are 'yes' or 'no' answer,
+      where a 'yes' response requires an explanation.
+    </p>
+  </div>
+  {% include "includes/errors_text.html" %}
+  <form method="post" action="." class="form medical-history">
+    {% csrf_token %}
+    <div>
+      <fieldset class="blockLabels">
+        <ol class="nobull">
+          {% if stype == "athlete" %}
+            {% for field in form.visible_fields %}
+              {% include "medical_history/athlete_headers.inc.html" %}
+              {% if field.value == "No" or not field.value %}
+                {% include "medical_history/form_field.inc.html" %}
+              {% else %}
+                {% include "medical_history/form_verify_field.inc.html" %}
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% for field in form.visible_fields %}
+              {% if forloop.first %}
+              <li>
+                <p>
+                  For any item to which you answer "Yes",
+                  please provide an explanation, including:
+                  the name of medications, year,
+                  side effects, and diagnosis when appropriate.
+                </p>
+              </li>
+              {% endif %}
+              {% if field.name == "organ_loss" %}
+                </li></ol></fieldset>
+                <fieldset class="blockLabels">
+                {% if not update %}
+                <p>
+                  Please check "yes" for any conditions with
+                  which you have been diagnosed. Please
+                  provide an explanation for any item to which you
+                  would answer "yes".
+                </p>
+                {% else %}
+                <p>
+                  For any item to which you would answer "Yes",
+                  please provide an explanation.
+                </p>
+                {% endif %}
+                <ol>
+              {% endif %}
+              {% if field.name == "depression" %}
+              <li class="form-group ctrlHolder">
+              <h3 style="color: #000;font-weight:700;">
+                I have been diagnosed by a medical professional
+                with the following:
+              </h3>
+              </li>
+              {% endif %}
+              {% if field.value == "No" or not field.value %}
+                {% include "medical_history/form_field.inc.html" %}
+              {% else %}
+                {% include "medical_history/form_verify_field.inc.html" %}
+              {% endif %}
+            {% endfor %}
+            <li class="form-group ctrlHolder">
+              {% get_lw_content as counseling blurbs 2174 %}
+              {{counseling.body}}
+            </li>
+          {% endif %}
+        </ol>
+      </fieldset>
+      {% include "form_submit.inc.html" %}
     </div>
-    {% include "includes/errors_text.html" %}
-    <form method="post" action="." class="form medical-history">
-        {% csrf_token %}
-        <div>
-            <fieldset class="blockLabels">
-                <ol class="nobull">
-                    {% if stype == "athlete" %}
-                        {% for field in form.visible_fields %}
-                            {% include "medical_history/athlete_headers.inc.html" %}
-                            {% if field.value == "No" or not field.value %}
-                                {% include "medical_history/form_field.inc.html" %}
-                            {% else %}
-                                {% include "medical_history/form_verify_field.inc.html" %}
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                      {% for field in form.visible_fields %}
-                        {% if forloop.first %}
-                        <li>
-                          <p>
-                            For any item to which you answer "Yes",
-                            please provide an explanation, including:
-                            the name of medications, year,
-                            side effects, and diagnosis when appropriate.
-                          </p>
-                        </li>
-                        {% endif %}
-                        {% if field.name == "organ_loss" %}
-                          </li></ol></fieldset>
-                          <fieldset class="blockLabels">
-                          {% if not update %}
-                          <p>
-                            Please check "yes" for any conditions with
-                            which you have been diagnosed. Please
-                            provide an explanation for any item to which you
-                            would answer "yes".
-                          </p>
-                          {% else %}
-                          <p>
-                            For any item to which you would answer "Yes",
-                            please provide an explanation.
-                          </p>
-                          {% endif %}
-                          <ol>
-                        {% endif %}
-                        {% if field.name == "trouble_sleeping" %}
-                        </li></ol></fieldset>
-                        <fieldset class="blockLabels">
-                        <legend>
-                            Student Mental Health Screening
-                        </legend>
-                        <p>
-                        Please answer all questions honestly.
-                        All answers are <u>confidential</u> and
-                        will not be shared. For any item to which you
-                        would answer "Yes", please provide an explanation.
-                        </p>
-                        <ol>
-                        {% endif %}
-                        {% if field.name == "depression" %}
-                        <li class="form-group ctrlHolder">
-                        <h3 style="color: #000;font-weight:700;">
-                            I have been diagnosed by a medical professional
-                            with the following:
-                        </h3>
-                        </li>
-                        {% endif %}
-                        {% if field.value == "No" or not field.value %}
-                          {% include "medical_history/form_field.inc.html" %}
-                        {% else %}
-                          {% include "medical_history/form_verify_field.inc.html" %}
-                        {% endif %}
-                      {% endfor %}
-                      <li class="form-group ctrlHolder">
-                        {% get_lw_content as counseling blurbs 2174 %}
-                        {{counseling.body}}
-                      </li>
-                    {% endif %}
-                </ol>
-            </fieldset>
-            {% include "form_submit.inc.html" %}
-        </div>
-    </form>
+  </form>
 </div>
 <div id="errorModal" class="modal fade bs-example-modal-sm" tabindex="-1"
-    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span><span class="sr-only">
-                Close
-            </span>
+          <span aria-hidden="true">&times;</span><span class="sr-only">
+            Close
+          </span>
         </button>
         <h1 class="modal-title">Error</h1>
       </div>
       <div class="modal-body">
         <p>
-            You did not respond with a "Yes" or "No" to all of the questions,
-            or you responsed "Yes" to one of the questions but did not provide
-            an explanation.
+          You did not respond with a "Yes" or "No" to all of the questions,
+          or you responsed "Yes" to one of the questions but did not provide
+          an explanation.
         </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">
-            Close
+          Close
         </button>
       </div>
     </div><!-- /.modal-content -->
   </div>
 </div>
 <div id="mentalHealthModal" class="modal fade bs-example-modal-sm" tabindex="-1"
-    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span><span class="sr-only">
-                Close
-            </span>
+          <span aria-hidden="true">&times;</span><span class="sr-only">
+            Close
+          </span>
         </button>
         <h1 class="modal-title">Counseling services</h1>
       </div>
       <div class="modal-body">
         <p>
-            {% get_lw_content as counseling blurbs 2174 %}
-            {{counseling.body}}
+          {% get_lw_content as counseling blurbs 2174 %}
+          {{counseling.body}}
         </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">
-            Close
+          Close
         </button>
       </div>
     </div><!-- /.modal-content -->

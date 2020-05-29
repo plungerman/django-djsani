@@ -869,6 +869,83 @@ class AthleteMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
+    # mental health
+    trouble_sleeping_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    trouble_sleeping = forms.CharField(
+        label="I often have trouble sleeping",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    more_energy_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    more_energy= forms.CharField(
+        label="I wish I had more energy most days of the week.",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    recurring_thoughts_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    recurring_thoughts= forms.CharField(
+        label="I think about things over and over.",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    anxious_nervious_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    anxious_nervious= forms.CharField(
+        label="I feel anxious and nervous much of the time.",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    depressed_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    depressed= forms.CharField(
+        label="I often feel sad or depressed.",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    lack_confidence_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    lack_confidence= forms.CharField(
+        label="I struggle with being confident.",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    despair_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    despair= forms.CharField(
+        label="I don’t feel hopeful about the future.",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    lack_emotional_control_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    lack_emotional_control= forms.CharField(
+        label="""
+            I have a hard time managing my emotions (frustration, anger,
+            impatience).
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    self_others_harm_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    self_others_harm= forms.CharField(
+        label="I have feelings of hurting myself or others.",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # misc
     other_information_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )

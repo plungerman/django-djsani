@@ -2,7 +2,6 @@
 
 """Views for the insurance forms."""
 
-import logging
 from os.path import join
 
 from django.conf import settings
@@ -15,9 +14,6 @@ from django.urls import reverse_lazy
 from djsani.core.utils import get_manager
 from djtools.fields.helpers import handle_uploaded_file
 from djtools.utils.convert import str_to_class
-
-
-logger = logging.getLogger('debug_logfile')
 
 
 @login_required
@@ -74,8 +70,6 @@ def index(request, stype, display=None):
         form = fclass(post, gender=gender, use_required_attribute=False)
         if form.is_valid():
             cd = form.cleaned_data
-            # update else create
-            logger.debug('history?')
             # set 'yes' responses with value from temp field
             for n1, v1 in cd.items():
                 if v1 == 'Yes':

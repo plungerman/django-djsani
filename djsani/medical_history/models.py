@@ -159,6 +159,17 @@ class AthleteMedicalHistory(models.Model):
     dental_appliances = models.CharField(max_length=255)
     previous_year_change = models.CharField(max_length=255)
     physician_prohibition = models.CharField(max_length=255)
+    # student mental health
+    trouble_sleeping = models.CharField(max_length=255)
+    more_energy = models.CharField(max_length=255)
+    recurring_thoughts = models.CharField(max_length=255)
+    anxious_nervious = models.CharField(max_length=255)
+    depressed = models.CharField(max_length=255)
+    lack_confidence = models.CharField(max_length=255)
+    despair = models.CharField(max_length=255)
+    lack_emotional_control = models.CharField(max_length=255)
+    self_others_harm = models.CharField(max_length=255)
+    # misc
     other_information = models.CharField(max_length=255)
     supplements = models.CharField(max_length=255)
     # Female Athletes Only
