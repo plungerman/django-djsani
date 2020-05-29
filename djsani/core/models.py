@@ -154,7 +154,7 @@ class StudentMedicalManager(models.Model):
         # while a manager created in january or february would correspond
         # to an end_date in the current year.
         date = self.created_at
-        if date.month < 6:
+        if date.month < settings.SPORTS_MONTH:
             year = date.year
         else:
             year = date.year + 1
