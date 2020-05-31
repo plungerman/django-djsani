@@ -10,6 +10,12 @@ START_DATE = settings.START_DATE
 # Informix likes DATE("2015-06-01") when using an IDE like Squirrel or RazorSQL
 # or DATE("06/01/15")
 
+date = settings.START_DATE
+if date.month < settings.SPORTS_MONTH:
+    YEAR = date.year
+else:
+    YEAR = date.year + 1
+
 SPORTS_STUDENT="""
 SELECT
     TRIM(IT.invl) AS sport_code,
@@ -67,7 +73,7 @@ SELECT
         WHERE
             TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
         AND
-            TODAY < INR.end_date
+            YEAR(INR.end_date) >= {0}
         AND
             INR.id = id_rec.id
     ) as athlete,
@@ -127,7 +133,7 @@ LEFT JOIN
 ON
     id_rec.id = cc_student_medical_manager.college_id
     AND
-    cc_student_medical_manager.created_at > "{0}"
+    cc_student_medical_manager.created_at > "{1}"
 LEFT JOIN
     cc_student_health_insurance
 ON
@@ -140,7 +146,7 @@ ON
     (
         cc_athlete_sicklecell_waiver.proof = 1
     OR
-        cc_athlete_sicklecell_waiver.created_at > "{1}"
+        cc_athlete_sicklecell_waiver.created_at > "{2}"
     )
 WHERE
     prog_enr_rec.subprog
@@ -152,7 +158,7 @@ AND
     stu_acad_rec.sess
 IN
     ("RA","RC","AM","GC","PC","TC","GD","GA","GC")
-""".format(START_DATE, START_DATE)
+""".format(YEAR, START_DATE, START_DATE)
 
 STUDENT_VITALS = """
 SELECT

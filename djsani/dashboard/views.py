@@ -131,6 +131,11 @@ def get_students(request):
                     sql += 'AND prog_enr_rec.cl IN ({0})'.format(cyear)
                 template = 'dashboard/students_data.inc.html'
             if sport:
+                date = settings.START_DATE
+                if date.month < settings.SPORTS_MONTH:
+                    year = date.year
+                else:
+                    year = date.year + 1
                 sql += """
                     AND '{0}' IN (
                     SELECT
@@ -146,11 +151,11 @@ def get_students(request):
                     WHERE
                         TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
                     AND
-                        TODAY < NVL(INR.end_date, TODAY)
+                        YEAR(INR.end_date) >= {1}
                     AND
                         INR.id = id_rec.id
                     )
-                """.format(str(sport))
+                """.format(str(sport), year)
         else:
             return HttpResponse(
                 "error", content_type="text/plain; charset=utf-8",
@@ -204,6 +209,7 @@ def get_students(request):
             'sport': sport,
             'staff': staff,
             'coach': coach,
+            'sql': sql,
         },
     )
 
