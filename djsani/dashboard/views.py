@@ -151,7 +151,7 @@ def get_students(request):
                     WHERE
                         TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
                     AND
-                        YEAR(INR.end_date) >= {1}
+                        YEAR(INR.end_date) = {1}
                     AND
                         INR.id = id_rec.id
                     )
