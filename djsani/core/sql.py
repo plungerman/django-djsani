@@ -73,7 +73,7 @@ SELECT
         WHERE
             TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
         AND
-            YEAR(INR.end_date) >= {0}
+            YEAR(INR.end_date) > {0}
         AND
             INR.id = id_rec.id
     ) as athlete,
