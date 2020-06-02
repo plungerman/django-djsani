@@ -420,13 +420,17 @@ $(function() {
             </tr>
             <tr>
               <td>
-                {% if adult %}
+                {% if not adult %}
+                  Sickle cell trait testing waiver
+                {% else %}
+                  {% if manager.cc_athlete_sicklecell_waiver %}
+                  Sickle cell trait testing waiver
+                  {% else %}
                   <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
                     Sickle cell trait testing waiver
                   </a>
-                  {% else %}
-                    Sickle cell trait testing waiver
                   {% endif %}
+                {% endif %}
               </td>
               <td>
                 {% if manager.cc_athlete_sicklecell_waiver %}
