@@ -80,7 +80,7 @@ def index(request, stype, display=None):
                     setattr(history, key, form_val)
             else:
                 # remove temp fields
-                for n2, _v2 in cd.items():
+                for n2 in list(cd):
                     if n2[-2:] == '_2':
                         cd.pop(n2)
                 cd['college_id'] = cid
@@ -88,10 +88,10 @@ def index(request, stype, display=None):
                 # create new object
                 history = model(**cd)
             # save out medical history object whether update or create
-            history.save()
+            history.save(using='informix')
             # update the manager
             setattr(manager, table, True)
-            manager.save()
+            manager.save(using='informix')
             return HttpResponseRedirect(reverse_lazy('medical_history_success'))
         elif not history:
             # for use at template level with dictionary filter
@@ -155,7 +155,7 @@ def file_upload(request, name):
                         request.FILES[field], sendero,
                     )
                     setattr(manager, field, '{0}/{1}'.format(folder, phile))
-                    manager.save()
+                    manager.save(using='informix')
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
         form = fclass

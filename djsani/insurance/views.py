@@ -83,10 +83,10 @@ def index(request, stype, cid=None):
             insurance = form.save(commit=False)
             insurance.college_id = cid
             insurance.manager_id = manager.id
-            insurance.save()
+            insurance.save(using='informix')
             # update the manager
             manager.cc_student_health_insurance = True
-            manager.save()
+            manager.save(using='informix')
             # opt out of insurance
             if insurance.opt_out:
                 if manager.sports:
