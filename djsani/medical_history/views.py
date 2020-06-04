@@ -79,12 +79,12 @@ def index(request, stype, display=None):
                 for key, form_val in cd.items():
                     setattr(history, key, form_val)
             else:
-                cd['college_id'] = cid
-                cd['manager_id'] = manager.id
                 # remove temp fields
                 for n2, _v2 in cd.items():
                     if n2[-2:] == '_2':
                         cd.pop(n2)
+                cd['college_id'] = cid
+                cd['manager_id'] = manager.id
                 # create new object
                 history = model(**cd)
             # save out medical history object whether update or create
