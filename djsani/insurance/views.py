@@ -65,7 +65,9 @@ def index(request, stype, cid=None):
     ).first()
 
     # opt out
-    oo = instance.opt_out
+    oo = None
+    if instance:
+        oo = instance.opt_out
 
     # form class
     if stype == 'student':
