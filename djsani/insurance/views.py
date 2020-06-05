@@ -89,7 +89,7 @@ def index(request, stype, cid=None):
             manager.save(using='informix')
             # opt out of insurance
             if insurance.opt_out:
-                if manager.sports:
+                if manager.sports():
                     if not medical_staff:
                         # alert email to staff
                         if settings.DEBUG:
