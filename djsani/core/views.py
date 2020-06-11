@@ -85,7 +85,7 @@ def set_val(request):
     table = request.POST.get('table')
     # value
     value = request.POST.get('value')
-    if not cid or not name or not pk or not table or not value:
+    if not cid or not name or not table or not value:
         return HttpResponse("Missing required parameters.")
     if not staff and int(cid) != user.id:
         return HttpResponse("Not staff")
