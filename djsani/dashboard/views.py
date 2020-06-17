@@ -2,6 +2,7 @@
 
 """Views for the administrative dashboard."""
 
+import logging
 import os
 
 from django.conf import settings
@@ -38,6 +39,8 @@ from djtools.utils.users import in_group
 EARL = settings.INFORMIX_ODBC
 STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
+
+logger = logging.getLogger('debug_logfile')
 
 
 def panels(request, mod, manager, content_type=None, gender=None):
@@ -85,9 +88,6 @@ def get_students(request):
     if request.POST:
         post = request.POST
         cyear = post.get('class')
-        if coach:
-            # option '3' in the select field is "All Current Athletes"
-            cyear = '3'
         if staff or coach:
             sport = post.get('sport')
             # are we in print view?
@@ -127,7 +127,7 @@ def get_students(request):
                         sql += 'AND cc_student_health_insurance.tertiary_company="US Fire Insurance Company"'
                     else:
                         sql += 'AND cc_student_medical_manager.id IS NULL'
-                else:
+                elif not coach:
                     sql += 'AND prog_enr_rec.cl IN ({0})'.format(cyear)
                 template = 'dashboard/students_data.inc.html'
             if sport:
@@ -174,6 +174,8 @@ def get_students(request):
         )
     # finally
     sql += ' ORDER BY lastname'
+    logger.debug('sql:')
+    logger.debug(sql)
     with get_connection(EARL) as connection:
         # fetch all the sports for search
         phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
