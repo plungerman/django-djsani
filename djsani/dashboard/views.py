@@ -174,8 +174,8 @@ def get_students(request):
         )
     # finally
     sql += ' ORDER BY lastname'
-    logger.debug('sql:')
-    logger.debug(sql)
+    #logger.debug('sql:')
+    #logger.debug(sql)
     with get_connection(EARL) as connection:
         # fetch all the sports for search
         phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
