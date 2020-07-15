@@ -4,6 +4,7 @@
 
 from django.db import models
 from djsani.core.models import StudentMedicalManager
+from djtools.fields.helpers import upload_to_path
 
 
 class StudentHealthInsurance(models.Model):
@@ -26,9 +27,19 @@ class StudentHealthInsurance(models.Model):
     primary_group_no = models.CharField(max_length=64)
     primary_policy_type = models.CharField(max_length=128)
     primary_policy_state = models.CharField(max_length=2)
-    primary_card_front = models.CharField(max_length=128)
+    primary_card_front = models.FileField(
+        upload_to=upload_to_path,
+        max_length=128,
+        null=True,
+        blank=True,
+    )
     primary_card_front_status = models.BooleanField()
-    primary_card_back = models.CharField(max_length=128)
+    primary_card_back = models.FileField(
+        upload_to=upload_to_path,
+        max_length=128,
+        null=True,
+        blank=True,
+    )
     primary_card_back_status = models.BooleanField()
     # secondary
     secondary_policy_holder = models.CharField(max_length=128)
@@ -50,7 +61,12 @@ class StudentHealthInsurance(models.Model):
     tertiary_group_no = models.CharField(max_length=64)
     tertiary_policy_type = models.CharField(max_length=128)
     tertiary_policy_state = models.CharField(max_length=2)
-    tertiary_card = models.CharField(max_length=128, null=True, blank=True)
+    tertiary_card = models.FileField(
+        upload_to=upload_to_path,
+        max_length=128,
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         """Attributes about the data model and admin options."""

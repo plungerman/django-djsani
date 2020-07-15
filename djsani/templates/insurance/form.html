@@ -310,7 +310,7 @@ $(function() {
                       <input type="file" name="primary_card_front"
                         id="id_primary_card_front" class="fleft" style="width:300px">
                         {% if form.primary_card_front.value %}
-                        <a href="{{media_url}}files/{{form.primary_card_front.value}}" class="fright">
+                        <a href="{{media_url}}/{{form.primary_card_front.value}}" class="fright">
                           <i class="fa fa-credit-card"></i></a>
                         {% endif %}
                     </div>
@@ -324,7 +324,7 @@ $(function() {
                       <input type="file" name="primary_card_back"
                         id="id_primary_card_back" class="fleft" style="width:300px">
                         {% if form.primary_card_back.value %}
-                          <a href="{{media_url}}files/{{form.primary_card_back.value}}" class="fright">
+                          <a href="{{media_url}}/{{form.primary_card_back.value}}" class="fright">
                             <i class="fa fa-credit-card"></i></a>
                         {% endif %}
                     </div>

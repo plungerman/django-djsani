@@ -43,22 +43,6 @@ AND
 STUDENTS_ALPHA = """
 SELECT
     UNIQUE
-    CASE
-        WHEN
-            NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
-        OR
-            NVL(stu_serv_rec.bldg, '') = 'undc'
-        OR
-            NVL(UPPER(stu_serv_rec.bldg), '') = 'OFF'
-        OR
-            NVL(UPPER(stu_serv_rec.bldg), '') = ''
-        THEN
-            'Commuter'
-        ELSE
-            'Resident'
-        END
-    AS
-        residency_status,
     (
         SELECT
             COUNT(*)
