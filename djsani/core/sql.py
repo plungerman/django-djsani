@@ -61,6 +61,9 @@ SELECT
         AND
             INR.id = id_rec.id
     ) as athlete,
+    CASE
+        WHEN NVL(stu_serv_rec.intend_hsg, 'C') IN ('C', 'O') THEN 'Commuter' ELSE 'Resident'
+    END AS residency_status,
     id_rec.lastname, id_rec.firstname, id_rec.middlename,
     id_rec.id, profile_rec.birth_date,
     TRIM(cvid_rec.ldap_name) as ldap_name,

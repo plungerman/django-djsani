@@ -168,6 +168,7 @@
                 <i class="fa fa-times red" title="Health Insurance"></i>
               {% endif %}
             </td>
+            {% if s.residency_status == "Resident" %}
             <td class="{{s.adult}}">
               {% if s.cc_student_meni_waiver %}
                 <i class="fa fa-check" title="Meningococcal meningitis/Hepatitis B response">
@@ -184,6 +185,11 @@
                 {% endif %}
               {% endif %}
             </td>
+            {% else %}
+            <td class="{{s.adult}}" style="background-color:#cacaca;">
+              <i class="fa fa-ban red" title="Meningococcal meningitis/Hepatitis B response"></i>
+            </td>
+            {% endif %}
             <td class="{{s.adult}}">
               {% if s.cc_student_medical_history %}
                 <i class="fa fa-check" title="Medical History">
