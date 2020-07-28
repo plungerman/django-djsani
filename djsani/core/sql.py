@@ -151,19 +151,9 @@ STUDENT_VITALS = """
 SELECT
     UNIQUE
     CASE
-        WHEN
-            NVL(UPPER(stu_serv_rec.bldg), '') = 'CMTR'
-        OR
-            NVL(stu_serv_rec.bldg, '') = 'undc'
-        OR
-            NVL(UPPER(stu_serv_rec.bldg), '') = ''
-        THEN
-            'Commuter'
-        ELSE
-            'Resident'
-        END
-    AS
-        residency_status,stu_serv_rec.stusv_no,
+        WHEN NVL(stu_serv_rec.intend_hsg, 'C') IN ('C', 'O') THEN 'Commuter' ELSE 'Resident'
+    END AS residency_status,
+    stu_serv_rec.stusv_no,
     id_rec.id, id_rec.lastname, id_rec.firstname, id_rec.middlename,
     id_rec.addr_line1, id_rec.addr_line2, id_rec.city, id_rec.st,
     id_rec.zip, id_rec.ctry, id_rec.phone,
