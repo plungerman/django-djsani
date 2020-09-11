@@ -110,7 +110,11 @@
               {% endif %}
               {% if staff %}
               <span style="float:right;"><!-- all one line required -->
+                {% if s.manid %}
                 <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting yellow{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-placement="right" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-10000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
+                {% else %}
+                <i class="fa fa-commenting red" data-toggle="popover" data-placement="right" data-content="No student medical manager yet."></i>
+                {% endif %}
               </span>
               {% endif %}
             </td>
