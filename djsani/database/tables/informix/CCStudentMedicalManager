@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalManager,v 8.0.17100.18 2019/03/18 12:08:11 stevek Released $
+ $Header: CCStudentMedicalManager,v 8.0.17100.20 2021/05/05 08:58:05 stevek Released $
  -------------------------------------------------------------------------
 }
 
@@ -129,6 +129,24 @@ column medical_consent_agreement_status smallint
     desc            "Medical consent and medical insurance agreement file upload status"
     heading         "Medical consent agreement file status"
     text            "Medical consent agreement file status"
+    attributes
+        (
+        )
+
+column covid19_vaccine_card varchar(128)
+    comments        ""
+    desc            "COVID-19 vaccine file upload"
+    heading         "COVID-19 vaccine file"
+    text            "COVID-19 vaccine file"
+    attributes
+        (
+        )
+
+column covid19_vaccine_card_status smallint
+    comments        "Did the student upload a valid photo/scan of this document?"
+    desc            "COVID-19 vaccine file upload status."
+    heading         "COVID-19 vaccine file upload status."
+    text            "COVID-19 vaccine file upload status."
     attributes
         (
         )

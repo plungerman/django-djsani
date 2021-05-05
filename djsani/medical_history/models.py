@@ -16,6 +16,8 @@ class StudentMedicalHistory(models.Model):
         StudentMedicalManager, on_delete=models.CASCADE,
     )
     # medical history fields
+    covid19_positive = models.CharField(max_length=255)
+    covid19_vacination = models.CharField(max_length=255)
     allergies_medical = models.CharField(max_length=255)
     allergies_other = models.CharField(max_length=255)
     anemia = models.CharField(max_length=255)

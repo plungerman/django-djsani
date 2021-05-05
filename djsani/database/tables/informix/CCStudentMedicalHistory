@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: CCStudentMedicalHistory,v 8.0.17100.5 2019/04/08 13:28:19 stevek Released $
+ $Header: CCStudentMedicalHistory,v 8.0.17100.6 2021/05/04 15:15:31 stevek Released $
  -------------------------------------------------------------------------
 }
 
@@ -47,6 +47,24 @@ column created_at   datetime year to second default current year to second not n
     desc            "The date when the record was created"
     heading         "Created At"
     text            "Created At"
+    attributes
+        (
+        )
+
+column covid19_positive varchar(255)
+    comments        ""
+    desc            "COVID 19 Positive"
+    heading         "COVID 19 Positive"
+    text            "COVID 19 Positive"
+    attributes
+        (
+        )
+
+column covid19_vacination varchar(255)
+    comments        ""
+    desc            "COVID 19 Vaccine"
+    heading         "COVID 19 Vaccine"
+    text            "COVID 19 Vaccine"
     attributes
         (
         )

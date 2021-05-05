@@ -15,6 +15,28 @@ ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
 class StudentMedicalHistoryForm(forms.Form):
     """Medical history for all students."""
 
+    covid19_positive_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    covid19_positive = forms.CharField(
+        label="Have you tested positive for COVID-19?",
+        help_text="""
+            If yes, please provide the month and year in your explanation
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    covid19_vacination_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    covid19_vacination = forms.CharField(
+        label="Have received the COVID-19 vaccination?",
+        help_text="""
+            If yes, please provide the month and year in your explanation
+        """,
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
     allergies_medical_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
@@ -1032,6 +1054,19 @@ class MedicalConsentAgreementForm(forms.Form):
             Photo or scan of your signed medical consent and
             medical insurance agreement form
         """,
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
+        ],
+        required=True,
+    )
+
+
+class Covid19VaccineCardForm(forms.Form):
+    """COVID-19 Vaccine Card form class."""
+
+    covid19_vaccine_card = forms.FileField(
+        label="Upload your file",
+        help_text="Photo or scan of your COVID-19 vaccine card.",
         validators=[
             FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
         ],
