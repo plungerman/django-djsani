@@ -153,18 +153,12 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.covid19_vaccine_card %}
+              {% if s.covid19_vaccine_card and s.covid19_vaccine_card_status %}
                 <i class="fa fa-check" title="COVID-19 Vaccine Card">
                   <span style="display:none;">x</span>
                 </i>
               {% else %}
-                {% if s.manid %}
-                <input type="checkbox" name="covid19_vaccine_card"
-                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
-                  data-table="covid19_vaccine_card" title="COVID-19 Vaccine Card">
-                {% else %}
-                  <i class="fa fa-times red" title="COVID-19 Vaccine Card"></i>
-                {% endif %}
+                <i class="fa fa-times red" title="COVID-19 Vaccine Card"></i>
               {% endif %}
             </td>
             <td class="{{s.adult}}">
