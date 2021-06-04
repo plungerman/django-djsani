@@ -1,4 +1,4 @@
-django==2.2.20
+django==2.2.21
 python-memcached==1.59
 python-ldap==3.2.0
 pyodbc==4.0.30
