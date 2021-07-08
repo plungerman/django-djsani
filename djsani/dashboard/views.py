@@ -190,6 +190,7 @@ def get_students(request):
             students.append(dict(zip(columns, row)))
         vax = 0
         ath = 0
+        vax_percent = 0
         for num, stu in enumerate(students):
             adult = 'minor'
             if stu['athlete']:
@@ -209,7 +210,8 @@ def get_students(request):
                 ).filter(aa__in=ENS_CODES)
                 # health insurance
                 stu['shi'] = panels(request, StudentHealthInsurance, manager)
-        vax_percent = round(vax/ath * 100)
+        if ath:
+            vax_percent = round(vax/ath * 100)
 
     return render(
         request, template, {
@@ -218,6 +220,8 @@ def get_students(request):
             'sport': sport,
             'staff': staff,
             'coach': coach,
+            'ath': ath,
+            'vax': vax,
             'vax_percent': vax_percent,
         },
     )
