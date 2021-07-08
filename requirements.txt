@@ -3,7 +3,7 @@ python-memcached==1.59
 python-ldap==3.2.0
 pyodbc==4.0.30
 image==1.5.28
-Pillow==8.1.1
+Pillow==8.2.0
 requests==2.25.1
 django-localflavor==3.0
 django-loginas==0.3.8
