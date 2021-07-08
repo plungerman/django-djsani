@@ -188,30 +188,31 @@ def get_students(request):
         students = []
         for row in cursor.fetchall():
             students.append(dict(zip(columns, row)))
-        vax = 0
-        ath = 0
-        vax_percent = 0
-        for num, stu in enumerate(students):
-            adult = 'minor'
-            if stu['athlete']:
-                ath += 1
-            if stu['covid19_vaccine_card_status']:
-                vax += 1
-            if stu['birth_date']:
-                age = calculate_age(stu['birth_date'])
-                if age >= settings.ADULT_AGE:
-                    adult = 'adult'
-            stu['adult'] = adult
-            if trees:
-                manager = get_manager(stu['id'])
-                # emergency notification system
-                stu['ens'] = AARec.objects.using('informix').filter(
-                    id=stu['id'],
-                ).filter(aa__in=ENS_CODES)
-                # health insurance
-                stu['shi'] = panels(request, StudentHealthInsurance, manager)
-        if ath:
-            vax_percent = round(vax/ath * 100)
+    vax = 0
+    ath = 0
+    vax_percent = 0
+    count = len(students)
+    for num, stu in enumerate(students):
+        adult = 'minor'
+        if stu['athlete']:
+            ath += 1
+        if stu['covid19_vaccine_card_status']:
+            vax += 1
+        if stu['birth_date']:
+            age = calculate_age(stu['birth_date'])
+            if age >= settings.ADULT_AGE:
+                adult = 'adult'
+        stu['adult'] = adult
+        if trees:
+            manager = get_manager(stu['id'])
+            # emergency notification system
+            stu['ens'] = AARec.objects.using('informix').filter(
+                id=stu['id'],
+            ).filter(aa__in=ENS_CODES)
+            # health insurance
+            stu['shi'] = panels(request, StudentHealthInsurance, manager)
+    if ath:
+        vax_percent = round(vax/ath * 100)
 
     return render(
         request, template, {
@@ -223,6 +224,8 @@ def get_students(request):
             'ath': ath,
             'vax': vax,
             'vax_percent': vax_percent,
+            'count': count,
+            'sql': sql,
         },
     )
 
