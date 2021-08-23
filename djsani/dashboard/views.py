@@ -196,13 +196,13 @@ def get_students(request):
     count = len(students)
     for num, stu in enumerate(students):
         adult = 'minor'
-        if stu['athlete']:
+        if stu.get('athlete'):
             ath += 1
-        if stu['covid19_vaccine_card_status']:
+        if stu.get('covid19_vaccine_card_status'):
             vax += 1
-        if stu['cc_athlete_medical_history']:
+        if stu.get('cc_athlete_medical_history'):
             med += 1
-        if stu['birth_date']:
+        if stu.get('birth_date'):
             age = calculate_age(stu['birth_date'])
             if age >= settings.ADULT_AGE:
                 adult = 'adult'
