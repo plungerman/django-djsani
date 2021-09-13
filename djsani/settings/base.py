@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
     'localhost', '127.0.0.1',
 ]
 ALLOWED_IMAGE_EXTENSIONS = (
-    'jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'PNG', 'pdf', 'PDF',
+    'jpg', 'jpeg', 'heic', 'pdf', 'png', 'JPG', 'JPEG', 'HEIC', 'PDF', 'PNG',
 )
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/Chicago'

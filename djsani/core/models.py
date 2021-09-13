@@ -12,7 +12,7 @@ from djtools.fields.helpers import upload_to_path
 
 
 ALLOWED_EXTENSIONS = (
-    'xls', 'xlsx', 'doc', 'docx', 'pdf', 'txt', 'png', 'jpg', 'jpeg',
+    'xls', 'xlsx', 'doc', 'docx', 'pdf', 'txt', 'png', 'jpg', 'jpeg', 'heic',
 )
 FILE_VALIDATORS = [
     FileExtensionValidator(allowed_extensions=ALLOWED_EXTENSIONS),
