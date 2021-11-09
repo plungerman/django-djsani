@@ -75,6 +75,7 @@ def panels(request, mod, manager, content_type=None, gender=None):
     )
 
 
+@login_required
 def get_students(request):
     """GET or POST: returns a list of students."""
     user = request.user
