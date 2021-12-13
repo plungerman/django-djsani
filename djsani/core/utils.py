@@ -12,7 +12,6 @@ from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.waivers.models import Sicklecell
-from djtools.fields import TODAY
 
 
 DEC = settings.DECEMBER
@@ -49,11 +48,12 @@ def get_content_type(name):
 def get_term():
     """Obtain the current academic term."""
     sd = settings.START_DATE
+    today = datetime.date.today()
     term = 'RA'
-    year = TODAY.year
-    if ((TODAY.month < sd.month) or (TODAY.month == DEC and TODAY.day > 10)):
+    year = today.year
+    if ((today.month < sd.month) or (today.month == DEC and today.day > 10)):
         term = 'RC'
-        if TODAY.month == DEC:
+        if today.month == DEC:
             year = year + 1
     return {'yr': year, 'sess': term}
 
