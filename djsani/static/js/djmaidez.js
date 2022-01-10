@@ -10,7 +10,7 @@ function makeDialog() {
         top: 10,
         buttons: { "Save": function(){
             if(isValid() && !isNaN(GetUserID())) {
-                $.getJSON('/campus-life/medical/forms/emergency/save/?callback=?', {
+                $.getJSON('https://app.carthage.edu/medical-forms/emergency/save/?callback=?', {
                     MIS1_NAME: $("#MIS1_NAME").val(),
                     MIS1_REL: $("#MIS1_REL").val(),
                     MIS1_PHONE1: $("#MIS1_PHONE1").val(),
