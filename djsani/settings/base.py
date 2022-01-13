@@ -41,6 +41,7 @@ USE_L10N = False
 USE_TZ = False
 DEFAULT_CHARSET = 'utf-8'
 FILE_CHARSET = 'utf-8'
+FILE_UPLOAD_PERMISSIONS = 0o644
 ROOT_URLCONF = 'djsani.core.urls'
 SERVER_URL = ''
 API_URL = ''
