@@ -1,3 +1,4 @@
+{% load livewhale_api %}
 <form class="form medical-history">
     <div id="medical-history">
         <fieldset class="blockLabels">
@@ -71,16 +72,8 @@
                     </li>
                 {% endfor %}
                 <li class="form-group ctrlHolder">
-                  <p>
-                    The Carthage Health and Counseling Center provides
-                    short-term counseling services for all full-time
-                    undergraduate students. For more information see our
-                    <a href="/campus-life/health-counseling/" target="_blank">website</a>.
-                  </p>
-                  <p>
-                  Information on local mental health providers can be found
-                  <a href="https://www.carthage.edu/live/files/4488-student-mental-health-referrals-pdf" target="_blank">here</a>.
-                  </p>
+                  {% get_lw_content as mental_health blurbs 3293 %}
+                  {{mental_health.body|safe}}
                 </li>
             </ol>
         </fieldset>

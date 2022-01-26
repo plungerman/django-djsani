@@ -12,17 +12,8 @@
   Please check the box below.
 </p>
 {% endif %}
-<p>
-  <strong class="red">
-  Click the link below to read a mandatory NCAA document on concussions.
-  You cannot submit this form until you read it.
-  </strong>
-</p>
-<h4>
-  <a href="https://www.carthage.edu/live/files/5209-pdf" class="modal-video">
-    NCAA concussion fact sheet
-  </a>
-</h4>
+{% get_lw_content as concussion blurbs 3292 %}
+{{concussion.body|safe}}
 <p>
   <input id="agree" type="checkbox" name="agree"
   {% if student.cc_athlete_risk_waiver %}
