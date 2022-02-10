@@ -1,5 +1,5 @@
 cryptography>=36.0.1
-django==2.2.25
+django==2.2.27
 django-localflavor>=3.1
 django-loginas>=0.3.10
 django-informixdb>=1.10.1
