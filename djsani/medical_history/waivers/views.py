@@ -36,9 +36,7 @@ def index(request, stype, wtype):
     if wtype == 'sicklecell':
         sicklecell = Sicklecell.objects.using('informix').filter(
             college_id=cid,
-        ).filter(
-            Q(proof=1) | Q(created_at__gte=settings.START_DATE),
-        ).first()
+        ).filter(created_at__gte=settings.START_DATE).first()
 
     # check to see if they already submitted this form.
     # redirect except for sicklecell waiver
@@ -63,7 +61,7 @@ def index(request, stype, wtype):
                 )
                 cd['results_file'] = '{0}/{1}'.format(folder, phile)
 
-            if sicklecell:
+            if sicklecell and sicklecell.proof:
                 # update student's sicklecell waiver record
                 cd['updated_at'] = datetime.datetime.now()
                 for key, form_val in cd.items():
