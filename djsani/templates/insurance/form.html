@@ -223,14 +223,23 @@ $(function() {
 </script>
 {% endblock %}
 {% block left_nav %}{% endblock %}
-{% block group_name %}{% endblock %}
-{% block page_content %}class="content large-11 medium-12 small-12"{% endblock %}
+{% block breadcrumb %}
+<div class="row">
+  <div class="col-11 col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xl-11">
+  <h3 class="red">Health Insurance</h3>
+  </div>
+  <div class="col-1 col-xs-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
+    <a href="/graduate-studies/check-in/" class="mr-sm-3 mr-lg-3 float-right">
+      <i class="fa fa-home fa-2x"></i></a>
+  </div>
+</div>
+{% endblock %}
 {% block content %}
-<div id="spotlight-wrap">
+<div id="spotlight-wrap" class="container-fluid mb-4 ml-4">
   <div class="spotlight forms-container">
     <div class="large-9 medium-12 small-12">
     {% get_lw_content as insurance_intro blurbs 2456 %}
-    {{insurance_intro.body}}
+    {{insurance_intro.body|safe}}
     {% include "includes/errors_text.html" %}
     {% include "includes/required_text.html" %}
     <div class="large-7 medium-12 small-12" style="border: 3px green solid;float:left;">
@@ -371,7 +380,7 @@ $(function() {
       <h2>Primary Insurance Required</h2>
       <p>
         {% get_lw_content as insurance_required blurbs 2173 %}
-        {{insurance_required.body}}
+        {{insurance_required.body|safe}}
       </p>
       <p>
         <a href="javascript:$.fancybox.close();">Close</a>

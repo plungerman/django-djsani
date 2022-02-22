@@ -4,7 +4,7 @@
     {% if student %}
     <div class="large-12 medium-12 small-12">
         {% get_lw_content as student_directions blurbs 2007 %}
-        {{student_directions.body}}
+        {{student_directions.body|safe}}
     </div>
     <p>
         <strong>NOTE:</strong>
@@ -142,10 +142,10 @@
     <div id="athlete" class="clear slider-container">
       <div class="large-12 medium-8 small-8">
         {% get_lw_content as athlete_directions blurbs 2008 %}
-        {{athlete_directions.body}}
+        {{athlete_directions.body|safe}}
         {% if not adult %}
             {% get_lw_content as sicklecell blurbs 2226 %}
-            {{sicklecell.body}}
+            {{sicklecell.body|safe}}
         {% endif %}
         {% if student.residency_status == "Resident" and not adult %}
             <h3>
@@ -153,7 +153,7 @@
                 Parent/Legal Guardian Consent Form
             </h3>
             {% get_lw_content as menihep blurbs 2013 %}
-            {{menihep.body}}
+            {{menihep.body|safe}}
         {% endif %}
         <h2 class="clear">Online forms and Waivers</h2>
         <p>
@@ -302,7 +302,7 @@
             {% else %}
                 <td colspan="2">
                 {% get_lw_content as risk blurbs 2010 %}
-                {{risk.body}}
+                {{risk.body|safe}}
                 </td>
             {% endif %}
             </tr>
@@ -329,7 +329,7 @@
             </tr>
         </table>
         {% get_lw_content as questions blurbs 2014 %}
-        {{questions.body}}
+        {{questions.body|safe}}
       </div>
       <!-- /.large .medium .small -->
     </div>

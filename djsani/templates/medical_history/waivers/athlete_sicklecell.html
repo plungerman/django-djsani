@@ -20,7 +20,7 @@
     Sickle Cell Trait Testing
   </h2>
   {% get_lw_content as sicklecell blurbs 2011 %}
-  {{sicklecell.body}}
+  {{sicklecell.body|safe}}
   {% include "includes/errors_text.html" %}
   <form method="post" action="." class="form"
     enctype="multipart/form-data" id="sickle_cell">

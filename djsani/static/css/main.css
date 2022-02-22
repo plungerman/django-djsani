@@ -12,7 +12,7 @@ list-style-image: none !important;
     margin: 9px 0;
     padding-top: 9px;
 }
-.slider-container { display:none; width: 795px; }
+.slider-container { display:none; }
 .form fieldset.btnHolder {background-color:#fff; }
 form textarea {width: 300px !important;height:90px !important;}
 .help {margin-top:-2px;}

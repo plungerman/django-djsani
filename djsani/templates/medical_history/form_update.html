@@ -69,7 +69,7 @@ $(document).ready(function() {
     {% endif %}
   </h2>
   {% get_lw_content as instructions blurbs 2223 %}
-  {{instructions.body}}
+  {{instructions.body|safe}}
   {% if update %}
     <div class="alert alert-warning" role="alert">
       <p>

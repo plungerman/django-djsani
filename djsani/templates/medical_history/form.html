@@ -136,7 +136,7 @@ $(document).ready(function() {
     {% endif %}
   </h2>
   {% get_lw_content as instructions blurbs 2223 %}
-  {{instructions.body}}
+  {{instructions.body|safe}}
   <div class="alert alert-warning" role="alert">
     <p>
       All questions are 'yes' or 'no' answer,
@@ -204,7 +204,7 @@ $(document).ready(function() {
             {% endfor %}
             <li class="form-group ctrlHolder">
               {% get_lw_content as counseling blurbs 2174 %}
-              {{counseling.body}}
+              {{counseling.body|safe}}
             </li>
           {% endif %}
         </ol>
@@ -255,7 +255,7 @@ $(document).ready(function() {
       <div class="modal-body">
         <p>
           {% get_lw_content as counseling blurbs 2174 %}
-          {{counseling.body}}
+          {{counseling.body|safe}}
         </p>
       </div>
       <div class="modal-footer">

@@ -1,37 +1,27 @@
-{% extends "djcher/accounts/login.html" %}
+{% extends "home.html" %}
 {% load livewhale_api %}
-{% block content_head %}
-<h1 id="page_title">
-    Medical Information Login<span id="secondary-dropdown"></span>
-</h1>
-{% endblock %}
 {% block content %}
+    <h1 id="page_title">
+      Medical Information Login<span id="secondary-dropdown"></span>
+    </h1>
     {% if user.is_anonymous %}
-        <p>
-            Please use your Carthage username to log in.
-            Do not include @carthage.edu as part of your username.
-        </p>
-        <p>
-            <a href="#login-downloadable-forms">
-                Downloadable forms are located at the bottom at of the page</a>.
-        </p>
         {% if form.errors or errors %}
-            <p class="error">
-                Please enter a correct username and password.
-                Both fields are case-sensitive.
-                <br /><br />
-                Do not include @carthage.edu
-                as part of your username.
-                <br /><br />
-                NOTE: Your password expires every 6 months,
-                so if you have not used your Carthage account in over
-                6 months, you will have to
-                <a href="https://password.carthage.edu/" target="_blank">
-                    change your password
-                </a>.
-            </p>
+        <p class="bg-warning p-4">
+            Please enter a correct username and password.
+            Both fields are case-sensitive.
+            <br /><br />
+            Do not include @carthage.edu
+            as part of your username.
+            <br /><br />
+            NOTE: Your password expires every 6 months,
+            so if you have not used your Carthage account in over
+            6 months, you will have to
+            <a href="https://password.carthage.edu/" target="_blank">
+                change your password
+            </a>.
+        </p>
         {% endif %}
-        {% include "accounts/login_form.inc.html" %}
+        {% include "registration/login_form.inc.html" %}
     {% else %}
         <h2>You are already logged in</h2>
         <p>Where do  you want to go?</p>
@@ -55,6 +45,6 @@
     {% endif %}
     <div id="login-downloadable-forms">
     {% get_lw_content as files blurbs 2455 %}
-    {{files.body}}
+    {{files.body|safe}}
     </div>
 {% endblock %}
