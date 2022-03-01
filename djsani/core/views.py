@@ -177,6 +177,8 @@ def home(request):
     context_data = {}
     # set our user
     user = request.user
+    # staff?
+    staff = in_group(user, settings.STAFF_GROUP)
     # fetch college id from user object
     cid = user.id
     # retrieve student manager (or create a new one if none exists)
@@ -252,6 +254,7 @@ def home(request):
                     request,
                     [settings.MANAGERS[0][1]],
                 )
+        context_data['staff'] = staff
 
     return render(request, 'home.html', context_data)
 
