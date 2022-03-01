@@ -4,10 +4,11 @@ label[for=id_results_file] {color: #337ab7;}
 .placeholder {color:#800;}
 h1,h2,h3 {font-weight:normal;}
 .form li {
-list-style-type: none !important;
-list-style: none !important;
-list-style-image: none !important;
+  list-style-type: none !important;
+  list-style: none !important;
+  list-style-image: none !important;
 }
+body.sidenav-toggled .content-wrapper, .content-wrapper {margin-left: 0;}
 #page-content-wrap .content .form h3 {
     margin: 9px 0;
     padding-top: 9px;
@@ -38,7 +39,6 @@ div.growlUI h2 { font-size:1.4em;}
 .minor {background-color:#ccf;}
 .hidden {display:none;}
 #id_sports{background:none;}
-#primary-form{margin-right:20px;}
 .error-message { padding:3px; font-weight:900; background: #fbe3e4; border: 2px solid #fbc2c4 ; color: #8a1f11; }
 #student table {width:50%;}
 #athlete table {width:60%;}
@@ -55,7 +55,31 @@ table.dataTable thead th, table.dataTable tfoot th { text-align: center; }
 .editable-input textarea {width:375px !important;}
 .editable-container.editable-popup { left: 0 !important; }
 .editable-click, a.editable-click, a.editable-click:hover {border-bottom: 0; text-decoration: none; }
+.navbar {
+  justify-content:center;padding: 0;
+  border-top: 5px solid #3ab0c8;
+  background: url(https://www.carthage.edu/themes/korra/assets/img/main-header-gradient.png) left top repeat-x;
+}
+.navbar-dark .navbar-brand {color:#000;font-weight:600;font-size:.9em;}
+a.navbar-brand:hover {color: red !important;}
+.navbar-dark .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 60, 75, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+@media (min-width: 992px) {
+  .navbar-expand-lg .navbar-nav {margin-right: 42px;}
+  .navbar {padding:2px 0 2px 8px;}
+}
+.navbar-toggler {padding: .5rem;}
+.navbar-toggler-icon {width: 1.1em;height: 1.1em;}
 .navbar-default {z-index:100;}
+.navbar-nav .dropdown-menu a {color: white;}
+.navbar-nav .dropdown-menu a:hove {color: #666;}
+.navbar-nav .dropdown-menu {padding: 5px; background-color:#003c4b;}
+.navbar-toggler-icon {color:yellow;}
+.navbar-nav .dropdown, .dropup { padding: 3px; }
+nav a {color: #003c4b;}
+nav a:hover {color:black;}
+nav .input-group-btn {font-size:1.3em;}
 address { margin-bottom: 0; }
 .center{text-align:center;}
 .fa-stethoscope{font-weight:900;}

@@ -194,7 +194,7 @@
 {% block navbar-top-links %}
 <ul class="navbar-nav ml-auto">
   <li>
-    <h4 style="display:inline;margin-right:20px;font-weight:700;color:#cbbde2;">
+    <h4 style="display:inline;margin-right:20px;font-weight:700;">
     {{manager.created_at|date:"Y F"}}
     </h4>
     <form action="." method="post" style="margin-right:8px; display:inline">
@@ -229,6 +229,13 @@
         </a>
         {% endif %}
       </li>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      {% if staff or user.is_superuser %}
+      <li><a href="{% url 'dashboard_home' %}">Dashboard</a></li>
+      {% endif %}
+      {% if user.is_superuser %}
+      <li><a href="{% url 'admin:index' %}">Admin</a></li>
+      {% endif %}
     </ul>
   </li>
 </ul>

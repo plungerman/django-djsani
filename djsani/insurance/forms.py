@@ -222,7 +222,13 @@ class AthleteForm(forms.ModelForm):
         """Attributes about the form class."""
 
         model = StudentHealthInsurance
-        exclude = ('college_id', 'created_at', 'manager')
+        exclude = (
+            'college_id',
+            'created_at',
+            'manager',
+            'primary_card_front_status',
+            'primary_card_back_status',
+        )
 
     def clean(self):
         """Form validation for all fields."""
@@ -251,4 +257,10 @@ class StudentForm(AthleteForm):
         """Attributes about the form class."""
 
         model = StudentHealthInsurance
-        exclude = ('college_id', 'created_at', 'manager')
+        exclude = (
+            'college_id',
+            'created_at',
+            'manager',
+            'primary_card_front_status',
+            'primary_card_back_status',
+        )

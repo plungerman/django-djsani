@@ -223,46 +223,38 @@ $(function() {
 </script>
 {% endblock %}
 {% block left_nav %}{% endblock %}
-{% block breadcrumb %}
-<div class="row">
-  <div class="col-11 col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xl-11">
-  <h3 class="red">Health Insurance</h3>
-  </div>
-  <div class="col-1 col-xs-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
-    <a href="/graduate-studies/check-in/" class="mr-sm-3 mr-lg-3 float-right">
-      <i class="fa fa-home fa-2x"></i></a>
-  </div>
-</div>
+{% block breadcrumb_current %}
+  <h1>Health Insurance</h1>
 {% endblock %}
 {% block content %}
 <div id="spotlight-wrap" class="container-fluid mb-4 ml-4">
   <div class="spotlight forms-container">
-    <div class="large-9 medium-12 small-12">
-    {% get_lw_content as insurance_intro blurbs 2456 %}
-    {{insurance_intro.body|safe}}
-    {% include "includes/errors_text.html" %}
-    {% include "includes/required_text.html" %}
-    <div class="large-7 medium-12 small-12" style="border: 3px green solid;float:left;">
-      <p style="margin:5px;">
-        <strong style="margin:5px;">
-          Click SUBMIT at the bottom of the page to complete this form
-        </strong>
-      </p>
+  <div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12 clearfix">
+      {% get_lw_content as insurance_intro blurbs 2456 %}
+      {{insurance_intro.body|safe}}
+      {% include "includes/errors_text.html" %}
+      {% include "includes/required_text.html" %}
+      <div style="border: 3px green solid;float:left;">
+        <p style="margin:5px;">
+          <strong style="margin:5px;">
+            Click SUBMIT at the bottom of the page to complete this form
+          </strong>
+        </p>
+      </div>
+      {% ifusergroup MedicalStaff %}
+      <div id="athletic-policy" style="margin-left:20px;float:right">
+        <input type="button" id="athletic-policy-data"
+          value="Load Athletic Policy Data" class="btn btn-primary">
+      </div>
+      {% endifusergroup %}
     </div>
-    {% ifusergroup MedicalStaff %}
-    <div id="athletic-policy" style="margin-left:20px;float:right">
-      <input type="button" id="athletic-policy-data"
-        value="Load Athletic Policy Data" class="btn btn-primary">
-    </div>
-    {% endifusergroup %}
-    </div>
-    <p class="cf">&nbsp;</p>
     <form method="post" action="." type="actionForm" class="form"
-       enctype="multipart/form-data" id="profile">
+       enctype="multipart/form-data" id="profile" style="width:100%">
       {% csrf_token %}
       <input id="id_update" type="hidden"
         value="{{update|default:''}}" name="update">
-      <div class="large-12 medium-12 small-12">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label for="id_opt_out">
           <input id="id_opt_out" type="checkbox" value="1" name="opt_out">
           <span style="color:#f00;">
@@ -271,7 +263,7 @@ $(function() {
           </span>
         </label>
       </div>
-      <div class="large-12 medium-12 small-12">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div id="secondary-box">
           <label for="id_second" style="display:block;">
             <input id="id_second" type="checkbox"
@@ -294,8 +286,8 @@ $(function() {
           </label>
         </div>
       </div>
-      <div id="insurance-policies">
-        <div class="large-5 medium-12 small-12" id="primary-form">
+      <div id="insurance-policies" class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" id="primary-form">
           <h2>
             Primary Insurance Policy
           </h2>
@@ -339,17 +331,17 @@ $(function() {
                     </div>
                   </li>
                   </ol></fieldset></div>
-                  <div class="large-5 medium-12 small-12" id="secondary-form">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" id="secondary-form">
                     <h2>Secondary Insurance Policy</h2>
                     <fieldset class="blockLabels">
                       <ol>
                 {% else %}
-                  {% if field.name != "primary_card_back" %}
-                  {% include "form_field.inc.html" %}
+                  {% if field.name != 'primary_card_back' and field.name != 'primary_card_front_status' and field.name != 'primary_card_back_status' %}
+                    {% include "form_field.inc.html" %}
                   {% endif %}
                   {% if field.name == "secondary_policy_state" %}
                   </ol></fieldset></div>
-                  <div class="large-5 medium-12 small-12 cf clear anchor" id="tertiary-form">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12 anchor" id="tertiary-form">
                     <h2 id="tertiary-insurance-header">
                       Athletes Insurance Policy
                     </h2>
@@ -362,9 +354,8 @@ $(function() {
           </fieldset>
         </div>
       </div>
-      <div class="large-11 medium-12 small-12">
-        <div class="large-4">&nbsp;</div>
-        <div class="large-5 medium-12 small-12">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">&nbsp;</div>
         {% if update %}
         <h3>
           I verify that this information is accurate.
@@ -386,6 +377,7 @@ $(function() {
         <a href="javascript:$.fancybox.close();">Close</a>
       </p>
     </div>
-  </div>
+  </div> <!-- /.row -->
+  </div> <!-- /.container -->
 </div>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends "dashboard/base.html" %}
+{% load static %}
 {% block title %}
 Student Medical Information
 {% endblock %}
@@ -297,11 +298,10 @@ $(function() {
 </script>
 {% endblock %}
 {% block navbar-header %}
-<a href="{% url 'dashboard_home' %}" class="mr-sm-3 mr-lg-3"><i class="fa fa-home fa-2x"></i></a>
+<a href="{% url 'dashboard_home' %}" class="mr-sm-3 mr-lg-3">
+  <img src="{% static 'img/clogo.png' %}" height="30" class="mr-2"></a>
 <a class="navbar-brand"
-    href="http://www.carthage.edu/campus-life/health-counseling/">
-    HCC and AT Medical Forms
-</a>
+  href="/life-at-carthage/health-wellness-safety/health-counseling/">Medical Forms</a>
 {% endblock %}
 {% block navbar-top-links %}
   <ul class="navbar-nav ml-auto">
@@ -323,8 +323,8 @@ $(function() {
     {% endblock search-top %}
     <li class="dropdown user-dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-user"></i> {{user.first_name|default:"Dashboard"}}
-            <b class="caret"></b>
+          <i class="fa fa-user"></i> {{user.first_name|default:"Dashboard"}}
+          <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
             <li class="divider"></li>
@@ -339,64 +339,18 @@ $(function() {
                 </a>
                 {% endif %}
             </li>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          {% if staff or user.is_superuser %}
+          <li><a href="{% url 'dashboard_home' %}">Dashboard</a></li>
+          {% endif %}
+          {% if user.is_superuser %}
+          <li><a href="{% url 'admin:index' %}">Admin</a></li>
+          {% endif %}
         </ul>
     </li>
   </ul>
 {% endblock navbar-top-links %}
-{% block navbar-sidenav %}
-<ul class="navbar-nav navbar-sidenav">
-  <li class="nav-item" data-toggle="tooltip" data-placement="right"
-    title="Dashboard">
-    <a class="nav-link" href="{% url 'dashboard_home' %}">
-      <i class="fa fa-fw fa fa-dashboard" aria-hidden="true"></i>
-      <span class="nav-link-text">Dashboard</span>
-    </a>
-  </li>
-  {% if user.is_superuser %}
-  <li class="nav-item" data-toggle="tooltip" data-placement="right"
-    title="Administration">
-    <a class="nav-link" href="{% url 'admin:index' %}">
-      <i class="fa fa-fw fa fa-cog" aria-hidden="true"></i>
-      <span class="nav-link-text">Administration</span>
-    </a>
-  </li>
-  {% endif %}
-  <li class="nav-item" data-toggle="tooltip" data-placement="right"
-    title="Medical Forms">
-    <a class="nav-link" href="{% url 'home' %}">
-      <i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>
-      <span class="nav-link-text">Medical Forms</span>
-    </a>
-  </li>
-  <li class="nav-item" data-toggle="tooltip" data-placement="right"
-    title="Carthage Home">
-    <a class="nav-link" href="https://www.carthage.edu/">
-      <i class="fa fa-fw fa fa-home" aria-hidden="true"></i>
-      <span class="nav-link-text">Carthage Home</span>
-    </a>
-  </li>
-  <li class="nav-item" data-toggle="tooltip" data-placement="right"
-    title="My.Carthage">
-    <a class="nav-link" href="https://my.carthage.edu/">
-      <i class="fa fa-fw fa fa-lemon-o" aria-hidden="true"></i>
-      <span class="nav-link-text">My.Carthage</span>
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link text-center" data-toggle="tooltip"
-      data-placement="right" title="Expand Menu" id="sidenavToggler">
-      <i class="fa fa-fw fa-angle-double-left" aria-hidden="true"></i>
-    </a>
-  </li>
-</ul>
-<ul class="navbar-nav sidenav-toggler">
-  <li class="nav-item">
-    <a class="nav-link text-center">
-      <i class="fa fa-fw"></i>
-    </a>
-  </li>
-</ul>
-{% endblock navbar-sidenav %}
+{% block navbar-sidenav %}{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
