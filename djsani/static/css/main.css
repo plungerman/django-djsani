@@ -73,7 +73,7 @@ a.navbar-brand:hover {color: red !important;}
 .navbar-toggler-icon {width: 1.1em;height: 1.1em;}
 .navbar-default {z-index:100;}
 .navbar-nav .dropdown-menu a {color: white;}
-.navbar-nav .dropdown-menu a:hove {color: #666;}
+.navbar-nav .dropdown-menu a:hover {color: #666;}
 .navbar-nav .dropdown-menu {padding: 5px; background-color:#003c4b;}
 .navbar-toggler-icon {color:yellow;}
 .navbar-nav .dropdown, .dropup { padding: 3px; }
