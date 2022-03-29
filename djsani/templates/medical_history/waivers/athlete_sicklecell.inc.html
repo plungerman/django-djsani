@@ -1,126 +1,21 @@
 {% load livewhale_api %}
-<div>
-    <div class="large-12 col-lg-12">
-        {% if MedicalStaff %}
-        {% else %}
-        <h3>About Sickle Cell Trait</h3>
-        {% get_lw_content as about blurbs 2029 %}
-        {{about.body|safe}}
-        <h3>Sickle Cell trait Testing</h3>
-        {% get_lw_content as testing blurbs 2030 %}
-        {{testing.body|safe}}
-        {% endif %}
-        <h3>About This Waiver</h3>
-        {% get_lw_content as waiver blurbs 2967 %}
-        {{waiver.body|safe}}
-        <h3>Test Results or Sickle Cell Trait Testing Waiver</h3>
-        {% get_lw_content as testing blurbs 2031 %}
-        {{testing.body|safe}}
-        {% if form.errors %}
-            <p class="error">
-                {% if form.data.proof %}
-                Please indicate whether your test results were
-                "positive or "negative".
-                {% else %}
-                Please check one of the checkboxes below.
-                {% endif %}
-            </p>
-        {% endif %}
-        {% block proof_checkbox %}
-        <div class="large-1 col-lg-1">
-            <input id="proof" type="checkbox" name="proof"
-            {% if student.proof or student.proof == 1 %}
-                checked="checked" value="0" class="set-val"
-            {% else %}
-                value="1"
-            {% endif %}
-            data-pk="{{student.sicklecell_id|default:''}}"
-            data-table="cc_athlete_sicklecell_waiver">
-        </div>
-        {% endblock %}
-        <div class="large-11 col-lg-11">
-            <label for="proof">
-                {% get_lw_content as proof blurbs 2033 %}
-                {{proof.body|safe}}
-            </label>
-            <h4>Test Results:</h4>
-            <ul>
-              <li>
-                  <input id="results_1" type="radio" name="results"
-                      class="set-val" value="Positive"
-                      {% if student.results == "Positive" %}checked="checked"{% endif %}
-                      data-pk="{{student.sicklecell_id|default:''}}"
-                      data-table="cc_athlete_sicklecell_waiver" />
-                  <label for="results_1">
-                      <i class="fa green fa-plus"></i>
-                  </label>
-              </li>
-              <li>
-                  <input id="results_0" type="radio" name="results"
-                      class="set-val" value="Negative"
-                      {% if student.results == "Negative" %}checked="checked"{% endif %}
-                      data-pk="{{student.sicklecell_id|default:''}}"
-                      data-table="cc_athlete_sicklecell_waiver" />
-                  <label for="results_0">
-                      <i class="fa green fa-minus"></i>
-                  </label>
-              </li>
-              <li>
-                  <label for="id_results_file">
-                      Upload your test results (Optional)
-                  </label>
-                  {% if student.results_file %}
-                    <div><a href="{{media_url}}files/{{student.results_file}}" target="_blank">
-                      Current File</a></div>
-                  {% endif %}
-                  <input type="file" name="results_file"
-                      id="id_results_file" style="width:300px">
-                  <span class="help">Photo/Scan of your test results</span>
-              </li>
-            </ul>
-        </div>
-        <div class="large-12 col-lg-12" style="text-align:center;">
-          <h4>
-            SICKLE CELL TRAIT TESTING WAIVER AND RELEASE OF LIABILITY<br>
-            ASSUMPTION OF RISK
-          </h4>
-        </div>
-        <div class="large-1 col-lg-1">
-          <input id="waive" type="checkbox" name="waive" class="set-val"
-          {% if student.waive or student.waiver == 1 %}
-            checked="checked" value="0"
-          {% else %}
-            value="1"
-          {% endif %}
-          data-pk="{{student.sicklecell_id|default:''}}"
-          data-table="cc_athlete_sicklecell_waiver">
-        </div>
-        <div class="large-11 col-lg-11">
-          <label for="waive">
-            {% get_lw_content as waive blurbs 2032 %}
-            {{waive.body|safe}}
-          </label>
-        </div>
-        <p>
-            <strong class="red">
-            Click the links below to watch two mandatory NCAA videos.
-            You cannot submit this form until you watch the videos.
-            </strong>
-        </p>
-        <h4>
-            <a href="https://www.youtube.com/watch?v=EiEpmZLLcuM" class="modal-video" id="sickleCell1">
-                Sickle Cell Trait and the Student-Athlete Video: Part I
-            </a>
-        </h4>
-        <h4>
-            <a href="https://www.youtube.com/watch?v=lbFWP39tF1A" class="modal-video" id="sickleCell2">
-                Sickle Cell Trait and the Student-Athlete Video: Part II
-            </a>
-        </h4>
-        <h4>
-            <a href="https://www.carthage.edu/live/files/4400-athletic-training-sickle-cell-trait-fact-sheetpdf" class="modal-video" id="sickleCell3">
-                Sickle Cell Trait Fact Sheet
-            </a>
-        </h4>
+{% if form.errors %}
+  <p class="error">
+    Please upload your proof of confirmation of sickle cell trait status.
+  </p>
+{% endif %}
+<ul>
+  <li>
+    <label for="id_results_file" style="display:block;">
+      Upload your test results.
+    </label>
+    {% if student.results_file %}
+    <div>
+      <a href="{{media_url}}files/{{student.results_file}}" target="_blank">
+      Current File</a>
     </div>
-</div>
+    {% endif %}
+    <input type="file" name="results_file" id="id_results_file" style="width:300px">
+    <div class="help" style="color:red; font-weight: 600;">Photo/Scan of your test results</div>
+  </li>
+</ul>

@@ -1,9 +1,8 @@
 {% extends "home.html" %}
 {% load livewhale_api %}
 {% block content %}
-    <h1 id="page_title">
-      Medical Information Login<span id="secondary-dropdown"></span>
-    </h1>
+<div class="row">
+  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
     {% if user.is_anonymous %}
         {% if form.errors or errors %}
         <p class="bg-warning p-4">
@@ -21,7 +20,11 @@
             </a>.
         </p>
         {% endif %}
-        {% include "registration/login_form.inc.html" %}
+        <div class="row">
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+          {% include "registration/login_form.inc.html" %}
+          </div>
+        </div>
     {% else %}
         <h2>You are already logged in</h2>
         <p>Where do  you want to go?</p>
@@ -47,4 +50,6 @@
     {% get_lw_content as files blurbs 2455 %}
     {{files.body|safe}}
     </div>
+  </div>
+</div>
 {% endblock %}

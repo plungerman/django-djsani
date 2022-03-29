@@ -85,9 +85,6 @@ SELECT
     cc_student_medical_manager.cc_athlete_sicklecell_waiver,
     cc_student_health_insurance.primary_policy_type,
     cc_athlete_sicklecell_waiver.updated_at,
-    cc_athlete_sicklecell_waiver.waive,
-    cc_athlete_sicklecell_waiver.proof,
-    cc_athlete_sicklecell_waiver.results,
     cc_athlete_sicklecell_waiver.results_file
 FROM
     id_rec

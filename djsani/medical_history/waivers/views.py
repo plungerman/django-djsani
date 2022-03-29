@@ -61,7 +61,7 @@ def index(request, stype, wtype):
                 )
                 cd['results_file'] = '{0}/{1}'.format(folder, phile)
 
-            if sicklecell and sicklecell.proof:
+            if sicklecell:
                 # update student's sicklecell waiver record
                 cd['updated_at'] = datetime.datetime.now()
                 for key, form_val in cd.items():

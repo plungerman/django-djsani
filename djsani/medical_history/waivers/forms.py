@@ -22,43 +22,14 @@ ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
 class SicklecellForm(forms.Form):
     """Sickle Cell form."""
 
-    waive = forms.BooleanField(required=False)
-    proof = forms.BooleanField(required=False)
-    results = forms.ChoiceField(
-        choices=SICKLE_CELL_RESULTS,
-        widget=forms.RadioSelect(),
-        required=False,
-    )
     results_file = forms.FileField(
         label="Results File",
         help_text="Photo/Scan of your test results",
         validators=[
             FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
         ],
-        required=False,
+        required=True,
     )
-
-    def clean(self):
-        """
-        Student must choose one or the other of two checkboxes.
-
-        The results field if they choose "proof" is required.
-        """
-        cleaned_data = self.cleaned_data
-
-        if not cleaned_data["waive"] and not cleaned_data["proof"]:
-            raise forms.ValidationError(
-                "Please check one of the checkboxes below.",
-            )
-        elif cleaned_data["proof"] and not cleaned_data["results"]:
-            raise forms.ValidationError(
-                """
-                Please indicate whether your test results were
-                "positive or "negative".
-                """,
-            )
-
-        return cleaned_data
 
 
 class DopingForm(forms.Form):

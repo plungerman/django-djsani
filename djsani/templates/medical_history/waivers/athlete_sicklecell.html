@@ -5,30 +5,21 @@
   Health and Counseling &mdash;
   Carthage College
 {% endblock %}
-{% block extra_style %}
-{{block.super}}
-<link href="https://www.carthage.edu/themes/toph/assets/css/magnific-popup.css" type="text/css" rel="stylesheet">
-{% endblock %}
-{% block extra_javascript %}
-<script type="text/javascript" src="https://www.carthage.edu/themes/toph/assets/js/magnific-popup.js"></script>
-{% include "medical_history/waivers/athlete_sicklecell.inc.js" %}
-{% endblock %}
 {% block content %}
 <div class="forms-container">
-  <h2>
-    Carthage College Athletic Training &mdash;<br>
-    Sickle Cell Trait Testing
-  </h2>
-  {% get_lw_content as sicklecell blurbs 2011 %}
-  {{sicklecell.body|safe}}
-  {% include "includes/errors_text.html" %}
-  <form method="post" action="." class="form"
-    enctype="multipart/form-data" id="sickle_cell">
-    {% csrf_token %}
-    {% include "medical_history/waivers/athlete_sicklecell.inc.html" %}
-    <div class="large-12 cf">
-      {% include "form_submit.inc.html" %}
+  <div class="row">
+    <div class="col-8">
+      <h2>Sickle Cell Trait Testing</h2>
+      {% get_lw_content as sicklecell blurbs 2011 %}
+      {{sicklecell.body|safe}}
+      {% include "includes/errors_text.html" %}
+      <form method="post" action="." class="form"
+        enctype="multipart/form-data" id="sickle_cell">
+        {% csrf_token %}
+        {% include "medical_history/waivers/athlete_sicklecell.inc.html" %}
+        {% include "form_submit.inc.html" %}
+      </form>
     </div>
-  </form>
+  </div>
 </div>
 {% endblock %}

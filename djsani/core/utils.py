@@ -102,7 +102,7 @@ def get_manager(cid):
                 sc = Sicklecell.objects.using('informix').filter(
                     college_id=cid,
                 ).order_by('-id').first()
-                if sc.proof:
+                if sc.results_file:
                     sicklecell = True
 
         # create new manager
