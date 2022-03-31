@@ -18,6 +18,8 @@ class Sicklecell(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    waive = models.BooleanField()
+    proof = models.BooleanField()
     results_file = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,

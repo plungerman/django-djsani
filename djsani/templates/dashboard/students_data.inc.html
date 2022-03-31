@@ -1,4 +1,4 @@
-<h4>Athlete Vaccine: {{vax_percent}}% || Medical History: {{med_percent}}%</h4>
+<h4>Medical History: {{med_percent}}%</h4>
 <div class="table-responsive">
   <div class="card-body" style="margin-bottom:20px">
     <table class="dataTable display table-bordered table-hover" id="students-data">
@@ -39,10 +39,6 @@
             <th title="Medical history">
               <i class="fa fa-book green" title="Medical History"></i>
               <span class="d-none">Medical History</span>
-            </th>
-            <th>
-              <i class="fa fa-resistance green" title="COVID-19 Vaccine Card"></i>
-              <span class="d-none">COVID-19 Vax Card</span>
             </th>
             <th title="Athlete Medical History">
               <i class="fa fa-book green" title="Athlete Medical History"></i>
@@ -209,15 +205,6 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.covid19_vaccine_card and s.covid19_vaccine_card_status %}
-                <i class="fa fa-check" title="COVID-19 Vaccine Card">
-                  <span style="display:none;">x</span>
-                </i>
-              {% else %}
-                <i class="fa fa-times red" title="COVID-19 Vaccine Card"></i>
-              {% endif %}
-            </td>
-            <td class="{{s.adult}}">
               {% if s.cc_athlete_medical_history %}
                 <i class="fa fa-check" title="Athlete Medical History">
                   <span style="display:none;">x</span>
@@ -328,10 +315,6 @@
             </th>
             <th title="Medical History">
               <i class="fa fa-book green" title="Medical History"></i>
-            </th>
-            <th>
-              <i class="fa fa-resistance green" title="COVID-19 Vaccine Card"></i>
-              <span class="d-none">COVID-19 Vax Card</span>
             </th>
             <th title="Athlete Medical History">
               <i class="fa fa-book green" title="Athlete Medical History"></i>

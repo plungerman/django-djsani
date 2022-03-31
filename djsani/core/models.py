@@ -117,14 +117,6 @@ class StudentMedicalManager(models.Model):
         blank=True,
     )
     physical_evaluation_status_2 = models.BooleanField()
-    covid19_vaccine_card = models.FileField(
-        upload_to=upload_to_path,
-        validators=FILE_VALIDATORS,
-        max_length=128,
-        null=True,
-        blank=True,
-    )
-    covid19_vaccine_card_status = models.BooleanField()
     emergency_contact = models.BooleanField()
     # forms and waivers
     cc_student_immunization = models.BooleanField()

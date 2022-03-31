@@ -17,7 +17,7 @@
   li { list-style: none; }
   .editable-input textarea {width:375px !important; height:200px;}
   .editable-container.editable-popup { z-index: 10000; }
-  #healthInsuranceEmailData, #StudentContactEmailHeader, #id_results_file {display:none;}
+  #healthInsuranceEmailData, #StudentContactEmailHeader {display:none;}
 </style>
 {% endblock %}
 {% block extra_javascript %}
@@ -508,26 +508,6 @@
                       Sickle Cell Test Results</a>
                   </li>
                   {% endif %}
-                  {% if student.covid19_vaccine_card %}
-                  <li>
-                    <input type="checkbox" class="set-val" name="covid19_vaccine_card_status"
-                      {% if manager.covid19_vaccine_card_status == True %}
-                      value="0"
-                      checked="checked"
-                      {% else %}
-                      value="1"
-                      {% endif %}
-                      data-pk="{{manager.id}}"
-                      data-table="cc_student_medical_manager">
-                    <a href="{{manager.covid19_vaccine_card}}" class="rotate-photo">
-                      <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                    <a href="{{media_url}}files/{{manager.covid19_vaccine_card}}"
-                      class="fleft" style="margin-left:10px;margin-top:3px;"
-                      target="_blank" title="current file">
-                      <i class="fa fa-resistance green"></i>
-                      COVID-19 Vaccine Card</a>
-                  </li>
-                  {% endif %}
                 </ul>
               </div>
               <!-- /#athlete_files -->
@@ -542,10 +522,6 @@
     </div>
     <!-- /.col-lg-6 -->
     <div class="col-lg-6">
-
-
-
-
       <div class="card mb-3">
         <div class="card-header">
           <h5 class="panel-title">

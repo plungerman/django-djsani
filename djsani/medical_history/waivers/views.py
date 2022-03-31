@@ -49,9 +49,7 @@ def index(request, stype, wtype):
         form = fname(request.POST, request.FILES)
         if form.is_valid():
             cd = form.cleaned_data
-
-            # deal with file uploads
-            if request.FILES.get('results_file'):
+            if sicklecell:
                 folder = 'sicklecell/{0}/{1}'.format(
                     cid, manager.created_at.strftime('%Y%m%d%H%M%S%f'),
                 )
@@ -60,12 +58,11 @@ def index(request, stype, wtype):
                     os.path.join(settings.UPLOADS_DIR, folder),
                 )
                 cd['results_file'] = '{0}/{1}'.format(folder, phile)
-
-            if sicklecell:
-                # update student's sicklecell waiver record
                 cd['updated_at'] = datetime.datetime.now()
                 for key, form_val in cd.items():
                     setattr(sicklecell, key, form_val)
+                sicklecell.proof = True
+                sicklecell.waive = False
                 sicklecell.save(using='informix')
             else:
                 # insert

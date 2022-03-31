@@ -191,16 +191,12 @@ def get_students(request):
             students.append(dict(zip(columns, row)))
     ath = 0
     med = 0
-    vax = 0
-    vax_percent = 0
     med_percent = 0
     count = len(students)
     for num, stu in enumerate(students):
         adult = 'minor'
         if stu.get('athlete'):
             ath += 1
-        if stu.get('covid19_vaccine_card_status'):
-            vax += 1
         if stu.get('cc_athlete_medical_history'):
             med += 1
         if stu.get('birth_date'):
@@ -217,7 +213,6 @@ def get_students(request):
             # health insurance
             stu['shi'] = panels(request, StudentHealthInsurance, manager)
     if ath:
-        vax_percent = round(vax/ath * 100)
         med_percent = round(med/ath * 100)
 
     return render(
@@ -228,7 +223,6 @@ def get_students(request):
             'staff': staff,
             'coach': coach,
             'med_percent': med_percent,
-            'vax_percent': vax_percent,
         },
     )
 
