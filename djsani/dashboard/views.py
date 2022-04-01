@@ -79,6 +79,7 @@ def panels(request, mod, manager, content_type=None, gender=None):
 def get_students(request):
     """GET or POST: returns a list of students."""
     user = request.user
+    minors = False
     trees = None
     sport = None
     term = get_term()
@@ -89,6 +90,7 @@ def get_students(request):
     if request.POST:
         post = request.POST
         cyear = post.get('class')
+        minors = post.get('minors')
         if staff or coach:
             sport = post.get('sport')
             # are we in print view?
@@ -157,13 +159,15 @@ def get_students(request):
                         INR.id = id_rec.id
                     )
                 """.format(str(sport), year)
+
+
         else:
             return HttpResponse(
                 "error", content_type="text/plain; charset=utf-8",
             )
     else:
         template = 'dashboard/home.html'
-        cl = 'AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")'
+        cl = 'AND prog_enr_rec.cl IN ("FN","FF","UT","PF","PN")'
         if coach:
             cl = ''
         sql = """ {0}
@@ -193,6 +197,7 @@ def get_students(request):
     med = 0
     med_percent = 0
     count = len(students)
+    minors_list = []
     for num, stu in enumerate(students):
         adult = 'minor'
         if stu.get('athlete'):
@@ -201,7 +206,10 @@ def get_students(request):
             med += 1
         if stu.get('birth_date'):
             age = calculate_age(stu['birth_date'])
-            if age >= settings.ADULT_AGE:
+            if minors and age < settings.ADULT_AGE:
+                stu['adult'] = 'minor'
+                minors_list.append(stu)
+            elif age >= settings.ADULT_AGE:
                 adult = 'adult'
         stu['adult'] = adult
         if trees:
@@ -215,6 +223,8 @@ def get_students(request):
     if ath:
         med_percent = round(med/ath * 100)
 
+    if minors_list:
+        students = minors_list
     return render(
         request, template, {
             'students': students,
