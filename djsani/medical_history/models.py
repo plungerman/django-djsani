@@ -2,8 +2,12 @@
 
 """Data models."""
 
+from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import User
+from django.dispatch import receiver
 from djsani.core.models import StudentMedicalManager
+from djtools.utils.mail import send_mail
 
 
 class StudentMedicalHistory(models.Model):
@@ -189,3 +193,26 @@ class AthleteMedicalHistory(models.Model):
     def current(self, day):
         """Determine if this is the current medical history academic year."""
         return self.created_at > day
+
+
+@receiver(models.signals.post_save, sender=AthleteMedicalHistory)
+def harm_email(sender, instance, created, **kwargs):
+    """send an email if student indicates an inclination to harm self/others."""
+    if instance.self_others_harm != 'No':
+        user = User.objects.get(pk=instance.college_id)
+        to_list = settings.HARM_EMAIL_LIST
+        if settings.DEBUG:
+            to_list = [settings.SERVER_EMAIL]
+        send_mail(
+            None,
+            to_list,
+            '[Harm Self or Others] {0}, {1} ({2})'.format(
+                user.last_name,
+                user.first_name,
+                user.id,
+            ),
+            user.email,
+            'medical_history/harm_email.html',
+            instance,
+            [settings.MANAGERS[0][1]],
+        )

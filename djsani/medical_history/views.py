@@ -20,7 +20,8 @@ from djtools.utils.convert import str_to_class
 def index(request, stype, display=None):
     """View for student and athlete medical history."""
     # student id
-    cid = request.user.id
+    user = request.user
+    cid = user.id
     # student gender
     gender = request.session.get('gender')
     # model name
