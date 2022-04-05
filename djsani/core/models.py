@@ -3,12 +3,15 @@
 """Data models."""
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djsani.core.sql import SPORTS_STUDENT
 from djtools.fields.helpers import upload_to_path
+from django.dispatch import receiver
+from djtools.utils.mail import send_mail
 
 
 ALLOWED_EXTENSIONS = (
@@ -161,3 +164,45 @@ class StudentMedicalManager(models.Model):
         sql = SPORTS_STUDENT(cid=self.college_id, year=year)
         with get_connection() as connection:
             return xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchall()
+
+
+@receiver(models.signals.pre_save, sender=StudentMedicalManager)
+def upload_email(sender, instance, **kwargs):
+    """send an email if a student uploads a file."""
+    user = User.objects.get(pk=instance.college_id)
+    to_list = settings.UPLOAD_EMAIL_LIST
+    email = {
+        'medical_consent_agreement': False,
+        'physical_evaluation_1': False,
+        'physical_evaluation_2': False,
+    }
+    if settings.DEBUG:
+        to_list = [settings.SERVER_EMAIL]
+
+    if instance.id is None:
+        for phile in email:
+            if getattr(instance, phile, None):
+                email[phile] = True
+    else:
+        previous = StudentMedicalManager.objects.using('informix').get(pk=instance.id)
+        for phile in email:
+            if getattr(previous, phile, None).name != getattr(instance, phile, None):
+                email[phile] = True
+    email['user'] = user
+    email['server_url'] = settings.SERVER_URL
+    for phile, status in email.items():
+        if status:
+            send_mail(
+                None,
+                to_list,
+                '[File(s) Uploaded] {0}, {1} ({2})'.format(
+                    user.last_name,
+                    user.first_name,
+                    user.id,
+                ),
+                user.email,
+                'upload_email.html',
+                email,
+                [settings.MANAGERS[0][1]],
+            )
+            break

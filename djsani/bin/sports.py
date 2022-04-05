@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import argparse
 import csv
+import logging
 import os
 import sys
 # env
@@ -13,10 +15,7 @@ django.setup()
 from django.conf import settings
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
-from djsani.core.models import SPORTS
 
-import argparse
-import logging
 
 logger = logging.getLogger('debug_logfile')
 
@@ -34,13 +33,7 @@ parser.add_argument(
     '-i', '--cid',
     help="College ID",
     dest='cid',
-    required=False,
-)
-parser.add_argument(
-    '-f', '--file',
-    help="File name",
-    dest='phile',
-    required=False,
+    required=True,
 )
 parser.add_argument(
     '--test',
@@ -68,35 +61,13 @@ def _xsql(cid):
 
 def main():
     """Obtain the sports in which a student participates."""
-    if cid:
-        print(_xsql(cid))
-    else:
-        sendero = os.path.join(settings.BASE_DIR, 'sql', phile)
-        if os.path.isfile(sendero):
-            with open(sendero, 'r') as csv_file:
-                reader = csv.DictReader(csv_file, delimiter='|')
-                for row in reader:
-                    sports = []
-                    clubsorgs = _xsql(row['ID'])
-                    for sport in row['Sports'].split(','):
-                        for s in SPORTS:
-                            if s[0] == sport:
-                                sports.append(s[1])
-                    print(row['ID'], row['Athlete Status'], clubsorgs, sports)
-        else:
-            print("{0} is not a valid file".format(phile))
+    print(_xsql(cid))
 
 
 if __name__ == '__main__':
     args = parser.parse_args()
     cid = args.cid
-    phile = args.phile
     test = args.test
-    if not cid and not phile:
-        print("You must provide a college ID or a file name")
-        sys.exit()
-
     if test:
         print(args)
-
     sys.exit(main())

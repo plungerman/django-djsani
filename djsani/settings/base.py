@@ -203,6 +203,7 @@ INSURANCE_RECIPIENTS = []
 INSURANCE_GROUP_NUMBER = ''
 HOUSING_EMAIL_LIST = []
 HARM_EMAIL_LIST = []
+UPLOAD_EMAIL_DICT = {}
 DEFAULT_HASH = ''
 DEFAULT_CID = '666'
 START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)

@@ -196,7 +196,7 @@ class AthleteMedicalHistory(models.Model):
 
 
 @receiver(models.signals.post_save, sender=AthleteMedicalHistory)
-def harm_email(sender, instance, created, **kwargs):
+def harm_email(sender, instance, **kwargs):
     """send an email if student indicates an inclination to harm self/others."""
     if instance.self_others_harm != 'No':
         user = User.objects.get(pk=instance.college_id)

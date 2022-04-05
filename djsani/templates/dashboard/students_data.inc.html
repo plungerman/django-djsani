@@ -240,13 +240,13 @@
                 <i class="fa fa-times red" title="Privacy Waiver"></i>
               {% endif %}
             </td>
-            {% if s.waive or s.proof %}
-              <td class="{{s.adult}}" style="background-color:#cacaca;">
-                {% if s.results_file %}<i class="fa fa-moon-o green" title="Sickle cell results">{% else %}<i class="fa fa-check" title="Sickle cell waiver">{% endif %}<span style="display:none;">x</span></i>{% if s.proof %} <strong>/</strong> {% if s.results == "Positive" %}<i class="fa fa-plus" title="Sickle cell positive"><span style="display:none;">+</span></i>{% else %}<i class="fa fa-minus" title="Sickle cell negative"><span style="display:none;">-</span></i>{% endif %}<strong title="Sickle cell results Date"> {{s.updated_at|date:"Y"}}</strong>{% endif %}
-            {% else %}
-              <td class="{{s.adult}}">
-              <i class="fa fa-times red" title="Sickle Cell Waiver"></i>
-            {% endif %}
+            <td class="{{s.adult}}">
+              {% if s.results_file %}
+                <i class="fa fa-check green" title="Sickle cell results">
+                <span style="display:none;">x</span></i>
+              {% else %}
+                <i class="fa fa-times red" title="Sickle cell results"></i>
+              {% endif %}
             </td>
             <td class="{{s.adult}}">
               {% if s.cc_athlete_reporting_waiver %}

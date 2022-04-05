@@ -300,8 +300,7 @@ $(function() {
 {% block navbar-header %}
 <a href="{% url 'dashboard_home' %}" class="mr-sm-3 mr-lg-3">
   <img src="{% static 'img/clogo.png' %}" height="30" class="mr-2"></a>
-<a class="navbar-brand"
-  href="/life-at-carthage/health-wellness-safety/health-counseling/">Medical Forms</a>
+<a class="navbar-brand" href="{% url 'dashboard_home' %}">Medical Forms Dashboard</a>
 {% endblock %}
 {% block navbar-top-links %}
   <ul class="navbar-nav ml-auto">

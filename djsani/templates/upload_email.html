@@ -1,0 +1,17 @@
+<h2>Uploaded Files</h2>
+<ul>
+  {% if data.medical_consent_agreement %}
+    <li>Medical Consent Agreement</li>
+  {% endif %}
+  {% if data.physical_evaluation_1 %}
+    <li>Physical Evaluation 1</li>
+  {% endif %}
+  {% if data.physical_evaluation_2 %}
+    <li>Physical Evaluation 2</li>
+  {% endif %}
+</ul>
+<h3>
+  <a href="https://{{data.server_url}}{% url 'student_detail' data.user.id %}">
+    Student Detail
+  </a>
+</h3>
