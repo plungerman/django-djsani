@@ -10,8 +10,8 @@ from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djsani.core.sql import SPORTS_STUDENT
 from djtools.fields.helpers import upload_to_path
-from django.dispatch import receiver
 from djtools.utils.mail import send_mail
+from django.dispatch import receiver
 
 
 ALLOWED_EXTENSIONS = (
@@ -23,6 +23,52 @@ FILE_VALIDATORS = [
 ADDITION = 1
 CHANGE = 2
 DELETION = 3
+
+
+def uploaded_email(sender, instance, philes):
+    """Send an email with data from model signal when student uploads file."""
+    user = instance.user()
+    to_list = []
+    try:
+        manager = instance.manager
+    except Exception:
+        manager = instance
+    for trainer, sports in settings.UPLOAD_EMAIL_DICT.items():
+        for spor in [sport.sport_code for sport in manager.sports()]:
+            if spor in sports and trainer not in to_list:
+                to_list.append(trainer)
+    hidden_list = to_list
+    if settings.DEBUG:
+        to_list = [settings.SERVER_EMAIL]
+
+    if instance.id is None:
+        for phile in philes:
+            if getattr(instance, phile, None):
+                philes[phile] = True
+    else:
+        previous = sender.objects.using('informix').get(pk=instance.id)
+        for phile in philes:
+            if getattr(previous, phile, None).name != getattr(instance, phile, None):
+                philes[phile] = True
+    philes['user'] = user
+    philes['server_url'] = settings.SERVER_URL
+    philes['to_list'] = hidden_list
+    for phile, status in philes.items():
+        if status:
+            send_mail(
+                None,
+                to_list,
+                '[File Uploaded] {0}, {1} ({2})'.format(
+                    user.last_name,
+                    user.first_name,
+                    user.id,
+                ),
+                user.email,
+                'upload_email.html',
+                philes,
+                [settings.MANAGERS[0][1]],
+            )
+            break
 
 
 class StudentMedicalContentType(models.Model):
@@ -150,6 +196,14 @@ class StudentMedicalManager(models.Model):
         """Used for the upload_to_path helper for file uplaods."""
         return 'student-medical-manager'
 
+    def user(self):
+        """Obtain the system user for student."""
+        try:
+            user = User.objects.get(pk=self.college_id)
+        except Exception:
+            user = None
+        return user
+
     def sports(self):
         """Obtain the sports for a student or all the sports."""
         # sports end_date is always around mid-may so a manager created
@@ -167,42 +221,11 @@ class StudentMedicalManager(models.Model):
 
 
 @receiver(models.signals.pre_save, sender=StudentMedicalManager)
-def upload_email(sender, instance, **kwargs):
+def uploaded_phile(sender, instance, **kwargs):
     """send an email if a student uploads a file."""
-    user = User.objects.get(pk=instance.college_id)
-    to_list = settings.UPLOAD_EMAIL_LIST
-    email = {
+    philes = {
         'medical_consent_agreement': False,
         'physical_evaluation_1': False,
         'physical_evaluation_2': False,
     }
-    if settings.DEBUG:
-        to_list = [settings.SERVER_EMAIL]
-
-    if instance.id is None:
-        for phile in email:
-            if getattr(instance, phile, None):
-                email[phile] = True
-    else:
-        previous = StudentMedicalManager.objects.using('informix').get(pk=instance.id)
-        for phile in email:
-            if getattr(previous, phile, None).name != getattr(instance, phile, None):
-                email[phile] = True
-    email['user'] = user
-    email['server_url'] = settings.SERVER_URL
-    for phile, status in email.items():
-        if status:
-            send_mail(
-                None,
-                to_list,
-                '[File(s) Uploaded] {0}, {1} ({2})'.format(
-                    user.last_name,
-                    user.first_name,
-                    user.id,
-                ),
-                user.email,
-                'upload_email.html',
-                email,
-                [settings.MANAGERS[0][1]],
-            )
-            break
+    uploaded_email(sender, instance, philes)

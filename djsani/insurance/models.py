@@ -2,8 +2,11 @@
 
 """Data models."""
 
+from django.contrib.auth.models import User
 from django.db import models
+from django.dispatch import receiver
 from djsani.core.models import StudentMedicalManager
+from djsani.core.models import uploaded_email
 from djtools.fields.helpers import upload_to_path
 
 
@@ -77,6 +80,14 @@ class StudentHealthInsurance(models.Model):
         """Default data for display."""
         return str(self.college_id)
 
+    def user(self):
+        """Obtain the system user for student."""
+        try:
+            user = User.objects.get(pk=self.college_id)
+        except Exception:
+            user = None
+        return user
+
     def get_slug(self):
         """Used for the upload_to_path helper for file uplaods."""
         return 'insurance'
@@ -97,3 +108,14 @@ class StudentHealthInsurance(models.Model):
     def current(self, day):
         """Determine if this is the current object for the academic year."""
         return self.created_at > day
+
+
+@receiver(models.signals.pre_save, sender=StudentHealthInsurance)
+def uploaded_phile(sender, instance, **kwargs):
+    """send an email if a student uploads a file."""
+    philes = {
+        'primary_card_front': False,
+        'primary_card_back': False,
+        'tertiary_card': False,
+    }
+    uploaded_email(sender, instance, philes)
