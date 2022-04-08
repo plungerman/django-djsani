@@ -19,11 +19,11 @@
             <li class="form-group ctrlHolder">
               <h3>
                 <label for="id_medical_consent_agreement">
-                    Photo or scan of your signed medical consent and
-                    medical insurance agreement form
+                  Photo or scan of your signed medical consent and
+                  medical insurance agreement form
                 </label>
               </h3>
-              {% if form..errors %}
+              {% if form.errors %}
               <div class="required warning">
                 <span class="error-message">
                   {{ form.medical_consent_agreement.errors|join:", "}}

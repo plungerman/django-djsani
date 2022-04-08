@@ -2,9 +2,12 @@
 
 """Data models."""
 
+from django.contrib.auth.models import User
 from django.db import models
+from django.dispatch import receiver
 from djsani.core.models import FILE_VALIDATORS
 from djsani.core.models import StudentMedicalManager
+from djsani.core.models import uploaded_email
 from djtools.fields.helpers import upload_to_path
 
 
@@ -37,6 +40,14 @@ class Sicklecell(models.Model):
     def __repr__(self):
         """Default value for this object."""
         return str(self.college_id)
+
+    def user(self):
+        """Obtain the system user for student."""
+        try:
+            user = User.objects.get(pk=self.college_id)
+        except Exception:
+            user = None
+        return user
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -147,3 +158,10 @@ class Privacy(models.Model):
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
         return self.created_at > day
+
+
+@receiver(models.signals.pre_save, sender=Sicklecell)
+def uploaded_phile(sender, instance, **kwargs):
+    """send an email if a student uploads a file."""
+    philes = {'results_file': False}
+    uploaded_email(sender, instance, philes)

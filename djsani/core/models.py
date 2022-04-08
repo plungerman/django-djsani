@@ -2,16 +2,18 @@
 
 """Data models."""
 
+import logging
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.dispatch import receiver
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djsani.core.sql import SPORTS_STUDENT
 from djtools.fields.helpers import upload_to_path
 from djtools.utils.mail import send_mail
-from django.dispatch import receiver
 
 
 ALLOWED_EXTENSIONS = (
@@ -50,11 +52,14 @@ def uploaded_email(sender, instance, philes):
         for phile in philes:
             if getattr(previous, phile, None).name != getattr(instance, phile, None):
                 philes[phile] = True
+    user.debug = settings.DEBUG
     philes['user'] = user
     philes['server_url'] = settings.SERVER_URL
     philes['to_list'] = hidden_list
     for phile, status in philes.items():
-        if status:
+        if isinstance(status, bool) and status:
+            logger = logging.getLogger('phile={0}'.format(phile))
+            logger = logging.getLogger('status={0}'.format(status))
             send_mail(
                 None,
                 to_list,
