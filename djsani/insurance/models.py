@@ -118,4 +118,4 @@ def uploaded_phile(sender, instance, **kwargs):
         'primary_card_back': False,
         'tertiary_card': False,
     }
-    uploaded_email(sender, instance, philes)
+    uploaded_email(sender, instance, instance.manager, philes)

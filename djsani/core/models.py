@@ -27,14 +27,10 @@ CHANGE = 2
 DELETION = 3
 
 
-def uploaded_email(sender, instance, philes):
+def uploaded_email(sender, instance, manager, philes):
     """Send an email with data from model signal when student uploads file."""
     user = instance.user()
     to_list = []
-    try:
-        manager = instance.manager
-    except Exception:
-        manager = instance
     for trainer, sports in settings.UPLOAD_EMAIL_DICT.items():
         for spor in [sport.sport_code for sport in manager.sports()]:
             if spor in sports and trainer not in to_list:
@@ -228,9 +224,10 @@ class StudentMedicalManager(models.Model):
 @receiver(models.signals.pre_save, sender=StudentMedicalManager)
 def uploaded_phile(sender, instance, **kwargs):
     """send an email if a student uploads a file."""
-    philes = {
-        'medical_consent_agreement': False,
-        'physical_evaluation_1': False,
-        'physical_evaluation_2': False,
-    }
-    uploaded_email(sender, instance, philes)
+    if instance.id:
+        philes = {
+            'medical_consent_agreement': False,
+            'physical_evaluation_1': False,
+            'physical_evaluation_2': False,
+        }
+        uploaded_email(sender, instance, instance, philes)

@@ -22,12 +22,12 @@
     <li>Sicklecell Results</li>
   {% endif %}
 </ul>
-{% if data.user.debug %}
 <h3>
   <a href="https://{{data.server_url}}{% url 'student_detail' data.user.id %}">
     Student Detail
   </a>
 </h3>
+{% if data.user.debug %}
 {{data.to_list}}
 <pre>{{data}}</pre>
 {% endif %}

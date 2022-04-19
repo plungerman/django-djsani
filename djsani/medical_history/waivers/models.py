@@ -2,6 +2,7 @@
 
 """Data models."""
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.dispatch import receiver
@@ -52,6 +53,10 @@ class Sicklecell(models.Model):
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
         return self.created_at > day
+
+    def get_slug(self):
+        """Used for the upload_to_path helper for file uplaods."""
+        return 'sicklecell'
 
 
 class Meni(models.Model):
@@ -164,4 +169,7 @@ class Privacy(models.Model):
 def uploaded_phile(sender, instance, **kwargs):
     """send an email if a student uploads a file."""
     philes = {'results_file': False}
-    uploaded_email(sender, instance, philes)
+    manager = StudentMedicalManager.objects.using('informix').filter(
+        college_id=instance.college_id,
+    ).filter(created_at__gte=settings.START_DATE).first()
+    uploaded_email(sender, instance, manager, philes)
