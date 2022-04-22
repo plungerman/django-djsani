@@ -62,7 +62,11 @@ $(document).ready(function() {
             $("#" + id).show();
             if (mentalHealth == false) {
               if( $.inArray(nm, mentalHealthList) != -1){
-                $('#mentalHealthModal').modal('show');
+                if (mm == 'self_others_harm') {
+                  $('#harmModal').modal('show');
+                } else {
+                  $('#mentalHealthModal').modal('show');
+                }
                 mentalHealth = true;
               }
             }
@@ -256,6 +260,32 @@ $(document).ready(function() {
         <p>
           {% get_lw_content as counseling blurbs 2174 %}
           {{counseling.body|safe}}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+<div id="harmModal" class="modal fade bs-example-modal-sm" tabindex="-1"
+  role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">
+            Close
+          </span>
+        </button>
+        <h1 class="modal-title">Counseling services</h1>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% get_lw_content as harm blurbs 3345 %}
+          {{harm.body|safe}}
         </p>
       </div>
       <div class="modal-footer">

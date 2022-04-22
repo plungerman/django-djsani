@@ -51,6 +51,9 @@ $(document).ready(function() {
         },
         success: function(response, newValue) {
             $.growlUI('Success', "Data saved.");
+            if (response == 'self_others_harm' && newValue != 'No') {
+              $('#harmModal').modal('show');
+            }
         }
     });
 });
@@ -83,5 +86,24 @@ $(document).ready(function() {
   {% else %}
     {% include "medical_history/form_student.inc.html" %}
   {% endif %}
+  <div id="harmModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Counseling services</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {% get_lw_content as harm blurbs 3345 %}
+          {{harm.body|safe}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

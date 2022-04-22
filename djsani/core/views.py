@@ -158,9 +158,7 @@ def set_val(request):
             )
             log.save(using='informix')
 
-        return HttpResponse(
-            "success", content_type='text/plain; charset=utf-8',
-        )
+        return HttpResponse(name, content_type='text/plain; charset=utf-8')
 
 
 @portal_auth_required(
