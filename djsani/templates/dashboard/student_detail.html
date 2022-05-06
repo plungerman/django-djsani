@@ -489,25 +489,30 @@
                       Medical consent and insurance agreement</a>
                   </li>
                   {% endif %}
-                  {% if student.results_file %}
                   <li>
-                    <input type="checkbox" class="set-val" name="results_file_status"
-                      {% if student.results_file_status == True %}
+                    <input type="checkbox" class="set-val" name="cc_athlete_sicklecell_waiver"
+                      {% if student.cc_athlete_sicklecell_waiver == True %}
                       value="0" checked="checked"
                       {% else %}
                       value="1"
                       {% endif %}
-                      data-pk="{{student.sicklecell_id}}"
+                      data-pk="{{manager.id}}"
                       data-table="cc_athlete_sicklecell_waiver">
                     <a href="{{student.results_file}}" class="rotate-photo">
                       <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
+                    {% if student.results_file %}
                     <a href="{{media_url}}files/{{student.results_file}}"
                       class="fleft" style="margin-left:10px;margin-top:3px;"
                       target="_blank" title="current file">
                       <i class="fa fa-moon-o green"></i>
                       Sickle Cell Test Results</a>
+                    {% else %}
+                      <span class="fleft" style="margin-left:10px;margin-top:3px;">
+                        <i class="fa fa-moon-o green"></i>
+                        Sickle Cell Test Results
+                      </span>
+                    {% endif %}
                   </li>
-                  {% endif %}
                 </ul>
               </div>
               <!-- /#athlete_files -->
