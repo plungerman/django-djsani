@@ -394,19 +394,22 @@ $(function() {
                 <td></td>
               {% endif %}
             </tr>
+          </tbody>
+        </table>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr><th colspan="2">Uploaded Forms</th></tr>
+          </thead>
+          <tbody>
             <tr>
               <td>
-                {% if not adult %}
-                  Sickle cell trait testing waiver
-                {% else %}
                   {% if manager.cc_athlete_sicklecell_waiver %}
                   Sickle cell trait testing waiver
                   {% else %}
                   <a href="{% url 'waiver_form' 'athlete' 'sicklecell' %}">
-                    Sickle cell trait testing waiver
+                    Sickle cell trait testing form
                   </a>
                   {% endif %}
-                {% endif %}
               </td>
               <td>
                 {% if manager.cc_athlete_sicklecell_waiver %}
@@ -418,14 +421,8 @@ $(function() {
                 {% endif %}
               </td>
             </tr>
-          </tbody>
-        </table>
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr><th colspan="2">Uploaded Forms</th></tr>
-          </thead>
-          <tbody>
             <tr>
+            </tr>
               <td>
                 <a href="{% url 'file_upload' 'physical-evaluation' %}">
                   Pre-Participation Physical Evaluation Upload Form
