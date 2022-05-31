@@ -401,6 +401,7 @@ $(function() {
             <tr><th colspan="2">Uploaded Forms</th></tr>
           </thead>
           <tbody>
+            {% if student.cl in 'FF,FN,FR,UT,PF,PN' %}
             <tr>
               <td>
                   {% if manager.cc_athlete_sicklecell_waiver %}
@@ -421,6 +422,7 @@ $(function() {
                 {% endif %}
               </td>
             </tr>
+            {% endif %}
             <tr>
             </tr>
               <td>
