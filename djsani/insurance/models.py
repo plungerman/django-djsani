@@ -110,7 +110,8 @@ class StudentHealthInsurance(models.Model):
         return self.created_at > day
 
 
-@receiver(models.signals.pre_save, sender=StudentHealthInsurance)
+#@receiver(models.signals.pre_save, sender=StudentHealthInsurance)
+@receiver(models.signals.post_save, sender=StudentHealthInsurance)
 def uploaded_phile(sender, instance, **kwargs):
     """send an email if a student uploads a file."""
     philes = {
