@@ -30,46 +30,47 @@ DELETION = 3
 def uploaded_email(sender, instance, manager, philes):
     """Send an email with data from model signal when student uploads file."""
     user = instance.user()
-    to_list = []
-    for trainer, sports in settings.UPLOAD_EMAIL_DICT.items():
-        for spor in [sport.sport_code for sport in manager.sports()]:
-            if spor in sports and trainer not in to_list:
-                to_list.append(trainer)
-    hidden_list = to_list
-    if settings.DEBUG:
-        to_list = [settings.SERVER_EMAIL]
+    if user and manager:
+        to_list = []
+        for trainer, sports in settings.UPLOAD_EMAIL_DICT.items():
+            for spor in [sport.sport_code for sport in manager.sports()]:
+                if spor in sports and trainer not in to_list:
+                    to_list.append(trainer)
+        hidden_list = to_list
+        if settings.DEBUG:
+            to_list = [settings.SERVER_EMAIL]
 
-    if instance.id is None:
-        for phile in philes:
-            if getattr(instance, phile, None):
-                philes[phile] = True
-    else:
-        previous = sender.objects.using('informix').get(pk=instance.id)
-        for phile in philes:
-            if getattr(previous, phile, None).name != getattr(instance, phile, None):
-                philes[phile] = True
-    user.debug = settings.DEBUG
-    philes['user'] = user
-    philes['server_url'] = settings.SERVER_URL
-    philes['to_list'] = hidden_list
-    for phile, status in philes.items():
-        if isinstance(status, bool) and status:
-            logger = logging.getLogger('phile={0}'.format(phile))
-            logger = logging.getLogger('status={0}'.format(status))
-            send_mail(
-                None,
-                to_list,
-                '[File Uploaded] {0}, {1} ({2})'.format(
-                    user.last_name,
-                    user.first_name,
-                    user.id,
-                ),
-                user.email,
-                'upload_email.html',
-                philes,
-                [settings.MANAGERS[0][1]],
-            )
-            break
+        if instance.id is None:
+            for phile in philes:
+                if getattr(instance, phile, None):
+                    philes[phile] = True
+        else:
+            previous = sender.objects.using('informix').get(pk=instance.id)
+            for phile in philes:
+                if getattr(previous, phile, None).name != getattr(instance, phile, None):
+                    philes[phile] = True
+        user.debug = settings.DEBUG
+        philes['user'] = user
+        philes['server_url'] = settings.SERVER_URL
+        philes['to_list'] = hidden_list
+        for phile, status in philes.items():
+            if isinstance(status, bool) and status:
+                logger = logging.getLogger('phile={0}'.format(phile))
+                logger = logging.getLogger('status={0}'.format(status))
+                send_mail(
+                    None,
+                    to_list,
+                    '[File Uploaded] {0}, {1} ({2})'.format(
+                        user.last_name,
+                        user.first_name,
+                        user.id,
+                    ),
+                    user.email,
+                    'upload_email.html',
+                    philes,
+                    [settings.MANAGERS[0][1]],
+                )
+                break
 
 
 class StudentMedicalContentType(models.Model):
@@ -215,6 +216,7 @@ class StudentMedicalManager(models.Model):
         if date.month < settings.SPORTS_MONTH:
             year = date.year
         else:
+            #year = date.year + 1
             year = date.year + 1
         sql = SPORTS_STUDENT(cid=self.college_id, year=year)
         with get_connection() as connection:
