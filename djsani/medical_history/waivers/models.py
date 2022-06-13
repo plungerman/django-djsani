@@ -165,7 +165,7 @@ class Privacy(models.Model):
         return self.created_at > day
 
 
-@receiver(models.signals.pre_save, sender=Sicklecell)
+@receiver(models.signals.post_save, sender=Sicklecell)
 def uploaded_phile(sender, instance, **kwargs):
     """send an email if a student uploads a file."""
     philes = {'results_file': False}
