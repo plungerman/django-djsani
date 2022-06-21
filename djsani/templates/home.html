@@ -207,9 +207,14 @@ $(function() {
       <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 ">
         {% get_lw_content as athlete_directions blurbs 2008 %}
         {{athlete_directions.body|safe}}
-        {% if not adult %}
-          {% get_lw_content as sicklecell blurbs 2226 %}
-          {{sicklecell.body|safe}}
+        {% if not adult and student.cl in 'FF,FN,FR,UT,PF,PN' %}
+          {% get_lw_content as sicklecell_minor blurbs 2226 %}
+          {{sicklecell_minor.body|safe}}
+        {% else %}
+          {% if student.cl in 'FF,FN,FR,UT,PF,PN' %}
+          {% get_lw_content as sicklecell_frosh blurbs 3362 %}
+          {{sicklecell_frosh.body|safe}}
+          {% endif %}
         {% endif %}
         {% if student.residency_status == "Resident" and not adult %}
           <h3>
