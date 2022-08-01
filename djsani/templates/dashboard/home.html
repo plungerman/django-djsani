@@ -339,7 +339,7 @@ $(function() {
                 {% endif %}
             </li>
           <li><a href="{% url 'home' %}">Home</a></li>
-          {% if staff or user.is_superuser %}
+          {% if staff or coach or user.is_superuser %}
           <li><a href="{% url 'dashboard_home' %}">Dashboard</a></li>
           {% endif %}
           {% if user.is_superuser %}
