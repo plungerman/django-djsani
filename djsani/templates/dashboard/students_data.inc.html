@@ -8,7 +8,7 @@
               <i class="fa fa-thumbs-up green" title="Student Status"></i>
               <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
               <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
-              {% if staff %}
+              {% if staff or coach %}
               <span class="d-none">Notes</span>
               {% endif %}
             </th>
@@ -16,7 +16,7 @@
             <th class="d-none">Athlete Status</th>
             <th class="d-none">Concussion Baseline</th>
             <th style="width:200px;">Name</th>
-            {% if staff %}
+            {% if staff or coach %}
             <th class="d-none">ID</th>
             <th class="d-none">DOB</th>
             <th class="d-none">Email</th>
@@ -109,7 +109,7 @@
                 <i class="fa fa-times red" title="Concussion Baseline"></i>
                 {% endif %}
               {% endif %}
-              {% if staff %}
+              {% if staff or coach %}
               <span style="float:right;"><!-- all one line required -->
                 {% if s.manid %}
                 <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting yellow{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-placement="right" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-10000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
@@ -136,7 +136,7 @@
               </span>
             {% endif %}
             </td>
-            {% if staff %}
+            {% if staff or coach %}
             <td class="d-none">{{s.id}}</td>
             <td class="d-none">{{s.birth_date}}</td>
             <td class="d-none">{{s.ldap_name}}@carthage.edu</td>
@@ -290,18 +290,18 @@
               <i class="fa fa-thumbs-up green" title="Student Status"></i>
               <i class="fa fa-thumbs-up red" title="Athlete Status"></i>
               <i class="fa fa-thumbs-up blue" title="Concussion Baseline"></i>
-              {% if staff %}
+              {% if staff or coach %}
               <span class="d-none">Notes</span>
               {% endif %}
             </th>
             <th class="d-none">Student Status</th>
             <th class="d-none">Athlete Status</th>
             <th class="d-none">Concussion Baseline</th>
-              {% if staff %}
+              {% if staff or coach %}
               <span class="d-none">Notes</span>
               {% endif %}
             <th style="width:200px;">Name</th>
-            {% if staff %}
+            {% if staff or coach %}
             <th class="d-none">ID</th>
             <th class="d-none">DOB</th>
             <th class="d-none">Email</th>
