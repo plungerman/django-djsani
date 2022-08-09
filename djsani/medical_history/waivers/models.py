@@ -168,7 +168,7 @@ class Privacy(models.Model):
 @receiver(models.signals.post_save, sender=Sicklecell)
 def uploaded_phile(sender, instance, **kwargs):
     """send an email if a student uploads a file."""
-    philes = {'results_file': False}
+    philes = {'results_file': True}
     manager = StudentMedicalManager.objects.using('informix').filter(
         college_id=instance.college_id,
     ).filter(created_at__gte=settings.START_DATE).first()
