@@ -2,8 +2,6 @@
 
 """Data models."""
 
-import logging
-
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
@@ -55,8 +53,6 @@ def uploaded_email(sender, instance, manager, philes):
         philes['to_list'] = hidden_list
         for phile, status in philes.items():
             if isinstance(status, bool) and status:
-                logger = logging.getLogger('phile={0}'.format(phile))
-                logger = logging.getLogger('status={0}'.format(status))
                 send_mail(
                     None,
                     to_list,
