@@ -427,9 +427,12 @@ $(function() {
             <tr>
             </tr>
               <td>
-                <a href="{% url 'file_upload' 'physical-evaluation' %}">
+                {% if student.physical_evaluation_status_1 and student.physical_evaluation_status_2 %}
                   Pre-Participation Physical Evaluation Upload Form
-                  </a>
+                {% else %}
+                  <a href="{% url 'file_upload' 'physical-evaluation' %}">
+                    Pre-Participation Physical Evaluation Upload Form</a>
+                {% endif %}
               </td>
               <td>
                 {% if manager.physical_evaluation_1 and manager.physical_evaluation_2 %}
@@ -438,7 +441,7 @@ $(function() {
                   {% else %}
                     <i class="fa fa-check yellow"></i>
                   {% endif %}
-              {% endif %}
+                {% endif %}
               </td>
             </tr>
             <tr>
