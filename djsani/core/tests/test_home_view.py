@@ -13,8 +13,8 @@ from djsani.core.models import SPORTS_MEN
 from djsani.core.models import SPORTS_WOMEN
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_manager
-from djsani.core.utils import get_term
 from djtools.utils.date import calculate_age
+from djtools.utils.date import get_term
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 

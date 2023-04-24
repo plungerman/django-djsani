@@ -46,19 +46,6 @@ def get_content_type(name):
     return ct
 
 
-def get_term():
-    """Obtain the current academic term."""
-    sd = settings.START_DATE
-    today = datetime.date.today()
-    term = 'RA'
-    year = today.year
-    if ((today.month < sd.month) or (today.month == DEC and today.day > 10)):
-        term = 'RC'
-        if today.month == DEC:
-            year = year + 1
-    return {'yr': year, 'sess': term}
-
-
 def get_manager(cid):
     """
     Returns the current student medical manager.

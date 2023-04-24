@@ -12,8 +12,8 @@ from django.conf import settings
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djsani.core.sql import STUDENTS_ALPHA
-from djsani.core.utils import get_term
 from djtools.utils.date import calculate_age
+from djtools.utils.date import get_term
 
 
 EARL = settings.INFORMIX_ODBC

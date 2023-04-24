@@ -20,7 +20,6 @@ from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.sql import STUDENTS_ALPHA
 from djsani.core.utils import get_manager
-from djsani.core.utils import get_term
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
@@ -28,6 +27,7 @@ from djtools.decorators.auth import group_required
 from djtools.fields import NEXT_YEAR
 from djtools.utils.convert import str_to_class
 from djtools.utils.date import calculate_age
+from djtools.utils.date import get_term
 from djtools.utils.mail import send_mail
 from djtools.utils.users import faculty_staff
 from djtools.utils.users import in_group

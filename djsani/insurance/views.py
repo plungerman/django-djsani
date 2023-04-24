@@ -11,10 +11,10 @@ from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_manager
-from djsani.core.utils import get_term
 from djsani.insurance.forms import AthleteForm
 from djsani.insurance.forms import StudentForm
 from djsani.insurance.models import StudentHealthInsurance
+from djtools.utils.date import get_term
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 

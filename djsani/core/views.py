@@ -18,7 +18,6 @@ from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_content_type
 from djsani.core.utils import get_manager
-from djsani.core.utils import get_term
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
@@ -28,6 +27,7 @@ from djsani.medical_history.waivers.models import Reporting
 from djsani.medical_history.waivers.models import Risk
 from djsani.medical_history.waivers.models import Sicklecell
 from djtools.utils.date import calculate_age
+from djtools.utils.date import get_term
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from PIL import Image
