@@ -15,9 +15,6 @@ from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.waivers.models import Sicklecell
 
 
-DEC = settings.DECEMBER
-
-
 def doop(mod, man):
     """Check for an object and duplicate it. Returns the new object or None."""
     instance = mod.objects.using('informix').filter(
