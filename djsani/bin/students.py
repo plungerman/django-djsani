@@ -6,7 +6,7 @@ import sys
 django.setup()
 
 # env
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djsani.settings.shell")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
 
 from django.conf import settings
 from djimix.core.utils import get_connection
@@ -23,11 +23,11 @@ def main():
     minors = True
     term = get_term()
     cl = 'AND prog_enr_rec.cl IN ("FN","FF","FR","UT","PF","PN")'
-    sql = """ {0}
-        AND stu_serv_rec.yr = "{1}"
-        AND stu_serv_rec.sess = "{2}"
+    sql = ''' {0}
+        AND stu_serv_rec.yr = '{1}'
+        AND stu_serv_rec.sess = '{2}'
         {3}
-    """.format(
+    '''.format(
         STUDENTS_ALPHA, term['yr'], term['sess'], cl,
     )
     sql += ' ORDER BY lastname'
