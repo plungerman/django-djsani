@@ -21,10 +21,6 @@
             <th class="d-none">DOB</th>
             <th class="d-none">Email</th>
             <th>
-              <i class="fa fa-ambulance green" title="Emergency contact"></i>
-              <span class="d-none">Emergency contact</span>
-            </th>
-            <th>
               <i class="fa fa-bug green" title="Immunization"></i>
               <span class="d-none">Immunization</span>
             </th>
@@ -140,15 +136,6 @@
             <td class="d-none">{{s.id}}</td>
             <td class="d-none">{{s.birth_date}}</td>
             <td class="d-none">{{s.ldap_name}}@carthage.edu</td>
-            <td class="{{s.adult}}">
-              {% if s.emergency_contact %}
-                <i class="fa fa-check" title="Emergency Contact">
-                  <span style="display:none;">x</span>
-                </i>
-              {% else %}
-                <i class="fa fa-times red" title="Emergency Contact"></i>
-              {% endif %}
-            </td>
             <td class="{{s.adult}}">
               {% if s.cc_student_immunization %}
                 <i class="fa fa-check" title="Immunization">
@@ -305,9 +292,6 @@
             <th class="d-none">ID</th>
             <th class="d-none">DOB</th>
             <th class="d-none">Email</th>
-            <th>
-              <i class="fa fa-ambulance green" title="Emergency contact"></i>
-            </th>
             <th><i class="fa fa-bug green" title="Immunization"></i></th>
             <th title="Insurance"><i class="fa fa-umbrella green"></i></th>
             <th title="Meningococcal meningitis/Hepatitis B response">

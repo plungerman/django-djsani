@@ -59,8 +59,6 @@ urlpatterns = [
     ),
     # admin manager
     path('dashboard/', include('djsani.dashboard.urls')),
-    # emergency contact manager
-    path('emergency/', include('djsani.emergency.urls')),
     # insurance forms
     path('insurance/', include('djsani.insurance.urls')),
     # medical history

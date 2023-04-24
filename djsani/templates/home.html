@@ -10,7 +10,6 @@
 <link href="/static/djsani/css/main.css" rel="stylesheet" type="text/css">
 <!-- from portal head -->
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-<link href="/static/djmaidez/css/index.css" rel="stylesheet" type="text/css">
 {% endblock %}
 {% block extra_javascript %}
 <!-- from portal head -->
@@ -29,14 +28,8 @@ function GetUserID() {
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"
   type="text/javascript"></script>
-<script src="/static/djsani/js/djmaidez.js" type="text/javascript"></script>
-<script src="/static/djmaidez/js/validate.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
-    // build emergency contact modal
-    $("a.ens-link").click(function() {
-        makeDialog();
-    });
     // set name/value pairs
     function setVal(name, value) {
         var $data = {
@@ -116,22 +109,6 @@ $(function() {
             <tr><th colspan="2">Online Forms and Waivers</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <a class="ens-link" style="cursor: pointer; cursor: hand;">
-                  Emergency contact information
-                </a>
-              </td>
-              <td class="djsani">
-                {% if manager.emergency_contact %}
-                  {% if manager.sitrep %}
-                    <i class="fa fa-check green"></i>
-                  {% else %}
-                    <i class="fa fa-check yellow"></i>
-                  {% endif %}
-                {% endif %}
-              </td>
-            </tr>
             <tr>
               <td>
                 <a href="{% url 'insurance_form' 'student' %}">
@@ -244,22 +221,6 @@ $(function() {
             <tr><th colspan="2">Online Forms and Waivers</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <a class="ens-link" style="cursor: pointer; cursor: hand;">
-                  Emergency contact information
-                </a>
-              </td>
-              <td class="djsani">
-                {% if manager.emergency_contact %}
-                  {% if manager.sitrep %}
-                    <i class="fa fa-check green"></i>
-                  {% else %}
-                    <i class="fa fa-check yellow"></i>
-                  {% endif %}
-                {% endif %}
-              </td>
-            </tr>
             <tr>
               <td>
                 <a href="{% url 'insurance_form' 'athlete' %}">
@@ -504,10 +465,5 @@ $(function() {
     </p>
     {% endif %}
 </div>
-{% if student %}
-<div id="emergencyContactFiller">
-  {% include "emergency/modal.html" %}
-</div>
-{% endif %}
 {% endblock %}
 {% block urchin %}{% endblock %}

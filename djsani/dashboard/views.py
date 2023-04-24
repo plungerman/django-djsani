@@ -16,13 +16,11 @@ from django.template import loader
 from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
-from djmaidez.contact.data import ENS_CODES
 from djsani.core.models import StudentMedicalManager
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.sql import STUDENTS_ALPHA
 from djsani.core.utils import get_manager
 from djsani.core.utils import get_term
-from djsani.emergency.models import AARec
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
@@ -183,7 +181,7 @@ def get_students(request):
             sports = xsql(incantation.read(), connection).fetchall()
         # fetch the students
         cursor = connection.cursor().execute(sql)
-        # obtain the column names
+        # obtain the olumn names
         columns = [column[0] for column in cursor.description]
         students = []
         for row in cursor.fetchall():
@@ -210,9 +208,7 @@ def get_students(request):
         if trees:
             manager = get_manager(stu['id'])
             # emergency notification system
-            stu['ens'] = AARec.objects.using('informix').filter(
-                id=stu['id'],
-            ).filter(aa__in=ENS_CODES)
+            # worday data for ENS coming soon
             # health insurance
             stu['shi'] = panels(request, StudentHealthInsurance, manager)
     if ath:
@@ -221,7 +217,9 @@ def get_students(request):
     if minors_list:
         students = minors_list
     return render(
-        request, template, {
+        request,
+        template,
+        {
             'students': students,
             'sports': sports,
             'sport': sport,
@@ -297,9 +295,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                 except Exception:
                     age = None
                 # emergency notification system
-                ens = AARec.objects.using('informix').filter(id=cid).filter(
-                    aa__in=ENS_CODES,
-                )
+                ens = None
                 # health insurance
                 shi = panels(
                     request,

@@ -31,6 +31,8 @@ def main():
         STUDENTS_ALPHA, term['yr'], term['sess'], cl,
     )
     sql += ' ORDER BY lastname'
+    print(sql)
+    print(EARL)
     with get_connection(EARL) as connection:
         # fetch the students
         cursor = connection.cursor().execute(sql)
@@ -38,8 +40,8 @@ def main():
         columns = [column[0] for column in cursor.description]
         students = []
         for row in cursor.fetchall():
+            print(row)
             students.append(dict(zip(columns, row)))
-
     minors_list = []
     for num, stu in enumerate(students):
         adult = 'minor'
@@ -56,5 +58,5 @@ def main():
         print(stu['birth_date'], stu['lastname'], stu['firstname'])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())

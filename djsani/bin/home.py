@@ -24,10 +24,6 @@ from djsani.core.utils import get_term
 from djtools.utils.date import calculate_age
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
-from djmaidez.contact.data import ENS_CODES
-from djmaidez.contact.data import ENS_FIELDS
-from djmaidez.contact.data import MOBILE_CARRIER
-from djmaidez.contact.data import RELATIONSHIP
 
 
 # set up command-line options
@@ -119,19 +115,6 @@ def main():
                 'adult': adult,
                 'sql': sql,
             }
-            # emergency contact modal form
-            sql = 'SELECT * FROM aa_rec WHERE aa in {0} AND id="{1}"'.format(
-                ENS_CODES, cid,
-            )
-            rows = xsql(sql, connection, key=settings.INFORMIX_DEBUG)
-            for row in rows:
-                ens = {}
-                for field in ENS_FIELDS:
-                    ens[field] = getattr(row, field)
-                context_data[row.aa] = ens
-            context_data['mobile_carrier'] = MOBILE_CARRIER
-            context_data['relationship'] = RELATIONSHIP
-            context_data['solo'] = True
         else:
             # returns False if not student, which returns True
             antistaff = (

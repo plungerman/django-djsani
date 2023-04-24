@@ -12,10 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 from djauth.decorators import portal_auth_required
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
-from djmaidez.contact.data import AA_REC
-from djmaidez.contact.data import ENS_FIELDS
-from djmaidez.contact.data import MOBILE_CARRIER
-from djmaidez.contact.data import RELATIONSHIP
 from djsani.core.models import CHANGE
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import StudentMedicalManager
@@ -217,17 +213,6 @@ def home(request):
                 'manager': manager,
                 'adult': adult,
             }
-            # emergency contact modal form
-            sql = '{0} AND id="{1}"'.format(AA_REC, cid)
-            rows = xsql(sql, connection, key=settings.INFORMIX_DEBUG)
-            for row in rows:
-                ens = {}
-                for field in ENS_FIELDS:
-                    ens[field] = getattr(row, field)
-                context_data[row.aa] = ens
-            context_data['mobile_carrier'] = MOBILE_CARRIER
-            context_data['relationship'] = RELATIONSHIP
-            context_data['solo'] = True
         else:
             # returns False if not student, which returns True
             antistaff = (

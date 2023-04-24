@@ -8,10 +8,6 @@ from django.test import TestCase
 from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
-from djmaidez.contact.data import ENS_CODES
-from djmaidez.contact.data import ENS_FIELDS
-from djmaidez.contact.data import MOBILE_CARRIER
-from djmaidez.contact.data import RELATIONSHIP
 from djsani.core.models import SPORTS
 from djsani.core.models import SPORTS_MEN
 from djsani.core.models import SPORTS_WOMEN
@@ -79,19 +75,6 @@ def home(user):
                 'adult': adult,
                 'sql': sql,
             }
-            # emergency contact modal form
-            sql = 'SELECT * FROM aa_rec WHERE aa in {0} AND id="{1}"'.format(
-                ENS_CODES, cid,
-            )
-            rows = xsql(sql, connection, key=settings.INFORMIX_DEBUG)
-            for row in rows:
-                ens = {}
-                for field in ENS_FIELDS:
-                    ens[field] = getattr(row, field)
-                context_data[row.aa] = ens
-            context_data['mobile_carrier'] = MOBILE_CARRIER
-            context_data['relationship'] = RELATIONSHIP
-            context_data['solo'] = True
         else:
             # returns False if not student, which returns True
             facstaff = (
