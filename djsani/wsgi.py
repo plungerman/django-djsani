@@ -12,7 +12,7 @@ from django.core.wsgi import get_wsgi_application
 sys.path.append('/d2/python_venv/3.10/djsani/lib/python3.10/')
 sys.path.append('/d2/python_venv/3.10/djsani/lib/python3.10/site-packages/')
 # django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.production')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
 os.environ.setdefault('PYTHON_EGG_CACHE', '/var/cache/python/.python-eggs')
 os.environ.setdefault('TZ', 'America/Chicago')
 # wsgi

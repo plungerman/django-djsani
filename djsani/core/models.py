@@ -264,6 +264,30 @@ class StudentProfile(models.Model):
         """Default data for display."""
         return self.user.username
 
+    def last_name(self):
+        """Construct the link to the print view using the user's last name."""
+        return self.user.last_name
+    last_name.allow_tags = True
+    last_name.short_description = "Sur Name"
+
+    def first_name(self):
+        """Construct the link to the default view using the user's first name."""
+        return self.user.first_name
+    first_name.allow_tags = True
+    first_name.short_description = "Given Name"
+
+    def username(self):
+        """Construct the link to the default view using the user's username."""
+        return self.user.username
+    username.allow_tags = True
+    username.short_description = "Username"
+
+    def cid(self):
+        """Construct the link to the default view using the user's ID."""
+        return self.user.id
+    cid.allow_tags = True
+    cid.short_description = "CID"
+
 
 @receiver(models.signals.pre_save, sender=StudentMedicalManager)
 def uploaded_phile(sender, instance, **kwargs):
