@@ -19,9 +19,6 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 
 
-EARL = settings.INFORMIX_ODBC
-
-
 @login_required
 def index(request, stype, cid=None):
     """Main view for the insurance form."""
@@ -46,7 +43,7 @@ def index(request, stype, cid=None):
         AND stu_serv_rec.sess = "{3}"
     """.format(STUDENT_VITALS, cid, term['yr'], term['sess'])
 
-    with get_connection(EARL) as connection:
+    with get_connection() as connection:
         student = xsql(sql, connection).fetchone()
 
     if not student:

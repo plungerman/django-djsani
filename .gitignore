@@ -58,8 +58,6 @@ development.py
 demo.py
 staging.py
 production.py
-wsgi.py
-wsgi_demo.py
 migrations
 user.json
 profile.json

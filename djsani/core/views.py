@@ -49,7 +49,6 @@ BASES = {
     'cc_athlete_medical_history': AthleteMedicalHistory,
 }
 BASES.update(WAIVERS)
-EARL = settings.INFORMIX_ODBC
 
 
 @csrf_exempt
@@ -193,8 +192,8 @@ def home(request):
     """.format(
         STUDENT_VITALS, cid, term['yr'], term['sess'], settings.START_DATE,
     )
-    with get_connection(EARL) as connection:
-        student = xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchone()
+    with get_connection() as connection:
+        student = xsql(sql, connection).fetchone()
         if student:
             # save some things to Django session:
             request.session['gender'] = student.sex

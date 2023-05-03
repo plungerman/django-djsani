@@ -18,10 +18,8 @@ from djimix.settings.local import MSSQL_EARL
 from djimix.settings.local import ODBCINI
 from djimix.settings.local import ONCONFIG
 
-
 # Debug
 DEBUG = False
-INFORMIX_DEBUG = ''
 ADMINS = (
     ('', ''),
 )
@@ -44,7 +42,7 @@ FILE_CHARSET = 'utf-8'
 FILE_UPLOAD_PERMISSIONS = 0o644
 ROOT_URLCONF = 'djsani.core.urls'
 SERVER_URL = ''
-API_URL = ''
+DIRECTORY_API_URL = 'https://{0}/{1}'.format(SERVER_URL, 'directory/api/')
 LIVEWHALE_API_URL = ''
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(__file__)
@@ -60,6 +58,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
@@ -118,12 +117,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # Add the automatic auth middleware just after the default
-    # AuthenticationMiddleware that manages sessions and cookies
-    # 'djauth.middleware.AutomaticUserLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # the following should be uncommented unless you are
-    # embedding your apps in iframes
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 # template stuff
@@ -198,13 +192,13 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 #SECURE_SSL_REDIRECT = True
 # app settings
+# REST API AUTHENTICATION TOKEN
+REST_FRAMEWORK_TOKEN = ''
 INSURANCE_RECIPIENTS = []
 INSURANCE_GROUP_NUMBER = ''
 HOUSING_EMAIL_LIST = []
 HARM_EMAIL_LIST = []
 UPLOAD_EMAIL_DICT = {}
-DEFAULT_HASH = ''
-DEFAULT_CID = '666'
 START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)
 DECEMBER = 12
 ADULT_AGE = 18

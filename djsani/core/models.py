@@ -43,7 +43,7 @@ def uploaded_email(sender, instance, manager, philes):
                 if getattr(instance, phile, None):
                     philes[phile] = True
         else:
-            previous = sender.objects.using('informix').get(pk=instance.id)
+            previous = sender.objects.get(pk=instance.id)
             for phile in philes:
                 if getattr(previous, phile, None).name != getattr(instance, phile, None):
                     philes[phile] = True
@@ -79,7 +79,7 @@ class StudentMedicalContentType(models.Model):
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_student_medical_content_type'
+        db_table = 'student_medical_content_type'
 
     def __repr__(self):
         """Default data for display."""
@@ -89,7 +89,7 @@ class StudentMedicalContentType(models.Model):
 class StudentMedicalLogEntry(models.Model):
     """Audit trail logs."""
 
-    college_id = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     action_time = models.DateTimeField(auto_now_add=True)
     content_type = models.ForeignKey(
         StudentMedicalContentType,
@@ -103,7 +103,7 @@ class StudentMedicalLogEntry(models.Model):
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_student_medical_log_entry'
+        db_table = 'student_medical_log_entry'
 
     def __repr__(self):
         """Default data for display."""
@@ -135,11 +135,17 @@ class StudentMedicalManager(models.Model):
     """Manager class for tracking meta data about other data models."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
-    sitrep = models.BooleanField()
-    sitrep_athlete = models.BooleanField()
-    concussion_baseline = models.BooleanField()
+    sitrep = models.BooleanField(null=True)
+    sitrep_athlete = models.BooleanField(null=True)
+    athlete = models.BooleanField(null=True)
+    sports = models.CharField(max_length=16, null=True, blank=True)
+    concussion_baseline = models.BooleanField(null=True)
     medical_consent_agreement = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -147,7 +153,15 @@ class StudentMedicalManager(models.Model):
         null=True,
         blank=True,
     )
-    medical_consent_agreement_status = models.BooleanField()
+    medical_consent_agreement_status = models.BooleanField(null=True)
+    covid19_vaccine_card = models.FileField(
+        upload_to=upload_to_path,
+        validators=FILE_VALIDATORS,
+        max_length=128,
+        null=True,
+        blank=True,
+    )
+    covid19_vaccine_card_status = models.BooleanField(null=True)
     physical_evaluation_1 = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -155,7 +169,7 @@ class StudentMedicalManager(models.Model):
         null=True,
         blank=True,
     )
-    physical_evaluation_status_1 = models.BooleanField()
+    physical_evaluation_status_1 = models.BooleanField(null=True)
     physical_evaluation_2 = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -163,28 +177,28 @@ class StudentMedicalManager(models.Model):
         null=True,
         blank=True,
     )
-    physical_evaluation_status_2 = models.BooleanField()
-    emergency_contact = models.BooleanField()
+    physical_evaluation_status_2 = models.BooleanField(null=True)
+    emergency_contact = models.BooleanField(null=True)
     # forms and waivers
-    cc_student_immunization = models.BooleanField()
-    cc_student_medical_history = models.BooleanField()
-    cc_student_health_insurance = models.BooleanField()
-    cc_student_meni_waiver = models.BooleanField()
-    cc_athlete_medical_history = models.BooleanField()
-    cc_athlete_privacy_waiver = models.BooleanField()
-    cc_athlete_reporting_waiver = models.BooleanField()
-    cc_athlete_risk_waiver = models.BooleanField()
-    cc_athlete_sicklecell_waiver = models.BooleanField()
-    staff_notes = models.TextField()
+    cc_student_immunization = models.BooleanField(null=True)
+    cc_student_medical_history = models.BooleanField(null=True)
+    cc_student_health_insurance = models.BooleanField(null=True)
+    cc_student_meni_waiver = models.BooleanField(null=True)
+    cc_athlete_medical_history = models.BooleanField(null=True)
+    cc_athlete_privacy_waiver = models.BooleanField(null=True)
+    cc_athlete_reporting_waiver = models.BooleanField(null=True)
+    cc_athlete_risk_waiver = models.BooleanField(null=True)
+    cc_athlete_sicklecell_waiver = models.BooleanField(null=True)
+    staff_notes = models.TextField(null=True, blank=True)
 
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_student_medical_manager'
+        db_table = 'student_medical_manager'
 
-    def __repr__(self):
+    def __str__(self):
         """Default data for display."""
-        return str(self.college_id)
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current manager for academic year."""
@@ -194,14 +208,7 @@ class StudentMedicalManager(models.Model):
         """Used for the upload_to_path helper for file uplaods."""
         return 'student-medical-manager'
 
-    def user(self):
-        """Obtain the system user for student."""
-        try:
-            user = User.objects.get(pk=self.college_id)
-        except Exception:
-            user = None
-        return user
-
+    '''
     def sports(self):
         """Obtain the sports for a student or all the sports."""
         # sports end_date is always around mid-may so a manager created
@@ -214,9 +221,48 @@ class StudentMedicalManager(models.Model):
         else:
             #year = date.year + 1
             year = date.year + 1
-        sql = SPORTS_STUDENT(cid=self.college_id, year=year)
+        sql = SPORTS_STUDENT(cid=self.id, year=year)
         with get_connection() as connection:
             return xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchall()
+    '''
+
+
+class StudentProfile(models.Model):
+    """Data class model for student data."""
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    second_name = models.CharField(max_length=255, null=True, blank=True)
+    alt_name = models.CharField(max_length=255, null=True, blank=True)
+    encrypted = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField("Date created", auto_now_add=True)
+    updated_at = models.DateTimeField("Date updated", auto_now=True)
+    expired_at = models.DateTimeField("Date updated", null=True, blank=True)
+    status = models.BooleanField(default=True)
+    birth_date = models.DateField(null=True, blank=True)
+    adult = models.BooleanField(default=True)
+    address1 = models.CharField("Address", max_length=128, null=True, blank=True)
+    address2 = models.CharField("", max_length=128, null=True, blank=True)
+    city = models.CharField(max_length=128, null=True, blank=True)
+    state = models.CharField(max_length=2, null=True, blank=True)
+    postal_code = models.CharField("Zip code", max_length=10, null=True, blank=True)
+    country = models.CharField(max_length=128, null=True, blank=True)
+    phone = models.CharField(max_length=16, null=True, blank=True)
+    gender = models.CharField(max_length=16, null=True, blank=True)
+    class_year = models.CharField("Current Class", max_length=24, null=True, blank=True)
+    residency = models.CharField(max_length=2, null=True, blank=True)
+
+    class Meta:
+        """Attributes about the data model and admin options."""
+
+        db_table = 'student_profile'
+
+    def __str__(self):
+        """Default data for display."""
+        return self.user.username
 
 
 @receiver(models.signals.pre_save, sender=StudentMedicalManager)

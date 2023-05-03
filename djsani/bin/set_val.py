@@ -78,11 +78,6 @@ parser.add_argument(
     dest='test',
 )
 
-if settings.DEBUG:
-    EARL = settings.INFORMIX_ODBC_TRAIN
-else:
-    EARL = settings.INFORMIX_ODBC
-
 logger = logging.getLogger('debug_logfile')
 
 # table names are the key, base model classes are the value

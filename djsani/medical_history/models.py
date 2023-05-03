@@ -14,76 +14,83 @@ class StudentMedicalHistory(models.Model):
     """Student Medical History data model."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     manager = models.ForeignKey(
-        StudentMedicalManager, on_delete=models.CASCADE,
+        StudentMedicalManager,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     # medical history fields
-    covid19_positive = models.CharField(max_length=255)
-    covid19_vacination = models.CharField(max_length=255)
-    allergies_medical = models.CharField(max_length=255)
-    allergies_other = models.CharField(max_length=255)
-    anemia = models.CharField(max_length=255)
-    bronchospasm = models.CharField(max_length=255)
-    birth_defect = models.CharField(max_length=255)
-    blood_disorder = models.CharField(max_length=255)
-    bronchitis = models.CharField(max_length=255)
-    cancer = models.CharField(max_length=255)
-    chicken_pox = models.CharField(max_length=255)
-    diabetes = models.CharField(max_length=255)
-    ent_disorder = models.CharField(max_length=255)
-    headaches = models.CharField(max_length=255)
-    head_injury = models.CharField(max_length=255)
-    heart_condition = models.CharField(max_length=255)
-    hepatitis = models.CharField(max_length=255)
-    hernia = models.CharField(max_length=255)
-    hyper_tension = models.CharField(max_length=255)
-    hiv_aids = models.CharField(max_length=255)
-    hospitalizations = models.CharField(max_length=255)
-    ibd = models.CharField(max_length=255)
-    kidney_urinary = models.CharField(max_length=255)
-    medications = models.CharField(max_length=255)
-    meningitis = models.CharField(max_length=255)
-    mononucleosis = models.CharField(max_length=255)
-    mrsa = models.CharField(max_length=255)
-    organ_loss = models.CharField(max_length=255)
-    pneumonia = models.CharField(max_length=255)
-    rheumatic_fever = models.CharField(max_length=255)
-    seizure_disorder = models.CharField(max_length=255)
-    stroke = models.CharField(max_length=255)
-    thyroid_disorder = models.CharField(max_length=255)
-    tuberculosis = models.CharField(max_length=255)
-    other_condition = models.CharField(max_length=255)
+    covid19_positive = models.TextField(null=True)
+    covid19_vacination = models.TextField(null=True)
+    allergies_medical = models.TextField(null=True)
+    allergies_other = models.TextField(null=True)
+    anemia = models.TextField(null=True)
+    bronchospasm = models.TextField(null=True)
+    birth_defect = models.TextField(null=True)
+    blood_disorder = models.TextField(null=True)
+    bronchitis = models.TextField(null=True)
+    cancer = models.TextField(null=True)
+    chicken_pox = models.TextField(null=True)
+    diabetes = models.TextField(null=True)
+    ent_disorder = models.TextField(null=True)
+    headaches = models.TextField(null=True)
+    head_injury = models.TextField(null=True)
+    heart_condition = models.TextField(null=True)
+    hepatitis = models.TextField(null=True)
+    hernia = models.TextField(null=True)
+    hyper_tension = models.TextField(null=True)
+    hiv_aids = models.TextField(null=True)
+    hospitalizations = models.TextField(null=True)
+    ibd = models.TextField(null=True)
+    kidney_urinary = models.TextField(null=True)
+    medications = models.TextField(null=True)
+    meningitis = models.TextField(null=True)
+    mononucleosis = models.TextField(null=True)
+    mrsa = models.TextField(null=True)
+    organ_loss = models.TextField(null=True)
+    pneumonia = models.TextField(null=True)
+    rheumatic_fever = models.TextField(null=True)
+    seizure_disorder = models.TextField(null=True)
+    stroke = models.TextField(null=True)
+    thyroid_disorder = models.TextField(null=True)
+    tuberculosis = models.TextField(null=True)
+    other_condition = models.TextField(null=True)
     # student mental health
-    # trouble_sleeping = models.CharField(max_length=255)
-    # more_energy = models.CharField(max_length=255)
-    # recurring_thoughts = models.CharField(max_length=255)
-    # anxious_nervious = models.CharField(max_length=255)
-    # depressed = models.CharField(max_length=255)
-    # lack_confidence = models.CharField(max_length=255)
-    # overwhelmed = models.CharField(max_length=255)
-    # lack_emotional_control = models.CharField(max_length=255)
-    # self_others_harm = models.CharField(max_length=255)
-    # lost_interest = models.CharField(max_length=255)
-    # isolated_alone = models.CharField(max_length=255)
-    # counseling = models.CharField(max_length=255)
-    depression = models.CharField(max_length=255)
-    anxiety = models.CharField(max_length=255)
-    eating_disorder = models.CharField(max_length=255)
-    adhd_add = models.CharField(max_length=255)
-    substance_abuse = models.CharField(max_length=255)
-    # self_harm = models.CharField(max_length=255)
-    other_mental_health = models.CharField(max_length=255)
+    trouble_sleeping = models.TextField(null=True)
+    more_energy = models.TextField(null=True)
+    recurring_thoughts = models.TextField(null=True)
+    anxious_nervious = models.TextField(null=True)
+    depressed = models.TextField(null=True)
+    lack_confidence = models.TextField(null=True)
+    overwhelmed = models.TextField(null=True)
+    lack_emotional_control = models.TextField(null=True)
+    self_others_harm = models.TextField(null=True)
+    lost_interest = models.TextField(null=True)
+    isolated_alone = models.TextField(null=True)
+    counseling = models.TextField(null=True)
+    self_harm = models.TextField(null=True)
+    # commented out the above after migration
+    depression = models.TextField(null=True)
+    anxiety = models.TextField(null=True)
+    eating_disorder = models.TextField(null=True)
+    adhd_add = models.TextField(null=True)
+    substance_abuse = models.TextField(null=True)
+    other_mental_health = models.TextField(null=True)
 
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_student_medical_history'
+        db_table = 'student_medical_history'
 
-    def __repr__(self):
+    def __str__(self):
         """Default data for display."""
-        return str(self.college_id)
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current medical history academic year."""
@@ -94,101 +101,107 @@ class AthleteMedicalHistory(models.Model):
     """Athlete Medical History data model."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     manager = models.ForeignKey(
-        StudentMedicalManager, on_delete=models.CASCADE,
+        StudentMedicalManager,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     # athlete medical history
-    exertional_syncope = models.CharField(max_length=255)
-    heat_illness = models.CharField(max_length=255)
-    intense_chest_pain = models.CharField(max_length=255)
+    exertional_syncope = models.TextField(null=True)
+    heat_illness = models.TextField(null=True)
+    intense_chest_pain = models.TextField(null=True)
     # Heart Health Questions about You and Your Family
-    passed_out = models.CharField(max_length=255)
-    chest_pain = models.CharField(max_length=255)
-    skip_beats = models.CharField(max_length=255)
-    high_cholesterol = models.CharField(max_length=255)
-    kawasaki_disease = models.CharField(max_length=255)
-    heart_infection = models.CharField(max_length=255)
-    heart_test = models.CharField(max_length=255)
-    lightheaded = models.CharField(max_length=255)
-    unexplained_seizure = models.CharField(max_length=255)
-    tired_quickly = models.CharField(max_length=255)
-    sudden_death = models.CharField(max_length=255)
-    sudden_cardiac_death = models.CharField(max_length=255)
-    family_heart_problems = models.CharField(max_length=255)
-    fainting_seizures = models.CharField(max_length=255)
+    passed_out = models.TextField(null=True)
+    chest_pain = models.TextField(null=True)
+    skip_beats = models.TextField(null=True)
+    high_cholesterol = models.TextField(null=True)
+    kawasaki_disease = models.TextField(null=True)
+    heart_infection = models.TextField(null=True)
+    heart_test = models.TextField(null=True)
+    lightheaded = models.TextField(null=True)
+    unexplained_seizure = models.TextField(null=True)
+    tired_quickly = models.TextField(null=True)
+    sudden_death = models.TextField(null=True)
+    sudden_cardiac_death = models.TextField(null=True)
+    family_heart_problems = models.TextField(null=True)
+    fainting_seizures = models.TextField(null=True)
     # Head and Neck Injury
-    concussion = models.CharField(max_length=255)
-    suspected_concussion = models.CharField(max_length=255)
-    head_injuries = models.CharField(max_length=255)
-    season_ending = models.CharField(max_length=255)
-    cervical_injury = models.CharField(max_length=255)
-    stinger_injury = models.CharField(max_length=255)
-    neurologist_treatment = models.CharField(max_length=255)
-    spine_injury = models.CharField(max_length=255)
-    history_headaches = models.CharField(max_length=255)
-    history_migraines = models.CharField(max_length=255)
-    abdomen_injury = models.CharField(max_length=255)
-    rib_injury = models.CharField(max_length=255)
-    lumbar_injury = models.CharField(max_length=255)
+    concussion = models.TextField(null=True)
+    suspected_concussion = models.TextField(null=True)
+    head_injuries = models.TextField(null=True)
+    season_ending = models.TextField(null=True)
+    cervical_injury = models.TextField(null=True)
+    stinger_injury = models.TextField(null=True)
+    neurologist_treatment = models.TextField(null=True)
+    spine_injury = models.TextField(null=True)
+    history_headaches = models.TextField(null=True)
+    history_migraines = models.TextField(null=True)
+    abdomen_injury = models.TextField(null=True)
+    rib_injury = models.TextField(null=True)
+    lumbar_injury = models.TextField(null=True)
     # Upper Extremity Injury
-    shoulder_fracture = models.CharField(max_length=255)
-    shoulder_dislocation = models.CharField(max_length=255)
-    shoulder_muscle = models.CharField(max_length=255)
-    labrum_injury = models.CharField(max_length=255)
-    forearm_injury = models.CharField(max_length=255)
-    elbow_injury = models.CharField(max_length=255)
-    wrist_injury = models.CharField(max_length=255)
-    finger_injury = models.CharField(max_length=255)
+    shoulder_fracture = models.TextField(null=True)
+    shoulder_dislocation = models.TextField(null=True)
+    shoulder_muscle = models.TextField(null=True)
+    labrum_injury = models.TextField(null=True)
+    forearm_injury = models.TextField(null=True)
+    elbow_injury = models.TextField(null=True)
+    wrist_injury = models.TextField(null=True)
+    finger_injury = models.TextField(null=True)
     # Lower Extremity Injury
-    hip_pelvis = models.CharField(max_length=255)
-    hamstring = models.CharField(max_length=255)
-    quadriceps = models.CharField(max_length=255)
-    thigh_other = models.CharField(max_length=255)
-    knee_ligaments = models.CharField(max_length=255)
-    meniscus = models.CharField(max_length=255)
-    patella = models.CharField(max_length=255)
-    knee_other = models.CharField(max_length=255)
-    shin_splints = models.CharField(max_length=255)
-    stress_fractures = models.CharField(max_length=255)
-    compartment_syndrome = models.CharField(max_length=255)
-    lower_leg_other = models.CharField(max_length=255)
-    ankle_fracture = models.CharField(max_length=255)
-    ankle_sprain = models.CharField(max_length=255)
-    foot = models.CharField(max_length=255)
-    toe = models.CharField(max_length=255)
+    hip_pelvis = models.TextField(null=True)
+    hamstring = models.TextField(null=True)
+    quadriceps = models.TextField(null=True)
+    thigh_other = models.TextField(null=True)
+    knee_ligaments = models.TextField(null=True)
+    meniscus = models.TextField(null=True)
+    patella = models.TextField(null=True)
+    knee_other = models.TextField(null=True)
+    shin_splints = models.TextField(null=True)
+    stress_fractures = models.TextField(null=True)
+    compartment_syndrome = models.TextField(null=True)
+    lower_leg_other = models.TextField(null=True)
+    ankle_fracture = models.TextField(null=True)
+    ankle_sprain = models.TextField(null=True)
+    foot = models.TextField(null=True)
+    toe = models.TextField(null=True)
     # Ears, Eyes, Dental
-    glasses = models.CharField(max_length=255)
-    contact_lenses = models.CharField(max_length=255)
-    hearing_aids = models.CharField(max_length=255)
-    dental_appliances = models.CharField(max_length=255)
-    previous_year_change = models.CharField(max_length=255)
-    physician_prohibition = models.CharField(max_length=255)
+    glasses = models.TextField(null=True)
+    contact_lenses = models.TextField(null=True)
+    hearing_aids = models.TextField(null=True)
+    dental_appliances = models.TextField(null=True)
+    previous_year_change = models.TextField(null=True)
+    physician_prohibition = models.TextField(null=True)
     # student mental health
-    trouble_sleeping = models.CharField(max_length=255)
-    more_energy = models.CharField(max_length=255)
-    recurring_thoughts = models.CharField(max_length=255)
-    anxious_nervious = models.CharField(max_length=255)
-    depressed = models.CharField(max_length=255)
-    lack_confidence = models.CharField(max_length=255)
-    despair = models.CharField(max_length=255)
-    lack_emotional_control = models.CharField(max_length=255)
-    self_others_harm = models.CharField(max_length=255)
+    trouble_sleeping = models.TextField(null=True)
+    more_energy = models.TextField(null=True)
+    recurring_thoughts = models.TextField(null=True)
+    anxious_nervious = models.TextField(null=True)
+    depressed = models.TextField(null=True)
+    lack_confidence = models.TextField(null=True)
+    despair = models.TextField(null=True)
+    lack_emotional_control = models.TextField(null=True)
+    self_others_harm = models.TextField(null=True)
     # misc
-    other_information = models.CharField(max_length=255)
-    supplements = models.CharField(max_length=255)
+    other_information = models.TextField(null=True)
+    supplements = models.TextField(null=True)
     # Female Athletes Only
-    menstrual_cycle = models.CharField(max_length=255)
+    menstrual_cycle = models.TextField(null=True)
 
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_athlete_medical_history'
+        db_table = 'athlete_medical_history'
 
-    def __repr__(self):
+    def __str__(self):
         """Default data for display."""
-        return str(self.college_id)
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current medical history academic year."""
@@ -199,7 +212,7 @@ class AthleteMedicalHistory(models.Model):
 def harm_email(sender, instance, **kwargs):
     """send an email if student indicates an inclination to harm self/others."""
     if instance.self_others_harm and instance.self_others_harm != 'No':
-        user = User.objects.get(pk=instance.college_id)
+        user = instance.user
         to_list = settings.HARM_EMAIL_LIST
         if settings.DEBUG:
             to_list = [settings.SERVER_EMAIL]

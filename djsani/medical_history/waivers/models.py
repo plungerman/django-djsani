@@ -16,14 +16,26 @@ class Sicklecell(models.Model):
     """Sicklecell waiver."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     manager = models.ForeignKey(
-        StudentMedicalManager, on_delete=models.CASCADE,
+        StudentMedicalManager,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    waive = models.BooleanField()
-    proof = models.BooleanField()
+    waive = models.BooleanField(null=True)
+    proof = models.BooleanField(null=True)
+    # remove after migration
+    results = models.CharField(
+        max_length=128,
+        null=True,
+        blank=True,
+    )
     results_file = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -31,24 +43,16 @@ class Sicklecell(models.Model):
         null=True,
         blank=True,
     )
-    results_file_status = models.BooleanField()
+    results_file_status = models.BooleanField(null=True)
 
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_athlete_sicklecell_waiver'
+        db_table = 'athlete_sicklecell_waiver'
 
-    def __repr__(self):
+    def __str__(self):
         """Default value for this object."""
-        return str(self.college_id)
-
-    def user(self):
-        """Obtain the system user for student."""
-        try:
-            user = User.objects.get(pk=self.college_id)
-        except Exception:
-            user = None
-        return user
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -63,9 +67,15 @@ class Meni(models.Model):
     """Meningitis and Hepatitis B waiver."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     manager = models.ForeignKey(
-        StudentMedicalManager, on_delete=models.CASCADE,
+        StudentMedicalManager,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
@@ -74,11 +84,11 @@ class Meni(models.Model):
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_student_meni_waiver'
+        db_table = 'student_meni_waiver'
 
-    def __repr__(self):
+    def __str__(self):
         """Default value for this object."""
-        return str(self.college_id)
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -89,9 +99,15 @@ class Risk(models.Model):
     """Assumption of Risk Waiver."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     manager = models.ForeignKey(
-        StudentMedicalManager, on_delete=models.CASCADE,
+        StudentMedicalManager,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
@@ -100,11 +116,11 @@ class Risk(models.Model):
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_athlete_risk_waiver'
+        db_table = 'athlete_risk_waiver'
 
-    def __repr__(self):
+    def __str__(self):
         """Default data for display."""
-        return str(self.college_id)
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -115,9 +131,15 @@ class Reporting(models.Model):
     """CCIW Injury and Illness Reporting Acknowledgement."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     manager = models.ForeignKey(
-        StudentMedicalManager, on_delete=models.CASCADE,
+        StudentMedicalManager,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
@@ -126,11 +148,11 @@ class Reporting(models.Model):
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_athlete_reporting_waiver'
+        db_table = 'athlete_reporting_waiver'
 
-    def __repr__(self):
+    def __str__(self):
         """Default data for display."""
-        return str(self.college_id)
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -141,24 +163,34 @@ class Privacy(models.Model):
     """Privacy waiver."""
 
     # core
-    college_id = models.IntegerField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        db_constraint=False,
+    )
     manager = models.ForeignKey(
-        StudentMedicalManager, on_delete=models.CASCADE,
+        StudentMedicalManager,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
-    news_media = models.BooleanField()  # not required
-    parents_guardians = models.BooleanField()  # not required
+    news_media = models.BooleanField(null=True)  # not required
+    # remove after migration
+    medical_insurance = models.BooleanField(null=True)  # not required
+    # remove after migration
+    ncaa_tool = models.BooleanField(null=True)  # not required
+    parents_guardians = models.BooleanField(null=True)  # not required
     disclose_records = models.BooleanField()
 
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'cc_athlete_privacy_waiver'
+        db_table = 'athlete_privacy_waiver'
 
-    def __repr__(self):
+    def __str__(self):
         """Default data for display."""
-        return str(self.college_id)
+        return self.user.username
 
     def current(self, day):
         """Determine if this is the current waiver for academic year."""
@@ -169,7 +201,7 @@ class Privacy(models.Model):
 def uploaded_phile(sender, instance, **kwargs):
     """send an email if a student uploads a file."""
     philes = {'results_file': True}
-    manager = StudentMedicalManager.objects.using('informix').filter(
-        college_id=instance.college_id,
+    manager = StudentMedicalManager.objects.filter(
+        user=instance.user,
     ).filter(created_at__gte=settings.START_DATE).first()
     uploaded_email(sender, instance, manager, philes)

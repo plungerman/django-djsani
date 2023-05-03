@@ -19,12 +19,6 @@ from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 
 
-if settings.DEBUG:
-    EARL = settings.INFORMIX_ODBC_TRAIN
-else:
-    EARL = settings.INFORMIX_ODBC
-
-
 def home(user):
     """Home page logic for unit test."""
     # for when faculty/staff sign in here or not student found
@@ -49,7 +43,7 @@ def home(user):
     """.format(
         STUDENT_VITALS, cid, term['yr'], term['sess'], settings.START_DATE,
     )
-    with get_connection(EARL) as connection:
+    with get_connection() as connection:
         student = xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchone()
         if student:
             # sports needs a python list

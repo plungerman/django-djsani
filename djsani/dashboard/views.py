@@ -33,7 +33,6 @@ from djtools.utils.users import faculty_staff
 from djtools.utils.users import in_group
 
 
-EARL = settings.INFORMIX_ODBC
 STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
 
@@ -174,7 +173,7 @@ def get_students(request):
         )
     # finally
     sql += ' ORDER BY lastname'
-    with get_connection(EARL) as connection:
+    with get_connection() as connection:
         # fetch all the sports for search
         phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
         with open(phile) as incantation:
@@ -272,7 +271,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                     {0} WHERE id_rec.id = "{1}"
                     ORDER BY cc_student_medical_manager.created_at DESC
                 """.format(STUDENT_VITALS, cid)
-            with get_connection(EARL) as connection:
+            with get_connection() as connection:
                 student = xsql(
                     sql, connection, key=settings.INFORMIX_DEBUG,
                 ).fetchone()
@@ -285,7 +284,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                     manager = get_manager(cid)
                     # execute student vitals sql again in case we just
                     # created a new manager
-                    with get_connection(EARL) as new_connection:
+                    with get_connection() as new_connection:
                         student = xsql(
                             sql, new_connection, key=settings.INFORMIX_DEBUG,
                         ).fetchone()
@@ -375,7 +374,7 @@ def advanced_search(request):
                 ORDER BY lastname
             """.format(STUDENT_VITALS, query)
     if sql:
-        with get_connection(EARL) as connection:
+        with get_connection() as connection:
             students = xsql(
                 sql, connection, key=settings.INFORMIX_DEBUG,
             ).fetchall()

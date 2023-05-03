@@ -29,7 +29,6 @@ class CoreUtilsTestCase(TestCase):
     def setUp(self):
         """Initialise our test with some data."""
         self.user = User.objects.get(pk=settings.TEST_STUDENT_ID)
-        self.earl = settings.INFORMIX_ODBC_TRAIN
         self.factory = RequestFactory()
 
     def test_get_term(self):
