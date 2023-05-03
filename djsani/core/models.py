@@ -198,7 +198,8 @@ class StudentMedicalManager(models.Model):
 
     def __str__(self):
         """Default data for display."""
-        return self.user.username
+        user = self.user
+        return user.username
 
     def current(self, day):
         """Determine if this is the current manager for academic year."""
