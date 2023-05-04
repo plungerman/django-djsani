@@ -7,14 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from djimix.core.utils import get_connection
-from djimix.core.utils import xsql
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_manager
 from djsani.insurance.forms import AthleteForm
 from djsani.insurance.forms import StudentForm
 from djsani.insurance.models import StudentHealthInsurance
-from djtools.utils.date import get_term
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 
@@ -25,6 +22,7 @@ def index(request, stype, cid=None):
     medical_staff = False
     user = request.user
     staff = in_group(user, settings.STAFF_GROUP)
+    student = in_group(user, settings.STUDENT_GROUP)
     if cid:
         if staff:
             medical_staff = True
@@ -32,19 +30,6 @@ def index(request, stype, cid=None):
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
         cid = user.id
-
-    # get academic term
-    term = get_term()
-    # get student
-    sql = """ {0}
-        WHERE
-        id_rec.id = "{1}"
-        AND stu_serv_rec.yr = "{2}"
-        AND stu_serv_rec.sess = "{3}"
-    """.format(STUDENT_VITALS, cid, term['yr'], term['sess'])
-
-    with get_connection() as connection:
-        student = xsql(sql, connection).fetchone()
 
     if not student:
         if medical_staff:
@@ -55,9 +40,7 @@ def index(request, stype, cid=None):
     # obtain our student medical manager
     manager = get_manager(cid)
     # obtain our health insturance object
-    instance = StudentHealthInsurance.objects.using('informix').filter(
-        college_id=cid,
-    ).filter(
+    instance = StudentHealthInsurance.objects.filter(user__id=cid).filter(
         created_at__gte=settings.START_DATE,
     ).first()
 
@@ -78,15 +61,15 @@ def index(request, stype, cid=None):
         )
         if form.is_valid():
             insurance = form.save(commit=False)
-            insurance.college_id = cid
-            insurance.manager_id = manager.id
-            insurance.save(using='informix')
+            insurance.user = user
+            insurance.manager = manager
+            insurance.save()
             # update the manager
             manager.cc_student_health_insurance = True
-            manager.save(using='informix')
+            manager.save()
             # opt out of insurance
             if insurance.opt_out:
-                if manager.sports():
+                if manager.athlete:
                     if not medical_staff:
                         # alert email to staff
                         if settings.DEBUG:
@@ -120,7 +103,7 @@ def index(request, stype, cid=None):
         {
             'form': form,
             'oo': oo,
-            'student': student,
+            'student': user,
             'medical_staff': medical_staff,
             'manager': manager,
             'group_number': settings.INSURANCE_GROUP_NUMBER,

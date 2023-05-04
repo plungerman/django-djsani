@@ -44,7 +44,7 @@ $(document).ready(function() {
         emptytext: "Click to edit",
         params: function (params) {
             params.table = $(this).attr("data-table");
-            params.college_id = {{cid|default:"0"}};
+            params.college_id = {{user.id|default:"0"}};
             params.switch = params.value;
             params.field = params.name;
             return params

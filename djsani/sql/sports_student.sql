@@ -13,8 +13,8 @@ ON
 AND
     IT.sanc_sport = 'Y'
 WHERE
-    TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
-AND
-    TODAY < NVL(INR.end_date, TODAY)
-AND
+    --TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
+--AND
+    --TODAY < NVL(INR.end_date, TODAY)
+--AND
     INR.id =

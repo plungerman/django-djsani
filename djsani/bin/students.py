@@ -16,9 +16,25 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from djauth.managers import LDAPManager
+from djimix.core.utils import get_connection
+from djimix.core.utils import xsql
+from djsani.core.models import Sport
+from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentProfile
 from djtools.utils.date import calculate_age
 from djtools.utils.workday import get_students
+
+
+PHILE = os.path.join(settings.BASE_DIR, 'sql/sports_student.sql')
+
+
+def get_sports(cid):
+    """Private function for executing the SQL incantation."""
+    with open(PHILE) as incantation:
+        sql = '{0}{1}'.format(incantation.read(), cid)
+    with get_connection() as connection:
+        row = xsql(sql, connection).fetchall()
+        return row
 
 
 def main():
@@ -75,6 +91,18 @@ def main():
                 user=user,
                 defaults=defaults,
             )
+            # sports
+            sports = get_sports(stu['id'])
+            for sporx in get_sports(stu['id']):
+                if sporx[4]:
+                    year = sporx[4].year - 1
+                    sport = Sport.objects.get(code=sporx[0])
+                    manager = StudentMedicalManager.objects.filter(
+                        user__id=stu['id'],
+                    ).filter(created_at__year=year).first()
+                    if manager:
+                        manager.sports.add(sport)
+
         else:
             print("Username '{0}' does not exist".format(username))
 

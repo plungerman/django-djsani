@@ -9,7 +9,6 @@ from django.db import models
 from django.dispatch import receiver
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
-from djsani.core.sql import SPORTS_STUDENT
 from djtools.fields.helpers import upload_to_path
 from djtools.utils.mail import send_mail
 
@@ -131,6 +130,23 @@ class StudentMedicalLogEntry(models.Model):
         return self.action_flag == DELETION
 
 
+class Sport(models.Model):
+    """Data class model for sports."""
+
+    name = models.CharField(max_length=128)
+    code = models.CharField(max_length=4)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        """Attributes about the data model and admin options."""
+
+        db_table = 'athlete_sports'
+
+    def __str__(self):
+        """Default data for display."""
+        return '{0} [{1}]'.format(self.name, self.code)
+
+
 class StudentMedicalManager(models.Model):
     """Manager class for tracking meta data about other data models."""
 
@@ -144,7 +160,7 @@ class StudentMedicalManager(models.Model):
     sitrep = models.BooleanField(null=True)
     sitrep_athlete = models.BooleanField(null=True)
     athlete = models.BooleanField(null=True)
-    sports = models.CharField(max_length=16, null=True, blank=True)
+    sports = models.ManyToManyField(Sport)
     concussion_baseline = models.BooleanField(null=True)
     medical_consent_agreement = models.FileField(
         upload_to=upload_to_path,
@@ -209,24 +225,6 @@ class StudentMedicalManager(models.Model):
         """Used for the upload_to_path helper for file uplaods."""
         return 'student-medical-manager'
 
-    '''
-    def sports(self):
-        """Obtain the sports for a student or all the sports."""
-        # sports end_date is always around mid-may so a manager created
-        # in august would correspond to an end_date in the following year,
-        # while a manager created in january or february would correspond
-        # to an end_date in the current year.
-        date = self.created_at
-        if date.month < settings.SPORTS_MONTH:
-            year = date.year
-        else:
-            #year = date.year + 1
-            year = date.year + 1
-        sql = SPORTS_STUDENT(cid=self.id, year=year)
-        with get_connection() as connection:
-            return xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchall()
-    '''
-
 
 class StudentProfile(models.Model):
     """Data class model for student data."""
@@ -235,6 +233,7 @@ class StudentProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         primary_key=True,
+        related_name='student',
     )
     second_name = models.CharField(max_length=255, null=True, blank=True)
     alt_name = models.CharField(max_length=255, null=True, blank=True)

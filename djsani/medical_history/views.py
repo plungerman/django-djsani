@@ -21,9 +21,8 @@ def index(request, stype, display=None):
     """View for student and athlete medical history."""
     # student id
     user = request.user
-    cid = user.id
     # student gender
-    gender = request.session.get('gender')
+    gender = request.user.student.gender
     # model name
     mname = '{0}MedicalHistory'.format(stype.capitalize())
     # form name
@@ -39,14 +38,14 @@ def index(request, stype, display=None):
     update = False
     table = 'cc_{0}_medical_history'.format(stype)
     # retrieve student manager record
-    manager = get_manager(cid)
+    manager = get_manager(user.id)
     # retrieve our model and check to see if they already
     # submitted this form or we have data from previous years
     model = str_to_class(
         'djsani.medical_history.models', mname,
     )
     if model:
-        history = model.objects.using('informix').filter(college_id=cid).filter(
+        history = model.objects.filter(user=user).filter(
             created_at__gte=settings.START_DATE,
         ).first()
     else:
@@ -84,15 +83,15 @@ def index(request, stype, display=None):
                 for n2 in list(cd):
                     if n2[-2:] == '_2':
                         cd.pop(n2)
-                cd['college_id'] = cid
-                cd['manager_id'] = manager.id
+                cd['user'] = user
+                cd['manager'] = manager
                 # create new object
                 history = model(**cd)
             # save out medical history object whether update or create
-            history.save(using='informix')
+            history.save()
             # update the manager
             setattr(manager, table, True)
-            manager.save(using='informix')
+            manager.save()
             return HttpResponseRedirect(reverse_lazy('medical_history_success'))
         elif not history:
             # for use at template level with dictionary filter
@@ -109,7 +108,6 @@ def index(request, stype, display=None):
         request,
         template,
         {
-            'cid': cid,
             'form': form,
             'data': cd,
             'stype': stype,
@@ -133,17 +131,15 @@ def file_upload(request, name):
         'djsani.medical_history.forms',
         '{0}Form'.format(form_name),
     )
-
-    # student id
-    cid = request.user.id
+    user = request.user
     # retrieve student manager record
-    manager = get_manager(cid)
+    manager = get_manager(user.id)
     if request.method == 'POST':
         form = fclass(request.POST, request.FILES)
         if form.is_valid():
             # folder in which we will store the file
             folder = '{0}/{1}/{2}'.format(
-                name.replace('-', '_'), cid, manager.created_at.strftime(
+                name.replace('-', '_'), user.id, manager.created_at.strftime(
                     '%Y%m%d%H%M%S%f',
                 ),
             )
@@ -156,7 +152,7 @@ def file_upload(request, name):
                         request.FILES[field], sendero,
                     )
                     setattr(manager, field, '{0}/{1}'.format(folder, phile))
-                    manager.save(using='informix')
+                    manager.save()
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
         form = fclass

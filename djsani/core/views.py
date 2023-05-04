@@ -9,13 +9,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from djauth.decorators import portal_auth_required
-from djimix.core.utils import get_connection
-from djimix.core.utils import xsql
 from djsani.core.models import CHANGE
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import StudentMedicalManager
-from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_content_type
 from djsani.core.utils import get_manager
 from djsani.insurance.models import StudentHealthInsurance
@@ -27,7 +23,6 @@ from djsani.medical_history.waivers.models import Reporting
 from djsani.medical_history.waivers.models import Risk
 from djsani.medical_history.waivers.models import Sicklecell
 from djtools.utils.date import calculate_age
-from djtools.utils.date import get_term
 from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from PIL import Image
@@ -108,13 +103,13 @@ def set_val(request):
             dic['college_id'] = cid
             dic['manager_id'] = manager.id
             nobj = WAIVERS[table](**dic)
-            nobj.save(using='informix')
+            nobj.save()
             # update the manager
             setattr(manager, table, value)
-            manager.save(using='informix')
+            manager.save()
         else:
             model = BASES[table]
-            nobj = model.objects.using('informix').filter(pk=pk).first()
+            nobj = model.objects.filter(pk=pk).first()
             if nobj:
                 # green check mark for athletes
                 if name == 'sitrep_athlete' and str(value) == '1':
@@ -127,7 +122,7 @@ def set_val(request):
                 # update existing object
                 for key, dic_val in dic.items():
                     setattr(nobj, key, dic_val)
-                nobj.save(using='informix')
+                nobj.save()
             else:
                 return HttpResponse(
                     "No object found associated with ID: {0}".format(pk),
@@ -136,7 +131,7 @@ def set_val(request):
             # if waiver, update manager table
             if WAIVERS.get(table):
                 setattr(manager, table, value)
-                manager.save(using='informix')
+                manager.save()
 
         # update the log entry for staff modifications
         if staff:
@@ -151,21 +146,18 @@ def set_val(request):
                 action_flag=CHANGE,
                 action_message=message,
             )
-            log.save(using='informix')
+            log.save()
 
         return HttpResponse(name, content_type='text/plain; charset=utf-8')
 
 
-@portal_auth_required(
-    session_var='DJSANI_AUTH', redirect_url=reverse_lazy('access_denied'),
-)
+@login_required
 def home(request):
     """Default home view when user signs in."""
     if settings.ACADEMIC_YEAR_LIMBO:
         return render(
             request, 'closed.html',
         )
-
     # for when faculty/staff sign in here or not student found
     context_data = {}
     # set our user
@@ -173,70 +165,16 @@ def home(request):
     # staff or coach?
     staff = in_group(user, settings.STAFF_GROUP)
     coach = in_group(user, settings.COACH_GROUP)
-    # fetch college id from user object
-    cid = user.id
-    # retrieve student manager (or create a new one if none exists)
-    manager = get_manager(cid)
-    # intialise some things
-    student = None
-    adult = False
-    # get academic term
-    term = get_term()
-    # get student
-    sql = """ {0}
-        WHERE
-        id_rec.id = "{1}"
-        AND stu_serv_rec.yr = "{2}"
-        AND UPPER(stu_serv_rec.sess) = "{3}"
-        AND cc_student_medical_manager.created_at > "{4}"
-    """.format(
-        STUDENT_VITALS, cid, term['yr'], term['sess'], settings.START_DATE,
-    )
-    with get_connection() as connection:
-        student = xsql(sql, connection).fetchone()
-        if student:
-            # save some things to Django session:
-            request.session['gender'] = student.sex
-            # adult or minor? if we do not have a DOB, default to minor
-            if student.birth_date:
-                age = calculate_age(student.birth_date)
-                if age >= settings.ADULT_AGE:
-                    adult = True
-            # quick switch for minor age students
-            if request.GET.get('minor'):
-                adult = False
-            # context dict
-            context_data = {
-                'switch_earl': reverse_lazy('set_val'),
-                'student': student,
-                'manager': manager,
-                'adult': adult,
-            }
-        else:
-            # returns False if not student, which returns True
-            antistaff = (
-                not in_group(user, 'carthageStaffStatus') and
-                not in_group(user, 'carthageFacultyStatus')
-            )
-            if antistaff:
-                # could not find student by college_id
-                context_data = {
-                    'student': student,
-                    'solo': True,
-                    'adult': adult,
-                }
-                # notify managers
-                send_mail(
-                    request,
-                    settings.HOUSING_EMAIL_LIST,
-                    '[Lost] Student: {0} {1} ({2})'.format(
-                        user.first_name, user.last_name, cid,
-                    ),
-                    user.email,
-                    'alert_email.html',
-                    request,
-                    [settings.MANAGERS[0][1]],
-                )
+    student = in_group(user, settings.STUDENT_GROUP)
+    if student:
+        # retrieve student manager (or create a new one if none exists)
+        manager = get_manager(user.id)
+        context_data = {
+            'switch_earl': reverse_lazy('set_val'),
+            'student': student,
+            'manager': manager,
+        }
+    else:
         context_data['staff'] = staff
         context_data['coach'] = coach
 
@@ -244,7 +182,6 @@ def home(request):
 
 
 @csrf_exempt
-@login_required
 def rotate_photo(request):
     """AJAX Post request for rotating an image 90 degrees clockwise."""
     msg = "Error"

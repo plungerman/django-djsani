@@ -15,7 +15,9 @@ django.setup()
 from django.conf import settings
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
-
+from djsani.core.models import Sport
+from djsani.core.models import StudentMedicalManager
+from djsani.core.models import StudentProfile
 
 logger = logging.getLogger('debug_logfile')
 
@@ -45,7 +47,7 @@ parser.add_argument(
 PHILE = os.path.join(settings.BASE_DIR, 'sql/sports_student.sql')
 
 
-def _xsql(cid):
+def get_sports(cid):
     """Private function for executing the SQL incantation."""
     with open(PHILE) as incantation:
         sql = '{0}{1}'.format(incantation.read(), cid)
@@ -55,13 +57,23 @@ def _xsql(cid):
     else:
         logger.debug("sql = {}".format(sql))
     with get_connection() as connection:
-        row = xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchall()
+        row = xsql(sql, connection).fetchall()
         return row
 
 
 def main():
     """Obtain the sports in which a student participates."""
-    print(_xsql(cid))
+    for sporx in get_sports(cid):
+        year = sporx[4].year - 1
+        print(year)
+        print(sporx)
+        sport = Sport.objects.get(code=sporx[0])
+        print(sport)
+        manager = StudentMedicalManager.objects.filter(
+            user__id=cid,
+        ).filter(created_at__year=year).first()
+        if manager:
+            print(manager.id, manager.created_at)
 
 
 if __name__ == '__main__':

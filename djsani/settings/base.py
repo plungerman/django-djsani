@@ -206,6 +206,7 @@ SPORTS_MONTH = 5
 ACADEMIC_YEAR_LIMBO = False
 STAFF_GROUP = 'MedicalStaff'
 COACH_GROUP = 'AthleticsCoach'
+STUDENT_GROUP = 'carthageStudentStatus'
 TEST_STUDENT_ID = None
 TEST_STAFF_ID = None
 ROTATE_PHOTO = -90

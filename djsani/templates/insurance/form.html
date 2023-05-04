@@ -80,8 +80,8 @@ $(function() {
         }
     });
     $('#athletic-policy-data').click(function() {
-        $('#id_tertiary_policy_holder').val('{{student.firstname}} {{student.lastname}}');
-        $('#id_tertiary_dob').val('{{student.birth_date|date:"m/d/Y"}}');
+        $('#id_tertiary_policy_holder').val('{{student.first_name}} {{student.last_name}}');
+        $('#id_tertiary_dob').val('{{student.profile.birth_date|date:"m/d/Y"}}');
         $('#id_tertiary_company').val('US Fire Insurance Company');
         $('#id_tertiary_phone').val('877-497-4980');
         $('#id_tertiary_member_id').val('{{student.id}}');

@@ -17,8 +17,8 @@ from djsani.medical_history.waivers.models import Sicklecell
 
 def doop(mod, man):
     """Check for an object and duplicate it. Returns the new object or None."""
-    instance = mod.objects.using('informix').filter(
-        college_id=man.college_id,
+    instance = mod.objects.filter(
+        user=man.user,
     ).order_by('-id').first()
 
     if instance:
@@ -27,7 +27,7 @@ def doop(mod, man):
         instance.created_at = None
         # associate the new obj with the new manager
         instance.manager_id = man.id
-        instance.save(using='informix')
+        instance.save()
 
     return instance
 
@@ -36,7 +36,7 @@ def get_content_type(name):
     """Return a content type from cache or fetch and set it in cache."""
     ct = cache.get(name)
     if not ct:
-        ct = StudentMedicalContentType.objects.using('informix').filter(
+        ct = StudentMedicalContentType.objects.filter(
             name=name,
         ).first()
         cache.set(name, ct, None)
@@ -56,8 +56,8 @@ def get_manager(cid):
     """
     # try to fetch a current manager
     # from cache or database
-    manager = StudentMedicalManager.objects.using('informix').filter(
-        college_id=cid,
+    manager = StudentMedicalManager.objects.filter(
+        user__id=cid,
     ).filter(created_at__gte=settings.START_DATE).first()
     # if we don't have a current manager:
     # (could be a first time returning student or new FR or transfer)
@@ -69,8 +69,8 @@ def get_manager(cid):
         sicklecell = False
         concussion_baseline = False
         # do we have a past manager?
-        past_man = StudentMedicalManager.objects.using('informix').filter(
-            college_id=cid,
+        past_man = StudentMedicalManager.objects.filter(
+            user__id=cid,
         ).order_by('-id').first()
 
         if past_man:
@@ -83,22 +83,22 @@ def get_manager(cid):
             # which means always True
             if past_man.cc_athlete_sicklecell_waiver:
                 # fetch the latest sicklecell waiver
-                sc = Sicklecell.objects.using('informix').filter(
-                    college_id=cid,
+                sc = Sicklecell.objects.filter(
+                    user__id=cid,
                 ).order_by('-id').first()
                 if sc.results_file:
                     sicklecell = True
 
         # create new manager
         manager = StudentMedicalManager(
-            college_id=cid,
+            user__id=cid,
             cc_student_immunization=immunization,
             cc_athlete_sicklecell_waiver=sicklecell,
             sitrep=False,
             sitrep_athlete=False,
             concussion_baseline=concussion_baseline,
         )
-        manager.save(using='informix')
+        manager.save()
 
         # check for insurance object
         doop(StudentHealthInsurance, manager)
