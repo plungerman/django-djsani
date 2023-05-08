@@ -1,8 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from djsani.core.models import Sport
 from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentProfile
+
+
+class SportAdmin(admin.ModelAdmin):
+    """Data model class for sports."""
+
+    list_display  = (
+        'name',
+        'code',
+        'status',
+    )
+    search_fields = ('name', 'code')
 
 
 class StudentMedicalManagerAdmin(admin.ModelAdmin):
@@ -51,5 +63,6 @@ class StudentProfileAdmin(admin.ModelAdmin):
     ordering = ['user__last_name']
 
 
+admin.site.register(Sport, SportAdmin)
 admin.site.register(StudentMedicalManager, StudentMedicalManagerAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)

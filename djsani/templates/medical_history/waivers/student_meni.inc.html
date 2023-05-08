@@ -10,12 +10,12 @@
 {% endif %}
 <p>
     <input id="agree" type="checkbox" name="agree"
-    {% if student.cc_student_meni_waiver %}
+    {% if manager.cc_student_meni_waiver %}
         checked="checked" value="0"
     {% else %}
         value="1"
     {% endif %}
-    data-pk="{{student.menid|default:''}}"
+    data-pk="{{manager.get_meni.id|default:''}}"
     data-table="cc_student_meni_waiver" class="set-val" />
     <label for="id_agree" style="display:inline;">
     I have received and read (or had explained to me) the

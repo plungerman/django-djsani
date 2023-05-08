@@ -47,8 +47,7 @@ def panels(request, mod, manager, content_type=None, gender=None):
     form = None
     panel = None
     mname = mod.__name__
-    manid = manager.id
-    modo = mod.objects.using('informix').filter(manager_id=manid).first()
+    modo = mod.objects.filter(manager=manager).first()
     if modo:
         panel = model_to_dict(modo)
         if gender:
@@ -91,16 +90,6 @@ def get_students(request):
             trees = post.get('print')
             if sport and staff and trees:
                 # print all athletes from any given sport
-                sql = """ {0}
-                    WHERE stu_serv_rec.yr = "{1}"
-                    AND stu_serv_rec.sess = "{2}"
-                    AND cc_student_medical_manager.created_at > "{3}"
-                """.format(
-                    STUDENT_VITALS,
-                    term['yr'],
-                    term['sess'],
-                    settings.START_DATE,
-                )
                 template = 'dashboard/athletes_print.html'
             else:
                 sql = """ {0}
@@ -153,8 +142,6 @@ def get_students(request):
                         INR.id = id_rec.id
                     )
                 """.format(str(sport), year)
-
-
         else:
             return HttpResponse(
                 "error", content_type="text/plain; charset=utf-8",
@@ -220,7 +207,7 @@ def get_students(request):
         template,
         {
             'students': students,
-            'sports': sports,
+            'sports': Sport.objects.filter(status=True),
             'sport': sport,
             'staff': staff,
             'coach': coach,
@@ -235,124 +222,93 @@ def home(request):
     return get_students(request)
 
 
-@login_required
+@group_required(STAFF)
 def student_detail(request, cid=None, medium=None, content_type=None):
     """Main method for displaying student data."""
-    if in_group(request.user, STAFF):
-        template = 'dashboard/student_detail.html'
-        if content_type:
-            template = 'dashboard/student_{0}_{1}.html'.format(
-                medium, content_type,
-            )
-        manager = None
-        # search form, grab only numbers from string
-        if not cid:
-            cid = filter(str.isdigit, str(request.POST.get('cid')))
-        # get all managers for switch select options
-        managers = StudentMedicalManager.objects.using('informix').filter(
-            college_id=cid,
+    template = 'dashboard/student_detail.html'
+    if content_type:
+        template = 'dashboard/student_{0}_{1}.html'.format(
+            medium, content_type,
         )
-        # we do not want to display faculty/staff details
-        # nor do we want to create a manager for them
-        if cid and not faculty_staff(cid):
-            # manager ID comes from profile switcher POST from form
-            manid = request.POST.get('manid')
-            # or from URL with GET variable
-            if not manid:
-                manid = request.GET.get('manid')
-            # get student
+    manager = None
+    # search form, grab only numbers from string
+    if not cid:
+        cid = filter(str.isdigit, str(request.POST.get('cid')))
+    # get all managers for switch select options
+    managers = StudentMedicalManager.objects.filter(user__id=cid)
+    # we do not want to display faculty/staff details
+    # nor do we want to create a manager for them
+    if cid and not faculty_staff(cid):
+        # manager ID comes from profile switcher POST from form
+        manid = request.POST.get('manid')
+        # or from URL with GET variable
+        if not manid:
+            manid = request.GET.get('manid')
+        # fetch our student
+        student = User.objects.get(pk=cid)
+        if student:
             if manid:
-                sql = """
-                    {0} WHERE cc_student_medical_manager.id = {1}
-                    ORDER by stu_serv_rec.stusv_no DESC
-                """.format(STUDENT_VITALS, manid)
-            else:
-                sql = """
-                    {0} WHERE id_rec.id = "{1}"
-                    ORDER BY cc_student_medical_manager.created_at DESC
-                """.format(STUDENT_VITALS, cid)
-            with get_connection() as connection:
-                student = xsql(
-                    sql, connection, key=settings.INFORMIX_DEBUG,
-                ).fetchone()
-            if student:
-                if manid:
-                    manager = StudentMedicalManager.objects.using(
-                        'informix',
-                    ).filter(id=manid).first()
-                if not manager:
-                    manager = get_manager(cid)
-                    # execute student vitals sql again in case we just
-                    # created a new manager
-                    with get_connection() as new_connection:
-                        student = xsql(
-                            sql, new_connection, key=settings.INFORMIX_DEBUG,
-                        ).fetchone()
-                # calculate student's age
-                try:
-                    age = calculate_age(student.birth_date)
-                except Exception:
-                    age = None
-                # emergency notification system
-                ens = None
-                # health insurance
-                shi = panels(
-                    request,
-                    StudentHealthInsurance,
-                    manager,
-                    content_type,
-                )
-                # student medical history
-                smh = panels(
-                    request,
-                    StudentMedicalHistory,
-                    manager,
-                    content_type,
-                    student.sex,
-                )
-                # athlete medical history
-                amh = panels(
-                    request,
-                    AthleteMedicalHistory,
-                    manager,
-                    content_type,
-                    student.sex,
-                )
-                # used for staff who update info on the dashboard
-                stype = 'student'
-                if manager.sports():
-                    stype = 'athlete'
-                try:
-                    student_user = User.objects.get(pk=cid)
-                except Exception:
-                    student_user = None
-            else:
-                age, ens, shi, smh, amh = (None,) * 5
-                student, stype, student_user, manager = (None,) * 5
-            return render(
+                manager = StudentMedicalManager.objects.filter(id=manid).first()
+            if not manager:
+                manager = get_manager(cid)
+            # calculate student's age
+            try:
+                age = calculate_age(student.student.birth_date)
+            except Exception:
+                age = None
+            # emergency notification system
+            ens = None
+            # health insurance
+            shi = panels(
                 request,
-                template,
-                {
-                    'student': student,
-                    'student_user': student_user,
-                    'age': age,
-                    'ens': ens,
-                    'shi': shi,
-                    'amh': amh,
-                    'smh': smh,
-                    'cid': cid,
-                    'switch_earl': reverse_lazy('set_val'),
-                    'next_year': NEXT_YEAR,
-                    'stype': stype,
-                    'managers': managers,
-                    'manager': manager,
-                    'MedicalStaff': True,
-                },
+                StudentHealthInsurance,
+                manager,
+                content_type,
             )
+            # student medical history
+            smh = panels(
+                request,
+                StudentMedicalHistory,
+                manager,
+                content_type,
+                student.student.gender,
+            )
+            # athlete medical history
+            amh = panels(
+                request,
+                AthleteMedicalHistory,
+                manager,
+                content_type,
+                student.student.gender,
+            )
+            # used for staff who update info on the dashboard
+            stype = 'student'
+            if manager.sports.all():
+                stype = 'athlete'
         else:
-            raise Http404
+            age, ens, shi, smh, amh = (None,) * 5
+            student, stype, manager = (None,) * 5
+        return render(
+            request,
+            template,
+            {
+                'student': student,
+                'age': age,
+                'ens': ens,
+                'shi': shi,
+                'amh': amh,
+                'smh': smh,
+                'cid': cid,
+                'switch_earl': reverse_lazy('set_val'),
+                'next_year': NEXT_YEAR,
+                'stype': stype,
+                'managers': managers,
+                'manager': manager,
+                'MedicalStaff': True,
+            },
+        )
     else:
-        return HttpResponseRedirect(reverse_lazy('access_denied'))
+        raise Http404
 
 
 @group_required(STAFF)
@@ -396,7 +352,7 @@ def sendmail(request):
     if request.POST:
         mid = request.POST.get('mid')
         if mid:
-            insurance = StudentHealthInsurance.objects.using('informix').get(
+            insurance = StudentHealthInsurance.objects.get(
                 manager_id=mid,
             )
         email = request.POST['email']

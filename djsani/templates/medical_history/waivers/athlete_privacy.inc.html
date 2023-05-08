@@ -9,13 +9,13 @@
   {{preamble.body|safe}}
   <div class="large-1 col-lg-1">
     <input type="checkbox" name="disclose_records" class="set-val"
-    {% if student.disclose_records %}
+    {% if manager.get_privacy.disclose_records %}
       checked="checked" value="0"
     {% else %}
       value="1"
     {% endif %}
     data-table="cc_athlete_privacy_waiver"
-    data-pk="{{student.privacy_id|default:''}}">
+    data-pk="{{manager.get_privacy.id|default:''}}">
   </div>
   <div class="large-11 col-lg-11">
     <label for="privacy_disclose_records">

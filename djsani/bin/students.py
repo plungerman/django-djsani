@@ -75,7 +75,7 @@ def main():
                 'residency': stu.get('residency'),
                 'phone': phone,
                 'birth_date': birth_date,
-                'gender': stu.get('sex'),
+                'gender': stu.get('gender'),
                 'address1': stu.get('address1'),
                 'address2': stu.get('address2'),
                 'city': stu.get('city'),

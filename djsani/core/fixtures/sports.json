@@ -1,0 +1,170 @@
+[
+    {
+        "model": "core.sport", "fields": {
+            "code":"ESPT",
+            "name":"Coed Esports"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MBAS",
+            "name":"Men's Baseball"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MBSK",
+            "name":"Men's Basketball"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MCCY",
+            "name":"Men's Cross Country"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MFBL",
+            "name":"Men's Football"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MGOL",
+            "name":"Men's Golf"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MLAX",
+            "name":"Men's Lacrosse"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MSCR",
+            "name":"Men's Soccer"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MSWM",
+            "name":"Men's Swimming and Diving"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MTEN",
+            "name":"Men's Tennis"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MTRK",
+            "name":"Men's Track & Field Outdoor"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MTRI",
+            "name":"Men's Track and Field (Indoors)"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MVBL",
+            "name":"Men's Volleyball"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"MWRE",
+            "name":"Men's Wrestling"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WBSK",
+            "name":"Women's Basketball"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WBWL",
+            "name":"Women's Bowling"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WCCY",
+            "name":"Women's Cross Country"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WGOL",
+            "name":"Women's Golf"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WLAX",
+            "name":"Women's Lacrosse"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WSCR",
+            "name":"Women's Soccer"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WSFT",
+            "name":"Women's Softball"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WSWM",
+            "name":"Women's Swimming & Diving"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WTEN",
+            "name":"Women's Tennis"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WTRI",
+            "name":"Women's Track & Field Indoor"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WTRK",
+            "name":"Women's Track & Field Outdoor"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WVBL",
+            "name":"Women's Volleyball"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WPOL",
+            "name":"Women's Water Polo"
+        }
+    },
+    {
+        "model": "core.sport", "fields": {
+            "code":"WWRE",
+            "name":"Women's Wrestling"
+        }
+    }
+]

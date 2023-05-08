@@ -76,6 +76,7 @@ class Meni(models.Model):
         StudentMedicalManager,
         on_delete=models.CASCADE,
         db_constraint=False,
+        related_name='meni',
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
@@ -108,6 +109,7 @@ class Risk(models.Model):
         StudentMedicalManager,
         on_delete=models.CASCADE,
         db_constraint=False,
+        related_name='risk',
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
@@ -140,6 +142,7 @@ class Reporting(models.Model):
         StudentMedicalManager,
         on_delete=models.CASCADE,
         db_constraint=False,
+        related_name='reporting',
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
@@ -172,13 +175,12 @@ class Privacy(models.Model):
         StudentMedicalManager,
         on_delete=models.CASCADE,
         db_constraint=False,
+        related_name='privacy',
     )
     created_at = models.DateTimeField(auto_now_add=True)
     # waiver fields
     news_media = models.BooleanField(null=True)  # not required
-    # remove after migration
     medical_insurance = models.BooleanField(null=True)  # not required
-    # remove after migration
     ncaa_tool = models.BooleanField(null=True)  # not required
     parents_guardians = models.BooleanField(null=True)  # not required
     disclose_records = models.BooleanField()

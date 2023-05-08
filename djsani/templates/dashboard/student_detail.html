@@ -1,7 +1,7 @@
 {% extends "dashboard/home.html" %}
 {% block title %}
   {% if student %}
-    {{student.lastname}}, {{student.firstname}}
+    {{student.last_name}}, {{student.first_name}}
   {% else %}
     Not found:{{cid}}
   {% endif %}
@@ -51,7 +51,7 @@
         var spinner = new Spinner(opts).spin(target);
         spinner.stop(target);
 
-        /* x-editable jquery plugin: pronounced 'sheditable' */
+        /* x-editable jquery plugin */
         $('.xeditable').editable({
             url: "{% url 'set_val' %}",
             mode: "inline",
@@ -118,7 +118,7 @@
             }
         );
         $("#emailInsuranceForm").submit(function(e) {
-            subject = "[Carthage Medical Forms] Student Insurance: {{student.lastname}}, {{student.firstname}} :: DOB {{student.birth_date}}"
+            subject = "[Carthage Medical Forms] Student Insurance: {{student.last_name}}, {{student.first_name}} :: DOB {{student.student.birth_date}}"
             content = $("#student-contact").html();
             content += $("#healthInsuranceEmailData").html();
             // ens
@@ -242,18 +242,18 @@
   <div class="row">
     <div class="col-lg-7">
       <h3>
-        {{student.firstname}} {{student.lastname}}
+        {{student.first_name}} {{student.last_name}}
         <small>
-          ({{student.sex}}) &mdash;
-          DOB: {{student.birth_date}}
-          ({{age}}) [{{student.cl}}]
+          ({{student.student.gender}}) &mdash;
+          DOB: {{student.student.birth_date}}
+          ({{age}}) [{{student.student.class_year}}]
         </small>
       </h3>
       <form class="form mb-2">
-        {% if manager.sports %}
+        {% if manager.sports.all %}
         <div class="mb-1"><strong>Sports:</strong>
-        {% for sport in manager.sports %}
-        <span title="{{sport.4.year}}">{{sport.1}}</span>{% if not forloop.last %},&nbsp;{% endif %}
+        {% for sport in manager.sports.all %}
+        <span title="{{sport.name}}">{{sport.name}}</span>{% if not forloop.last %},&nbsp;{% endif %}
         {% endfor %}
         </div>
         {% endif %}
@@ -262,7 +262,7 @@
           title="Health and Counseling Status"
           class="set-val" data-pk="{{manager.id}}"
           data-table="cc_student_medical_manager"
-        {% if student.sitrep %}
+        {% if manager.sitrep %}
           value="0"
           checked="checked"
         {% else %}
@@ -273,7 +273,7 @@
           title="Athletics Training Status"
           class="set-val" data-pk="{{manager.id}}"
           data-table="cc_student_medical_manager"
-        {% if student.sitrep_athlete %}
+        {% if manager.sitrep_athlete %}
           value="0"
           checked="checked"
         {% else %}
@@ -284,7 +284,7 @@
           title="Immunization Status"
           class="set-val" data-pk="{{manager.id}}"
           data-table="cc_student_medical_manager"
-        {% if student.cc_student_immunization %}
+        {% if manager.cc_student_immunization %}
           value="0"
           checked="checked"
         {% else %}
@@ -295,7 +295,7 @@
           title="Has the concussion baseline been set?"
           data-table="cc_student_medical_manager"
           data-pk="{{manager.id}}"
-        {% if student.concussion_baseline %}
+        {% if manager.concussion_baseline %}
           value="0"
           checked="checked"
         {% else %}
@@ -313,26 +313,23 @@
             <div class="col-12" id="student-contact" style="font-size:.9em;">
               <h4 id="StudentContactEmailHeader">Student Contact Information</h4>
               <div class="float-left" style="width:50%;">
-              {{student.addr_line1}} {{student.addr_line2}}<br>
-              {{student.city}}, {{student.st}}<br>
-              {{student.zip}} {{student.ctry}}<br>
+              {{student.student.address1}} {{student.student.address2}}<br>
+              {{student.student.city}}, {{student.student.state}}<br>
+              {{student.student.portal_code}} {{student.student.country}}<br>
               <abbr title="Phone">Phone:</abbr>
-              <a href="tel:{{student.phone}}">{{student.phone}}</a>
-              <br>
-              <abbr title="Phone">Mobile:</abbr>
-              <a href="tel:{{student.mobile}}">{{student.mobile}}</a>
+              <a href="tel:{{student.student.phone}}">{{student.student.phone}}</a>
               </div>
               <div class="float-right" style="width:50%;">
               <a class="float-right" href="{% url 'student_detail_medium' cid 'print' 'travel' %}?manid={{manager.id}}"
                 title="Print travel kit">
                 <i class="fa fa-print fa-2x"></i></a>
               <strong>
-                {{student.residency_status}}
+                {{student.student.get_residency_display}}
               </strong><br>
-              <a href="mailto:{{student.ldap_name}}@carthage.edu">
-                {{student.ldap_name}}@carthage.edu
+              <a href="mailto:{{student.email}}">
+                {{student.email}}
               </a><br>
-              Signed in: {{student_user.last_login|date:"m/d/Y, fA"}}
+              Signed in: {{student.last_login|date:"m/d/Y, fA"}}
               </div>
             </div>
             <!-- /.col-12 -->
@@ -465,7 +462,7 @@
                       Physical evaluation page 2</a>
                   </li>
                   {% endif %}
-                  {% if student.medical_consent_agreement %}
+                  {% if manager.medical_consent_agreement %}
                   <li>
                     <input type="checkbox" class="set-val" name="medical_consent_agreement_status"
                       {% if manager.medical_consent_agreement_status == True %}
@@ -486,19 +483,19 @@
                   </li>
                   {% endif %}
                   <li>
-                    {% if student.cc_athlete_sicklecell_waiver == True %}
+                    {% if manager.cc_athlete_sicklecell_waiver == True %}
                       <input type="checkbox" class="set-val" name="results_file_status"
-                      {% if student.results_file_status == True %}
+                      {% if manager.results_file_status == True %}
                       value="0" checked="checked"
                       {% else %}
                       value="1"
                       {% endif %}
-                      data-pk="{{student.sicklecell_id}}"
+                      data-pk="{{manager.sicklecell_id}}"
                       data-table="cc_athlete_sicklecell_waiver">
-                      <a href="{{student.results_file}}" class="rotate-photo">
+                      <a href="{{manager.results_file}}" class="rotate-photo">
                       <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                      {% if student.results_file %}
-                      <a href="{{media_url}}files/{{student.results_file}}"
+                      {% if manager.results_file %}
+                      <a href="{{media_url}}files/{{manager.results_file}}"
                       class="fleft" style="margin-left:10px;margin-top:3px;"
                       target="_blank" title="current file">
                       <i class="fa fa-moon-o green"></i>
@@ -575,28 +572,28 @@
                   aria-controls="cc_student_meni_waiver" aria-selected="true">
                   Meni/Hep B</a>
               </li>
-              <li class="nav-item"{% if not student.cc_athlete_privacy_waiver %}
+              <li class="nav-item"{% if not manager.cc_athlete_privacy_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_privacy_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_privacy_waiver" role="tab"
                   aria-controls="cc_athlete_privacy_waiver" aria-selected="false">
                   Privacy</a>
               </li>
-              <li class="nav-item"{% if not student.cc_athlete_sicklecell_waiver %}
+              <li class="nav-item"{% if not manager.cc_athlete_sicklecell_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_sicklecell_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_sicklecell_waiver" role="tab"
                   aria-controls="cc_athlete_sicklecell_waiver" aria-selected="false">
                   Sickle Cell</a>
               </li>
-              <li class="nav-item"{% if not student.cc_athlete_reporting_waiver %}
+              <li class="nav-item"{% if not manager.cc_athlete_reporting_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_reporting_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_reporting_waiver" role="tab"
                   aria-controls="cc_athlete_reporting_waiver" aria-selected="false">
                   Reporting</a>
               </li>
-              <li class="nav-item"{% if not student.cc_athlete_risk_waiver %}
+              <li class="nav-item"{% if not manager.cc_athlete_risk_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_risk_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_risk_waiver" role="tab"

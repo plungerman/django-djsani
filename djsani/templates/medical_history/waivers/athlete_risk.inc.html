@@ -16,12 +16,12 @@
 {{concussion.body|safe}}
 <p>
   <input id="agree" type="checkbox" name="agree"
-  {% if student.cc_athlete_risk_waiver %}
+  {% if manager.cc_athlete_risk_waiver %}
   checked="checked" value="0"
   {% else %}
   value="1"
   {% endif %}
-  data-pk="{{student.risk_id|default:''}}"
+  data-pk="{{manager.get_risk.id|default:''}}"
   data-table="cc_athlete_risk_waiver" class="set-val">
   <label for="id_agree" style="display:inline;">
     I hereby acknowledge that I have read, understand, and will

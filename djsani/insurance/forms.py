@@ -235,7 +235,7 @@ class AthleteForm(forms.ModelForm):
         cd = self.cleaned_data
         insurance = self.insurance
         manager = self.manager
-        if manager.sports() and not cd['opt_out']:
+        if manager.sports.all() and not cd['opt_out']:
             front = cd.get('primary_card_front')
             back = cd.get('primary_card_back')
             if not front or not back:

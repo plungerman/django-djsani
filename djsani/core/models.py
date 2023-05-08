@@ -22,6 +22,12 @@ FILE_VALIDATORS = [
 ADDITION = 1
 CHANGE = 2
 DELETION = 3
+REZ_CHOICES = (
+    ('M', 'Manager'),
+    ('C', 'Commuter'),
+    ('O', 'Off Campus'),
+    ('R', 'Resident'),
+)
 
 
 def uploaded_email(sender, instance, manager, philes):
@@ -30,7 +36,7 @@ def uploaded_email(sender, instance, manager, philes):
     if user and manager:
         to_list = []
         for trainer, sports in settings.UPLOAD_EMAIL_DICT.items():
-            for spor in [sport.sport_code for sport in manager.sports()]:
+            for spor in [sport.code for sport in manager.sports.all()]:
                 if spor in sports and trainer not in to_list:
                     to_list.append(trainer)
         hidden_list = to_list
@@ -225,6 +231,22 @@ class StudentMedicalManager(models.Model):
         """Used for the upload_to_path helper for file uplaods."""
         return 'student-medical-manager'
 
+    def get_meni(self):
+        """Return current meni waiver"""
+        return self.meni.filter(created_at__gte=settings.START_DATE).first()
+
+    def get_privacy(self):
+        """Return current privacy waiver"""
+        return self.privacy.filter(created_at__gte=settings.START_DATE).first()
+
+    def get_reporting(self):
+        """Return current reporting waiver"""
+        return self.reporting.filter(created_at__gte=settings.START_DATE).first()
+
+    def get_risk(self):
+        """Return current risk waiver"""
+        return self.risk.filter(created_at__gte=settings.START_DATE).first()
+
 
 class StudentProfile(models.Model):
     """Data class model for student data."""
@@ -253,7 +275,12 @@ class StudentProfile(models.Model):
     phone = models.CharField(max_length=16, null=True, blank=True)
     gender = models.CharField(max_length=16, null=True, blank=True)
     class_year = models.CharField("Current Class", max_length=24, null=True, blank=True)
-    residency = models.CharField(max_length=2, null=True, blank=True)
+    residency = models.CharField(
+        max_length=2,
+        choices=REZ_CHOICES,
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         """Attributes about the data model and admin options."""
