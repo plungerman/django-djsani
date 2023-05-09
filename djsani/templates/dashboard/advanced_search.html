@@ -17,10 +17,10 @@
         {% if students %}
         <ol>
         {% for s in students %}
-          {% ifchanged s.id %}
+          {% ifchanged s.user.id %}
           <li>
-            <a href="{% url 'student_detail' s.id %}">
-            {{s.lastname}}, {{s.firstname}}
+            <a href="{% url 'student_detail' s.user.id %}">
+            {{s.user.last_name}}, {{s.user.first_name}}
             </a>
           </li>
           {% endifchanged %}

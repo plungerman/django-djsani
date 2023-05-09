@@ -17,6 +17,7 @@ from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
 from djsani.core.models import StudentMedicalManager
+from djsani.core.models import StudentProfile
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.sql import STUDENTS_ALPHA
 from djsani.core.utils import get_manager
@@ -248,7 +249,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
         student = User.objects.get(pk=cid)
         if student:
             if manid:
-                manager = StudentMedicalManager.objects.filter(id=manid).first()
+                manager = StudentMedicalManager.objects.filter(pk=manid).first()
             if not manager:
                 manager = get_manager(cid)
             # calculate student's age
@@ -283,7 +284,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
             )
             # used for staff who update info on the dashboard
             stype = 'student'
-            if manager.sports.all():
+            if manager.sports and manager.sports.all():
                 stype = 'athlete'
         else:
             age, ens, shi, smh, amh = (None,) * 5
@@ -314,29 +315,15 @@ def student_detail(request, cid=None, medium=None, content_type=None):
 @group_required(STAFF)
 def advanced_search(request):
     """Search for a student or students."""
-    student = request.POST.get('student', '')
-    sql = None
-    try:
-        query = int(student)
-        sql = """
-            {0} WHERE id_rec.id = "{1}"
-            ORDER BY cc_student_medical_manager.created_at DESC
-        """.format(STUDENT_VITALS, student)
-    except Exception:
-        query = student.lower()
-        if query and len(query) >= 3:
-            sql = """
-                {0} WHERE LOWER(id_rec.lastname) LIKE "%%{1}%%"
-                ORDER BY lastname
-            """.format(STUDENT_VITALS, query)
-    if sql:
-        with get_connection() as connection:
-            students = xsql(
-                sql, connection, key=settings.INFORMIX_DEBUG,
-            ).fetchall()
-    else:
-        students = None
-
+    search = request.POST.get('search', '')
+    students = None
+    if len(search) > 2:
+        try:
+            query = int(search)
+            students = StudentProfile.objects.filter(user__pk__icontains=query)
+        except Exception:
+            query = search
+            students = StudentProfile.objects.filter(user__last_name__icontains=query)
     return render(
         request,
         'dashboard/advanced_search.html',

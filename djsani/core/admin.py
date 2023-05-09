@@ -27,9 +27,11 @@ class StudentMedicalManagerAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'user__last_name',
+        'user__first_name',
         'user__username',
         'user__id',
     )
+    raw_id_fields = ['user']
 
 
 class StudentProfileAdmin(admin.ModelAdmin):
@@ -49,6 +51,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'user__last_name',
+        'user__first_name',
         'user__username',
         'user__id',
         'phone',
@@ -61,6 +64,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
     list_per_page = 500
     save_on_top = True
     ordering = ['user__last_name']
+    raw_id_fields = ['user']
 
 
 admin.site.register(Sport, SportAdmin)

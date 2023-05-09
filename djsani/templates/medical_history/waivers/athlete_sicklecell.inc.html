@@ -10,8 +10,8 @@
       Upload your test results.
     </label>
     <input type="file" name="results_file" id="id_results_file" class="fleft" style="width:300px">
-    {% if student.results_file %}
-    <a href="{{media_url}}files/{{student.results_file}}" class="fleft" style="margin-left:10px;margin-top:3px;" target="_blank" title="current file">
+    {% if manager.get_sicklecell.results_file %}
+    <a href="{{media_url}}files/{{manager.get_sickcell.results_file}}" class="fleft" style="margin-left:10px;margin-top:3px;" target="_blank" title="current file">
       <i class="fa fa-file"></i></a>
     {% endif %}
     <div class="help" style="color:red; font-weight: 600;">Photo/Scan of your test results</div>

@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.dispatch import receiver
-from djimix.core.utils import get_connection
-from djimix.core.utils import xsql
 from djtools.fields.helpers import upload_to_path
 from djtools.utils.mail import send_mail
 
@@ -246,6 +244,10 @@ class StudentMedicalManager(models.Model):
     def get_risk(self):
         """Return current risk waiver"""
         return self.risk.filter(created_at__gte=settings.START_DATE).first()
+
+    def get_sicklecell(self):
+        """Return current risk waiver"""
+        return self.sicklecell.filter(created_at__gte=settings.START_DATE).first()
 
 
 class StudentProfile(models.Model):

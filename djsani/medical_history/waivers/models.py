@@ -24,6 +24,7 @@ class Sicklecell(models.Model):
     manager = models.ForeignKey(
         StudentMedicalManager,
         on_delete=models.CASCADE,
+        related_name='sicklecell',
         db_constraint=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)

@@ -12,6 +12,12 @@ class WaiverAdmin(admin.ModelAdmin):
     """Generice admin class for athlete medical waiver."""
 
     raw_id_fields = ('user', 'manager')
+    search_fields = (
+        'user__last_name',
+        'user__first_name',
+        'user__username',
+        'user__id',
+    )
 
 
 admin.site.register(Meni, WaiverAdmin)
