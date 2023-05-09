@@ -16,6 +16,7 @@ from django.template import loader
 from django.urls import reverse_lazy
 from djimix.core.utils import get_connection
 from djimix.core.utils import xsql
+from djsani.core.models import Sport
 from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentProfile
 from djsani.core.sql import STUDENT_VITALS
@@ -81,6 +82,7 @@ def get_students(request):
     coach = in_group(user, COACH)
     if coach and user.is_superuser:
         coach = False
+    students = StudentProfile.objects.filter(status=True)
     if request.POST:
         post = request.POST
         cyear = post.get('class')
@@ -149,55 +151,41 @@ def get_students(request):
             )
     else:
         template = 'dashboard/home.html'
-        cl = 'AND prog_enr_rec.cl IN ("FN","FF","UT","PF","PN")'
-        if coach:
-            cl = ''
-        sql = """ {0}
-            AND stu_serv_rec.yr = "{1}"
-            AND stu_serv_rec.sess = "{2}"
-            {3}
-        """.format(
-            STUDENTS_ALPHA, term['yr'], term['sess'], cl,
-        )
+        if not coach:
+            students.filter(class_year__in=("FN","FF","UT","PF","PN"))
+
     # finally
-    sql += ' ORDER BY lastname'
-    with get_connection() as connection:
-        # fetch all the sports for search
-        phile = os.path.join(settings.BASE_DIR, 'sql/sports_all.sql')
-        with open(phile) as incantation:
-            sports = xsql(incantation.read(), connection).fetchall()
-        # fetch the students
-        cursor = connection.cursor().execute(sql)
-        # obtain the olumn names
-        columns = [column[0] for column in cursor.description]
-        students = []
-        for row in cursor.fetchall():
-            students.append(dict(zip(columns, row)))
+    students.order_by('user__lastname')
+
+
     ath = 0
     med = 0
     med_percent = 0
     count = len(students)
     minors_list = []
-    for num, stu in enumerate(students):
-        adult = 'minor'
-        if stu.get('athlete'):
-            ath += 1
-        if stu.get('cc_athlete_medical_history'):
-            med += 1
-        if stu.get('birth_date'):
-            age = calculate_age(stu['birth_date'])
-            if minors and age < settings.ADULT_AGE:
-                stu['adult'] = 'minor'
-                minors_list.append(stu)
-            elif age >= settings.ADULT_AGE:
-                adult = 'adult'
-        stu['adult'] = adult
+
+    for stu in students:
+        manager = stu.get_manager()
+        # some stats for display
+        if manager:
+            if stu.get_manager().athlete:
+                ath += 1
+            if stu.get_manager().cc_athlete_medical_history:
+                med += 1
+        # minor or adult
+        adult = 'adult'
+        if stu.birth_date:
+            age = calculate_age(stu.birth_date)
+            if age < settings.ADULT_AGE:
+                adult = 'minor'
+                if minors:
+                    minors_list.append(stu)
+        stu.adult = adult
         if trees:
-            manager = get_manager(stu['id'])
             # emergency notification system
             # worday data for ENS coming soon
             # health insurance
-            stu['shi'] = panels(request, StudentHealthInsurance, manager)
+            stu.shi = panels(request, StudentHealthInsurance, manager)
     if ath:
         med_percent = round(med/ath * 100)
 
@@ -239,6 +227,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
     managers = StudentMedicalManager.objects.filter(user__id=cid)
     # we do not want to display faculty/staff details
     # nor do we want to create a manager for them
+    manid = None
     if cid and not faculty_staff(cid):
         # manager ID comes from profile switcher POST from form
         manid = request.POST.get('manid')
@@ -300,6 +289,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                 'amh': amh,
                 'smh': smh,
                 'cid': cid,
+                'manid': manid,
                 'switch_earl': reverse_lazy('set_val'),
                 'next_year': NEXT_YEAR,
                 'stype': stype,

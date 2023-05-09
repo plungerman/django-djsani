@@ -40,6 +40,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
     list_display  = (
         'last_name',
         'first_name',
+        'class_year',
         'residency',
         'username',
         'cid',

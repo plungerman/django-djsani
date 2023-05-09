@@ -38,7 +38,6 @@ def get_sports(cid):
 
 
 def main():
-    minors = True
     eldap = LDAPManager()
     students = get_students()
     for stu in students:
@@ -55,7 +54,6 @@ def main():
                 groups = eldap.get_groups(result_data)
                 user = eldap.dj_create(result_data, groups=groups)
         if user:
-            #print(user)
             adult = False
             birth_date = None
             if stu.get('birth_date'):
@@ -101,6 +99,8 @@ def main():
                         user__id=stu['id'],
                     ).filter(created_at__year=year).first()
                     if manager:
+                        manager.athlete=True
+                        manager.save()
                         manager.sports.add(sport)
 
         else:

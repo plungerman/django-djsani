@@ -31,7 +31,6 @@ class Sicklecell(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     waive = models.BooleanField(null=True)
     proof = models.BooleanField(null=True)
-    # remove after migration
     results = models.CharField(
         max_length=128,
         null=True,

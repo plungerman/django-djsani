@@ -141,7 +141,7 @@ $(function() {
                 {% endif %}
               </td>
             </tr>
-            {% if student.residency_status == "Resident" %}
+            {% if student.residency == "R" %}
             <tr class="slider-container" id="adult_student">
               <td>
                 {% if manager.cc_student_meni_waiver %}
@@ -189,7 +189,7 @@ $(function() {
         {% get_lw_content as sicklecell_frosh blurbs 3362 %}
         {{sicklecell_frosh.body|safe}}
         {% endif %}
-        {% if student.residency_status == "Resident" and not adult %}
+        {% if student.residency == "R" and not adult %}
           <h3>
             Meningococcal meningitis/Hepatitis B response and
             Parent/Legal Guardian Consent Form

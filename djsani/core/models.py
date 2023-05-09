@@ -30,7 +30,7 @@ REZ_CHOICES = (
 
 def uploaded_email(sender, instance, manager, philes):
     """Send an email with data from model signal when student uploads file."""
-    user = instance.user()
+    user = instance.user
     if user and manager:
         to_list = []
         for trainer, sports in settings.UPLOAD_EMAIL_DICT.items():
@@ -159,6 +159,7 @@ class StudentMedicalManager(models.Model):
         User,
         on_delete=models.CASCADE,
         db_constraint=False,
+        related_name='manager',
     )
     created_at = models.DateTimeField(auto_now_add=True)
     sitrep = models.BooleanField(null=True)
@@ -220,10 +221,6 @@ class StudentMedicalManager(models.Model):
         """Default data for display."""
         user = self.user
         return user.username
-
-    def current(self, day):
-        """Determine if this is the current manager for academic year."""
-        return self.created_at > day
 
     def get_slug(self):
         """Used for the upload_to_path helper for file uplaods."""
@@ -316,6 +313,15 @@ class StudentProfile(models.Model):
         return self.user.id
     cid.allow_tags = True
     cid.short_description = "CID"
+
+    def get_manager(self):
+        """Fetch the current manager for academic year."""
+        manager = None
+        for man in self.user.manager.all():
+            if man.created_at >= settings.START_DATE:
+                manager = man
+                break
+        return manager
 
 
 @receiver(models.signals.pre_save, sender=StudentMedicalManager)
