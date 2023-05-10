@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from django.conf import settings
-
-
-# e.g. 2015-05-01 00:00:00
-START_DATE = settings.START_DATE
-STUDENTS_ALPHA = """
 SELECT
     auth_user.id,
     auth_user.first_name,
@@ -47,38 +39,32 @@ SELECT
     student_medical_manager.cc_athlete_reporting_waiver,
     student_medical_manager.cc_athlete_risk_waiver,
     student_medical_manager.cc_athlete_sicklecell_waiver,
-    student_health_insurance.opt_out,
-    student_health_insurance.primary_policy_type,
-    student_health_insurance.tertiary_company,
     athlete_sicklecell_waiver.updated_at,
     athlete_sicklecell_waiver.results_file,
     athlete_sicklecell_waiver.results_file_status
 FROM
-    student_profile
-LEFT JOIN
     auth_user
+LEFT JOIN
+    student_profile
 ON
-    student_profile.user_id = auth_user.id
+    auth_user.id = student_profile.user_id
 LEFT JOIN
     student_medical_manager
 ON
-    student_profile.user_id = student_medical_manager.user_id
+    auth_user.id = student_medical_manager.user_id
 AND
-    student_medical_manager.created_at > "{0}"
-LEFT JOIN
-    student_health_insurance
-ON
-    student_medical_manager.id = student_health_insurance.manager_id
+    student_medical_manager.created_at > "2022-06-01"
 LEFT JOIN
     athlete_sicklecell_waiver
 ON
-    student_profile.user_id = athlete_sicklecell_waiver.user_id
+    auth_user.id = athlete_sicklecell_waiver.user_id
     AND
     (
         athlete_sicklecell_waiver.proof = 1
     OR
-        athlete_sicklecell_waiver.created_at > "{1}"
+        athlete_sicklecell_waiver.created_at > "2022-06-01"
     )
 WHERE
-    student_profile.status = 1
-""".format(START_DATE, START_DATE)
+    student_profile.class_year IN ("FN","FF","UT","PF","PN")
+ORDER BY
+  auth_user.last_name

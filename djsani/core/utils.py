@@ -5,15 +5,32 @@
 import datetime
 import os
 
+from collections import namedtuple
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.db import connection
 from djsani.core.models import StudentMedicalContentType
 from djsani.core.models import StudentMedicalManager
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.waivers.models import Sicklecell
+
+
+def xsql(sql):
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        #desc = cursor.description
+        #nt_result = namedtuple('Result', [col[0] for col in desc])
+        #results = [nt_result(*row) for row in cursor.fetchall()]
+        columns = [col[0] for col in cursor.description]
+        results = [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+    return results
+
 
 
 def doop(mod, man):

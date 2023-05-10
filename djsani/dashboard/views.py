@@ -14,14 +14,12 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse_lazy
-from djimix.core.utils import get_connection
-from djimix.core.utils import xsql
 from djsani.core.models import Sport
 from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentProfile
-from djsani.core.sql import STUDENT_VITALS
 from djsani.core.sql import STUDENTS_ALPHA
 from djsani.core.utils import get_manager
+from djsani.core.utils import xsql
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
@@ -82,7 +80,7 @@ def get_students(request):
     coach = in_group(user, COACH)
     if coach and user.is_superuser:
         coach = False
-    students = StudentProfile.objects.filter(status=True)
+    sql = STUDENTS_ALPHA
     if request.POST:
         post = request.POST
         cyear = post.get('class')
@@ -95,97 +93,75 @@ def get_students(request):
                 # print all athletes from any given sport
                 template = 'dashboard/athletes_print.html'
             else:
-                sql = """ {0}
-                    AND stu_serv_rec.yr = "{1}"
-                    AND stu_serv_rec.sess = "{2}"
-                """.format(
-                    STUDENTS_ALPHA, term['yr'], term['sess'],
-                )
                 if cyear in {'0', '1', '2', '3', '4', '5', '6'}:
                     if cyear == '1':
-                        sql += 'AND cc_student_medical_manager.sitrep = 1'
+                        sql += 'AND student_medical_manager.sitrep = 1'
                     elif cyear == '0':
-                        sql += 'AND cc_student_medical_manager.sitrep = 0'
+                        sql += 'AND student_medical_manager.sitrep = 0'
                     elif cyear == '3':
-                        sql += 'AND athlete > 0'
+                        sql += 'AND student_medical_manager.athlete = 1'
                     elif cyear == '4':
-                        sql += 'AND cc_student_health_insurance.primary_policy_type="Gov"'
+                        sql += 'AND student_health_insurance.primary_policy_type="Gov"'
                     elif cyear == '5':
-                        sql += 'AND cc_student_health_insurance.opt_out="1"'
+                        sql += 'AND student_health_insurance.opt_out="1"'
                     elif cyear == '6':
-                        sql += 'AND cc_student_health_insurance.tertiary_company="US Fire Insurance Company"'
+                        sql += 'AND student_health_insurance.tertiary_company="US Fire Insurance Company"'
                     else:
-                        sql += 'AND cc_student_medical_manager.id IS NULL'
+                        sql += 'AND student_medical_manager.id IS NULL'
                 elif not coach:
-                    sql += 'AND prog_enr_rec.cl IN ({0})'.format(cyear)
+                    sql += 'AND student_profile.class_year IN ({0})'.format(cyear)
                 template = 'dashboard/students_data.inc.html'
             if sport:
-                date = settings.START_DATE
-                if date.month < settings.SPORTS_MONTH:
-                    year = date.year
-                else:
-                    year = date.year + 1
                 sql += """
-                    AND '{0}' IN (
+                    AND {0} IN (
                     SELECT
-                        TRIM(IT.invl) AS sport_code
+                        sport_id
                     FROM
-                        invl_table IT
-                    INNER JOIN
-                        involve_rec INR
-                    ON
-                        TRIM(IT.invl) = TRIM(INR.invl)
-                    AND
-                        IT.sanc_sport = 'Y'
+                        student_medical_manager_sports
                     WHERE
-                        TODAY BETWEEN IT.active_date AND NVL(IT.inactive_date, TODAY)
-                    AND
-                        YEAR(INR.end_date) = {1}
-                    AND
-                        INR.id = id_rec.id
+                        studentmedicalmanager_id = student_medical_manager.id
                     )
-                """.format(str(sport), year)
+                """.format(sport)
         else:
             return HttpResponse(
                 "error", content_type="text/plain; charset=utf-8",
             )
     else:
         template = 'dashboard/home.html'
-        if not coach:
-            students.filter(class_year__in=("FN","FF","UT","PF","PN"))
-
-    # finally
-    students.order_by('user__lastname')
-
-
+        cl = ' AND student_profile.class_year IN ("FN","FF","UT","PF","PN")'
+        if coach:
+            cl = ''
+        sql += cl
+    # lastly, order by last name
+    sql += ' ORDER BY auth_user.last_name'
+    students = xsql(sql)
+    # some stats for display
     ath = 0
     med = 0
     med_percent = 0
     count = len(students)
     minors_list = []
-
     for stu in students:
-        manager = stu.get_manager()
-        # some stats for display
+        manager = get_manager(stu['id'])
         if manager:
-            if stu.get_manager().athlete:
+            if manager.athlete:
                 ath += 1
-            if stu.get_manager().cc_athlete_medical_history:
+            if manager.cc_athlete_medical_history:
                 med += 1
         # minor or adult
         adult = 'adult'
-        if stu.birth_date:
-            age = calculate_age(stu.birth_date)
+        if stu['birth_date']:
+            age = calculate_age(stu['birth_date'])
             if age < settings.ADULT_AGE:
                 adult = 'minor'
                 if minors:
                     minors_list.append(stu)
-        stu.adult = adult
+            stu['age'] = age
         if trees:
             # emergency notification system
             # worday data for ENS coming soon
             # health insurance
-            stu.shi = panels(request, StudentHealthInsurance, manager)
+            stu['shi'] = panels(request, StudentHealthInsurance, manager)
     if ath:
         med_percent = round(med/ath * 100)
 
@@ -201,6 +177,7 @@ def get_students(request):
             'staff': staff,
             'coach': coach,
             'med_percent': med_percent,
+            'sql': sql,
         },
     )
 

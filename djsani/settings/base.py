@@ -39,17 +39,18 @@ USE_TZ = False
 DEFAULT_CHARSET = 'utf-8'
 FILE_CHARSET = 'utf-8'
 FILE_UPLOAD_PERMISSIONS = 0o644
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_APP = os.path.basename(BASE_DIR)
 ROOT_URLCONF = 'djsani.core.urls'
 SERVER_URL = ''
 DIRECTORY_API_URL = 'https://{0}/{1}'.format(SERVER_URL, 'directory/api/')
 LIVEWHALE_API_URL = ''
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(__file__)
 ROOT_URL = '/medical-forms/'
 MEDIA_ROOT = '{0}/assets/'.format(BASE_DIR)
-MEDIA_URL = '/media/djsani/'
+MEDIA_URL = '/media/{0}/'.format(PROJECT_APP)
 STATIC_ROOT = '{0}/static/'.format(ROOT_DIR)
-STATIC_URL = 'https://{0}/static/djsani/'.format(SERVER_URL)
+STATIC_URL = 'https://{0}/static/{1}/'.format(SERVER_URL, PROJECT_APP)
 UPLOADS_DIR = '{0}files/'.format(MEDIA_ROOT)
 UPLOADS_URL = '{0}files/'.format(MEDIA_URL)
 STATICFILES_DIRS = ()
@@ -62,7 +63,7 @@ DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
         'PORT': '3306',
-        'NAME': 'django_djsani',
+        'NAME': 'django_{0}'.format(PROJECT_APP),
         'ENGINE': 'django.db.backends.mysql',
         'USER': '',
         'PASSWORD': '',
@@ -110,9 +111,9 @@ INSTALLED_APPS = (
 )
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -144,6 +145,16 @@ TEMPLATES = [
         },
     },
 ]
+'''
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 86400,
+        'KEY_PREFIX': '{0}_'.format(PROJECT_APP),
+    }
+}
+'''
 # LDAP Constants
 LDAP_SERVER = ''
 LDAP_PORT = ''

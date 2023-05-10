@@ -58,7 +58,7 @@ table.dataTable thead th, table.dataTable tfoot th { text-align: center; }
 .navbar {
   justify-content:center;padding: 0;
   border-top: 5px solid #3ab0c8;
-  background: url(https://www.carthage.edu/themes/korra/assets/img/main-header-gradient.png) left top repeat-x;
+  background: url(https://app.carthage.edu/themes/korra/assets/img/main-header-gradient.png) left top repeat-x;
 }
 .navbar-dark .navbar-brand {color:#000;font-weight:600;font-size:.9em;}
 a.navbar-brand:hover {color: red !important;}

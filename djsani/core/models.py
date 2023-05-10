@@ -144,7 +144,7 @@ class Sport(models.Model):
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'athlete_sports'
+        db_table = 'athlete_sport'
 
     def __str__(self):
         """Default data for display."""

@@ -261,7 +261,7 @@
         <input type="checkbox" name="sitrep"
           title="Health and Counseling Status"
           class="set-val" data-pk="{{manager.id}}"
-          data-table="cc_student_medical_manager"
+          data-table="student_medical_manager"
         {% if manager.sitrep %}
           value="0"
           checked="checked"
@@ -272,7 +272,7 @@
         <input type="checkbox" name="sitrep_athlete"
           title="Athletics Training Status"
           class="set-val" data-pk="{{manager.id}}"
-          data-table="cc_student_medical_manager"
+          data-table="student_medical_manager"
         {% if manager.sitrep_athlete %}
           value="0"
           checked="checked"
@@ -283,7 +283,7 @@
         <input type="checkbox" name="cc_student_immunization"
           title="Immunization Status"
           class="set-val" data-pk="{{manager.id}}"
-          data-table="cc_student_medical_manager"
+          data-table="student_medical_manager"
         {% if manager.cc_student_immunization %}
           value="0"
           checked="checked"
@@ -293,7 +293,7 @@
         Immunization status |
         <input type="checkbox" name="concussion_baseline" class="set-val"
           title="Has the concussion baseline been set?"
-          data-table="cc_student_medical_manager"
+          data-table="student_medical_manager"
           data-pk="{{manager.id}}"
         {% if manager.concussion_baseline %}
           value="0"
@@ -433,7 +433,7 @@
                       value="1"
                       {% endif %}
                       data-pk="{{manager.id}}"
-                      data-table="cc_student_medical_manager">
+                      data-table="student_medical_manager">
                     <a href="{{manager.physical_evaluation_1}}" class="rotate-photo">
                       <i class="fa fa-repeat" aria-hidden="true"
                         title="Rotate photo: Shift reload after"></i></a>
@@ -451,7 +451,7 @@
                       value="1"
                       {% endif %}
                       data-pk="{{manager.id}}"
-                      data-table="cc_student_medical_manager">
+                      data-table="student_medical_manager">
                     <a href="{{manager.physical_evaluation_2}}" class="rotate-photo">
                       <i class="fa fa-repeat" aria-hidden="true"
                         title="Rotate photo: Shift reload after"></i></a>
@@ -472,7 +472,7 @@
                       value="1"
                       {% endif %}
                       data-pk="{{manager.id}}"
-                      data-table="cc_student_medical_manager">
+                      data-table="student_medical_manager">
                     <a href="{{manager.medical_consent_agreement}}" class="rotate-photo">
                       <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
                     <a href="{{media_url}}files/{{manager.medical_consent_agreement}}"
@@ -483,7 +483,7 @@
                   </li>
                   {% endif %}
                   <li>
-                    {% if manager.cc_athlete_sicklecell_waiver == True %}
+                    {% if manager.athlete_sicklecell_waiver == True %}
                       <input type="checkbox" class="set-val" name="results_file_status"
                       {% if manager.results_file_status == True %}
                       value="0" checked="checked"
@@ -491,7 +491,7 @@
                       value="1"
                       {% endif %}
                       data-pk="{{manager.sicklecell_id}}"
-                      data-table="cc_athlete_sicklecell_waiver">
+                      data-table="athlete_sicklecell_waiver">
                       <a href="{{manager.results_file}}" class="rotate-photo">
                       <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
                       {% if manager.results_file %}
@@ -572,28 +572,28 @@
                   aria-controls="cc_student_meni_waiver" aria-selected="true">
                   Meni/Hep B</a>
               </li>
-              <li class="nav-item"{% if not manager.cc_athlete_privacy_waiver %}
+              <li class="nav-item"{% if not manager.athlete_privacy_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_privacy_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_privacy_waiver" role="tab"
                   aria-controls="cc_athlete_privacy_waiver" aria-selected="false">
                   Privacy</a>
               </li>
-              <li class="nav-item"{% if not manager.cc_athlete_sicklecell_waiver %}
+              <li class="nav-item"{% if not manager.athlete_sicklecell_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_sicklecell_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_sicklecell_waiver" role="tab"
                   aria-controls="cc_athlete_sicklecell_waiver" aria-selected="false">
                   Sickle Cell</a>
               </li>
-              <li class="nav-item"{% if not manager.cc_athlete_reporting_waiver %}
+              <li class="nav-item"{% if not manager.athlete_reporting_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_reporting_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_reporting_waiver" role="tab"
                   aria-controls="cc_athlete_reporting_waiver" aria-selected="false">
                   Reporting</a>
               </li>
-              <li class="nav-item"{% if not manager.cc_athlete_risk_waiver %}
+              <li class="nav-item"{% if not manager.athlete_risk_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_risk_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_risk_waiver" role="tab"

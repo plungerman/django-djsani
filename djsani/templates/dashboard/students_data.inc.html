@@ -1,7 +1,9 @@
+{% load cache %}
 <h4>Medical History: {{med_percent}}%</h4>
 <div class="table-responsive">
   <div class="card-body" style="margin-bottom:20px">
     <table class="dataTable display table-bordered table-hover" id="students-data">
+        {% cache 86400 datatable_head %}
         <thead>
           <tr>
             <th style="width:55px;">
@@ -68,91 +70,92 @@
             {% endif %}
           </tr>
         </thead>
+        {% endcache %}
         <tbody>
         {% for s in students %}
           <tr>
             <td class="{{s.adult}}" style="text-align:left;">
-              {% if s.get_manager.sitrep %}
+              {% if s.sitrep %}
                 <i class="fa fa-check green" title="Student Status"></i>
               {% else %}
-                {% if s.get_manager.id and staff %}
+                {% if s.manid and staff %}
                 <input type="checkbox" name="sitrep"
-                  data-cid="{{s.user.id}}" data-pk="{{s.get_manager.id}}" value="1"
-                  data-table="cc_student_medical_manager" title="Student Status">
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="student_medical_manager" title="Student Status">
                 {% else %}
                 <i class="fa fa-times red" title="Student Status"></i>
                 {% endif %}
               {% endif %}
-              {% if s.get_manager.sitrep_athlete %}
+              {% if s.sitrep_athlete %}
                 <i class="fa fa-check red" title="Athlete Status"></i>
               {% else %}
-                {% if s.get_manager.athlete and staff %}
+                {% if s.athlete and staff %}
                 <input type="checkbox" name="sitrep_athlete"
-                  data-cid="{{s.user.id}}" data-pk="{{s.get_manager.id}}" value="1"
-                  data-table="cc_student_medical_manager" title="Athlete Status">
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="student_medical_manager" title="Athlete Status">
                 {% else %}
                 <i class="fa fa-times red" title="Athlete Status"></i>
                 {% endif %}
               {% endif %}
-              {% if s.get_manager.concussion_baseline %}
+              {% if s.concussion_baseline %}
                 <i class="fa fa-check blue" title="Concussion Baseline"></i>
               {% else %}
-                {% if s.get_manager.athlete and staff %}
+                {% if s.athlete and staff %}
                 <input type="checkbox" name="concussion_baseline"
-                  data-cid="{{s.user.id}}" data-pk="{{s.get_manager.id}}" value="1"
-                  data-table="cc_student_medical_manager" title="Concussion Baseline">
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="student_medical_manager" title="Concussion Baseline">
                 {% else %}
                 <i class="fa fa-times red" title="Concussion Baseline"></i>
                 {% endif %}
               {% endif %}
               {% if staff or coach %}
               <span style="float:right;"><!-- all one line required -->
-                {% if s.get_manager.id %}
-                <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.user.id}}" data-pk="{{s.get_manager.id}}" class="xeditable" data-table="cc_student_medical_manager"><i class="fa {% if s.get_manager.staff_notes %}fa-commenting yellow{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-placement="right" data-content="{{s.get_manager.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-10000px;">{{s.get_manager.staff_notes|default_if_none:''}}</span></i></a>
+                {% if s.manid %}
+                <a href="#" data-field="staff_notes" data-type="textarea" data-cid="{{s.id}}" data-pk="{{s.manid}}" class="xeditable" data-table="student_medical_manager"><i class="fa {% if s.staff_notes %}fa-commenting yellow{% else %} fa-commenting-o green{% endif %}" data-toggle="popover" data-placement="right" data-content="{{s.staff_notes|default_if_none:''}}"><span style="position:absolute;left:-10000px;">{{s.staff_notes|default_if_none:''}}</span></i></a>
                 {% else %}
                 <i class="fa fa-commenting red" data-toggle="popover" data-placement="right" data-content="No student medical manager yet."></i>
                 {% endif %}
               </span>
               {% endif %}
             </td>
-            <td class="d-none">{% if s.get_manager.sitrep %}x{% else %}&nbsp;{% endif %}</td>
-            <td class="d-none">{% if s.get_manager.sitrep_athlete %}x{% else %}&nbsp;{% endif %}</td>
-            <td class="d-none">{% if s.get_manager.concussion_baseline %}x{% else %}&nbsp;{% endif %}</td>
-            <td class="{{s.get_manager.adult}} student-name" style="text-align:left;">
+            <td class="d-none">{% if s.sitrep %}x{% else %}&nbsp;{% endif %}</td>
+            <td class="d-none">{% if s.sitrep_athlete %}x{% else %}&nbsp;{% endif %}</td>
+            <td class="d-none">{% if s.concussion_baseline %}x{% else %}&nbsp;{% endif %}</td>
+            <td class="{{s.adult}} student-name" style="text-align:left;">
             {% if staff %}
-              <a href="{% url 'student_detail' s.user.id %}">
-                {{s.user.last_name}}, {{s.user.first_name}}
+              <a href="{% url 'student_detail' s.id %}">
+                {{s.last_name}}, {{s.first_name}}
               </a>
             {% else %}
-              {{s.user.lastname}}, {{s.user.first_name}}
+              {{s.lastname}}, {{s.first_name}}
             {% endif %}
-            {% if s.get_manager.athlete %}
+            {% if s.athlete %}
               <span style="float:right;margin-left:3px;">
                 <i class="fa fa-star green" title="Athlete"></i>
               </span>
             {% endif %}
             </td>
             {% if staff or coach %}
-            <td class="d-none">{{s.user.id}}</td>
+            <td class="d-none">{{s.id}}</td>
             <td class="d-none">{{s.birth_date}}</td>
-            <td class="d-none">{{s.user.email}}</td>
+            <td class="d-none">{{s.email}}</td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_student_immunization %}
+              {% if s.cc_student_immunization %}
                 <i class="fa fa-check" title="Immunization">
                   <span style="display:none;">x</span>
                 </i>
               {% else %}
-                {% if s.get_manager.id %}
+                {% if s.manid %}
                 <input type="checkbox" name="cc_student_immunization"
-                  data-cid="{{s.user.id}}" data-pk="{{s.get_manager.id}}" value="1"
-                  data-table="cc_student_medical_manager" title="Immunization">
+                  data-cid="{{s.id}}" data-pk="{{s.manid}}" value="1"
+                  data-table="student_medical_manager" title="Immunization">
                 {% else %}
                   <i class="fa fa-times red" title="Immunization"></i>
                 {% endif %}
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_student_health_insurance %}
+              {% if s.cc_student_health_insurance %}
                 <i class="fa fa-check" title="Health Insurance">
                   <span style="display:none;">x</span>
                 </i>
@@ -162,15 +165,15 @@
             </td>
             {% if s.residency == "R" %}
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_student_meni_waiver %}
+              {% if s.cc_student_meni_waiver %}
                 <i class="fa fa-check" title="Meningococcal meningitis/Hepatitis B response">
                   <span style="display:none;">x</span>
                 </i>
               {% else %}
-                {% if s.get_manager.id %}
+                {% if s.manid %}
                   <input type="checkbox" name="agree" value="1"
-                    data-cid="{{s.user.id}}" data-pk=""
-                    data-table="cc_student_meni_waiver"
+                    data-cid="{{s.id}}" data-pk=""
+                    data-table="student_meni_waiver"
                     title="Meningococcal meningitis/Hepatitis B response">
                 {% else %}
                   <i class="fa fa-times red" title="Meningococcal meningitis/Hepatitis B response"></i>
@@ -183,7 +186,7 @@
             </td>
             {% endif %}
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_student_medical_history %}
+              {% if s.cc_student_medical_history %}
                 <i class="fa fa-check" title="Medical History">
                   <span style="display:none;">x</span>
                 </i>
@@ -192,7 +195,7 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_athlete_medical_history %}
+              {% if s.cc_athlete_medical_history %}
                 <i class="fa fa-check" title="Athlete Medical History">
                   <span style="display:none;">x</span>
                 </i>
@@ -201,7 +204,7 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.physical_evaluation_1 and s.get_manager.physical_evaluation_2 %}
+              {% if s.physical_evaluation_1 and s.physical_evaluation_2 %}
                 <i class="fa fa-check" title="Pre-participation Physical">
                   <span style="display:none;">x</span>
                 </i>
@@ -210,7 +213,7 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.medical_consent_agreement %}
+              {% if s.medical_consent_agreement %}
                 <i class="fa fa-check" title="Medical consent and insurance agreement">
                   <span style="display:none;">x</span>
                 </i>
@@ -219,7 +222,7 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_athlete_privacy_waiver %}
+              {% if s.cc_athlete_privacy_waiver %}
                 <i class="fa fa-check" title="Privacy Waiver">
                   <span style="display:none;">x</span>
                 </i>
@@ -228,7 +231,7 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.get_sicklecell.results_file %}
+              {% if s.get_sicklecell.results_file %}
                 <i class="fa fa-check green" title="Sickle cell results">
                 <span style="display:none;">x</span></i>
               {% else %}
@@ -236,15 +239,15 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_athlete_reporting_waiver %}
+              {% if s.cc_athlete_reporting_waiver %}
                 <i class="fa fa-check" title="CCIW Injury and Illness Reporting Acknowledgement waiver">
                   <span style="display:none;">x</span>
                 </i>
               {% else %}
-                {% if s.get_manager.id %}
+                {% if s.manid and s.athlete and staff %}
                   <input type="checkbox" name="agree" value="1"
-                    data-cid="{{s.user.id}}" data-pk=""
-                    data-table="cc_athlete_reporting_waiver"
+                    data-cid="{{s.id}}" data-pk=""
+                    data-table="athlete_reporting_waiver"
                     title="CCIW Injury and Illness Reporting Acknowledgement waiver">
                 {% else %}
                   <i class="fa fa-times red"></i>
@@ -252,15 +255,15 @@
               {% endif %}
             </td>
             <td class="{{s.adult}}">
-              {% if s.get_manager.cc_athlete_risk_waiver %}
+              {% if s.cc_athlete_risk_waiver %}
                 <i class="fa fa-check" title="Assumption of risk waiver">
                   <span style="display:none;">x</span>
                 </i>
               {% else %}
-                {% if s.get_manager.id %}
+                {% if s.manid and s.athlete and staff %}
                   <input type="checkbox" name="agree" value="1"
-                    data-cid="{{s.user.id}}" data-pk=""
-                    data-table="cc_athlete_risk_waiver"
+                    data-cid="{{s.id}}" data-pk=""
+                    data-table="athlete_risk_waiver"
                     title="Assumption of risk waiver">
                 {% else %}
                   <i class="fa fa-times red" title="Assumption of risk waiver"></i>
@@ -271,6 +274,7 @@
           </tr>
         {% endfor %}
         </tbody>
+        {% cache 86400 datatable_foot %}
         <tfoot>
           <tr>
             <th style="width:55px;padding-right:30px;">
@@ -326,6 +330,7 @@
             {% endif %}
           </tr>
         </tfoot>
+        {% endcache %}
     </table>
   </div>
 </div>

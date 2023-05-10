@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_manager
 from djsani.insurance.forms import AthleteForm
 from djsani.insurance.forms import StudentForm

@@ -31,17 +31,17 @@ from PIL import Image
 # table names are the key, base model classes are the value
 
 WAIVERS = {
-    'cc_student_meni_waiver': Meni,
-    'cc_athlete_privacy_waiver': Privacy,
-    'cc_athlete_reporting_waiver': Reporting,
-    'cc_athlete_risk_waiver': Risk,
-    'cc_athlete_sicklecell_waiver': Sicklecell,
+    'student_meni_waiver': Meni,
+    'athlete_privacy_waiver': Privacy,
+    'athlete_reporting_waiver': Reporting,
+    'athlete_risk_waiver': Risk,
+    'athlete_sicklecell_waiver': Sicklecell,
 }
 BASES = {
-    'cc_student_medical_manager': StudentMedicalManager,
-    'cc_student_health_insurance': StudentHealthInsurance,
-    'cc_student_medical_history': StudentMedicalHistory,
-    'cc_athlete_medical_history': AthleteMedicalHistory,
+    'student_medical_manager': StudentMedicalManager,
+    'student_health_insurance': StudentHealthInsurance,
+    'student_medical_history': StudentMedicalHistory,
+    'athlete_medical_history': AthleteMedicalHistory,
 }
 BASES.update(WAIVERS)
 
@@ -82,7 +82,7 @@ def set_val(request):
     else:
         # create our dictionary to hold name/value pairs
         dic = {name: value}
-        if table == 'cc_athlete_sicklecell_waiver':
+        if table == 'athlete_sicklecell_waiver':
             # set value = 1 if field name = 'waive' or
             # if it = 'results' since that value is
             # either Positive or Negative
@@ -100,7 +100,7 @@ def set_val(request):
         manager = get_manager(cid)
         if WAIVERS.get(table) and not pk:
             # create new waiver
-            dic['college_id'] = cid
+            dic['user_id'] = cid
             dic['manager_id'] = manager.id
             nobj = WAIVERS[table](**dic)
             nobj.save()
@@ -139,7 +139,7 @@ def set_val(request):
             for dkey, dval in dic.items():
                 message += '{0} = {1}\n'.format(dkey, dval)
             log = StudentMedicalLogEntry(
-                college_id=user.id,
+                user=user,
                 content_type_id=get_content_type(table).id,
                 object_id=nobj.id,
                 object_repr=nobj,

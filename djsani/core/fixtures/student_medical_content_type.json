@@ -1,0 +1,83 @@
+[
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 1,
+    "fields": {
+        "name": "student_medical_manager",
+        "app_label": "core",
+        "model": "StudentMedicalManager"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 2,
+    "fields": {
+        "name": "student_health_insurance",
+        "app_label": "insurance",
+        "model": "StudentHealthInsurance"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 3,
+    "fields": {
+        "name": "student_medical_history",
+        "app_label": "medical_history",
+        "model": "StudentMedicalHistory"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 4,
+    "fields": {
+        "name": "student_meni_waiver",
+        "app_label": "waivers",
+        "model": "StudentMeniWaiver"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 5,
+    "fields": {
+        "name": "athlete_medical_history",
+        "app_label": "medical_history",
+        "model": "AthleteMedicalHistory"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 6,
+    "fields": {
+        "name": "athlete_privacy_waiver",
+        "app_label": "waivers",
+        "model": "Privacy"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 7,
+    "fields": {
+        "name": "athlete_reporting_waiver",
+        "app_label": "waivers",
+        "model": "Reporting"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 8,
+    "fields": {
+        "name": "athlete_risk_waiver",
+        "app_label": "waivers",
+        "model": "Risk"
+    }
+},
+{
+    "model": "core.studentmedicalcontenttype",
+    "pk": 9,
+    "fields": {
+        "name": "athlete_sicklecell_waiver",
+        "app_label": "waivers",
+        "model": "Sicklecell"
+    }
+}
+]
