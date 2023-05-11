@@ -57,7 +57,7 @@ def set_val(request):
 
     Requires via POST:
 
-    college_id
+    user_id
     name (database field)
     value
     pk (primary key of object to be updated)
@@ -66,7 +66,7 @@ def set_val(request):
     user = request.user
     staff = in_group(user, settings.STAFF_GROUP)
     # college ID
-    cid = request.POST.get('college_id')
+    cid = request.POST.get('user_id')
     # name/value pair
     name = request.POST.get('name')
     # primary key

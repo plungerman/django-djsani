@@ -223,7 +223,7 @@ class AthleteForm(forms.ModelForm):
 
         model = StudentHealthInsurance
         exclude = (
-            'college_id',
+            'user',
             'created_at',
             'manager',
             'primary_card_front_status',
@@ -258,7 +258,7 @@ class StudentForm(AthleteForm):
 
         model = StudentHealthInsurance
         exclude = (
-            'college_id',
+            'user',
             'created_at',
             'manager',
             'primary_card_front_status',

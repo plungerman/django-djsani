@@ -58,7 +58,7 @@ $(function() {
               emptytext: "Click to edit",
               params: function (params) {
                   params.table = $(this).attr("data-table");
-                  params.college_id = $(this).attr("data-cid");
+                  params.user_id = $(this).attr("data-cid");
                   params.name = $(this).attr("data-field");
                   params.pk = $(this).attr("data-pk");
                   return params
@@ -133,7 +133,7 @@ $(function() {
                           emptytext: "Click to edit",
                           params: function (params) {
                             params.table = $(this).attr("data-table");
-                            params.college_id = $(this).attr("data-cid");
+                            params.user_id = $(this).attr("data-cid");
                             params.name = $(this).attr("data-field");
                             params.pk = $(this).attr("data-pk");
                             return params
@@ -170,7 +170,7 @@ $(function() {
                   $('#students-data').on( 'change', 'input', function () {
                       var $dis = $(this);
                       var $data = {
-                          'college_id': $dis.attr("data-cid"),
+                          'user_id': $dis.attr("data-cid"),
                           'value': $dis.val(),
                           'name': $dis.attr("name"),
                           'table': $dis.attr("data-table"),
@@ -220,7 +220,7 @@ $(function() {
   $('#students-data').on( 'change', 'input', function () {
       var $dis = $(this);
       var $data = {
-          'college_id': $dis.attr("data-cid"),
+          'user_id': $dis.attr("data-cid"),
           'value': $dis.val(),
           'name': $dis.attr("name"),
           'table': $dis.attr("data-table"),

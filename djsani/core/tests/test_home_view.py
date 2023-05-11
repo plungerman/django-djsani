@@ -6,13 +6,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse_lazy
-from djimix.core.utils import get_connection
-from djimix.core.utils import xsql
 from djsani.core.models import SPORTS
 from djsani.core.models import SPORTS_MEN
 from djsani.core.models import SPORTS_WOMEN
 from djsani.core.sql import STUDENT_VITALS
 from djsani.core.utils import get_manager
+from djsani.core.utils import xsql
 from djtools.utils.date import calculate_age
 from djtools.utils.date import get_term
 from djtools.utils.mail import send_mail
@@ -44,7 +43,7 @@ def home(user):
         STUDENT_VITALS, cid, term['yr'], term['sess'], settings.START_DATE,
     )
     with get_connection() as connection:
-        student = xsql(sql, connection, key=settings.INFORMIX_DEBUG).fetchone()
+        student = xsql(sql).fetchone()
         if student:
             # sports needs a python list
             if manager.sports:

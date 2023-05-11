@@ -157,6 +157,7 @@ def get_students(request):
                 if minors:
                     minors_list.append(stu)
             stu['age'] = age
+            stu['adult'] = adult
         if trees:
             # emergency notification system
             # worday data for ENS coming soon

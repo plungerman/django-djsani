@@ -58,7 +58,7 @@
             emptytext: "Click to edit",
             params: function (params) {
                 params.table = $(this).attr("data-table");
-                params.college_id = {{student.id|default:"0"}};
+                params.user_id = {{student.id|default:"0"}};
                 params.pk = $(this).attr("data-pk");
                 return params
             },
@@ -72,7 +72,7 @@
             var $dis = $(this);
             var $name = $dis.attr("name");
             dict = {
-                'college_id':{{student.id|default:"0"}},
+                'user_id':{{student.id|default:"0"}},
                 'value': $dis.val(),
                 'name': $name,
                 'table': $(this).attr("data-table"),

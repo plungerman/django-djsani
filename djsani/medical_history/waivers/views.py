@@ -21,12 +21,12 @@ from djtools.utils.convert import str_to_class
 @login_required
 def index(request, stype, wtype):
     """Generic waivers form."""
-    cid = request.user.id
+    user = request.user
     # user student type and waiver type to build table name
     table = 'cc_{0}_{1}_waiver'.format(stype, wtype)
 
     # check for student manager record
-    manager = get_manager(cid)
+    manager = get_manager(user.id)
     # form name
     fname = str_to_class(
         'djsani.medical_history.waivers.forms',
@@ -35,7 +35,7 @@ def index(request, stype, wtype):
     sicklecell = None
     if wtype == 'sicklecell':
         sicklecell = Sicklecell.objects.using('informix').filter(
-            college_id=cid,
+            user=user,
         ).filter(created_at__gte=settings.START_DATE).first()
 
     # check to see if they already submitted this form.
@@ -51,7 +51,7 @@ def index(request, stype, wtype):
             cd = form.cleaned_data
             if sicklecell:
                 folder = 'sicklecell/{0}/{1}'.format(
-                    cid, manager.created_at.strftime('%Y%m%d%H%M%S%f'),
+                    user.id, manager.created_at.strftime('%Y%m%d%H%M%S%f'),
                 )
                 phile = handle_uploaded_file(
                     request.FILES['results_file'],
@@ -66,7 +66,7 @@ def index(request, stype, wtype):
                 sicklecell.save(using='informix')
             else:
                 # insert
-                cd['college_id'] = cid
+                cd['user_id'] = user.id
                 cd['manager_id'] = manager.id
                 model = str_to_class(
                     'djsani.medical_history.waivers.models',

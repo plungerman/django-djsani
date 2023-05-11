@@ -33,7 +33,7 @@ $(function() {
     // set name/value pairs
     function setVal(name, value) {
         var $data = {
-            "college_id": {{request.user.id}},
+            "user_id": {{request.user.id}},
             "table": "cc_student_medical_manager",
             "pk": {{manager.id|default:0}},
             "name": name,

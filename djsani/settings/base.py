@@ -5,18 +5,6 @@
 import datetime
 import os
 
-from djimix.settings.local import DBSERVERNAME
-from djimix.settings.local import INFORMIX_ODBC
-from djimix.settings.local import INFORMIX_ODBC_TRAIN
-from djimix.settings.local import INFORMIXDIR
-from djimix.settings.local import INFORMIXSERVER
-from djimix.settings.local import INFORMIXSQLHOSTS
-from djimix.settings.local import LD_LIBRARY_PATH
-from djimix.settings.local import LD_RUN_PATH
-from djimix.settings.local import MSSQL_EARL
-from djimix.settings.local import ODBCINI
-from djimix.settings.local import ONCONFIG
-
 # Debug
 DEBUG = False
 ADMINS = (
@@ -212,7 +200,6 @@ UPLOAD_EMAIL_DICT = {}
 START_DATE = datetime.datetime(datetime.datetime.now().year, 6, 1)
 DECEMBER = 12
 ADULT_AGE = 18
-SPORTS_MONTH = 5
 ACADEMIC_YEAR_LIMBO = False
 STAFF_GROUP = 'MedicalStaff'
 COACH_GROUP = 'AthleticsCoach'
