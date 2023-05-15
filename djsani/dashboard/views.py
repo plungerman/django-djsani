@@ -85,7 +85,7 @@ def get_students(request):
         post = request.POST
         cyear = post.get('class')
         minors = post.get('minors')
-        if staff or coach:
+        if staff:
             sport = post.get('sport')
             # are we in print view?
             trees = post.get('print')
@@ -108,7 +108,7 @@ def get_students(request):
                         sql += 'AND student_health_insurance.tertiary_company="US Fire Insurance Company"'
                     else:
                         sql += 'AND student_medical_manager.id IS NULL'
-                elif not coach:
+                else:
                     sql += 'AND student_profile.class_year IN ({0})'.format(cyear)
                 template = 'dashboard/students_data.inc.html'
             if sport:
@@ -128,10 +128,20 @@ def get_students(request):
             )
     else:
         template = 'dashboard/home.html'
-        cl = ' AND student_profile.class_year IN ("FN","FF","UT","PF","PN")'
         if coach:
-            cl = ''
-        sql += cl
+            sids = [str(sid.id) for sid in user.staff.sports.all()]
+            sql += """
+                AND ({0}) IN (
+                SELECT
+                    sport_id
+                FROM
+                    student_medical_manager_sports
+                WHERE
+                    studentmedicalmanager_id = student_medical_manager.id
+                )
+            """.format(','.join(sids))
+        else:
+            sql += ' AND student_profile.class_year IN ("FN","FF","UT","PF","PN")'
     # lastly, order by last name
     sql += ' ORDER BY auth_user.last_name'
     students = xsql(sql)

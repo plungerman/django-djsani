@@ -3,6 +3,7 @@
 from django.contrib import admin
 from djsani.core.models import Sport
 from djsani.core.models import StudentMedicalManager
+from djsani.core.models import StaffProfile
 from djsani.core.models import StudentProfile
 
 
@@ -31,6 +32,28 @@ class StudentMedicalManagerAdmin(admin.ModelAdmin):
         'user__username',
         'user__id',
     )
+    raw_id_fields = ['user']
+
+
+class StaffProfileAdmin(admin.ModelAdmin):
+    """Data model class for student profiles."""
+
+    list_display  = (
+        'last_name',
+        'first_name',
+        'username',
+        'cid',
+    )
+    search_fields = (
+        'user__last_name',
+        'user__first_name',
+        'user__username',
+        'user__id',
+    )
+    list_max_show_all = 500
+    list_per_page = 500
+    save_on_top = True
+    ordering = ['user__last_name']
     raw_id_fields = ['user']
 
 
@@ -69,5 +92,6 @@ class StudentProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Sport, SportAdmin)
+admin.site.register(StaffProfile, StaffProfileAdmin)
 admin.site.register(StudentMedicalManager, StudentMedicalManagerAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)

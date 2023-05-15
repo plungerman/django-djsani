@@ -130,9 +130,9 @@ $(function() {
                         action="." role="form">
                         {% csrf_token %}
                         <div class="form-group">
+                            {% if staff %}
                             <label style="margin-right:10px;">
                                 Only show
-                            {% if staff %}
                             </label>
                             <select name="class" class="form-control">
                                 <option value="'FF','FN','FR','UT','PF','PN'">
@@ -167,10 +167,6 @@ $(function() {
                                     Have athlete insurance
                                 </option>
                             </select>
-                            {% else %}
-                            Students
-                            </label>
-                            {% endif %}
                             <label style="margin:0 10px;">
                               Participating in
                             </label>
@@ -182,15 +178,14 @@ $(function() {
                             </option>
                             {% endfor %}
                             </select>
-                            {% if staff %}
                             <input type="checkbox" name="print" value="print"
                               id="athletes-print" style="margin:0 10px;"> Print
                             <input type="checkbox" name="minors" value="minors"
                               id="athletes-minors" style="margin:0 10px;"> Minors
-                            {% endif %}
                             <input type="submit" name="submit" value="submit"
                               id="submit-toggle" style="margin:0 10px;"
                               class="btn btn-primary">
+                            {% endif %}
                         </div>
                     </form>
                 </div>
