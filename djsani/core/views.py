@@ -154,10 +154,6 @@ def set_val(request):
 @login_required
 def home(request):
     """Default home view when user signs in."""
-    if settings.ACADEMIC_YEAR_LIMBO:
-        return render(
-            request, 'closed.html',
-        )
     # for when faculty/staff sign in here or not student found
     context_data = {}
     # set our user
@@ -178,7 +174,15 @@ def home(request):
         context_data['staff'] = staff
         context_data['coach'] = coach
 
-    return render(request, 'home.html', context_data)
+    if settings.ACADEMIC_YEAR_LIMBO:
+        response = render(
+            request,
+            'closed.html',
+            context_data,
+        )
+    else:
+        response = render(request, 'home.html', context_data)
+    return response
 
 
 @csrf_exempt
