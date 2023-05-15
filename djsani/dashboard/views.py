@@ -129,7 +129,7 @@ def get_students(request):
     else:
         template = 'dashboard/home.html'
         if coach:
-            sids = [str(sid.id) for sid in user.staff.sports.all()]
+            sids = [str(sid.id) for sid in user.coach.sports.all()]
             sql += """
                 AND ({0}) IN (
                 SELECT

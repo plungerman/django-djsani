@@ -247,21 +247,21 @@ class StudentMedicalManager(models.Model):
         return self.sicklecell.filter(created_at__gte=settings.START_DATE).first()
 
 
-class StaffProfile(models.Model):
+class CoachProfile(models.Model):
     """Data class model for student data."""
 
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         primary_key=True,
-        related_name='staff',
+        related_name='coach',
     )
     sports = models.ManyToManyField(Sport)
 
     class Meta:
         """Attributes about the data model and admin options."""
 
-        db_table = 'staff_profile'
+        db_table = 'coach_profile'
 
     def __str__(self):
         """Default data for display."""

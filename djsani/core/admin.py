@@ -3,7 +3,7 @@
 from django.contrib import admin
 from djsani.core.models import Sport
 from djsani.core.models import StudentMedicalManager
-from djsani.core.models import StaffProfile
+from djsani.core.models import CoachProfile
 from djsani.core.models import StudentProfile
 
 
@@ -35,7 +35,7 @@ class StudentMedicalManagerAdmin(admin.ModelAdmin):
     raw_id_fields = ['user']
 
 
-class StaffProfileAdmin(admin.ModelAdmin):
+class CoachProfileAdmin(admin.ModelAdmin):
     """Data model class for student profiles."""
 
     list_display  = (
@@ -91,7 +91,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
     raw_id_fields = ['user']
 
 
+admin.site.register(CoachProfile, CoachProfileAdmin)
 admin.site.register(Sport, SportAdmin)
-admin.site.register(StaffProfile, StaffProfileAdmin)
 admin.site.register(StudentMedicalManager, StudentMedicalManagerAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)
