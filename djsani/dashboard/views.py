@@ -91,7 +91,7 @@ def get_students(request):
             trees = post.get('print')
             if sport and staff and trees:
                 # print all athletes from any given sport
-                template = 'dashboard/athletes_print.html'
+                template = 'dashboard/athlete_print.html'
             else:
                 if cyear in {'0', '1', '2', '3', '4', '5', '6'}:
                     if cyear == '1':
@@ -129,9 +129,11 @@ def get_students(request):
     else:
         template = 'dashboard/home.html'
         if coach:
-            sids = [str(sid.id) for sid in user.coach.sports.all()]
-            sql += """
-                AND ({0}) IN (
+            sids = user.coach.get_sports(get='id')
+            sql += ' AND ('
+            for count, sid in enumerate(sids):
+                sql += """
+                {0} IN (
                 SELECT
                     sport_id
                 FROM
@@ -139,7 +141,10 @@ def get_students(request):
                 WHERE
                     studentmedicalmanager_id = student_medical_manager.id
                 )
-            """.format(','.join(sids))
+                """.format(sid)
+                if count < len(sids) - 1:
+                    sql +=' OR '
+            sql += ')'
         else:
             sql += ' AND student_profile.class_year IN ("FN","FF","UT","PF","PN")'
     # lastly, order by last name
@@ -199,7 +204,7 @@ def home(request):
     return get_students(request)
 
 
-@group_required(STAFF)
+@group_required(STAFF, COACH)
 def student_detail(request, cid=None, medium=None, content_type=None):
     """Main method for displaying student data."""
     template = 'dashboard/student_detail.html'

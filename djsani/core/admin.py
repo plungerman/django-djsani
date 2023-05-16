@@ -41,7 +41,7 @@ class CoachProfileAdmin(admin.ModelAdmin):
     list_display  = (
         'last_name',
         'first_name',
-        'sports',
+        'get_sports',
         'username',
         'cid',
     )

@@ -6,33 +6,27 @@
 {% block extra_style %}
 <style>
 .dl-horizontal dt.widus {
-    overflow: auto;
-    width: 300px;
-    margin-right:9px;
+  overflow: auto;
+  width: 300px;
+  margin-right:9px;
 }
-.dl-horizontal dd.yes {
-    margin-left: 0;
-}
+.dl-horizontal dd.yes {margin-left: 0;}
 .nav-tabs{display:none;}
-.tab-content > .tab-pane {
-    display: block;
-}
-.fade {
-    opacity: 1;
-}
+.tab-content > .tab-pane {display: block;}
+.fade {opacity: 1;}
 </style>
 {% endblock %}
 {% block extra_javascript %}{% endblock %}
 {% block body_tag %} onload="window.print()"{% endblock %}
 {% block content %}
 <div id="student-contact">
-    <h1 class="page-header">
+  <h1 class="page-header">
     {{student.first_name}} {{student.last_name}}
     <small>DOB: {{student.student.birth_date}} &mdash; Age: {{age}}</small>
-    </h1>
+  </h1>
 </div>
-<div id="student-waivers">
-    <h2>Waivers</h2>
-    {% include "dashboard/waivers.inc.html" %}
+<div id="emergency_information">
+  <h2>Notes and comments</h2>
+  {% include "dashboard/panels/staff_notes.html" %}
 </div>
 {% endblock content %}

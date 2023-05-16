@@ -1,16 +1,16 @@
 <div class="student-contact">
     <h1 class="page-header">
-    {{student.first_name}} {{student.last_name}} ({{student.student.gender}}) [{{student.id}}]
+    {{student.first_name}} {{student.last_name}} ({{student.gender}}) [{{student.id}}]
     {% if student.athlete %}<small>Athlete</small><br />{% endif %}
-    <small>DOB: {{student.student.birth_date}} &mdash; Age: {{age}}</small>
+    <small>DOB: {{student.birth_date}} &mdash; Age: {{student.age}}</small>
     </h1>
     <address>
-    {{student.student.address1}} {{student.student.address2}}<br>
-    {{student.student.city}}, {{student.student.state}}<br>
-    {{student.student.postal_code}} {{student.student.country}}<br>
-    {{student.student.phone}}<br>
-    {{student.student.email}}<br>
-    Residency: {{student.student.residency}}
+    {{student.address1}} {{student.address2}}<br>
+    {{student.city}}, {{student.state}}<br>
+    {{student.postal_code}} {{student.country}}<br>
+    {{student.phone}}<br>
+    {{student.email}}<br>
+    Residency: {{student.residency}}
     </address>
 </div>
 <div class="emergency_information">
@@ -24,7 +24,7 @@
         </ul>
         {% endfor %}
     {% else %}
-      {% with ens=student.student.ens %}
+      {% with ens=student.ens %}
         {% for e in ens %}
         <h4>Contact {{forloop.counter}}</h4>
         <ul>
@@ -40,6 +40,6 @@
     {% if shi %}
       {{shi}}
     {% else %}
-      {{student.student.shi}}
+      {{student.shi}}
     {% endif %}
 </div>

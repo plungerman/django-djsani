@@ -291,6 +291,16 @@ class CoachProfile(models.Model):
     cid.allow_tags = True
     cid.short_description = "CID"
 
+    def get_sports(self, get=None):
+        """Return sports IDs or Codes in a tuple."""
+        if get=='id':
+            sports = [sid.id for sid in self.user.coach.sports.all()]
+        else:
+            sports = [sid.code for sid in self.user.coach.sports.all()]
+        return sports
+    get_sports.allow_tags = True
+    get_sports.short_description = "Sports"
+
 
 class StudentProfile(models.Model):
     """Data class model for student data."""
