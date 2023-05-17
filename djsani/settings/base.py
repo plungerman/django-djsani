@@ -56,28 +56,6 @@ DATABASES = {
         'USER': '',
         'PASSWORD': '',
     },
-    'informix': {
-        'ENGINE': 'django_informixdb',
-        'NAME': '',
-        'SERVER': '',
-        'USER': '',
-        'PASSWORD': '',
-        'OPTIONS': {
-            'DRIVER': '/opt/ibm/informix/lib/cli/iclit09b.so',
-            'CPTIMEOUT': 120,
-            'CONN_TIMEOUT': 120,
-            'ISOLATION_LEVEL': 'READ_UNCOMMITTED',
-            'LOCK_MODE_WAIT': 0,
-            'VALIDATE_CONNECTION': True,
-        },
-        'CONNECTION_RETRY': {
-            'MAX_ATTEMPTS': 10,
-        },
-        'TEST': {
-            'NAME': '',
-            'CREATE_DB': False,
-        },
-    },
 }
 INSTALLED_APPS = (
     'django.contrib.admin',

@@ -51,7 +51,7 @@ def main():
     """Obtain the users medical manager."""
     logger.debug("fetch the current user manager")
     logger.debug(seperator())
-    manager = StudentMedicalManager.objects.using('informix').filter(
+    manager = StudentMedicalManager.objects.filter(
         college_id=cid,
     ).filter(created_at__gte=settings.START_DATE).first()
     if manager:
@@ -64,7 +64,7 @@ def main():
         sicklecell = False
         concussion_baseline = False
         # do we have a past manager?
-        past_man = StudentMedicalManager.objects.using('informix').filter(
+        past_man = StudentMedicalManager.objects.filter(
             college_id=cid,
         ).order_by('-id').first()
 
@@ -81,7 +81,7 @@ def main():
             # which means always True
             if past_man.cc_athlete_sicklecell_waiver:
                 # fetch the latest sicklecell waiver
-                sc = Sicklecell.objects.using('informix').filter(
+                sc = Sicklecell.objects.filter(
                     college_id=cid,
                 ).order_by('-id').first()
                 if sc.proof:
@@ -99,7 +99,7 @@ def main():
         if test:
             logger.debug(manager)
         else:
-            manager.save(using='informix')
+            manager.save()
             logger.debug(manager)
 
         # check for insurance object

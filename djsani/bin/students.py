@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import argparse
 import datetime
 import django
 import os
@@ -24,6 +25,26 @@ from djsani.core.models import StudentProfile
 from djtools.utils.date import calculate_age
 from djtools.utils.workday import get_students
 
+
+# set up command-line options
+desc = "Accepts as input sports arg for loading sports or not"
+
+# RawTextHelpFormatter method allows for new lines in help text
+parser = argparse.ArgumentParser(
+    description=desc, formatter_class=argparse.RawTextHelpFormatter
+)
+parser.add_argument(
+    '-s', '--sports',
+    help="Load sports?",
+    dest='sports',
+    action='store_true',
+)
+parser.add_argument(
+    '--test',
+    action='store_true',
+    help="Dry run?",
+    dest='test'
+)
 
 PHILE = os.path.join(settings.BASE_DIR, 'sql/sports_student.sql')
 
@@ -90,22 +111,27 @@ def main():
                 defaults=defaults,
             )
             # sports
-            sports = get_sports(stu['id'])
-            for sporx in get_sports(stu['id']):
-                if sporx[4]:
-                    year = sporx[4].year - 1
-                    sport = Sport.objects.get(code=sporx[0])
-                    manager = StudentMedicalManager.objects.filter(
-                        user__id=stu['id'],
-                    ).filter(created_at__year=year).first()
-                    if manager:
-                        manager.athlete=True
-                        manager.save()
-                        manager.sports.add(sport)
-
+            if sports:
+                sports = get_sports(stu['id'])
+                for sporx in get_sports(stu['id']):
+                    if sporx[4]:
+                        year = sporx[4].year - 1
+                        sport = Sport.objects.get(code=sporx[0])
+                        manager = StudentMedicalManager.objects.filter(
+                            user__id=stu['id'],
+                        ).filter(created_at__year=year).first()
+                        if manager:
+                            manager.athlete=True
+                            manager.save()
+                            manager.sports.add(sport)
         else:
             print("Username '{0}' does not exist".format(username))
 
 
 if __name__ == '__main__':
+    args = parser.parse_args()
+    sports = args.sports
+    test = args.test
+    if test:
+        print(args)
     sys.exit(main())

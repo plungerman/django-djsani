@@ -9,8 +9,8 @@ import os
 import sys
 
 django.setup()
-# env
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from djsani.core.utils import get_content_type
@@ -135,13 +135,13 @@ def main():
             dic['college_id'] = cid
             dic['manager_id'] = manager.id
             nobj = WAIVERS[table](**dic)
-            nobj.save(using='informix')
+            nobj.save()
             # update the manager
             setattr(manager, table, value)
-            manager.save(using='informix')
+            manager.save()
         else:
             model = BASES[table]
-            nobj = model.objects.using('informix').filter(pk=pk).first()
+            nobj = model.objects.filter(pk=pk).first()
             if nobj:
                 if name == 'athlete' and str(value) == '0':
                     dic['sports'] = ''
@@ -156,7 +156,7 @@ def main():
                 # update existing object
                 for key, dic_val in dic.items():
                     setattr(nobj, key, dic_val)
-                nobj.save(using='informix')
+                nobj.save()
             else:
                 logger.debug("No object found associated with ID:")
                 logger.debug(pk)
@@ -164,7 +164,7 @@ def main():
             # if waiver, update manager table
             if WAIVERS.get(table):
                 setattr(manager, table, value)
-                manager.save(using='informix')
+                manager.save()
 
         # update the log entry for staff modifications
         if staff:
@@ -179,7 +179,7 @@ def main():
                 action_flag=CHANGE,
                 action_message=message,
             )
-            log.save(using='informix')
+            log.save()
 
     logger.debug("Done.")
 

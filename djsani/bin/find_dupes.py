@@ -1,34 +1,24 @@
 # -*- coding: utf-8 -*-
-import os, sys
 
-# env
-sys.path.append('/usr/lib/python2.7/dist-packages/')
-sys.path.append('/usr/lib/python2.7/')
-sys.path.append('/usr/local/lib/python2.7/dist-packages/')
-sys.path.append('/data2/django_1.7/')
-sys.path.append('/data2/django_projects/')
-sys.path.append('/data2/django_third/')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings')
-
+import argparse
 import django
+import os
+import sys
+
 django.setup()
 
 from django.conf import settings
-
-from djsani.medical_history.waivers.models import Meni, Privacy, Reporting
-from djsani.medical_history.waivers.models import Risk, Sicklecell
+from djsani.medical_history.waivers.models import Meni
+from djsani.medical_history.waivers.models import Privacy
+from djsani.medical_history.waivers.models import Reporting
+from djsani.medical_history.waivers.models import Risk
+from djsani.medical_history.waivers.models import Sicklecell
 from djsani.medical_history.models import StudentMedicalHistory
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.core.models import StudentMedicalManager
 from djsani.core.views import BASES
 
-from djzbar.utils.informix import get_session
-
-import argparse
-
-
-EARL = settings.INFORMIX_EARL
 
 # set up command-line options
 desc = """
@@ -47,37 +37,22 @@ parser.add_argument(
 )
 
 def main():
-    """
-    main function
-    """
-
-    # create database session
-    session = get_session(EARL)
-
+    """main function."""
     model = BASES[table]
-
     print("select all managers")
-    managers = session.query(StudentMedicalManager).all()
+    managers = StudentMedicalManager.objects.all()
     for man in managers:
         try:
-            obj = session.query(model).filter_by(college_id=man.college_id).all()
+            obj = model.objects.filter(college_id=man.college_id).all()
             if len(obj) > 1:
-                print("Manager ID {} has more than 1 rec: {}".format(
-                    man.college_id, len(obj)
+                print("Manager ID {0} has more than 1 rec: {1}".format(
+                    man.college_id, len(obj),
                 ))
         except:
             pass
 
-    session.commit()
-    session.close()
-
-######################
-# shell command line
-######################
 
 if __name__ == '__main__':
-
     args = parser.parse_args()
     table = args.table
-
     sys.exit(main())

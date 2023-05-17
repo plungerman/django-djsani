@@ -52,7 +52,7 @@ def main():
         print("Invalid table name: {0}".format(table))
         sys.exit()
 
-    rows = model.objects.using('informix').all().order_by('id')
+    rows = model.objects.all().order_by('id')
     print("select all from table: {0}".format(table))
     for row in rows:
         print(row.__dict__)

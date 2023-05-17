@@ -46,7 +46,7 @@ class CoreUtilsTestCase(TestCase):
         """Obtain the users medical manager."""
         logger.debug("fetch the current user manager")
         logger.debug(seperator())
-        manager = StudentMedicalManager.objects.using('informix').filter(
+        manager = StudentMedicalManager.objects.filter(
             college_id=self.user.id,
         ).filter(created_at__gte=settings.START_DATE).first()
         if manager:
@@ -59,7 +59,7 @@ class CoreUtilsTestCase(TestCase):
             sicklecell = False
             concussion_baseline = False
             # do we have a past manager?
-            past_man = StudentMedicalManager.objects.using('informix').filter(
+            past_man = StudentMedicalManager.objects.filter(
                 college_id=self.user.id,
             ).order_by('-id').first()
             if past_man:
@@ -75,7 +75,7 @@ class CoreUtilsTestCase(TestCase):
                 # which means always True
                 if past_man.cc_athlete_sicklecell_waiver:
                     # fetch the latest sicklecell waiver
-                    sc = Sicklecell.objects.using('informix').filter(
+                    sc = Sicklecell.objects.filter(
                         college_id=self.user.id,
                     ).order_by('-id').first()
                     if sc.proof:
@@ -90,7 +90,7 @@ class CoreUtilsTestCase(TestCase):
                 concussion_baseline=concussion_baseline,
             )
             logger.debug("new manager")
-            manager.save(using='informix')
+            manager.save()
             logger.debug(manager)
 
             # check for insurance object

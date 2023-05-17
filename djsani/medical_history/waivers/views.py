@@ -34,7 +34,7 @@ def index(request, stype, wtype):
     )
     sicklecell = None
     if wtype == 'sicklecell':
-        sicklecell = Sicklecell.objects.using('informix').filter(
+        sicklecell = Sicklecell.objects.filter(
             user=user,
         ).filter(created_at__gte=settings.START_DATE).first()
 
@@ -63,7 +63,7 @@ def index(request, stype, wtype):
                     setattr(sicklecell, key, form_val)
                 sicklecell.proof = True
                 sicklecell.waive = False
-                sicklecell.save(using='informix')
+                sicklecell.save()
             else:
                 # insert
                 cd['user_id'] = user.id
@@ -73,10 +73,10 @@ def index(request, stype, wtype):
                     wtype.capitalize(),
                 )
                 waiver = model(**cd)
-                waiver.save(using='informix')
+                waiver.save()
             # update the manager
             setattr(manager, table, True)
-            manager.save(using='informix')
+            manager.save()
 
             return HttpResponseRedirect(reverse_lazy('waiver_success'))
     else:
