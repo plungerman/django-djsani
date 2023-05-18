@@ -68,11 +68,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
         'residency',
         'username',
         'cid',
-        #'address1',
-        #'address2',
-        #'city',
-        #'state',
-        #'postal_code',
+        'created_at',
     )
     search_fields = (
         'user__last_name',

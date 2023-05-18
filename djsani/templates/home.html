@@ -46,11 +46,7 @@ $(function() {
             dataType: "html",
             data: $data,
             success: function(data) {
-                if (data == "success") {
-                    $.growlUI('Success', "Data saved.");
-                } else {
-                    $.growlUI('Error', data);
-                }
+                $.growlUI('Success', "Data saved.");
             }
         });
     }

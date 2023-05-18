@@ -34,10 +34,12 @@ parser = argparse.ArgumentParser(
     description=desc, formatter_class=argparse.RawTextHelpFormatter
 )
 parser.add_argument(
-    '-s', '--sports',
+    '-s',
+    '--sports',
     help="Load sports?",
     dest='sports',
     action='store_true',
+    default=False,
 )
 parser.add_argument(
     '--test',
@@ -112,10 +114,10 @@ def main():
             )
             # sports
             if sports:
-                sports = get_sports(stu['id'])
                 for sporx in get_sports(stu['id']):
+                    print('boo')
                     if sporx[4]:
-                        year = sporx[4].year - 1
+                        year = sporx[4].year
                         sport = Sport.objects.get(code=sporx[0])
                         manager = StudentMedicalManager.objects.filter(
                             user__id=stu['id'],

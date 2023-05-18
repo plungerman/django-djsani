@@ -2,6 +2,8 @@
 
 """Views and helpers for the project as a whole."""
 
+import logging
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -28,6 +30,7 @@ from djtools.utils.users import in_group
 from PIL import Image
 
 
+logger = logging.getLogger('debug_logfile')
 # table names are the key, base model classes are the value
 
 WAIVERS = {
@@ -107,6 +110,7 @@ def set_val(request):
             # update the manager
             setattr(manager, table, value)
             manager.save()
+            logger.debug(manager.cc_student_meni_waiver	)
         else:
             model = BASES[table]
             nobj = model.objects.filter(pk=pk).first()
@@ -132,7 +136,6 @@ def set_val(request):
             if WAIVERS.get(table):
                 setattr(manager, table, value)
                 manager.save()
-
         # update the log entry for staff modifications
         if staff:
             message = ''

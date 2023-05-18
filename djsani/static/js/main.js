@@ -236,13 +236,9 @@ $(function() {
           },
           success: function(data) {
               spinner.stop(target);
-              if (data == "success") {
-                  check ='<i class="fa fa-check"></i>';
-                  $dis.replaceWith(check);
-                  $.growlUI('Success', "Data saved.");
-              } else {
-                  $.growlUI('Error?', data);
-              }
+              check ='<i class="fa fa-check"></i>';
+              $dis.replaceWith(check);
+              $.growlUI('Success', "Data saved.");
           },
           error: function(data) {
               spinner.stop(target);
