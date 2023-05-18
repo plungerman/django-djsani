@@ -34,7 +34,7 @@ $(function() {
     function setVal(name, value) {
         var $data = {
             "user_id": {{request.user.id}},
-            "table": "cc_student_medical_manager",
+            "table": "student_medical_manager",
             "pk": {{manager.id|default:0}},
             "name": name,
             "value": value

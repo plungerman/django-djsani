@@ -24,7 +24,7 @@ from djsani.core.views import BASES
 desc = """
 Accepts as input database table name related to medical forms:
 
-python find_dupes.py --table=cc_student_meni_waiver
+python find_dupes.py --table=student_meni_waiver
 """
 
 parser = argparse.ArgumentParser(description=desc)
