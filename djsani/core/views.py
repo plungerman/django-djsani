@@ -76,6 +76,8 @@ def set_val(request):
     pk = request.POST.get('pk')
     # table name
     table = request.POST.get('table')
+    # stupid relic of old database
+    table_relice = 'cc_' + table
     # value
     value = request.POST.get('value')
     if not cid or not name or not table or not value:
@@ -108,7 +110,7 @@ def set_val(request):
             nobj = WAIVERS[table](**dic)
             nobj.save()
             # update the manager
-            setattr(manager, table, value)
+            setattr(manager, table_relice, value)
             manager.save()
             logger.debug(manager.cc_student_meni_waiver	)
         else:
@@ -134,7 +136,7 @@ def set_val(request):
                 )
             # if waiver, update manager table
             if WAIVERS.get(table):
-                setattr(manager, table, value)
+                setattr(manager, table_relice, value)
                 manager.save()
         # update the log entry for staff modifications
         if staff:
