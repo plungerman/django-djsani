@@ -1,5 +1,5 @@
 li.ctrlHolder div ul li {display:inline;}
-.form .blockLabels label.error, .form p.error {font-weight:bold; border:0; background-color:#fff;color:#B94A48}
+.form .blockLabels label.error, .form p.error {font-weight:bold; border:0; color:#B94A48}
 label[for=id_results_file] {color: #337ab7;}
 .placeholder {color:#800;}
 h1,h2,h3 {font-weight:normal;}
@@ -8,13 +8,17 @@ h1,h2,h3 {font-weight:normal;}
   list-style: none !important;
   list-style-image: none !important;
 }
+body{background-color: #e9e7e1;}
 body.sidenav-toggled .content-wrapper, .content-wrapper {margin-left: 0;}
+.content-wrapper {overflow-x: hidden; background-color: #e9e7e1; }
 #page-content-wrap .content .form h3 {
     margin: 9px 0;
     padding-top: 9px;
 }
+.form h3 {
+    font-size: 1.75rem;
+}
 .slider-container { display:none; }
-.form fieldset.btnHolder {background-color:#fff; }
 form textarea {width: 300px !important;height:90px !important;}
 .help {margin-top:-2px;}
 .form select {width:200px;}
@@ -73,7 +77,7 @@ a.navbar-brand:hover {color: red !important;}
 .navbar-toggler-icon {width: 1.1em;height: 1.1em;}
 .navbar-default {z-index:100;}
 .navbar-nav .dropdown-menu a {color: white;}
-.navbar-nav .dropdown-menu a:hover {color: #666;}
+.navbar-nav .dropdown-menu a:hover {color: #cacaca;}
 .navbar-nav .dropdown-menu {padding: 5px; background-color:#003c4b;}
 .navbar-toggler-icon {color:yellow;}
 .navbar-nav .dropdown, .dropup { padding: 3px; }
@@ -90,7 +94,7 @@ position: relative;
 }
 li.form-group h3 { font-size: 14px; }
 .form fieldset {
-background-color: #fcffff;
+background-color: #c0d2d3;
 border: 2px solid #ddf3f3;
 border-radius: 3px;
 margin-bottom: 10px;

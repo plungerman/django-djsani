@@ -9,7 +9,7 @@
 {% block extra_style %}
 {{block.super}}
 <link rel="stylesheet"
-    href="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css"
+    href="https://app.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.css"
     type="text/css" media="screen" />
 <style>
 @media only screen and (max-width: 60em) {
@@ -21,9 +21,9 @@
 </style>
 {% endblock %}
 {% block extra_javascript %}
-<script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
-<script src="//www.carthage.edu/static/vendor/jquery/plugins/validate/additional-methods.min.js"></script>
-<script src="//www.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://app.carthage.edu/static/vendor/jquery/plugins/validate/jquery.validate.min.js"></script>
+<script src="https://app.carthage.edu/static/vendor/jquery/plugins/validate/additional-methods.min.js"></script>
+<script src="https://app.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $("#profile").validate();
@@ -215,10 +215,10 @@ $(function() {
     // disable submit button after users clicks it
     //$('form#profile').bind('submit', function (e) {
     //$('form#profile').on('submit', function (e) {
-    //$('form#profile').submit(function (e) {
-        //$('#id_submit').prop('disabled', true);
-        //return true;
-    //});
+    $('form#profile').submit(function (e) {
+        $('#id_submit').prop('disabled', true);
+        return true;
+    });
 });
 </script>
 {% endblock %}
@@ -362,7 +362,8 @@ $(function() {
         </h3>
         {% endif %}
         <div style="margin-left:45px;">
-        {% include "form_submit.inc.html" %}
+          <label for="id_submit" style="display:none;">Submit</label>
+          <input id="id_submit" type="submit" value="Submit" class="button">
         </div>
         </div>
       </div>

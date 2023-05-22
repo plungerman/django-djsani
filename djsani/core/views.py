@@ -165,7 +165,9 @@ def home(request):
     student = in_group(user, settings.STUDENT_GROUP)
     if student:
         # retrieve student manager (or create a new one if none exists)
-        manager = get_manager(user.id)
+        manager = None
+        if not staff or not coach:
+            manager = get_manager(user.id)
         context_data = {
             'switch_earl': reverse_lazy('set_val'),
             'student': student,
