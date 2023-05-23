@@ -24,6 +24,7 @@ class StudentHealthInsurance(models.Model):
         StudentMedicalManager,
         on_delete=models.CASCADE,
         db_constraint=False,
+        related_name='insurance',
     )
     opt_out = models.BooleanField(null=True)
     # primary

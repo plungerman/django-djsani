@@ -28,7 +28,10 @@ def index(request, stype, cid=None):
         else:
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
-        cid = user.id
+        if staff:
+            return HttpResponseRedirect(reverse_lazy('dashboard_home'))
+        else:
+            cid = user.id
 
     if not student:
         if medical_staff:
@@ -60,7 +63,8 @@ def index(request, stype, cid=None):
         )
         if form.is_valid():
             insurance = form.save(commit=False)
-            insurance.user = user
+            if not staff:
+                insurance.user = user
             insurance.manager = manager
             insurance.save()
             # update the manager

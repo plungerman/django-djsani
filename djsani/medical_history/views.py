@@ -12,11 +12,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from djsani.core.utils import get_manager
+from djtools.decorators.auth import group_required
 from djtools.fields.helpers import handle_uploaded_file
 from djtools.utils.convert import str_to_class
 
 
-@login_required
+STUDENT = settings.STUDENT_GROUP
+
+
+@group_required(STUDENT)
 def index(request, stype, display=None):
     """View for student and athlete medical history."""
     # student id
@@ -119,7 +123,17 @@ def index(request, stype, display=None):
 
 @login_required
 def file_upload(request, name):
-    """Almost generic file upload, just need model class to make it so."""
+    """File upload function for printed medical forms."""
+    user = request.user
+    # retrieve student manager record
+    manager = get_manager(user.id)
+    man_att = name.replace('-', '_') + '_status'
+    if name == 'physical-evaluation':
+        if getattr(manager, man_att + '_1') and getattr(manager, man_att + '_2'):
+            return HttpResponseRedirect(reverse_lazy('home'))
+    else:
+        if getattr(manager, man_att):
+            return HttpResponseRedirect(reverse_lazy('home'))
     # munge the field name
     slug_list = name.split('-')
     form_name = slug_list.pop(0).capitalize()
@@ -131,9 +145,6 @@ def file_upload(request, name):
         'djsani.medical_history.forms',
         '{0}Form'.format(form_name),
     )
-    user = request.user
-    # retrieve student manager record
-    manager = get_manager(user.id)
     if request.method == 'POST':
         form = fclass(request.POST, request.FILES)
         if form.is_valid():

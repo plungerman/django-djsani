@@ -211,6 +211,7 @@ class StudentMedicalManager(models.Model):
     cc_athlete_risk_waiver = models.BooleanField(null=True)
     cc_athlete_sicklecell_waiver = models.BooleanField(null=True)
     staff_notes = models.TextField(null=True, blank=True)
+    #sicklecell_required = models.BooleanField(null=True)
 
     class Meta:
         """Attributes about the data model and admin options."""
@@ -222,9 +223,9 @@ class StudentMedicalManager(models.Model):
         user = self.user
         return user.username
 
-    def get_slug(self):
-        """Used for the upload_to_path helper for file uplaods."""
-        return 'student-medical-manager'
+    def get_insurance(self):
+        """Return current insurance object"""
+        return self.insurance.filter(created_at__gte=settings.START_DATE).first()
 
     def get_meni(self):
         """Return current meni waiver"""
@@ -245,6 +246,10 @@ class StudentMedicalManager(models.Model):
     def get_sicklecell(self):
         """Return current risk waiver"""
         return self.sicklecell.filter(created_at__gte=settings.START_DATE).first()
+
+    def get_slug(self):
+        """Used for the upload_to_path helper for file uplaods."""
+        return 'student-medical-manager'
 
 
 class CoachProfile(models.Model):

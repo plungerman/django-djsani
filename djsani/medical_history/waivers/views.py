@@ -64,6 +64,7 @@ def index(request, stype, wtype):
                 sicklecell.proof = True
                 sicklecell.waive = False
                 sicklecell.save()
+                manager.sicklecell_required = False
             else:
                 # insert
                 cd['user_id'] = user.id
