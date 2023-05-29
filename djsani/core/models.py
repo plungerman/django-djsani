@@ -162,11 +162,11 @@ class StudentMedicalManager(models.Model):
         related_name='manager',
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    sitrep = models.BooleanField(null=True)
-    sitrep_athlete = models.BooleanField(null=True)
-    athlete = models.BooleanField(null=True)
-    sports = models.ManyToManyField(Sport)
-    concussion_baseline = models.BooleanField(null=True)
+    sitrep = models.BooleanField()
+    sitrep_athlete = models.BooleanField()
+    athlete = models.BooleanField()
+    sports = models.ManyToManyField(Sport, blank=True)
+    concussion_baseline = models.BooleanField()
     medical_consent_agreement = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -174,7 +174,7 @@ class StudentMedicalManager(models.Model):
         null=True,
         blank=True,
     )
-    medical_consent_agreement_status = models.BooleanField(null=True)
+    medical_consent_agreement_status = models.BooleanField()
     covid19_vaccine_card = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -182,7 +182,7 @@ class StudentMedicalManager(models.Model):
         null=True,
         blank=True,
     )
-    covid19_vaccine_card_status = models.BooleanField(null=True)
+    covid19_vaccine_card_status = models.BooleanField()
     physical_evaluation_1 = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -190,7 +190,7 @@ class StudentMedicalManager(models.Model):
         null=True,
         blank=True,
     )
-    physical_evaluation_status_1 = models.BooleanField(null=True)
+    physical_evaluation_status_1 = models.BooleanField()
     physical_evaluation_2 = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,
@@ -198,20 +198,20 @@ class StudentMedicalManager(models.Model):
         null=True,
         blank=True,
     )
-    physical_evaluation_status_2 = models.BooleanField(null=True)
-    emergency_contact = models.BooleanField(null=True)
+    physical_evaluation_status_2 = models.BooleanField()
+    emergency_contact = models.BooleanField()
     # forms and waivers
-    cc_student_immunization = models.BooleanField(null=True)
-    cc_student_medical_history = models.BooleanField(null=True)
-    cc_student_health_insurance = models.BooleanField(null=True)
-    cc_student_meni_waiver = models.BooleanField(null=True)
-    cc_athlete_medical_history = models.BooleanField(null=True)
-    cc_athlete_privacy_waiver = models.BooleanField(null=True)
-    cc_athlete_reporting_waiver = models.BooleanField(null=True)
-    cc_athlete_risk_waiver = models.BooleanField(null=True)
-    cc_athlete_sicklecell_waiver = models.BooleanField(null=True)
-    staff_notes = models.TextField(null=True, blank=True)
-    #sicklecell_required = models.BooleanField(null=True)
+    cc_student_immunization = models.BooleanField()
+    cc_student_medical_history = models.BooleanField()
+    cc_student_health_insurance = models.BooleanField()
+    cc_student_meni_waiver = models.BooleanField()
+    cc_athlete_medical_history = models.BooleanField()
+    cc_athlete_privacy_waiver = models.BooleanField()
+    cc_athlete_reporting_waiver = models.BooleanField()
+    cc_athlete_risk_waiver = models.BooleanField()
+    cc_athlete_sicklecell_waiver = models.BooleanField()
+    staff_notes = models.TextField(blank=True)
+    sicklecell_required = models.BooleanField()
 
     class Meta:
         """Attributes about the data model and admin options."""

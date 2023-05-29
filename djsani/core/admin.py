@@ -24,6 +24,7 @@ class StudentMedicalManagerAdmin(admin.ModelAdmin):
     list_display  = (
         'user',
         'id',
+        'athlete',
         'created_at',
     )
     search_fields = (
@@ -33,6 +34,7 @@ class StudentMedicalManagerAdmin(admin.ModelAdmin):
         'user__id',
     )
     raw_id_fields = ['user']
+    list_filter = ['athlete']
 
 
 class CoachProfileAdmin(admin.ModelAdmin):
@@ -80,7 +82,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
         'state',
         'postal_code',
     )
-    list_filter = ('residency',)
+    list_filter = ['residency']
     list_max_show_all = 500
     list_per_page = 500
     save_on_top = True

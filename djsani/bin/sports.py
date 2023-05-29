@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import csv
 import logging
 import os
 import sys
