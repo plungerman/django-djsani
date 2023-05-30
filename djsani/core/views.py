@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
+from djsani.core.decorators import eligibility
 from djsani.core.models import CHANGE
 from djsani.core.models import StudentMedicalLogEntry
 from djsani.core.models import StudentMedicalManager
@@ -22,8 +23,6 @@ from djsani.medical_history.waivers.models import Privacy
 from djsani.medical_history.waivers.models import Reporting
 from djsani.medical_history.waivers.models import Risk
 from djsani.medical_history.waivers.models import Sicklecell
-from djtools.utils.date import calculate_age
-from djtools.utils.mail import send_mail
 from djtools.utils.users import in_group
 from PIL import Image
 
@@ -153,39 +152,17 @@ def set_val(request):
 
 
 @login_required
+@eligibility
 def home(request):
     """Default home view when user signs in."""
-    # for when faculty/staff sign in here or not student found
-    context_data = {}
     # set our user
     user = request.user
-    # staff or coach?
-    staff = in_group(user, settings.STAFF_GROUP)
-    coach = in_group(user, settings.COACH_GROUP)
-    student = in_group(user, settings.STUDENT_GROUP)
-    if student:
-        # retrieve student manager (or create a new one if none exists)
-        manager = None
-        if not staff or not coach:
-            manager = get_manager(user.id)
-        context_data = {
-            'switch_earl': reverse_lazy('set_val'),
-            'student': student,
-            'manager': manager,
-        }
-    else:
-        context_data['staff'] = staff
-        context_data['coach'] = coach
-
-    if settings.ACADEMIC_YEAR_LIMBO:
-        response = render(
-            request,
-            'closed.html',
-            context_data,
-        )
-    else:
-        response = render(request, 'home.html', context_data)
-    return response
+    manager = get_manager(user.id)
+    context_data = {
+        'student': user.student,
+        'manager': manager,
+    }
+    return render(request, 'home.html', context_data)
 
 
 @csrf_exempt
