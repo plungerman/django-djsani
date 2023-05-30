@@ -12,6 +12,9 @@ def eligibility(view_func):
     def _wrap(request, *args, **kwargs):
         """Wrapper for the decorator."""
         staff = in_group(request.user, settings.STAFF_GROUP)
+        coach = in_group(request.user, settings.COACH_GROUP)
+        if coach:
+            staff = True
         user = request.user
         try:
             student = user.student
