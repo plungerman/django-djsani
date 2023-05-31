@@ -17,29 +17,18 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from djauth.managers import LDAPManager
-from djimix.core.utils import get_connection
-from djimix.core.utils import xsql
-from djsani.core.models import Sport
-from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentProfile
+from djsani.core.utils import get_manager
 from djtools.utils.date import calculate_age
 from djtools.utils.workday import get_students
 
 
 # set up command-line options
-desc = "Accepts as input sports arg for loading sports or not"
+desc = "Load student data from college directory API"
 
 # RawTextHelpFormatter method allows for new lines in help text
 parser = argparse.ArgumentParser(
     description=desc, formatter_class=argparse.RawTextHelpFormatter
-)
-parser.add_argument(
-    '-s',
-    '--sports',
-    help="Load sports?",
-    dest='sports',
-    action='store_true',
-    default=False,
 )
 parser.add_argument(
     '--test',
@@ -48,23 +37,12 @@ parser.add_argument(
     dest='test'
 )
 
-PHILE = os.path.join(settings.BASE_DIR, 'sql/sports_student.sql')
-
-
-def get_sports(cid):
-    """Private function for executing the SQL incantation."""
-    with open(PHILE) as incantation:
-        sql = '{0}{1}'.format(incantation.read(), cid)
-    with get_connection() as connection:
-        row = xsql(sql, connection).fetchall()
-        return row
-
 
 def main():
     eldap = LDAPManager()
     students = get_students()
     for stu in students:
-        username = stu['username']
+        username = stu['email'].split('@')[0]
         try:
             # fetch user
             user = User.objects.get(username=username)
@@ -112,27 +90,15 @@ def main():
                 user=user,
                 defaults=defaults,
             )
-            # sports
-            if sports:
-                for sporx in get_sports(stu['id']):
-                    print('boo')
-                    if sporx[4]:
-                        year = sporx[4].year
-                        sport = Sport.objects.get(code=sporx[0])
-                        manager = StudentMedicalManager.objects.filter(
-                            user__id=stu['id'],
-                        ).filter(created_at__year=year).first()
-                        if manager:
-                            manager.athlete=True
-                            manager.save()
-                            manager.sports.add(sport)
+            # fetch or create the medical manager
+            manager = get_manager(user, pk=False)
+            print(manager)
         else:
             print("Username '{0}' does not exist".format(username))
 
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    sports = args.sports
     test = args.test
     if test:
         print(args)
