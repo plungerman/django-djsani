@@ -41,6 +41,7 @@ parser.add_argument(
 def main():
     eldap = LDAPManager()
     students = get_students()
+    StudentProfile.objects.all().update(status=False)
     for stu in students:
         username = stu['email'].split('@')[0]
         try:
@@ -92,7 +93,8 @@ def main():
             )
             # fetch or create the medical manager
             manager = get_manager(user, pk=False)
-            print(manager)
+            if test:
+                print(manager)
         else:
             print("Username '{0}' does not exist".format(username))
 

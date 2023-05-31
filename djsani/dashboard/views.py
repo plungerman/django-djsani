@@ -146,7 +146,7 @@ def get_students(request):
                     sql +=' OR '
             sql += ')'
         else:
-            sql += ' AND student_profile.class_year IN ("FN","FF","UT","PF","PN")'
+            sql += ' AND student_profile.class_year = "Freshman"'
     # lastly, order by last name
     sql += ' ORDER BY auth_user.last_name'
     students = xsql(sql)

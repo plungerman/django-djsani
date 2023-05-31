@@ -7,6 +7,7 @@ from django.conf import settings
 START_DATE = settings.START_DATE
 STUDENTS_ALPHA = """
 SELECT
+    DISTINCT
     auth_user.id,
     auth_user.first_name,
     auth_user.last_name,
@@ -69,6 +70,8 @@ LEFT JOIN
     student_health_insurance
 ON
     student_medical_manager.id = student_health_insurance.manager_id
+AND
+    student_health_insurance.created_at > "{1}"
 LEFT JOIN
     athlete_sicklecell_waiver
 ON
@@ -77,8 +80,8 @@ ON
     (
         athlete_sicklecell_waiver.proof = 1
     OR
-        athlete_sicklecell_waiver.created_at > "{1}"
+        athlete_sicklecell_waiver.created_at > "{2}"
     )
 WHERE
     student_profile.status = 1
-""".format(START_DATE, START_DATE)
+""".format(START_DATE, START_DATE, START_DATE)

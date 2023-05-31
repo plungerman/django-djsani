@@ -73,7 +73,7 @@ def get_manager(user, pk=True):
     requires the student's college ID and START_DATE in settings file.
     """
     manager = None
-    if not pk:
+    if pk:
         try:
             user = User.objects.get(pk=user)
         except Exception:
