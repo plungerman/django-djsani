@@ -220,8 +220,7 @@ class StudentMedicalManager(models.Model):
 
     def __str__(self):
         """Default data for display."""
-        user = self.user
-        return user.username
+        return self.user.username
 
     def get_insurance(self):
         """Return current insurance object"""
@@ -328,7 +327,7 @@ class StudentProfile(models.Model):
     address1 = models.CharField("Address", max_length=128, null=True, blank=True)
     address2 = models.CharField("", max_length=128, null=True, blank=True)
     city = models.CharField(max_length=128, null=True, blank=True)
-    state = models.CharField(max_length=2, null=True, blank=True)
+    state = models.CharField(max_length=32, null=True, blank=True)
     postal_code = models.CharField("Zip code", max_length=10, null=True, blank=True)
     country = models.CharField(max_length=128, null=True, blank=True)
     phone = models.CharField(max_length=16, null=True, blank=True)
