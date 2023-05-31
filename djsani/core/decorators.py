@@ -22,7 +22,7 @@ def eligibility(view_func):
             student = None
         if settings.ACADEMIC_YEAR_LIMBO and not staff:
             return render(request, 'closed.html')
-        elif student and student.birth_date:
+        elif student and student.birth_date and student.gender and student.residency and student.class_year:
             return view_func(request, *args, **kwargs)
         else:
             response = render(request, 'missing.html')
