@@ -61,7 +61,7 @@ def get_content_type(name):
     return ct
 
 
-def get_manager(cid):
+def get_manager(user, pk=True):
     """
     Returns the current student medical manager.
 
@@ -73,10 +73,11 @@ def get_manager(cid):
     requires the student's college ID and START_DATE in settings file.
     """
     manager = None
-    try:
-        user = User.objects.get(pk=cid)
-    except Exception:
-        user = None
+    if not pk:
+        try:
+            user = User.objects.get(pk=user)
+        except Exception:
+            user = None
     if user:
         # try to fetch a current manager
         # from cache or database
