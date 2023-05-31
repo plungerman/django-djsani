@@ -13,9 +13,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djsani.settings.shell')
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from djauth.managers import LDAPManager
 from djsani.core.models import Sport
-from djsani.core.utils import get_manager
+from djsani.core.models import StudentMedicalManager
 
 
 # set up command-line options
@@ -58,31 +57,23 @@ def main():
             except User.DoesNotExist:
                 user = None
 
-            if not user:
-                username = row[1].split('@')
-                if username[1] == 'carthage.edu':
-                    # create a new user
-                    eldap = LDAPManager()
-                    result_data = eldap.search(username[0], field='cn')
-                    if result_data:
-                        groups = eldap.get_groups(result_data)
-                        #print(cid, groups)
-                        #user = eldap.dj_create(result_data, groups=groups)
-                    else:
-                        print("No user found with username: {0}".format(username))
-                else:
-                    print("{0} is not a carthage email address.".format(row[1]))
-
             if user:
-                print(user)
-
-            '''
-                manager = get_manager(cid)
+                try:
+                    manager = StudentMedicalManager.objects.filter(
+                        user=user,
+                        created_at__gte=settings.START_DATE,
+                    ).first()
+                except Exception as error:
+                    print('error:')
+                    print(error)
+                    manager = None
                 if manager:
                     manager.athlete=True
                     manager.save()
                     manager.sports.add(sport)
-            '''
+                else:
+                    print(user.id)
+                    print('no manager found')
 
 
 if __name__ == '__main__':
