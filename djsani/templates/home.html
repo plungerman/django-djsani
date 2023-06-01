@@ -55,11 +55,11 @@ $(function() {
     {% endif %}
     $student = $('#student');
     $athlete = $('#athlete');
-    {% if not manager.sports %}
+    {% if not manager.athlete %}
       $athlete.slideUp(200);
       $student.delay(200).slideDown(200);
     {% endif %}
-    {% if manager.sports %}
+    {% if manager.athlete %}
       $student.slideUp(200);
       $athlete.delay(200).slideDown(200);
     {% endif %}
