@@ -26,7 +26,7 @@ class StudentHealthInsurance(models.Model):
         db_constraint=False,
         related_name='insurance',
     )
-    opt_out = models.BooleanField()
+    opt_out = models.BooleanField(default=False)
     # primary
     primary_policy_holder = models.CharField(max_length=128)
     primary_dob = models.DateField(null=True, blank=True)
@@ -43,14 +43,14 @@ class StudentHealthInsurance(models.Model):
         null=True,
         blank=True,
     )
-    primary_card_front_status = models.BooleanField()
+    primary_card_front_status = models.BooleanField(default=False)
     primary_card_back = models.FileField(
         upload_to=upload_to_path,
         max_length=128,
         null=True,
         blank=True,
     )
-    primary_card_back_status = models.BooleanField()
+    primary_card_back_status = models.BooleanField(default=False)
     # secondary
     secondary_policy_holder = models.CharField(max_length=128, null=True, blank=True)
     secondary_dob = models.DateField(null=True, blank=True)
