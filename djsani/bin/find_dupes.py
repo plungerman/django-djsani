@@ -33,23 +33,24 @@ parser.add_argument(
     "-t", "--table",
     required=True,
     help="Database table",
-    dest="table"
+    dest="table",
 )
+
 
 def main():
     """main function."""
     model = BASES[table]
     print("select all managers")
-    managers = StudentMedicalManager.objects.all()
+    managers = StudentMedicalManager.objects.filter(created_at__gte=settings.START_DATE)
     for man in managers:
         try:
-            obj = model.objects.filter(college_id=man.college_id).all()
+            obj = model.objects.filter(user=man.user).filter(created_at__gte=settings.START_DATE)
             if len(obj) > 1:
                 print("Manager ID {0} has more than 1 rec: {1}".format(
-                    man.college_id, len(obj),
+                    man.user.id, len(obj),
                 ))
-        except:
-            pass
+        except Exception as error:
+            print(error)
 
 
 if __name__ == '__main__':
