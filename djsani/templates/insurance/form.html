@@ -43,7 +43,7 @@ $(function() {
     {% endifusergroup %}
     $('#id_opt_out').change(function() {
         if($(this).is(":checked")) {
-            {% if manager.sports %}
+            {% if manager.athlete %}
               {% ifusergroup MedicalStaff %}
                 $("#tertiary-insurance-header").text("Athlete Insurance");
                 $('#insurance-card').slideUp(200);
@@ -62,7 +62,7 @@ $(function() {
             $('#secondary-box').slideUp(200);
             $('#secondary-form').slideUp(200);
         }else{
-            {% if manager.sports %}
+            {% if manager.athlete %}
             $("#tertiary-insurance-header").text("Tertiary Insurance");
             {% endif %}
             $('#primary-form').slideDown(200);
@@ -147,7 +147,7 @@ $(function() {
         }
     });
     {% if oo == True %}
-        {% if manager.sports %}
+        {% if manager.athlete %}
             {% if not tertiary %}
               {% ifusergroup MedicalStaff %}
               {% else %}
@@ -192,7 +192,7 @@ $(function() {
             $('#tertiary-form').slideDown(200);
         {% endif %}
     {% endif %}
-    {% if manager.sports %}
+    {% if manager.athlete %}
         {% if not form.primary_card_front.value %}
         $("#id_primary_card_front").addClass("required");
         {% endif %}
