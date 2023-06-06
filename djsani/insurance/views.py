@@ -18,23 +18,15 @@ from djtools.utils.users import in_group
 @login_required
 def index(request, stype, cid=None):
     """Main view for the insurance form."""
-    medical_staff = False
     user = request.user
     staff = in_group(user, settings.STAFF_GROUP)
     student = in_group(user, settings.STUDENT_GROUP)
+
     if cid:
-        if staff:
-            medical_staff = True
-        else:
+        if not staff:
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
         cid = user.id
-
-    if not student:
-        if medical_staff:
-            return HttpResponseRedirect(reverse_lazy('dashboard_home'))
-        else:
-            return HttpResponseRedirect(reverse_lazy('home'))
 
     # obtain our student medical manager
     manager = get_manager(cid)
@@ -70,7 +62,7 @@ def index(request, stype, cid=None):
             # opt out of insurance
             if insurance.opt_out:
                 if manager.athlete:
-                    if not medical_staff:
+                    if not staff:
                         # alert email to staff
                         if settings.DEBUG:
                             to_list = [settings.SERVER_EMAIL]
@@ -104,7 +96,6 @@ def index(request, stype, cid=None):
             'form': form,
             'oo': oo,
             'student': user,
-            'medical_staff': medical_staff,
             'manager': manager,
             'group_number': settings.INSURANCE_GROUP_NUMBER,
         },
