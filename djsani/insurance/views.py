@@ -28,10 +28,7 @@ def index(request, stype, cid=None):
         else:
             return HttpResponseRedirect(reverse_lazy('home'))
     else:
-        if staff:
-            return HttpResponseRedirect(reverse_lazy('dashboard_home'))
-        else:
-            cid = user.id
+        cid = user.id
 
     if not student:
         if medical_staff:
