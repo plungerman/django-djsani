@@ -26,6 +26,7 @@
 <script src="https://app.carthage.edu/static/vendor/jquery/plugins/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
+    $('input').attr('autocomplete', 'off');
     $("#profile").validate();
     $(".fancybox").fancybox({
         maxWidth    : 800,
@@ -80,11 +81,11 @@ $(function() {
         }
     });
     $('#athletic-policy-data').click(function() {
-        $('#id_tertiary_policy_holder').val('{{student.first_name}} {{student.last_name}}');
-        $('#id_tertiary_dob').val('{{student.profile.birth_date|date:"m/d/Y"}}');
+        $('#id_tertiary_policy_holder').val('{{manager.user.first_name}} {{manager.user.last_name}}');
+        $('#id_tertiary_dob').val('{{manager.user.student.birth_date|date:"m/d/Y"}}');
         $('#id_tertiary_company').val('US Fire Insurance Company');
         $('#id_tertiary_phone').val('877-497-4980');
-        $('#id_tertiary_member_id').val('{{student.id}}');
+        $('#id_tertiary_member_id').val('{{manager.user.id}}');
         $('#id_tertiary_group_no').val('{{group_number}}');
         $('#id_tertiary_policy_address').val('NAHGA\nPO BOX 189\nBridgton, ME 04009');
         $('#id_tertiary_policy_type').val('PPO');

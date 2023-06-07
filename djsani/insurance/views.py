@@ -95,7 +95,6 @@ def index(request, stype, cid=None):
         {
             'form': form,
             'oo': oo,
-            'student': user,
             'manager': manager,
             'group_number': settings.INSURANCE_GROUP_NUMBER,
         },
