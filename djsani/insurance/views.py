@@ -52,7 +52,9 @@ def index(request, stype, cid=None):
         )
         if form.is_valid():
             insurance = form.save(commit=False)
-            if not staff:
+            if staff:
+                insurance.user = manager.user
+            else:
                 insurance.user = user
             insurance.manager = manager
             insurance.save()
