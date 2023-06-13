@@ -313,11 +313,12 @@
             <div class="col-12" id="student-contact" style="font-size:.9em;">
               <h4 id="StudentContactEmailHeader">Student Contact Information</h4>
               <div class="float-left" style="width:50%;">
-              {{student.student.address1}} {{student.student.address2}}<br>
+              {{student.student.address1}} {{student.student.address2|default:''}}<br>
               {{student.student.city}}, {{student.student.state}}<br>
               {{student.student.portal_code}} {{student.student.country}}<br>
-              <abbr title="Phone">Phone:</abbr>
+              {% if student.student.phone  %}
               <a href="tel:{{student.student.phone}}">{{student.student.phone}}</a>
+              {% endif %}
               </div>
               <div class="float-right" style="width:50%;">
               <a class="float-right" href="{% url 'student_detail_medium' cid 'print' 'travel' %}?manid={{manager.id}}"
@@ -563,6 +564,19 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
+          <div class="p-3">
+          <input type="checkbox" name="sicklecell_required"
+            title="Sickle cell waiver required"
+            class="set-val mr-1" data-pk="{{manager.id}}"
+            data-table="student_medical_manager"
+          {% if manager.sicklecell_required %}
+            value="0"
+            checked="checked"
+          {% else %}
+            value="1"
+          {% endif %}>
+          Student is required to complete the sickle cell waiver.
+          </div>
           <div id="student-waivers">
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item">

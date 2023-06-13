@@ -15,7 +15,6 @@ from djsani.core.models import StudentMedicalManager
 from djsani.insurance.models import StudentHealthInsurance
 from djsani.medical_history.models import AthleteMedicalHistory
 from djsani.medical_history.models import StudentMedicalHistory
-from djsani.medical_history.waivers.models import Sicklecell
 
 
 def xsql(sql):
@@ -88,10 +87,9 @@ def get_manager(user, pk=True):
         # (could be a first time returning student or new FR or transfer)
         # create the new student profile by copying some things from
         # the previous manager, in addition to copying the insurance,
-        # medical histories, sicklecell waiver if they exists.
+        # medical histories, if they exists.
         if not manager:
             immunization = False
-            sicklecell = False
             concussion_baseline = False
             # do we have a past manager?
             past_man = StudentMedicalManager.objects.filter(
@@ -103,20 +101,10 @@ def get_manager(user, pk=True):
                     immunization = True
                 if past_man.concussion_baseline:
                     concussion_baseline = True
-                # if sicklecell waiver, check the latest for proof,
-                # which means always True
-                if past_man.cc_athlete_sicklecell_waiver:
-                    # fetch the latest sicklecell waiver
-                    sc = Sicklecell.objects.filter(
-                        user=user,
-                    ).order_by('-id').first()
-                    if sc.results_file:
-                        sicklecell = True
             # create new manager
             manager = StudentMedicalManager(
                 user=user,
                 cc_student_immunization=immunization,
-                cc_athlete_sicklecell_waiver=sicklecell,
                 sitrep=False,
                 sitrep_athlete=False,
                 concussion_baseline=concussion_baseline,

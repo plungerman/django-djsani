@@ -37,15 +37,14 @@
   </div>
   {% endif %}
   <h4>Date of submission</h4>
-  <p>{{data.created_at}}</p>
+  <p>{{data.created_at|default_if_none:"boo"}}</p>
   {% if data.opt_out == True %}
   <div class="alert alert-danger">
   {% else %}
-  <div>
+  <div class="p-2">
   {% endif %}
     <form id="optOutForm">
-      <input type="checkbox" class="set-val" name="opt_out"
-        style="float:left;"
+      <input type="checkbox" class="set-val mr-2" name="opt_out"
         {% if data.opt_out == True %}
         value="0"
         checked="checked"
@@ -54,12 +53,9 @@
         {% endif %}
         data-pk="{{data.id}}"
         data-table="student_health_insurance">
-    </form>
-    <p>
-      &nbsp;&nbsp;
       I attest that I do <strong><u>NOT</u></strong>
       have health insurance.
-    </p>
+    </form>
   </div>
   <ul class="nav nav-tabs mb-3" role="tablist">
     <li class="nav-item">
@@ -316,7 +312,7 @@
   <!-- /.tab-content -->
   <div id="healthInsuranceEmailData">
     <h4>Date of submission</h4>
-    <p>{{data.created_at}}</p>
+    <p>{{data.created_at|default_if_none:"boo"}}</p>
     {% if data.primary_policy_holder %}
     <h3>Primary Health Insurance</h3>
     <dl class="dl-horizontal">

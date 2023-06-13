@@ -177,7 +177,7 @@ $(function() {
       <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 ">
         {% get_lw_content as athlete_directions blurbs 2008 %}
         {{athlete_directions.body|safe}}
-        {% if user.student.class_year == 'Freshman' %}
+        {% if user.student.class_year == 'Freshman' or manager.sicklecell_required %}
         {% get_lw_content as sicklecell_frosh blurbs 3362 %}
         {{sicklecell_frosh.body|safe}}
         {% endif %}

@@ -50,6 +50,7 @@ def panels(request, mod, manager, content_type=None, gender=None):
     modo = mod.objects.filter(manager=manager).first()
     if modo:
         panel = model_to_dict(modo)
+        panel['created_at'] = modo.created_at
         if gender:
             form = str_to_class(
                 'djsani.medical_history.forms',

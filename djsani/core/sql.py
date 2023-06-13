@@ -48,6 +48,7 @@ SELECT
     student_medical_manager.cc_athlete_reporting_waiver,
     student_medical_manager.cc_athlete_risk_waiver,
     student_medical_manager.cc_athlete_sicklecell_waiver,
+    student_medical_manager.sicklecell_required,
     student_health_insurance.opt_out,
     student_health_insurance.primary_policy_type,
     student_health_insurance.tertiary_company,
