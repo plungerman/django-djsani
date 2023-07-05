@@ -229,7 +229,7 @@
             <td class="{{s.adult}}">
               {% if s.athlete %}
                 {% if s.cc_athlete_sicklecell_waiver and s.class_year == 'Freshman' %}
-                  <i class="fa fa-check green" title="Sickle cell results">
+                <i class="fa fa-check {% if s.results_file_status %}green{% else %}yellow{% endif %}" title="Sickle cell results">
                   <span style="display:none;">x</span></i>
                 {% else %}
                   {% if s.sicklecell_required or s.class_year == 'Freshman' %}

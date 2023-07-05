@@ -83,20 +83,6 @@ def set_val(request):
     else:
         # create our dictionary to hold name/value pairs
         dic = {name: value}
-        if table == 'athlete_sicklecell_waiver':
-            # set value = 1 if field name = 'waive' or
-            # if it = 'results' since that value is
-            # either Positive or Negative
-            if name == 'results':
-                dic['proof'] = 1
-                dic['waive'] = 0
-                value = 1
-            elif name == 'waive':
-                dic['proof'] = 0
-                dic['waive'] = value
-                dic['results'] = ''
-            elif name == 'proof':
-                dic['results'] = ''
         # retrieve student manager
         manager = get_manager(cid)
         if WAIVERS.get(table) and not pk:

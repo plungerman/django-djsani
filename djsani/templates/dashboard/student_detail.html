@@ -483,28 +483,30 @@
                   </li>
                   {% endif %}
                   <li>
-                    {% if manager.athlete_sicklecell_waiver == True %}
+                    {% if manager.cc_athlete_sicklecell_waiver == True %}
                       <input type="checkbox" class="set-val" name="results_file_status"
-                      {% if manager.results_file_status == True %}
-                      value="0" checked="checked"
+                        {% if manager.get_sicklecell.results_file_status == True %}
+                        value="0" checked="checked"
+                        {% else %}
+                        value="1"
+                        {% endif %}
+                        data-pk="{{manager.get_sicklecell.id}}"
+                        data-table="athlete_sicklecell_waiver">
+                      <a href="{{manager.get_sicklecell.results_file}}" class="rotate-photo">
+                        <i class="fa fa-repeat"
+                          aria-hidden="true"
+                          title="Rotate photo: Shift reload after"></i></a>
+                      {% if manager.get_sicklecell.results_file %}
+                        <a href="{{media_url}}files/{{manager.get_sicklecell.results_file}}"
+                          style="margin-left:10px;margin-top:3px;"
+                          target="_blank" title="current file">
+                          <i class="fa fa-moon-o green"></i>
+                          Sickle Cell Test Results</a>
                       {% else %}
-                      value="1"
-                      {% endif %}
-                      data-pk="{{manager.sicklecell_id}}"
-                      data-table="athlete_sicklecell_waiver">
-                      <a href="{{manager.results_file}}" class="rotate-photo">
-                      <i class="fa fa-repeat" aria-hidden="true" title="Rotate photo: Shift reload after"></i></a>
-                      {% if manager.results_file %}
-                      <a href="{{media_url}}files/{{manager.results_file}}"
-                      class="fleft" style="margin-left:10px;margin-top:3px;"
-                      target="_blank" title="current file">
-                      <i class="fa fa-moon-o green"></i>
-                      Sickle Cell Test Results</a>
-                      {% else %}
-                      <span class="fleft" style="margin-left:10px;margin-top:3px;">
-                        <i class="fa fa-moon-o green"></i>
-                        Sickle Cell Test Results
-                      </span>
+                        <span style="margin-left:10px;margin-top:3px;">
+                          <i class="fa fa-moon-o green"></i>
+                          Sickle Cell Test Results
+                        </span>
                       {% endif %}
                     {% endif %}
                   </li>
@@ -592,7 +594,7 @@
                   aria-controls="cc_athlete_privacy_waiver" aria-selected="false">
                   Privacy</a>
               </li>
-              <li class="nav-item"{% if not manager.athlete_sicklecell_waiver %}
+              <li class="nav-item"{% if not manager.cc_athlete_sicklecell_waiver %}
                 class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_sicklecell_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_sicklecell_waiver" role="tab"
