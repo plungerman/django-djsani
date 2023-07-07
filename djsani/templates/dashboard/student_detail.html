@@ -255,6 +255,10 @@
         {% for sport in manager.sports.all %}
         <span title="{{sport.name}}">{{sport.name}}</span>{% if not forloop.last %},&nbsp;{% endif %}
         {% endfor %}
+        <a href="{% url 'sports' manager.id %}">
+          <i class="fa fa-clipboard green" data-toggle="tooltip"
+            data-placement="top" aria-hidden="true"
+            title="Manage Sports"></i></a>
         </div>
         {% endif %}
         <h5>

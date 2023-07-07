@@ -107,6 +107,19 @@ $(function() {
   </ul>
 {% endblock navbar-top-links %}
 {% block navbar-sidenav %}{% endblock %}
+{% block breadcrumb %}
+{% if messages %}
+<div class="row">
+  {% for message in messages %}
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
+    <div class="p-3 alert-success {{message.tags}}">
+      <strong>{{ message }}</strong>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">

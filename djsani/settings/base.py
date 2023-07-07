@@ -70,6 +70,8 @@ INSTALLED_APPS = (
     'djsani.medical_history',
     'djsani.medical_history.waivers',
     'djtools',
+    # form forge
+    'bootstrap4',
     # third party apps
     'loginas',
     # honeypot for admin attacks

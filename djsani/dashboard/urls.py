@@ -20,6 +20,8 @@ urlpatterns = [
     # ajax returns students because using home view is a
     # pain in the ass with security involved & spinner
     path('get-students/', views.get_students, name='get_students'),
+    # sports form
+    path('sports/<int:mid>/', views.sports, name='sports'),
     # simple ID search
     path('student/', views.student_detail, name='search_students'),
     # name search

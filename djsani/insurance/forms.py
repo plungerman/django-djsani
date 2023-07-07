@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Views for the insurance forms."""
+"""Forms for the insurance objects."""
 
 from django import forms
 from django.conf import settings

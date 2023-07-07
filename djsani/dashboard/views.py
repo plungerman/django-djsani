@@ -5,6 +5,7 @@
 import os
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -14,6 +15,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse_lazy
+from djsani.core.forms import SportForm
 from djsani.core.models import Sport
 from djsani.core.models import StudentMedicalManager
 from djsani.core.models import StudentProfile
@@ -204,6 +206,52 @@ def home(request):
     """Dashboard home with a list of students."""
     return get_students(request)
 
+
+@group_required(STAFF, COACH)
+def sports(request, mid):
+    """Manage sports for a student."""
+    try:
+        manager = StudentMedicalManager.objects.get(pk=mid)
+    except Exception:
+        form = manager = None
+    if manager:
+        if request.POST:
+            form = SportForm(
+                data=request.POST,
+                instance=manager,
+                use_required_attribute=settings.REQUIRED_ATTRIBUTE,
+            )
+            if form.is_valid():
+                stu = form.save(commit=False)
+                stu.user = manager.user
+                stu.save()
+                form.save_m2m()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Sports for student {0}, {1} have been updated.".format(
+                        manager.user.last_name, manager.user.first_name,
+                    ),
+                    extra_tags='bg-success',
+                )
+                return HttpResponseRedirect(
+                    reverse_lazy('student_detail', args=[manager.user.id]),
+                )
+        else:
+            form = SportForm(instance=manager)
+    else:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            "Could not find a medical manager for the student.",
+            extra_tags='bg-danger',
+        )
+        response = HttpResponseRedirect(reverse_lazy('dashboard_home'))
+    return render(
+        request,
+        'dashboard/student_sports.html',
+        {'form': form},
+    )
 
 @group_required(STAFF, COACH)
 def student_detail(request, cid=None, medium=None, content_type=None):
