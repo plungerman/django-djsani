@@ -250,17 +250,17 @@
         </small>
       </h3>
       <form class="form mb-2">
-        {% if manager.sports.all %}
         <div class="mb-1"><strong>Sports:</strong>
-        {% for sport in manager.sports.all %}
-        <span title="{{sport.name}}">{{sport.name}}</span>{% if not forloop.last %},&nbsp;{% endif %}
-        {% endfor %}
+        {% if manager.sports.all %}
+          {% for sport in manager.sports.all %}
+          <span title="{{sport.name}}">{{sport.name}}</span>{% if not forloop.last %},&nbsp;{% endif %}
+          {% endfor %}
+        {% endif %}
         <a href="{% url 'sports' manager.id %}">
           <i class="fa fa-clipboard green" data-toggle="tooltip"
             data-placement="top" aria-hidden="true"
             title="Manage Sports"></i></a>
         </div>
-        {% endif %}
         <h5>
         <input type="checkbox" name="sitrep"
           title="Health and Counseling Status"
