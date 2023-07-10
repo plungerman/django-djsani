@@ -17,17 +17,19 @@
         {% if students %}
         <ol>
         {% for s in students %}
-          {% ifchanged s.user.id %}
-          <li>
             {% if staff %}
+            <li>
               <a href="{% url 'student_detail' s.user.id %}">
               {{s.user.last_name}}, {{s.user.first_name}}</a>
+            </li>
             {% else %}
-              <a href="{% url 'sports' s.get_manager.id %}">
-              {{s.user.last_name}}, {{s.user.first_name}}</a>
+              {% if s.get_manager.id  %}
+                <li>
+                <a href="{% url 'sports' s.get_manager.id %}">
+                {{s.user.last_name}}, {{s.user.first_name}}</a>
+                </li>
+              {% endif %}
             {% endif %}
-          </li>
-          {% endifchanged %}
         {% endfor %}
         </ol>
         {% else %}
