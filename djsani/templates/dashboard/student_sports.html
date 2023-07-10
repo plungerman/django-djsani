@@ -17,9 +17,9 @@
     <div class="card mb-3">
       <div class="card-body">
         <form method="post" action="." autocomplete="false" class="form" role="form">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Save</button>
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit-button">Save</button>
         </form>
       </div>
       <!-- /.card-body -->
