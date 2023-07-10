@@ -361,7 +361,7 @@ def search(request):
             students = StudentProfile.objects.filter(user__last_name__icontains=query)
     return render(
         request,
-        'dashboard/advanced_search.html',
+        'dashboard/search.html',
         {'students': students},
     )
 
