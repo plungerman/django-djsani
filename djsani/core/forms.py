@@ -16,6 +16,7 @@ class SportForm(forms.ModelForm):
         queryset=Sport.objects.filter(status=True),
         help_text='Check all that apply',
         widget=forms.CheckboxSelectMultiple(),
+        required=False,
     )
 
     class Meta:
