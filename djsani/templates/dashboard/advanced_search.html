@@ -19,9 +19,13 @@
         {% for s in students %}
           {% ifchanged s.user.id %}
           <li>
-            <a href="{% url 'student_detail' s.user.id %}">
-            {{s.user.last_name}}, {{s.user.first_name}}
-            </a>
+            {% if staff %}
+              <a href="{% url 'student_detail' s.user.id %}">
+              {{s.user.last_name}}, {{s.user.first_name}}</a>
+            {% else %}
+              <a href="{% url 'sports' s.get_manager.id %}">
+              {{s.user.last_name}}, {{s.user.first_name}}</a>
+            {% endif %}
           </li>
           {% endifchanged %}
         {% endfor %}

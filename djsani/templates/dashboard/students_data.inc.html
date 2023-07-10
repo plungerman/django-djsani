@@ -122,13 +122,17 @@
             <td class="d-none">{% if s.sitrep_athlete %}x{% else %}&nbsp;{% endif %}</td>
             <td class="d-none">{% if s.concussion_baseline %}x{% else %}&nbsp;{% endif %}</td>
             <td class="{{s.adult}} student-name" style="text-align:left;">
-              <a href="{% url 'student_detail' s.id %}">
-                {{s.last_name}}, {{s.first_name}}
-              </a>
-              {% if s.athlete %}
-              <span style="float:right;margin-left:3px;">
-                <i class="fa fa-star green" title="Athlete"></i>
-              </span>
+              {% if staff %}
+                <a href="{% url 'student_detail' s.id %}">
+                  {{s.last_name}}, {{s.first_name}}</a>
+                {% if s.athlete %}
+                <span style="float:right;margin-left:3px;">
+                  <i class="fa fa-star green" title="Athlete"></i>
+                </span>
+                {% endif %}
+              {% else %}
+                <a href="{% url 'sports' s.manid %}">
+                  {{s.last_name}}, {{s.first_name}}</a>
               {% endif %}
             </td>
             {% if staff or coach %}

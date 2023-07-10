@@ -210,10 +210,13 @@ def home(request):
 @group_required(STAFF, COACH)
 def sports(request, mid):
     """Manage sports for a student."""
+    '''
     try:
         manager = StudentMedicalManager.objects.get(pk=mid)
     except Exception:
         form = manager = None
+    '''
+    manager = StudentMedicalManager.objects.get(pk=mid)
     if manager:
         if request.POST:
             form = SportForm(
@@ -253,7 +256,7 @@ def sports(request, mid):
         {'form': form},
     )
 
-@group_required(STAFF, COACH)
+@group_required(STAFF)
 def student_detail(request, cid=None, medium=None, content_type=None):
     """Main method for displaying student data."""
     template = 'dashboard/student_detail.html'
@@ -344,8 +347,8 @@ def student_detail(request, cid=None, medium=None, content_type=None):
         raise Http404
 
 
-@group_required(STAFF)
-def advanced_search(request):
+@group_required(STAFF, COACH)
+def search(request):
     """Search for a student or students."""
     search = request.POST.get('search', '')
     students = None

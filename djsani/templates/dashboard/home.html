@@ -64,7 +64,7 @@ $(function() {
     {% block search-top %}
     <li class="nav-item">
       <form class="form-inline my-2 my-lg-0 mr-sm-3 mr-lg-3" method="post"
-        action="{% url 'search_advanced' %}">
+        action="{% url 'search' %}">
         {% csrf_token %}
         <div class="input-group">
           <input class="form-control" name="search" placeholder="Last name or ID..." type="text">

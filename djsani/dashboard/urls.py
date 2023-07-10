@@ -25,7 +25,7 @@ urlpatterns = [
     # simple ID search
     path('student/', views.student_detail, name='search_students'),
     # name search
-    path('student/search/', views.advanced_search, name='search_advanced'),
+    path('student/search/', views.search, name='search'),
     # student detail
     path('student/<int:cid>/', views.student_detail, name='student_detail'),
     # student detail content specific
