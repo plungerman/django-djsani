@@ -210,13 +210,10 @@ def home(request):
 @group_required(STAFF, COACH)
 def sports(request, mid):
     """Manage sports for a student."""
-    '''
     try:
         manager = StudentMedicalManager.objects.get(pk=mid)
     except Exception:
         form = manager = None
-    '''
-    manager = StudentMedicalManager.objects.get(pk=mid)
     if manager:
         if request.POST:
             form = SportForm(
@@ -237,9 +234,12 @@ def sports(request, mid):
                     ),
                     extra_tags='bg-success',
                 )
-                return HttpResponseRedirect(
-                    reverse_lazy('student_detail', args=[manager.user.id]),
-                )
+                coach = in_group(request.user, COACH)
+                if coach:
+                    redirect = reverse_lazy('dashboard_home')
+                else:
+                    redirect = reverse_lazy('student_detail', args=[manager.user.id])
+                return HttpResponseRedirect(redirect)
         else:
             form = SportForm(instance=manager)
     else:
@@ -255,6 +255,7 @@ def sports(request, mid):
         'dashboard/student_sports.html',
         {'form': form},
     )
+
 
 @group_required(STAFF)
 def student_detail(request, cid=None, medium=None, content_type=None):
