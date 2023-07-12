@@ -226,6 +226,11 @@ def sports(request, mid):
                 stu.user = manager.user
                 stu.save()
                 form.save_m2m()
+                if stu.sports.exists():
+                    stu.athlete = True
+                else:
+                    stu.athlete = False
+                stu.save()
                 messages.add_message(
                     request,
                     messages.SUCCESS,
