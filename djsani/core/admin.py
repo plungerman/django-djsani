@@ -33,8 +33,9 @@ class StudentMedicalManagerAdmin(admin.ModelAdmin):
         'user__username',
         'user__id',
     )
+    list_editable = ['athlete']
     raw_id_fields = ['user']
-    list_filter = ['athlete']
+    list_filter = ['athlete', 'sports']
 
 
 class CoachProfileAdmin(admin.ModelAdmin):
