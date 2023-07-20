@@ -83,6 +83,13 @@ def get_students(request):
     coach = in_group(user, COACH)
     if coach and user.is_superuser:
         coach = False
+    try:
+        roster = user.coach
+    except Exception:
+        if coach and staff:
+            staff = True
+        else:
+            coach = False
     sql = STUDENTS_ALPHA
     if request.POST:
         post = request.POST
