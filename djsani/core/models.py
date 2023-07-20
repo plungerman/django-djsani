@@ -332,7 +332,7 @@ class StudentProfile(models.Model):
     postal_code = models.CharField("Zip code", max_length=10, null=True, blank=True)
     country = models.CharField(max_length=128, null=True, blank=True)
     phone = models.CharField(max_length=16, null=True, blank=True)
-    gender = models.CharField(max_length=16, null=True, blank=True)
+    gender = models.CharField(max_length=64, null=True, blank=True)
     class_year = models.CharField("Current Class", max_length=24, null=True, blank=True)
     residency = models.CharField(
         max_length=2,
