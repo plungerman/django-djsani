@@ -20,7 +20,7 @@ from djtools.utils.convert import str_to_class
 STUDENT = settings.STUDENT_GROUP
 
 
-@group_required(STUDENT)
+@login_required
 def index(request, stype, display=None):
     """View for student and athlete medical history."""
     # student id
