@@ -188,6 +188,7 @@ class AthleteMedicalHistory(models.Model):
     despair = models.TextField(null=True)
     lack_emotional_control = models.TextField(null=True)
     self_others_harm = models.TextField(null=True)
+    mental_health_check = models.TextField(null=True, blank=True)
     # misc
     other_information = models.TextField(null=True)
     supplements = models.TextField(null=True)
@@ -212,8 +213,8 @@ class AthleteMedicalHistory(models.Model):
 def harm_email(sender, instance, **kwargs):
     """send an email if student indicates an inclination to harm self/others."""
     if not settings.ACADEMIC_YEAR_LIMBO:
+        user = instance.user
         if instance.self_others_harm and instance.self_others_harm != 'No':
-            user = instance.user
             to_list = settings.HARM_EMAIL_LIST
             if settings.DEBUG:
                 to_list = [settings.SERVER_EMAIL]
@@ -221,6 +222,23 @@ def harm_email(sender, instance, **kwargs):
                 None,
                 to_list,
                 '[Harm Self or Others] {0}, {1} ({2})'.format(
+                    user.last_name,
+                    user.first_name,
+                    user.id,
+                ),
+                user.email,
+                'medical_history/harm_email.html',
+                instance,
+                [settings.MANAGERS[0][1]],
+            )
+        if instance.mental_health_check == 'Yes':
+            to_list = settings.MENTAL_HEALTH_CHECK
+            if settings.DEBUG:
+                to_list = [settings.SERVER_EMAIL]
+            send_mail(
+                None,
+                to_list,
+                '[Mental Health Check] {0}, {1} ({2})'.format(
                     user.last_name,
                     user.first_name,
                     user.id,

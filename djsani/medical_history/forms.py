@@ -10,6 +10,13 @@ from djtools.fields import REQ_CSS
 
 
 ALLOWED_IMAGE_EXTENSIONS = settings.ALLOWED_IMAGE_EXTENSIONS
+MENTAL_HEALTH_CHECK = (
+    ('Yes', 'Yes'),
+    (
+        'No',
+        'No, I feel confident that I can contact help if needed.',
+    ),
+)
 
 
 class StudentMedicalHistoryForm(forms.Form):
@@ -60,7 +67,7 @@ class StudentMedicalHistoryForm(forms.Form):
         label="Do you take any medications on a routine basis?",
         help_text="""
             This should include prescription & over the counter medicines
-            (name, dose, frequency)
+            (name, dose, frequency).
         """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -71,7 +78,7 @@ class StudentMedicalHistoryForm(forms.Form):
     hospitalizations = forms.CharField(
         label="Have you had any hospitalizations or surgeries?",
         help_text="""
-            If yes, please provide the year(s) in your explanation
+            If yes, please provide the year(s) in your explanation.
         """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -82,7 +89,7 @@ class StudentMedicalHistoryForm(forms.Form):
     chicken_pox = forms.CharField(
         label="Have you had chicken pox?",
         help_text="""
-            If yes, please provide the month and year in your explanation
+            If yes, please provide the month and year in your explanation.
         """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -896,14 +903,14 @@ class AthleteMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(), required=False,
     )
     trouble_sleeping = forms.CharField(
-        label="I often have trouble sleeping",
+        label="I often have trouble sleeping.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
     more_energy_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    more_energy= forms.CharField(
+    more_energy = forms.CharField(
         label="I wish I had more energy most days of the week.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -911,7 +918,7 @@ class AthleteMedicalHistoryForm(forms.Form):
     recurring_thoughts_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    recurring_thoughts= forms.CharField(
+    recurring_thoughts = forms.CharField(
         label="I think about things over and over.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -919,7 +926,7 @@ class AthleteMedicalHistoryForm(forms.Form):
     anxious_nervious_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    anxious_nervious= forms.CharField(
+    anxious_nervious = forms.CharField(
         label="I feel anxious and nervous much of the time.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -927,7 +934,7 @@ class AthleteMedicalHistoryForm(forms.Form):
     depressed_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    depressed= forms.CharField(
+    depressed = forms.CharField(
         label="I often feel sad or depressed.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -935,7 +942,7 @@ class AthleteMedicalHistoryForm(forms.Form):
     lack_confidence_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    lack_confidence= forms.CharField(
+    lack_confidence = forms.CharField(
         label="I struggle with being confident.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -943,7 +950,7 @@ class AthleteMedicalHistoryForm(forms.Form):
     despair_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    despair= forms.CharField(
+    despair = forms.CharField(
         label="I don’t feel hopeful about the future.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -951,7 +958,7 @@ class AthleteMedicalHistoryForm(forms.Form):
     lack_emotional_control_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    lack_emotional_control= forms.CharField(
+    lack_emotional_control = forms.CharField(
         label="""
             I have a hard time managing my emotions (frustration, anger,
             impatience).
@@ -962,10 +969,16 @@ class AthleteMedicalHistoryForm(forms.Form):
     self_others_harm_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    self_others_harm= forms.CharField(
+    self_others_harm = forms.CharField(
         label="I have feelings of hurting myself or others.",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    mental_health_check = forms.CharField(
+        label="Would you like someone from health and counceling to reach out to you?",
+        max_length=255,
+        required=False,
+        widget=forms.RadioSelect(choices=MENTAL_HEALTH_CHECK, attrs=REQ_CSS),
     )
     # misc
     other_information_2 = forms.CharField(
@@ -1013,10 +1026,17 @@ class AthleteMedicalHistoryForm(forms.Form):
         """Form validation."""
         cd = self.cleaned_data
         for field, _ in cd.items():
-            if cd[field] == 'Yes' and not cd.get('{0}_2'.format(field)):
-                self._errors[field] = self.error_class(
-                    ["Explain your 'Yes' response"],
-                )
+            if field != 'mental_health_check':
+                if cd[field] == 'Yes' and not cd.get('{0}_2'.format(field)):
+                    self._errors[field] = self.error_class(
+                        ["Explain your 'Yes' response"],
+                    )
+            else:
+                if cd['self_others_harm'] == 'Yes' and not cd['mental_health_check']:
+                    self._errors['mental_health_check'] = self.error_class(
+                        ['Please choose "Yes" or "No"'],
+                    )
+
         return self.cleaned_data
 
 

@@ -71,12 +71,13 @@ def index(request, stype, display=None):
                 template = 'medical_history/form_update.html'
     if request.method == 'POST':
         post = request.POST.copy()
-        form = fclass(post, gender=gender, use_required_attribute=False)
+        form = fclass(post, gender=gender, use_required_attribute=False, label_suffix='')
         if form.is_valid():
             cd = form.cleaned_data
             # set 'yes' responses with value from temp field
             for n1, v1 in cd.items():
-                if v1 == 'Yes':
+                # mental health check does not require explanation
+                if v1 == 'Yes' and n1 != 'mental_health_check':
                     cd[n1] = post['{0}_2'.format(n1)]
             if history:
                 # update
@@ -105,7 +106,7 @@ def index(request, stype, display=None):
 
     else:
         form = fclass(
-            initial=cd, gender=gender, use_required_attribute=False,
+            initial=cd, gender=gender, use_required_attribute=False, label_suffix='',
         )
 
     return render(

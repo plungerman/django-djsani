@@ -13,7 +13,6 @@
     href="https://app.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/css/bootstrapValidator.min.css">
 {% endblock %}
 {% block extra_javascript %}
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="https://app.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
 <script src="https://app.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -43,10 +42,10 @@ $(document).ready(function() {
     // set all radios to 'no' or not
     $("#toggle_no").on('click', function() {
         /* we need 'prop' to manage the UI selecting of 'no' button */
-        $("input[id$='_0']").prop('checked', this.checked);
+        $("input[id$='_1']").prop('checked', this.checked);
         /* we need 'attr' to set checked="checked" for POST value */
         if ($(this).is(':checked')) {
-            $("input[id$='_0']").attr("checked", "checked");
+            $("input[id$='_1']").attr("checked", "checked");
             $("li[id$='_2']").hide();
             $("input[id$='_2']").val("");
             $("li.error").remove();
@@ -74,6 +73,20 @@ $(document).ready(function() {
         if (val == "No") {
             $("#" + id).hide();
         }
+    });
+    {% if form.self_others_harm.value == 'Yes' %}
+      $('#switch_mental_health_check').show();
+    {% else %}
+      $('#switch_mental_health_check').hide();
+    {% endif %}
+    $("input[name='self_others_harm']").on('change', function() {
+      val = $(this).val();
+      if (val == "Yes") {
+        $('#switch_mental_health_check').show();
+      }
+      if (val == "No") {
+        $('#switch_mental_health_check').hide();
+      }
     });
     {% if form.errors %}
     $(':radio:checked').each(function() {
@@ -148,6 +161,9 @@ $(document).ready(function() {
     </p>
   </div>
   {% include "includes/errors_text.html" %}
+  {% if request.user.is_superuser %}
+  <p><input id='toggle_no' type='checkbox'></p>
+  {% endif %}
   <form method="post" action="." class="form medical-history">
     {% csrf_token %}
     <div>
@@ -156,10 +172,27 @@ $(document).ready(function() {
           {% if stype == "athlete" %}
             {% for field in form.visible_fields %}
               {% include "medical_history/athlete_headers.inc.html" %}
-              {% if field.value == "No" or not field.value %}
-                {% include "medical_history/form_field.inc.html" %}
+              {% if field.name == 'mental_health_check' %}
+                <li class="form-group ctrlHolder" id="switch_{{field.name}}">
+                  {% if field.label %}<h3>{{ field.label_tag }}</h3>{% endif %}
+                  {% if field.errors %}
+                  <div class="required warning">
+                    <span class="error">{{ field.errors|join:", "}}</span>
+                  {% else %}
+                  <div{% if field.field.required %} class="required"{% endif %}>
+                  {% endif %}
+                  {% if field.help_text %}
+                      <p class="small text-muted">{{field.help_text|safe}}</p>
+                  {% endif %}
+                  {{field}}
+                  </div>
+                </li>
               {% else %}
-                {% include "medical_history/form_verify_field.inc.html" %}
+                {% if field.value == "No" or not field.value %}
+                  {% include "medical_history/form_field.inc.html" %}
+                {% else %}
+                  {% include "medical_history/form_verify_field.inc.html" %}
+                {% endif %}
               {% endif %}
             {% endfor %}
           {% else %}
@@ -200,10 +233,27 @@ $(document).ready(function() {
               </h3>
               </li>
               {% endif %}
-              {% if field.value == "No" or not field.value %}
-                {% include "medical_history/form_field.inc.html" %}
+              {% if field.name == 'mental_health_check' %}
+                <li class="form-group ctrlHolder" id="switch_{{field.name}}">
+                  {% if field.label %}<h3>{{ field.label_tag }}</h3>{% endif %}
+                  {% if field.errors %}
+                  <div class="required warning">
+                    <span class="error">{{ field.errors|join:", "}}</span>
+                  {% else %}
+                  <div{% if field.field.required %} class="required"{% endif %}>
+                  {% endif %}
+                  {% if field.help_text %}
+                      <p class="small text-muted">{{field.help_text|safe}}</p>
+                  {% endif %}
+                  {{field}}
+                  </div>
+                </li>
               {% else %}
-                {% include "medical_history/form_verify_field.inc.html" %}
+                {% if field.value == "No" or not field.value %}
+                  {% include "medical_history/form_field.inc.html" %}
+                {% else %}
+                  {% include "medical_history/form_verify_field.inc.html" %}
+                {% endif %}
               {% endif %}
             {% endfor %}
             <li class="form-group ctrlHolder">
