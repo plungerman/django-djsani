@@ -353,24 +353,6 @@
       <div class="card mb-3">
         <div class="card-header">
           <h5 class="panel-title">
-            <i class="fa fa-ambulance"></i>
-            Emergency Contact Information
-            <a href="{% url 'student_detail_medium' cid 'print' 'emergency' %}?manid={{manager.id}}"
-              title="Print emergency contact">
-              <i class="fa fa-print"></i>
-            </a>
-          </h5>
-        </div>
-        <div class="card-body">
-          <div id="emergency_information">
-            {% include "dashboard/panels/emergency_information.html" %}
-          </div>
-        </div>
-      </div>
-      <!-- /.card -->
-      <div class="card mb-3">
-        <div class="card-header">
-          <h5 class="panel-title">
             <i class="fa fa-comments-o"></i>
             Staff Notes and Comments
             <a href="{% url 'student_detail_medium' cid 'print' 'notes' %}?manid={{manager.id}}"
