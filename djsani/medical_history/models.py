@@ -244,7 +244,7 @@ def harm_email(sender, instance, **kwargs):
                     user.id,
                 ),
                 user.email,
-                'medical_history/harm_email.html',
+                'medical_history/mental_health_check.html',
                 instance,
                 [settings.MANAGERS[0][1]],
             )
