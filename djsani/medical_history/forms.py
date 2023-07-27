@@ -1032,7 +1032,7 @@ class AthleteMedicalHistoryForm(forms.Form):
                         ["Explain your 'Yes' response"],
                     )
             else:
-                if cd['self_others_harm'] == 'Yes' and not cd['mental_health_check']:
+                if cd.get('self_others_harm') == 'Yes' and not cd.get('mental_health_check'):
                     self._errors['mental_health_check'] = self.error_class(
                         ['Please choose "Yes" or "No"'],
                     )
