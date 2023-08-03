@@ -975,7 +975,7 @@ class AthleteMedicalHistoryForm(forms.Form):
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
     mental_health_check = forms.CharField(
-        label="Would you like someone from health and counceling to reach out to you?",
+        label="Would you like someone from health and counseling to reach out to you?",
         max_length=255,
         required=False,
         widget=forms.RadioSelect(choices=MENTAL_HEALTH_CHECK, attrs=REQ_CSS),
