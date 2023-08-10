@@ -365,6 +365,7 @@ def search(request):
     """Search for a student or students."""
     search = request.POST.get('search', '')
     students = None
+    staff = in_group(request.user, STAFF)
     if len(search) > 2:
         try:
             query = int(search)
@@ -375,7 +376,7 @@ def search(request):
     return render(
         request,
         'dashboard/search.html',
-        {'students': students},
+        {'students': students, 'staff': staff},
     )
 
 
