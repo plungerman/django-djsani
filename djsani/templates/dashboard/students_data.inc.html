@@ -73,6 +73,8 @@
         {% endcache %}
         <tbody>
         {% for s in students %}
+          {% if s.class_year == 'Graduate' and not s.athlete %}
+          {% else %}
           <tr>
             <td class="{{s.adult}}" style="text-align:left;">
               {% if s.sitrep %}
@@ -127,7 +129,7 @@
                   {{s.last_name}}, {{s.first_name}}</a>
                 {% if s.athlete %}
                 <span style="float:right;margin-left:3px;">
-                  <i class="fa fa-star green" title="Athlete"></i>
+                <i class="fa fa-star green" title="Athlete: {{s.class_year}}"></i>
                 </span>
                 {% endif %}
               {% else %}
@@ -280,6 +282,7 @@
             </td>
             {% endif %}
           </tr>
+          {% endif %}
         {% endfor %}
         </tbody>
         {% cache 86400 datatable_foot %}
