@@ -1,5 +1,5 @@
 cryptography
-django==3.2.19
+django==3.2.20
 django-bootstrap4
 django-localflavor
 django-loginas

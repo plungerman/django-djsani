@@ -67,7 +67,8 @@ def get_manager(user, pk=True):
     it is based on the date created in relation to the medical forms
     collection process start date.
 
-    if we don't have a current manager, we create one.
+    if we don't have a current manager for a current student, we create one,
+    otherwise we try to return the most recent manager.
 
     requires the student's college ID and START_DATE in settings file.
     """
@@ -83,12 +84,16 @@ def get_manager(user, pk=True):
         manager = StudentMedicalManager.objects.filter(
             user=user,
         ).filter(created_at__gte=settings.START_DATE).first()
-        # if we don't have a current manager:
-        # (could be a first time returning student or new FR or transfer)
+        # if we don't have a current manager and a current student:
         # create the new student profile by copying some things from
         # the previous manager, in addition to copying the insurance,
         # medical histories, if they exists.
-        if not manager:
+        # if not current student, find the latest manager
+        try:
+            student = user.student
+        except Exception:
+            student = None
+        if not manager and student and student.status:
             immunization = False
             concussion_baseline = False
             # do we have a past manager?
@@ -116,5 +121,7 @@ def get_manager(user, pk=True):
             doop(StudentMedicalHistory, manager)
             # check for athlete medical history
             doop(AthleteMedicalHistory, manager)
+        else:
+            manager = StudentMedicalManager.objects.filter(user=user).order_by('-id').first()
 
     return manager

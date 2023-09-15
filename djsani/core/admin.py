@@ -70,6 +70,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
         'class_year',
         'residency',
         'username',
+        'status',
         'cid',
         'created_at',
     )
@@ -83,7 +84,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
         'state',
         'postal_code',
     )
-    list_filter = ['residency']
+    list_filter = ['residency', 'status']
     list_max_show_all = 500
     list_per_page = 500
     save_on_top = True

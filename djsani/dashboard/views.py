@@ -2,6 +2,7 @@
 
 """Views for the administrative dashboard."""
 
+import logging
 import os
 
 from django.conf import settings
@@ -39,6 +40,9 @@ STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
 
 
+logger = logging.getLogger('debug_logfile')
+
+
 def panels(request, mod, manager, content_type=None, gender=None):
     """
     Accepts a data model class, manager object, optional gender.
@@ -53,13 +57,12 @@ def panels(request, mod, manager, content_type=None, gender=None):
     if modo:
         panel = model_to_dict(modo)
         panel['created_at'] = modo.created_at
-        if gender:
+        if mname in {'StudentMedicalHistory', 'AthleteMedicalHistory'}:
             form = str_to_class(
                 'djsani.medical_history.forms',
                 '{0}Form'.format(mname),
             )(initial=panel, gender=gender)
     template = loader.get_template('dashboard/panels/{0}.html'.format(mname))
-
     return template.render(
         {
             'data': panel,
@@ -304,6 +307,10 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                 age = calculate_age(student.student.birth_date)
             except Exception:
                 age = None
+            try:
+                gender = student.student.gender
+            except Exception:
+                gender = None
             # emergency notification system
             ens = None
             # health insurance
@@ -319,7 +326,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                 StudentMedicalHistory,
                 manager,
                 content_type,
-                student.student.gender,
+                gender,
             )
             # athlete medical history
             amh = panels(
@@ -327,7 +334,7 @@ def student_detail(request, cid=None, medium=None, content_type=None):
                 AthleteMedicalHistory,
                 manager,
                 content_type,
-                student.student.gender,
+                gender,
             )
             # used for staff who update info on the dashboard
             stype = 'student'
@@ -369,10 +376,10 @@ def search(request):
     if len(search) > 2:
         try:
             query = int(search)
-            students = StudentProfile.objects.filter(user__pk__icontains=query)
+            students = User.objects.filter(pk__icontains=query).order_by('last_name')
         except Exception:
             query = search
-            students = StudentProfile.objects.filter(user__last_name__icontains=query)
+            students = User.objects.filter(last_name__icontains=query).order_by('last_name')
     return render(
         request,
         'dashboard/search.html',
