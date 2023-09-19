@@ -573,29 +573,25 @@
                   aria-controls="cc_student_meni_waiver" aria-selected="true">
                   Meni/Hep B</a>
               </li>
-              <li class="nav-item"{% if not manager.athlete_privacy_waiver %}
-                class="disabled"{% endif %}>
+              <li class="nav-item"{% if not manager.cc_athlete_privacy_waiver %} class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_privacy_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_privacy_waiver" role="tab"
                   aria-controls="cc_athlete_privacy_waiver" aria-selected="false">
                   Privacy</a>
               </li>
-              <li class="nav-item"{% if not manager.cc_athlete_sicklecell_waiver %}
-                class="disabled"{% endif %}>
+              <li class="nav-item"{% if not manager.cc_athlete_sicklecell_waiver %} class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_sicklecell_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_sicklecell_waiver" role="tab"
                   aria-controls="cc_athlete_sicklecell_waiver" aria-selected="false">
                   Sickle Cell</a>
               </li>
-              <li class="nav-item"{% if not manager.athlete_reporting_waiver %}
-                class="disabled"{% endif %}>
+              <li class="nav-item"{% if not manager.cc_athlete_reporting_waiver %} class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_reporting_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_reporting_waiver" role="tab"
                   aria-controls="cc_athlete_reporting_waiver" aria-selected="false">
                   Reporting</a>
               </li>
-              <li class="nav-item"{% if not manager.athlete_risk_waiver %}
-                class="disabled"{% endif %}>
+              <li class="nav-item"{% if not manager.cc_athlete_risk_waiver %} class="disabled"{% endif %}>
                 <a class="nav-link" id="cc_athlete_risk_waiver-tab"
                   data-toggle="tab" href="#cc_athlete_risk_waiver" role="tab"
                   aria-controls="cc_athlete_risk_waiver" aria-selected="false">
@@ -604,7 +600,7 @@
             </ul>
             <!-- /.nav-tabs -->
             <div class="tab-content" id="student-waivers-content">
-                {% include "dashboard/waivers.inc.html" %}
+              {% include "dashboard/waivers.inc.html" %}
             </div>
             <!-- /.tab-content -->
           </div>
