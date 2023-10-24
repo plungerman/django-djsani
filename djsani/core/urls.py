@@ -22,8 +22,6 @@ urlpatterns = [
     # django admin
     path('rocinante/', include('loginas.urls')),
     path('rocinante/', admin.site.urls),
-    # admin honeypot
-    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     # we don't want users created through django admin
     path(
         'rocinante/auth/user/add/',
