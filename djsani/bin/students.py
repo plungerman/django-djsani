@@ -20,6 +20,7 @@ from djauth.managers import LDAPManager
 from djsani.core.models import StudentProfile
 from djsani.core.utils import get_manager
 from djtools.utils.date import calculate_age
+from djtools.utils.mail import send_mail
 from djtools.utils.workday import get_students
 
 
@@ -39,7 +40,20 @@ parser.add_argument(
 
 
 def main():
-    eldap = LDAPManager()
+    try:
+        eldap = LDAPManager()
+    except Exception as error:
+        send_mail(
+            None,
+            [settings.MANAGERS[0][1],],
+            '[DJ Sani] load workday students: FAIL',
+            settings.MANAGERS[0][1],
+            'workday_fail_email.html',
+            {'error': error},
+            [settings.MANAGERS[0][1]],
+        )
+        sys.exit(main())
+
     students = get_students()
     # set all profiles to status False and then
     # update to True when we have a student from API
