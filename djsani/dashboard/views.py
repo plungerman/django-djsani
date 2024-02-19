@@ -338,8 +338,17 @@ def student_detail(request, cid=None, medium=None, content_type=None):
             )
             # used for staff who update info on the dashboard
             stype = 'student'
-            if manager.sports and manager.sports.all():
-                stype = 'athlete'
+            if manager:
+                if manager.sports and manager.sports.all():
+                    stype = 'athlete'
+            else:
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Could not find a medical manager for the student with ID: {0}.".format(cid),
+                    extra_tags='bg-success',
+                )
+                return HttpResponseRedirect(reverse_lazy('dashboard_home'))
         else:
             age, ens, shi, smh, amh = (None,) * 5
             student, stype, manager = (None,) * 5
