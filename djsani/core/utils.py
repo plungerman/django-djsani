@@ -18,11 +18,9 @@ from djsani.medical_history.models import StudentMedicalHistory
 
 
 def xsql(sql):
+    """Helper function to execute SQL incantation and return the results."""
     with connection.cursor() as cursor:
         cursor.execute(sql)
-        #desc = cursor.description
-        #nt_result = namedtuple('Result', [col[0] for col in desc])
-        #results = [nt_result(*row) for row in cursor.fetchall()]
         columns = [col[0] for col in cursor.description]
         results = [
             dict(zip(columns, row))
@@ -32,6 +30,7 @@ def xsql(sql):
 
 
 
+# doop(StudentHealthInsurance, manager)
 def doop(mod, man):
     """Check for an object and duplicate it. Returns the new object or None."""
     instance = mod.objects.filter(
@@ -44,6 +43,20 @@ def doop(mod, man):
         instance.created_at = None
         # associate the new obj with the new manager
         instance.manager_id = man.id
+
+        # remove all tertiary values if they are athlete insurance
+        if instance.__class__.__name__ == 'StudentHealthInsurance' \
+          and instance.tertiary_company == settings.INSURANCE_COMPANY_NAME:
+            instance.tertiary_policy_holder = ''
+            instance.tertiary_dob = ''
+            instance.tertiary_company = ''
+            instance.tertiary_phone = ''
+            instance.tertiary_policy_address = ''
+            instance.tertiary_member_id = ''
+            instance.tertiary_group_no = ''
+            instance.tertiary_policy_type = ''
+            instance.tertiary_policy_state = ''
+            instance.tertiary_card = ''
         instance.save()
 
     return instance
