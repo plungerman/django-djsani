@@ -1,12 +1,11 @@
 cryptography
-django==4.2.5
+django==4.2.11
 django-bootstrap4
 django-localflavor
 django-loginas
-django-admin-honeypot
 image
 mysqlclient
-python-memcached
+pymemcache
 python-ldap
 pyodbc
 Pillow
