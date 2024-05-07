@@ -64,6 +64,11 @@ def main():
             try:
                 # fetch user
                 user = User.objects.get(username=username)
+                if user.first_name != stu.get('first_name'):
+                    user.first_name = stu.get('first_name')
+                if user.last_name != stu.get('last_name'):
+                    user.last_name = stu.get('last_name')
+                user.save()
             except User.DoesNotExist:
                 user = None
                 # or create a new user
