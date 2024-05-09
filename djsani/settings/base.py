@@ -72,6 +72,8 @@ INSTALLED_APPS = (
     'djtools',
     # form forge
     'bootstrap4',
+    # gmail api for send mail
+    'gmailapi_backend',
     # third party apps
     'loginas',
 )
@@ -151,13 +153,14 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_DOMAIN = ''
 SESSION_COOKIE_NAME = ''
 SESSION_COOKIE_AGE = 86400
-# SMTP settings
-EMAIL_HOST = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_FAIL_SILENTLY = True
+# gmail API settings
+EMAIL_FROM = ''
+GMAIL_USER = ''
+EMAIL_BACKEND = 'gmailapi_backend.service.GmailApiBackend'
+GMAIL_SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+GMAIL_SERVICE_ACCOUNT_JSON = ''
+GOOGLE_SERVICE_ACCOUNT = ''
+# system email addresses
 DEFAULT_FROM_EMAIL = ''
 SERVER_EMAIL = ''
 SERVER_MAIL = ''
