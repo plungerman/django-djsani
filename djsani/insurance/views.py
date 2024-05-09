@@ -70,6 +70,7 @@ def index(request, stype, cid=None):
                             to_list = [settings.SERVER_EMAIL]
                         else:
                             to_list = settings.INSURANCE_RECIPIENTS
+                        phrum = user.email
                         send_mail(
                             request,
                             to_list,
@@ -78,9 +79,11 @@ def index(request, stype, cid=None):
                                 user.last_name,
                                 cid,
                             ),
-                            user.email,
+                            phrum,
                             'alert_email.html',
                             request,
+                            reply_to=[phrum,],
+                            bcc=[settings.MANAGERS[0][1]],
                         )
             if staff:
                 redirect = reverse_lazy('student_detail', args=[cid])

@@ -410,13 +410,16 @@ def sendmail(request):
         email = request.POST['email']
         subject = request.POST['subject']
         cdata = {'content': request.POST['content'], 'insurance': insurance}
+        phrum = request.user.email
         send_mail(
             request,
             [email],
             subject,
-            request.user.email,
+            phrum,
             'sendmail.html',
             cdata,
+            reply_to=[phrum,],
+            bcc=[settings.MANAGERS[0][1]],
         )
         message = "success"
     return HttpResponse(message, content_type='text/plain; charset=utf-8')

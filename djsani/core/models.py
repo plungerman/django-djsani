@@ -57,6 +57,7 @@ def uploaded_email(sender, instance, manager, philes):
         philes['to_list'] = hidden_list
         for phile, status in philes.items():
             if isinstance(status, bool) and status:
+                phrum = user.email
                 send_mail(
                     None,
                     to_list,
@@ -65,10 +66,11 @@ def uploaded_email(sender, instance, manager, philes):
                         user.first_name,
                         user.id,
                     ),
-                    user.email,
+                    phrum,
                     'upload_email.html',
                     philes,
-                    [settings.MANAGERS[0][1]],
+                    reply_to=[phrum,],
+                    bcc=[settings.MANAGERS[0][1]],
                 )
                 break
 

@@ -218,6 +218,7 @@ def harm_email(sender, instance, **kwargs):
             to_list = settings.HARM_EMAIL_LIST
             if settings.DEBUG:
                 to_list = [settings.SERVER_EMAIL]
+            phrum = user.email
             send_mail(
                 None,
                 to_list,
@@ -226,25 +227,28 @@ def harm_email(sender, instance, **kwargs):
                     user.first_name,
                     user.id,
                 ),
-                user.email,
+                phrum,
                 'medical_history/harm_email.html',
                 instance,
-                [settings.MANAGERS[0][1]],
+                reply_to=[phrum,],
+                bcc=[settings.MANAGERS[0][1]],
             )
         if instance.mental_health_check == 'Yes':
             to_list = settings.MENTAL_HEALTH_CHECK
             if settings.DEBUG:
                 to_list = [settings.SERVER_EMAIL]
+            phrum = user.email
             send_mail(
                 None,
                 to_list,
-                '[Mental Health Check] {0}, {1} ({2})'.format(
+                '[Harm Self or Others] {0}, {1} ({2})'.format(
                     user.last_name,
                     user.first_name,
                     user.id,
                 ),
-                user.email,
-                'medical_history/mental_health_check.html',
+                phrum,
+                'medical_history/harm_email.html',
                 instance,
-                [settings.MANAGERS[0][1]],
+                reply_to=[phrum,],
+                bcc=[settings.MANAGERS[0][1]],
             )

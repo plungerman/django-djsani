@@ -43,14 +43,16 @@ def main():
     try:
         eldap = LDAPManager()
     except Exception as error:
+        phrum = settings.MANAGERS[0][1]
         send_mail(
             None,
-            [settings.MANAGERS[0][1],],
+            [phrum,],
             '[DJ Sani] load workday students: FAIL',
-            settings.MANAGERS[0][1],
+            phrum,
             'workday_fail_email.html',
             {'error': error},
-            [settings.MANAGERS[0][1]],
+            reply_to=[phrum,],
+            bcc=[settings.MANAGERS[0][1]],
         )
         sys.exit(main())
 

@@ -141,7 +141,7 @@ LDAP_ID_ATTR = ''
 LDAP_AUTH_USER_PK = False
 # auth backends
 AUTHENTICATION_BACKENDS = (
-    'djauth.backends.LDAPBackend',
+    #'djauth.backends.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 LOGIN_URL = '{0}accounts/login/'.format(ROOT_URL)
@@ -177,7 +177,7 @@ HOUSING_EMAIL_LIST = []
 HARM_EMAIL_LIST = []
 MENTAL_HEALTH_CHECK = []
 UPLOAD_EMAIL_DICT = {}
-START_DATE = datetime.datetime(datetime.datetime.now().year, 5, 25)
+START_DATE = datetime.datetime(datetime.datetime.now().year, 5, 1)
 DECEMBER = 12
 ADULT_AGE = 18
 ACADEMIC_YEAR_LIMBO = False

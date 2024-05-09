@@ -48,7 +48,7 @@ def doop(mod, man):
         if instance.__class__.__name__ == 'StudentHealthInsurance' \
           and instance.tertiary_company == settings.INSURANCE_COMPANY_NAME:
             instance.tertiary_policy_holder = ''
-            instance.tertiary_dob = ''
+            instance.tertiary_dob = None
             instance.tertiary_company = ''
             instance.tertiary_phone = ''
             instance.tertiary_policy_address = ''
