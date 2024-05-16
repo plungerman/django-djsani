@@ -19,8 +19,11 @@ handler404 = 'djtools.views.errors.four_oh_four_error'
 handler500 = 'djtools.views.errors.server_error'
 
 urlpatterns = [
-    # django admin
+    # sign in as user
     path('rocinante/', include('loginas.urls')),
+    # defender admin
+    path('rocinante/defender/', include('defender.urls')),
+    # django admin
     path('rocinante/', admin.site.urls),
     # we don't want users created through django admin
     path(
