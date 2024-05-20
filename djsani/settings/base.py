@@ -179,6 +179,7 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 #SECURE_SSL_REDIRECT = True
 # app settings
+ROTATE_PHOTO = -90
 # REST API AUTHENTICATION TOKEN
 REST_FRAMEWORK_TOKEN = ''
 INSURANCE_RECIPIENTS = []
@@ -188,16 +189,23 @@ HOUSING_EMAIL_LIST = []
 HARM_EMAIL_LIST = []
 MENTAL_HEALTH_CHECK = []
 UPLOAD_EMAIL_DICT = {}
+WORKDAY_SPORTS_ROSTERS = ''
+WORKDAY_USERNAME = ''
+WORKDAY_PASSWORD = ''
+# retry limit for requests package
+WORKDAY_REQUESTS_RETRY = 100
+# dates
 START_DATE = datetime.datetime(datetime.datetime.now().year, 5, 1)
 DECEMBER = 12
 ADULT_AGE = 18
 ACADEMIC_YEAR_LIMBO = False
+# Groups
 STAFF_GROUP = 'MedicalStaff'
 COACH_GROUP = 'AthleticsCoach'
 STUDENT_GROUP = 'carthageStudentStatus'
+# testing
 TEST_STUDENT_ID = None
 TEST_STAFF_ID = None
-ROTATE_PHOTO = -90
 # logging
 LOG_FILEPATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/',

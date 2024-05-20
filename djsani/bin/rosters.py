@@ -3,9 +3,9 @@
 """Load roster data for sport."""
 
 import argparse
-import csv
 import django
 import os
+import requests
 import sys
 
 django.setup()
@@ -15,22 +15,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from djsani.core.models import Sport
 from djsani.core.models import StudentMedicalManager
-
+from urllib3.util import Retry
 
 # set up command-line options
-desc = """
-    Accepts as input the 4 letter code for the sport. e.g. wscr
-"""
-
+desc = "Accepts as input --test for debugging."
 parser = argparse.ArgumentParser(description=desc)
 
-parser.add_argument(
-    '-c',
-    '--code',
-    required=True,
-    help="Sport code",
-    dest='code',
-)
 parser.add_argument(
     '--test',
     action='store_true',
@@ -40,45 +30,56 @@ parser.add_argument(
 
 
 def main():
-    """Obtain all the data from a database table."""
-    phile = os.path.join(settings.BASE_DIR, 'rosters/{0}.csv'.format(code))
-    try:
-        sport = Sport.objects.get(code=code.upper())
-    except Exception:
-        print("Invalid sport code: {0}".format(code))
-        sys.exit(-1)
+    """Obtain all the data from the API and insert into database."""
+    session = requests.Session()
 
-    with open(phile) as roster:
-        reader = csv.reader(roster, delimiter='|')
-        for row in reader:
-            cid=row[0]
+    retries = Retry(
+        total=settings.WORKDAY_REQUESTS_RETRY,
+        backoff_factor=0.1,
+        status_forcelist=[502, 503, 504],
+        allowed_methods={'GET'},
+    )
+    session.mount('https://', requests.adapters.HTTPAdapter(max_retries=retries))
+    response = session.get(
+        settings.WORKDAY_SPORTS_ROSTERS,
+        auth=(settings.WORKDAY_USERNAME, settings.WORKDAY_PASSWORD),
+    )
+    if response:
+        jason = response.json()
+        for athlete in jason['Report_Entry']:
+            code = athlete['referenceID']
             try:
-                user = User.objects.get(pk=cid)
-            except User.DoesNotExist:
-                user = None
-
-            if user:
+                sport = Sport.objects.get(code=code.upper())
+            except Exception:
+                print("Invalid sport code: {0}".format(code))
+                sport = None
+            if sport:
+                cid=athlete['Student_ID']
                 try:
-                    manager = StudentMedicalManager.objects.filter(
-                        user=user,
-                        created_at__gte=settings.START_DATE,
-                    ).first()
-                except Exception as error:
-                    print('error:')
-                    print(error)
-                    manager = None
-                if manager:
-                    manager.athlete=True
-                    manager.save()
-                    manager.sports.add(sport)
-                else:
-                    print(user.id)
-                    print('no manager found')
+                    user = User.objects.get(pk=cid)
+                except User.DoesNotExist:
+                    user = None
+
+                if user:
+                    try:
+                        manager = StudentMedicalManager.objects.filter(
+                            user=user,
+                            created_at__gte=settings.START_DATE,
+                        ).first()
+                    except Exception as error:
+                        print('error:')
+                        print(error)
+                        manager = None
+                    if manager:
+                        manager.athlete=True
+                        manager.save()
+                        manager.sports.add(sport)
+                    else:
+                        print(user.id)
+                        print('no manager found')
 
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    code = args.code
     test = args.test
-
     sys.exit(main())
