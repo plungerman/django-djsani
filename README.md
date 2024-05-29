@@ -77,3 +77,12 @@ whereas the following will resolve to true:
 {% if oo %}
 
 if oo has a value of "False".
+
+# rosters
+30 04 * * * DJANGO_SETTINGS_MODULE=djsani.settings.shell ; export DJANGO_SETTINGS_MODULE; (cd /data2/python_venv/3.10/djsani/ && . bin/activate && bin/python /data2/python_venv/3.10/djsani/djsani/bin/rosters.py 2>&1 | mail -s "[DJ Sani] load athlete rosters" larry@carthage.edu) >> /dev/null 2>&1
+# student API data
+00 08 * * * DJANGO_SETTINGS_MODULE=djsani.settings.shell ; export DJANGO_SETTINGS_MODULE; (cd /data2/python_venv/3.10/djsani/ && . bin/activate && bin/python /data2/python_venv/3.10/djsani/djsani/bin/students.py  2>&1 | mail -s "[DJ Sani] load workday students" larry@carthage.edu) >> /dev/null 2>&1
+00 12 * * * DJANGO_SETTINGS_MODULE=djsani.settings.shell ; export DJANGO_SETTINGS_MODULE; (cd /data2/python_venv/3.10/djsani/ && . bin/activate && bin/python /data2/python_venv/3.10/djsani/djsani/bin/students.py  2>&1 | mail -s "[DJ Sani] load workday students" larry@carthage.edu) >> /dev/null 2>&1
+00 15 * * * DJANGO_SETTINGS_MODULE=djsani.settings.shell ; export DJANGO_SETTINGS_MODULE; (cd /data2/python_venv/3.10/djsani/ && . bin/activate && bin/python /data2/python_venv/3.10/djsani/djsani/bin/students.py  2>&1 | mail -s "[DJ Sani] load workday students" larry@carthage.edu) >> /dev/null 2>&1
+# django defender clear cache
+00 00 * * * DJANGO_SETTINGS_MODULE=djsani.settings.shell ; export DJANGO_SETTINGS_MODULE; (cd /data2/python_venv/3.10/djsani/ && . bin/activate && bin/python //data2/python_venv/3.10/djsani/djsani/manage.py cleanup_django_defender >> /d3/www/data/djsani/django_defender_cleanup.log) >> /dev/null 2>&1

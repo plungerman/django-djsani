@@ -32,7 +32,6 @@ parser.add_argument(
 def main():
     """Obtain all the data from the API and insert into database."""
     session = requests.Session()
-
     retries = Retry(
         total=settings.WORKDAY_REQUESTS_RETRY,
         backoff_factor=0.1,
@@ -59,7 +58,6 @@ def main():
                     user = User.objects.get(pk=cid)
                 except User.DoesNotExist:
                     user = None
-
                 if user:
                     try:
                         manager = StudentMedicalManager.objects.filter(
