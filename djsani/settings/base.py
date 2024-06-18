@@ -73,17 +73,17 @@ INSTALLED_APPS = (
     # form forge
     'bootstrap4',
     # brute force prevention
-    'defender',
+    #'defender',
     # gmail api for send mail
     'gmailapi_backend',
     # third party apps
     'loginas',
 )
 # defender settings
-DEFENDER_REDIS_URL = 'redis://localhost:6379/0'
-DEFENDER_LOGIN_FAILURE_LIMIT = 10
-DEFENDER_LOCK_OUT_BY_IP_AND_USERNAME = True
-DEFENDER_DISABLE_USERNAME_LOCKOUT = True
+#DEFENDER_REDIS_URL = 'redis://localhost:6379/0'
+#DEFENDER_LOGIN_FAILURE_LIMIT = 10
+#DEFENDER_LOCK_OUT_BY_IP_AND_USERNAME = True
+#DEFENDER_DISABLE_USERNAME_LOCKOUT = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     #'django.middleware.cache.UpdateCacheMiddleware',
@@ -92,7 +92,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'defender.middleware.FailedLoginMiddleware',
+    #'defender.middleware.FailedLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

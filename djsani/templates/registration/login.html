@@ -4,6 +4,10 @@
 <div class="row">
   <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
     {% if user.is_anonymous %}
+      <p class="dashintro">
+        Please use your Carthage username to log in.
+        Do not include @carthage.edu as part of your username.
+      </p>
         {% if form.errors or errors %}
         <p class="bg-warning p-4">
             Please enter a correct username and password.
