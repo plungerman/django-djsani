@@ -123,6 +123,7 @@ $(function() {
             $('#tertiary-form').slideUp(200);
         }
     });
+    {% if manager.athlete %}
     $("[id$='policy_type']").change(function() {
         if( $(this).val()=="Gov" ) {
             $.fancybox.open([{
@@ -130,6 +131,7 @@ $(function() {
             }]);
         }
     });
+    {% endif %}
     // for updates to the form
     if ( $('#id_primary_policy_type').val() == "Gov") {
         $('#id_primary_policy_state').addClass("required");
