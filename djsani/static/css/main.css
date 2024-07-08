@@ -44,8 +44,11 @@ div.growlUI h2 { font-size:1.4em;}
 .hidden {display:none;}
 #id_sports{background:none;}
 .error-message { padding:3px; font-weight:900; background: #fbe3e4; border: 2px solid #fbc2c4 ; color: #8a1f11; }
-#student table {width:50%;}
-#athlete table {width:60%;}
+
+@media (min-width: 768px) {
+  #student table {width:50%;}
+  #athlete table {width:60%;}
+}
 table.dataTable > tbody > tr:hover > td.minor { background-color: #ccf; }
 table.dataTable > tbody > tr:nth-child(2n+1) > td.minor { background-color: #ccf; }
 table.dataTable > tbody tr.selected { background-color: #b0bed9 !important; }

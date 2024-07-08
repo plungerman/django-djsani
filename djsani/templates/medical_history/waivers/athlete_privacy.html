@@ -40,7 +40,8 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="forms-container">
+<div class="row">
+  <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 forms-container">
     <h2>
         Student Athlete Authorization/Consent For <br />
         Disclosure of Protected Health Information (PHI)
@@ -50,5 +51,6 @@ $(function() {
         {% include "medical_history/waivers/athlete_privacy.inc.html" %}
         {% include "form_submit.inc.html" %}
     </form>
+  </div>
 </div>
 {% endblock %}

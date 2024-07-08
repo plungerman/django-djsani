@@ -23,7 +23,8 @@ $(function() {
 </script>
 {% endblock %}
 {% block content %}
-<div class="large-12 forms-container">
+<div class="row">
+  <div class="col-8 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 forms-container">
     <h2>
         Important Information about Meningitis<br /> and Hepatitis B
     </h2>
@@ -33,5 +34,6 @@ $(function() {
         {% include "medical_history/waivers/student_meni.inc.html" %}
         {% include "form_submit.inc.html" %}
     </form>
+  </div>
 </div>
 {% endblock %}
