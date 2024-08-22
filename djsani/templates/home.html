@@ -355,7 +355,7 @@ $(function() {
             <tr><th colspan="2">Uploaded Forms</th></tr>
           </thead>
           <tbody>
-            {% if user.student.class_year == 'Freshman' or user.student.sicklecell_required %}
+            {% if user.student.class_year == 'Freshman' or manager.sicklecell_required %}
             <tr>
               <td>
                   {% if manager.cc_athlete_sicklecell_waiver %}
