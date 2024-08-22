@@ -8,7 +8,7 @@
     {{student.student.address1}} {{student.student.address2}}<br>
     {{student.student.city}}, {{student.student.state}}<br>
     {{student.student.postal_code}} {{student.student.country}}<br>
-    {{student.student.phone}}<br>
+    {{student.student.phone|default:'No Phone'}}<br>
     {{student.email}}<br>
     Residency: {{student.student.residency}}
     </address>
