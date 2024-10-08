@@ -65,25 +65,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 2FA auth with saml2
+    'django_saml',
+    # apps
     'djsani.core',
     'djsani.insurance',
     'djsani.medical_history',
     'djsani.medical_history.waivers',
-    'djtools',
     # form forge
     'bootstrap4',
-    # brute force prevention
-    #'defender',
+    # tools
+    'djtools',
     # gmail api for send mail
     'gmailapi_backend',
     # third party apps
     'loginas',
 )
-# defender settings
-#DEFENDER_REDIS_URL = 'redis://localhost:6379/0'
-#DEFENDER_LOGIN_FAILURE_LIMIT = 10
-#DEFENDER_LOCK_OUT_BY_IP_AND_USERNAME = True
-#DEFENDER_DISABLE_USERNAME_LOCKOUT = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     #'django.middleware.cache.UpdateCacheMiddleware',
@@ -92,7 +89,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'defender.middleware.FailedLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -151,9 +147,85 @@ LDAP_ID_ATTR = ''
 LDAP_AUTH_USER_PK = False
 # auth backends
 AUTHENTICATION_BACKENDS = (
+    'djauth.saml.backends.OneloginBackend',
     'django.contrib.auth.backends.ModelBackend',
     'djauth.backends.LDAPBackend',
 )
+# SAML settings
+SAML_DEBUG = False
+SAML_STRICT = False
+SAML_LOGIN_REDIRECT = ROOT_URL
+SAML_LOGOUT_REDIRECT = ROOT_URL
+SAML_USERNAME_ATTR = ''
+SAML_CID_ATTR = ''
+SAML_CREATE_USER = True
+SAML_UPDATE_USER = True
+SAML_IDP_FILE = os.path.join(BASE_DIR, 'idp_meta.xml')
+SAML_IDP_URL = 'https://{0}/{1}/saml/metadata/'.format(SERVER_URL, PROJECT_APP)
+SAML_SECURITY = {
+    'nameIdEncrypted': False,
+    'authnRequestsSigned': False,
+    'logoutRequestSigned': False,
+    'logoutResponseSigned': False,
+    'signMetadata': False,
+    'wantMessagesSigned': False,
+    'wantAssertionsSigned': False,
+    'wantNameId' : True,
+    'wantNameIdEncrypted': False,
+    'wantAttributeStatement': False,
+    'wantAssertionsEncrypted': False,
+    'allowSingleLabelDomains': False,
+    #'signatureAlgorithm': 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+    #'digestAlgorithm': 'http://www.w3.org/2001/04/xmlenc#sha256',
+    'signatureAlgorithm': 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+    'digestAlgorithm': 'http://www.w3.org/2000/09/xmldsig#sha1'
+}
+SAML_CONTACT = {
+    'technical': {
+        'givenName': '',
+        'emailAddress': '',
+    },
+    'support': {
+        'givenName': '',
+        'emailAddress': '',
+    }
+}
+SAML_ORGANIZATION = {
+    'en-US': {
+        'name': '',
+        'displayname': '',
+        'url': '',
+    }
+}
+SAML_SP = {
+    'entityId': '',
+    'assertionConsumerService': {
+        'url': '',
+        'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
+    },
+    'singleLogoutService': {
+        'url': '',
+        'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+    },
+    'NameIDFormat': 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+}
+# the x509cert value is from onelogin
+SAML_IDP = {
+    'entityId': '',
+    'singleSignOnService': {
+        'url': '',
+        'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+    },
+    'singleLogoutService': {
+        'url': '',
+        'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+    },
+    'x509cert': ''
+}
+# saml_attr, django_attr
+SAML_ATTR_MAP = [('', ''),]
+SAML_ATTR_UPDATE_IGNORE = [('',)]
+# vLDAP authentication (remove after saml2 integration)
 LOGIN_URL = '{0}accounts/login/'.format(ROOT_URL)
 LOGIN_REDIRECT_URL = ROOT_URL
 USE_X_FORWARDED_HOST = True

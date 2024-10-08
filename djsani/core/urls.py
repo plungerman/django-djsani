@@ -21,8 +21,6 @@ handler500 = 'djtools.views.errors.server_error'
 urlpatterns = [
     # sign in as user
     path('rocinante/', include('loginas.urls')),
-    # defender admin
-    #path('rocinante/defender/', include('defender.urls')),
     # django admin
     path('rocinante/', admin.site.urls),
     # we don't want users created through django admin
@@ -30,6 +28,8 @@ urlpatterns = [
         'rocinante/auth/user/add/',
         RedirectView.as_view(url=reverse_lazy('auth_login')),
     ),
+    # saml2 auth
+    path('saml/', include('django_saml.urls')),
     # auth
     path(
         'accounts/login/',

@@ -8,6 +8,7 @@ image
 mysqlclient
 pymemcache
 python-ldap
+python3-saml-django
 pyodbc
 Pillow
 requests
