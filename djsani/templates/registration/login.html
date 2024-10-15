@@ -4,44 +4,26 @@
 <div class="row">
   <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
     {% if user.is_anonymous %}
-      <p class="dashintro">
-        Please use your Carthage username to log in.
-        Do not include @carthage.edu as part of your username.
+      <p><a class="btn btn-primary btn-lg" href="{% url 'django_saml:login' %}">Sign in</a></p>
+      <p>
+        <strong class="purple">NOTE:</strong> You will be sent to OneLogin to authenticate
+        and then redirected back here after authentication.
       </p>
-        {% if form.errors or errors %}
-        <p class="bg-warning p-4">
-            Please enter a correct username and password.
-            Both fields are case-sensitive.
-            <br /><br />
-            Do not include @carthage.edu
-            as part of your username.
-        </p>
-        {% endif %}
-        <div class="row">
-          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-          {% include "registration/login_form.inc.html" %}
-          </div>
-        </div>
     {% else %}
-        <h2>You are already logged in</h2>
-        <p>Where do  you want to go?</p>
-        <ul>
-            <li>
-                <a href="{% url 'home' %}">
-                    Forms Home
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'dashboard_home' %}">
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="../logout/">
-                    Do you want to log out and log in as a new user?
-                    </a>
-            </li>
-        </ul>
+      <h2>You are already logged in</h2>
+      <p>Where do  you want to go?</p>
+      <ul>
+        <li>
+          <a href="{% url 'home' %}">
+            Forms Home
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'dashboard_home' %}">
+            Dashboard
+          </a>
+        </li>
+      </ul>
     {% endif %}
     <div id="login-downloadable-forms">
     {% get_lw_content as files blurbs 2455 %}

@@ -216,11 +216,11 @@
       <li class="divider"></li>
       <li>
         {% if user.is_anonymous %}
-        <a href="{% url 'auth_login' %}">
+        <a href="{% url 'django_saml:login' %}">
           <i class="fa fa-sign-in"></i> Sign In
         </a>
         {% else %}
-        <a href="{% url 'auth_logout' %}">
+        <a href="{% url 'django_saml:logout' %}">
           <i class="fa fa-sign-out"></i> Sign Out
         </a>
         {% endif %}

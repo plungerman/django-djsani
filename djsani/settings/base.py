@@ -148,8 +148,8 @@ LDAP_AUTH_USER_PK = False
 # auth backends
 AUTHENTICATION_BACKENDS = (
     'djauth.saml.backends.OneloginBackend',
-    'django.contrib.auth.backends.ModelBackend',
     'djauth.backends.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 # SAML settings
 SAML_DEBUG = False
@@ -160,7 +160,6 @@ SAML_USERNAME_ATTR = ''
 SAML_CID_ATTR = ''
 SAML_CREATE_USER = True
 SAML_UPDATE_USER = True
-SAML_IDP_FILE = os.path.join(BASE_DIR, 'idp_meta.xml')
 SAML_IDP_URL = 'https://{0}/{1}/saml/metadata/'.format(SERVER_URL, PROJECT_APP)
 SAML_SECURITY = {
     'nameIdEncrypted': False,
