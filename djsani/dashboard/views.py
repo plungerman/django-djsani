@@ -36,8 +36,9 @@ from djtools.utils.users import faculty_staff
 from djtools.utils.users import in_group
 
 
-STAFF = settings.STAFF_GROUP
 COACH = settings.COACH_GROUP
+STAFF = settings.STAFF_GROUP
+STUDENT = settings.STUDENT_GROUP
 
 
 logger = logging.getLogger('debug_logfile')
@@ -284,74 +285,80 @@ def student_detail(request, cid=None, medium=None, content_type=None):
     # search form, grab only numbers from string
     if not cid:
         cid = filter(str.isdigit, str(request.POST.get('cid')))
-    # get all managers for switch select options
-    managers = StudentMedicalManager.objects.filter(user__id=cid)
+    # fetch our student
+    try:
+        student = User.objects.get(pk=cid)
+    except Exception:
+        student = None
+
     # we do not want to display faculty/staff details
     # nor do we want to create a manager for them
-    manid = None
-    if cid and not faculty_staff(cid):
+    if student and in_group(student, STUDENT):
+
+
+
+
+        # get all managers for switch select options
+        managers = StudentMedicalManager.objects.filter(user__id=cid)
+        manid = None
         # manager ID comes from profile switcher POST from form
         manid = request.POST.get('manid')
         # or from URL with GET variable
         if not manid:
             manid = request.GET.get('manid')
-        # fetch our student
-        student = User.objects.get(pk=cid)
-        if student:
-            if manid:
-                manager = StudentMedicalManager.objects.filter(pk=manid).first()
-            if not manager:
-                manager = get_manager(cid)
-            # calculate student's age
-            try:
-                age = calculate_age(student.student.birth_date)
-            except Exception:
-                age = None
-            try:
-                gender = student.student.gender
-            except Exception:
-                gender = None
-            # emergency notification system
-            ens = None
-            # health insurance
-            shi = panels(
-                request,
-                StudentHealthInsurance,
-                manager,
-                content_type,
-            )
-            # student medical history
-            smh = panels(
-                request,
-                StudentMedicalHistory,
-                manager,
-                content_type,
-                gender,
-            )
-            # athlete medical history
-            amh = panels(
-                request,
-                AthleteMedicalHistory,
-                manager,
-                content_type,
-                gender,
-            )
-            # used for staff who update info on the dashboard
-            stype = 'student'
-            if manager:
-                if manager.sports and manager.sports.all():
-                    stype = 'athlete'
-            else:
-                messages.add_message(
-                    request,
-                    messages.SUCCESS,
-                    "Could not find a medical manager for the student with ID: {0}.".format(cid),
-                    extra_tags='bg-success',
-                )
-                return HttpResponseRedirect(reverse_lazy('dashboard_home'))
+
+
+        if manid:
+            manager = StudentMedicalManager.objects.filter(pk=manid).first()
+        if not manager:
+            manager = get_manager(cid)
+        # calculate student's age
+        try:
+            age = calculate_age(student.student.birth_date)
+        except Exception:
+            age = None
+        try:
+            gender = student.student.gender
+        except Exception:
+            gender = None
+        # emergency notification system
+        ens = None
+        # health insurance
+        shi = panels(
+            request,
+            StudentHealthInsurance,
+            manager,
+            content_type,
+        )
+        # student medical history
+        smh = panels(
+            request,
+            StudentMedicalHistory,
+            manager,
+            content_type,
+            gender,
+        )
+        # athlete medical history
+        amh = panels(
+            request,
+            AthleteMedicalHistory,
+            manager,
+            content_type,
+            gender,
+        )
+        # used for staff who update info on the dashboard
+        stype = 'student'
+        if manager:
+            if manager.sports and manager.sports.all():
+                stype = 'athlete'
         else:
-            age, ens, shi, smh, amh = (None,) * 5
-            student, stype, manager = (None,) * 5
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Could not find a medical manager for the student with ID: {0}.".format(cid),
+                extra_tags='bg-success',
+            )
+            return HttpResponseRedirect(reverse_lazy('dashboard_home'))
         return render(
             request,
             template,
@@ -373,7 +380,13 @@ def student_detail(request, cid=None, medium=None, content_type=None):
             },
         )
     else:
-        raise Http404
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Could not find a student with ID: {0}.".format(cid),
+            extra_tags='bg-success',
+        )
+        return HttpResponseRedirect(reverse_lazy('dashboard_home'))
 
 
 @group_required(STAFF, COACH)
