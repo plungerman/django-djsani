@@ -364,8 +364,8 @@ class StudentMedicalHistoryForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        """Initialisation of the form that accepts a 'gender' value."""
-        kwargs.pop('gender', 0)
+        """Initialisation of the form with an instance."""
+        self.instance = kwargs.pop('instance', None)
         super(StudentMedicalHistoryForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -1015,12 +1015,9 @@ class AthleteMedicalHistoryForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        """Initialisation of the form that accepts a 'gender' value."""
-        gender = kwargs.pop('gender', 0)
+        """Initialisation of the form with an instance."""
+        self.instance = kwargs.pop('instance', None)
         super(AthleteMedicalHistoryForm, self).__init__(*args, **kwargs)
-        if gender == 'M':
-            self.fields.pop('menstrual_cycle')
-            self.fields.pop('menstrual_cycle_2')
 
     def clean(self):
         """Form validation."""

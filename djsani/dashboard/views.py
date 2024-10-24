@@ -44,9 +44,9 @@ STUDENT = settings.STUDENT_GROUP
 logger = logging.getLogger('debug_logfile')
 
 
-def panels(request, mod, manager, content_type=None, gender=None):
+def panels(request, mod, manager, content_type=None):
     """
-    Accepts a data model class, manager object, optional gender.
+    Accepts a data model class, manager object, optional content_type.
 
     Returns the template data that paints the panels in the
     student detail view.
@@ -62,7 +62,7 @@ def panels(request, mod, manager, content_type=None, gender=None):
             form = str_to_class(
                 'djsani.medical_history.forms',
                 '{0}Form'.format(mname),
-            )(initial=panel, gender=gender)
+            )(initial=panel)
     template = loader.get_template('dashboard/panels/{0}.html'.format(mname))
     return template.render(
         {
@@ -317,10 +317,6 @@ def student_detail(request, cid=None, medium=None, content_type=None):
             age = calculate_age(student.student.birth_date)
         except Exception:
             age = None
-        try:
-            gender = student.student.gender
-        except Exception:
-            gender = None
         # emergency notification system
         ens = None
         # health insurance
@@ -336,7 +332,6 @@ def student_detail(request, cid=None, medium=None, content_type=None):
             StudentMedicalHistory,
             manager,
             content_type,
-            gender,
         )
         # athlete medical history
         amh = panels(
@@ -344,7 +339,6 @@ def student_detail(request, cid=None, medium=None, content_type=None):
             AthleteMedicalHistory,
             manager,
             content_type,
-            gender,
         )
         # used for staff who update info on the dashboard
         stype = 'student'

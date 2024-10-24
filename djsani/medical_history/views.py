@@ -71,7 +71,7 @@ def index(request, stype, display=None):
                 template = 'medical_history/form_update.html'
     if request.method == 'POST':
         post = request.POST.copy()
-        form = fclass(post, gender=gender, use_required_attribute=False, label_suffix='')
+        form = fclass(post, use_required_attribute=False, label_suffix='', instance=history)
         if form.is_valid():
             cd = form.cleaned_data
             # set 'yes' responses with value from temp field
@@ -103,10 +103,9 @@ def index(request, stype, display=None):
             for post_name, post_value in post.items():
                 if post_name[-2:] == '_2' and post_value:
                     cd[post_name[:-2]] = post_value
-
     else:
         form = fclass(
-            initial=cd, gender=gender, use_required_attribute=False, label_suffix='',
+            initial=cd, use_required_attribute=False, label_suffix='',
         )
 
     return render(
@@ -114,6 +113,7 @@ def index(request, stype, display=None):
         template,
         {
             'form': form,
+            'gender': gender,
             'data': cd,
             'stype': stype,
             'table': table,

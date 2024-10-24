@@ -171,8 +171,10 @@ $(document).ready(function() {
         <ol class="nobull">
           {% if stype == "athlete" %}
             {% for field in form.visible_fields %}
-              {% include "medical_history/athlete_headers.inc.html" %}
-              {% if field.name == 'mental_health_check' %}
+              {% if field.name == 'menstrual_cycle' and gender == 'Male' %}
+              {% else %}
+                {% include "medical_history/athlete_headers.inc.html" %}
+                {% if field.name == 'mental_health_check' %}
                 <li class="form-group ctrlHolder" id="switch_{{field.name}}">
                   {% if field.label %}<h3>{{ field.label_tag }}</h3>{% endif %}
                   {% if field.errors %}
@@ -187,11 +189,12 @@ $(document).ready(function() {
                   {{field}}
                   </div>
                 </li>
-              {% else %}
+                {% else %}
                 {% if field.value == "No" or not field.value %}
                   {% include "medical_history/form_field.inc.html" %}
                 {% else %}
                   {% include "medical_history/form_verify_field.inc.html" %}
+                {% endif %}
                 {% endif %}
               {% endif %}
             {% endfor %}
