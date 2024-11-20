@@ -295,9 +295,6 @@ def student_detail(request, cid=None, medium=None, content_type=None):
     # nor do we want to create a manager for them
     if student and in_group(student, STUDENT):
 
-
-
-
         # get all managers for switch select options
         managers = StudentMedicalManager.objects.filter(user__id=cid)
         manid = None
@@ -306,7 +303,6 @@ def student_detail(request, cid=None, medium=None, content_type=None):
         # or from URL with GET variable
         if not manid:
             manid = request.GET.get('manid')
-
 
         if manid:
             manager = StudentMedicalManager.objects.filter(pk=manid).first()
