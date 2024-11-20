@@ -293,7 +293,8 @@ def student_detail(request, cid=None, medium=None, content_type=None):
 
     # we do not want to display faculty/staff details
     # nor do we want to create a manager for them
-    if student and in_group(student, STUDENT):
+    #    in_group(student, STUDENT):
+    if student and hasattr(student, 'student'):
 
         # get all managers for switch select options
         managers = StudentMedicalManager.objects.filter(user__id=cid)
