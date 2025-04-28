@@ -42,7 +42,8 @@ dt.header{
 {% block content %}
 <div id="student-contact">
     <h1 id="page-header">
-    {{student.first_name}} {{student.last_name}}
+    {% if student.student.alt_name %}{{student.student.alt_name}}{% else %}{{student.first_name}}{% endif %}
+    {{student.last_name}}
     <small>DOB: {{student.student.birth_date}} &mdash; Age: {{age}}</small>
     </h1>
 </div>

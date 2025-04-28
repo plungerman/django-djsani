@@ -21,7 +21,7 @@
 {% block content %}
 <div id="student-contact">
   <h1 class="page-header">
-    {{student.first_name}} {{student.last_name}}
+    {% if student.alt_name %}{{student.alt_name}}{% else %}{{student.first_name}}{% endif %} {{student.last_name}}
     <small>DOB: {{student.student.birth_date}} &mdash; Age: {{age}}</small>
   </h1>
 </div>

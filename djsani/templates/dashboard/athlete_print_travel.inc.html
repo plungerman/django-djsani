@@ -1,6 +1,6 @@
 <div class="student-contact">
     <h1 class="page-header">
-    {{student.first_name}} {{student.last_name}} ({{student.gender}}) [{{student.id}}]
+    {% if student.alt_name %}{{student.alt_name}}{% else %}{{student.first_name}}{% endif %} {{student.last_name}} ({{student.gender}}) [{{student.id}}]
     {% if student.athlete %}<small>Athlete</small><br />{% endif %}
     <small>DOB: {{student.birth_date}} &mdash; Age: {{student.age}}</small>
     </h1>

@@ -71,11 +71,14 @@ def index(request, stype, cid=None):
                         else:
                             to_list = settings.INSURANCE_RECIPIENTS
                         phrum = user.email
+                        first_name = user.first_name
+                        if user.student.alt_name:
+                            first_name = user.student.alt_name
                         send_mail(
                             request,
                             to_list,
                             "[Health Insurance] Opt Out: {0} {1} ({2})".format(
-                                user.first_name,
+                                first_name,
                                 user.last_name,
                                 cid,
                             ),

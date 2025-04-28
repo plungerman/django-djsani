@@ -214,6 +214,9 @@ def harm_email(sender, instance, **kwargs):
     """send an email if student indicates an inclination to harm self/others."""
     if not settings.ACADEMIC_YEAR_LIMBO:
         user = instance.user
+        first_name = user.first_name
+        if user.student.alt_name:
+            first_name = user.student.alt_name
         if instance.self_others_harm and instance.self_others_harm != 'No':
             to_list = settings.HARM_EMAIL_LIST
             if settings.DEBUG:
@@ -224,7 +227,7 @@ def harm_email(sender, instance, **kwargs):
                 to_list,
                 '[Harm Self or Others] {0}, {1} ({2})'.format(
                     user.last_name,
-                    user.first_name,
+                    first_name,
                     user.id,
                 ),
                 phrum,
@@ -243,7 +246,7 @@ def harm_email(sender, instance, **kwargs):
                 to_list,
                 '[Harm Self or Others] {0}, {1} ({2})'.format(
                     user.last_name,
-                    user.first_name,
+                    first_name,
                     user.id,
                 ),
                 phrum,

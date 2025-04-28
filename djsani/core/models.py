@@ -32,6 +32,9 @@ REZ_CHOICES = (
 def uploaded_email(sender, instance, manager, philes):
     """Send an email with data from model signal when student uploads file."""
     user = instance.user
+    first_name = user.first_name
+    if user.student.alt_name:
+        first_name = user.student.alt_name
     if user and manager:
         to_list = []
         for trainer, sports in settings.UPLOAD_EMAIL_DICT.items():
@@ -63,7 +66,7 @@ def uploaded_email(sender, instance, manager, philes):
                     to_list,
                     '[File Uploaded] {0}, {1} ({2})'.format(
                         user.last_name,
-                        user.first_name,
+                        first_name,
                         user.id,
                     ),
                     phrum,
@@ -282,7 +285,10 @@ class CoachProfile(models.Model):
 
     def first_name(self):
         """Construct the link to the default view using the user's first name."""
-        return self.user.first_name
+        firstname = self.user.first_name
+        if self.user.student.alt_name:
+            firstname = self.user.student.alt_name
+        return firstname
     first_name.allow_tags = True
     first_name.short_description = "Given Name"
 
@@ -360,7 +366,10 @@ class StudentProfile(models.Model):
 
     def first_name(self):
         """Construct the link to the default view using the user's first name."""
-        return self.user.first_name
+        firstname = self.user.first_name
+        if self.user.student.alt_name:
+            firstname = self.user.student.alt_name
+        return firstname
     first_name.allow_tags = True
     first_name.short_description = "Given Name"
 

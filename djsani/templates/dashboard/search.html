@@ -20,13 +20,13 @@
             {% if staff %}
             <li>
               <a href="{% url 'student_detail' s.id %}">
-              {{s.last_name}}, {{s.first_name}}</a>
+              {{s.last_name}}, {% if s.student.alt_name %}{{s.student.alt_name}}{% else %}{{s.first_name}}{% endif %}</a>
             </li>
             {% else %}
               {% if s.student.get_manager.id  %}
                 <li>
                 <a href="{% url 'sports' s.student.get_manager.id %}">
-                {{s.last_name}}, {{s.first_name}}</a>
+                {{s.last_name}}, {% if s.alt_name %}{{s.alt_name}}{% else %}{{s.first_name}}{% endif %}</a>
                 </li>
               {% endif %}
             {% endif %}

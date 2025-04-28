@@ -42,7 +42,7 @@ dt.header{
 {% block content %}
 <div id="student-contact">
     <h1 id="page-header">
-    {{request.user.last_name}}, {{request.user.first_name}}
+    {{request.user.last_name}}, {% if request.user.student.alt_name %}{{request.user.student.alt_name}}{% else %}{{request.user.first_name}}{% endif %}
     </h1>
 </div>
 <div id="student-medical-history">
