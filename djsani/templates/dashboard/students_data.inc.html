@@ -126,7 +126,7 @@
             <td class="{{s.adult}} student-name" style="text-align:left;">
               {% if staff %}
                 <a href="{% url 'student_detail' s.id %}">
-                  {{s.last_name}}, {{s.first_name}}</a>
+                  {{s.last_name}}, {% if s.alt_name %}{{s.alt_name}}{% else %}{{s.first_name}}{% endif %}</a>
                 {% if s.athlete %}
                 <span style="float:right;margin-left:3px;">
                 <i class="fa fa-star green" title="Athlete: {{s.class_year}}"></i>
@@ -134,7 +134,7 @@
                 {% endif %}
               {% else %}
                 <a href="{% url 'sports' s.manid %}">
-                  {{s.last_name}}, {{s.first_name}}</a>
+                  {{s.last_name}}, {% if s.alt_name %}{{s.alt_name}}{% else %}{{s.first_name}}{% endif %}</a>
               {% endif %}
             </td>
             {% if staff or coach %}
