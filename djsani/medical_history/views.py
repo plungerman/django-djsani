@@ -37,7 +37,7 @@ def index(request, stype, display=None):
     if not fclass:
         raise Http404
     # default template
-    template = 'medical_history/form.html'
+    template = 'medical_history/form_{0}.html'.format(stype)
     # check for student record(s)
     update = False
     table = 'cc_{0}_medical_history'.format(stype)

@@ -181,14 +181,6 @@ class StudentMedicalManager(models.Model):
         blank=True,
     )
     medical_consent_agreement_status = models.BooleanField(null=True)
-    covid19_vaccine_card = models.FileField(
-        upload_to=upload_to_path,
-        validators=FILE_VALIDATORS,
-        max_length=128,
-        null=True,
-        blank=True,
-    )
-    covid19_vaccine_card_status = models.BooleanField(null=True)
     physical_evaluation_1 = models.FileField(
         upload_to=upload_to_path,
         validators=FILE_VALIDATORS,

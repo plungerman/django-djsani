@@ -22,28 +22,7 @@ MENTAL_HEALTH_CHECK = (
 class StudentMedicalHistoryForm(forms.Form):
     """Medical history for all students."""
 
-    covid19_positive_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    covid19_positive = forms.CharField(
-        label="Have you tested positive for COVID-19?",
-        help_text="""
-            If yes, please provide the month and year in your explanation
-        """,
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    covid19_vacination_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    covid19_vacination = forms.CharField(
-        label="Have received the COVID-19 vaccination?",
-        help_text="""
-            If yes, please provide the month and year in your explanation
-        """,
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
+    #General Medical History
     allergies_medical_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
@@ -57,6 +36,15 @@ class StudentMedicalHistoryForm(forms.Form):
     )
     allergies_other = forms.CharField(
         label="Do you have any seasonal, environmental, or food allergies?",
+        help_text="Includes bee/wasp stings",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    epi_pen_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    epi_pen = forms.CharField( # new
+        label="Do you carry an Epi-Pen?",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
@@ -66,8 +54,9 @@ class StudentMedicalHistoryForm(forms.Form):
     medications = forms.CharField(
         label="Do you take any medications on a routine basis?",
         help_text="""
-            This should include prescription & over the counter medicines
-            (name, dose, frequency).
+            This should include prescription & over the counter medicines (name, dose, frequency).
+            If you list a prescription medication, you MUST indicate the corresponding diagnosis
+            in the questions below.
         """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -78,18 +67,7 @@ class StudentMedicalHistoryForm(forms.Form):
     hospitalizations = forms.CharField(
         label="Have you had any hospitalizations or surgeries?",
         help_text="""
-            If yes, please provide the year(s) in your explanation.
-        """,
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    chicken_pox_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    chicken_pox = forms.CharField(
-        label="Have you had chicken pox?",
-        help_text="""
-            If yes, please provide the month and year in your explanation.
+            If yes, please provide the year(s) in your explanation. (Includes insertion of ear tubes)
         """,
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
@@ -99,30 +77,7 @@ class StudentMedicalHistoryForm(forms.Form):
     )
     organ_loss = forms.CharField(
         label="Absence/Loss of organ",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    substance_abuse_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    substance_abuse = forms.CharField(
-        label="Alcohol/Substance abuse",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    anemia_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    anemia = forms.CharField(
-        label="Anemia/Iron deficiency",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    bronchospasm_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    bronchospasm = forms.CharField(
-        label="Asthma/Exertion induced bronchospasm",
+        help_text="Includes tonsils/appendix",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
@@ -130,97 +85,15 @@ class StudentMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(), required=False,
     )
     birth_defect = forms.CharField(
+        help_text = "Please list",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    blood_disorder_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    blood_disorder = forms.CharField(
-        label="Bleeding/Blood disorder",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    bronchitis_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    bronchitis = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-        label="Bronchitis (recurrent)",
     )
     cancer_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
     cancer = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    diabetes_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    diabetes = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    ent_disorder_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    ent_disorder = forms.CharField(
-        label="Ear, nose, and throat disorder",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    headaches_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    headaches = forms.CharField(
-        label="Headaches (recurrent)",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    head_injury_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    head_injury = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    heart_condition_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    heart_condition = forms.CharField(
-        label="Heart condition/murmur",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    hepatitis_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    hepatitis = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    hernia_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    hernia = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    hyper_tension_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    hyper_tension = forms.CharField(
-        label="High blood pressure",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    hiv_aids_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    hiv_aids = forms.CharField(
-        label="HIV/AIDS",
+        help_text = "Please list",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
@@ -232,89 +105,7 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
-    ibd_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    ibd = forms.CharField(
-        label="Inflammatory bowel disease",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    kidney_urinary_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    kidney_urinary = forms.CharField(
-        label="Kidney/Urinary tract problems",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    meningitis_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    meningitis = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    mrsa_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    mrsa = forms.CharField(
-        label="MRSA/Staph infection",
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    pneumonia_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    pneumonia = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    rheumatic_fever_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    rheumatic_fever = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    seizure_disorder_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    seizure_disorder = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    stroke_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    stroke = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    thyroid_disorder_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    thyroid_disorder = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    tuberculosis_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    tuberculosis = forms.CharField(
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
-    other_condition_2 = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-    )
-    other_condition = forms.CharField(
-        label="""
-            Do you have any illness or medical condition not listed above
-        """,
-        max_length=255,
-        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
-    )
+    # Mental Health
     depression_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
@@ -337,6 +128,256 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
+    substance_abuse_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    substance_abuse = forms.CharField(
+        label="Alcohol/Substance abuse disorder",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_mental_health_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_mental_health = forms.CharField(
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Cardiovascular
+    blood_disorder_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    blood_disorder = forms.CharField(
+        label="Bleeding/Blood disorder",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    heart_condition_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    heart_condition = forms.CharField(
+        label="Heart murmur",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    pots_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    pots = forms.CharField( # new
+        label="POTS",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    hyper_tension_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    hyper_tension = forms.CharField(
+        label="High blood pressure",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    anemia_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    anemia = forms.CharField(
+        label="Anemia/Iron deficiency",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    sickle_cell_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    sickle_cell = forms.CharField( # new
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    rheumatic_fever_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    rheumatic_fever = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_heart_condition_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_heart_condition = forms.CharField( # new
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Respiratory
+    bronchospasm_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    bronchospasm = forms.CharField(
+        label="Asthma/Exertion induced asthma",
+        help_text = "Includes childhood",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    bronchitis_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    bronchitis = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+        label="Bronchitis",
+    )
+    pneumonia_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    pneumonia = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    long_covid_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    long_covid = forms.CharField( # new
+        label="Long COVID Lung Issues",
+        help_text="Please describe",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    tuberculosis_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    tuberculosis = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    ent_disorder_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    ent_disorder = forms.CharField(
+        label="Ear, nose, and throat disorder",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_respiratory_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_respiratory = forms.CharField( # new
+        label="Other Respiratory Condition",
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    smoke_vape_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    smoke_vape = forms.CharField( # new
+        label="Do you Smoke or Vape?",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Digestive
+    hepatitis_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    hepatitis = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    hernia_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    hernia = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    ibd_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    ibd = forms.CharField(
+        label="Inflammatory Bowel Disease/Crohn's",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    ibs_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    ibs = forms.CharField( # new
+        label="IBS",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    gerd_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    gerd = forms.CharField( # new
+        label="GERD",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_digestive_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_digestive = forms.CharField( # new
+        label="Other Digestive Condition",
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Urinary
+    kidney_disease_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    kidney_disease = forms.CharField( # new
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    kidney_stones_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    kidney_stones = forms.CharField( # new
+        label="",
+        help_text="",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    kidney_urinary_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    kidney_urinary = forms.CharField(
+        label="Urinary tract problems",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_urinary_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_urinary = forms.CharField( # new
+        label="Other Endocrine Condition",
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Endocrine
+    diabetes_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    diabetes = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    thyroid_disorder_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    thyroid_disorder = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_endocrine_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_endocrine = forms.CharField( # new
+        label="Other Endocrine Condition",
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Neurologic
     adhd_add_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
@@ -348,18 +389,135 @@ class StudentMedicalHistoryForm(forms.Form):
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
-    substance_abuse_2 = forms.CharField(
+    autism_2 = forms.CharField( # new
         widget=forms.HiddenInput(), required=False,
     )
-    substance_abuse = forms.CharField(
-        label="Alcohol/Substance Abuse Disorder",
+    autism = forms.CharField( # new
+        label="Autism Spectrum Disorder",
+        help_text="",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
-    other_mental_health_2 = forms.CharField(
+    headaches_2 = forms.CharField(
         widget=forms.HiddenInput(), required=False,
     )
-    other_mental_health = forms.CharField(
+    headaches = forms.CharField(
+        label="Headaches / Migraines",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    head_injury_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    head_injury = forms.CharField(
+        help_text = "Including Concussions",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    meningitis_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    meningitis = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    seizure_disorder_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    seizure_disorder = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    stroke_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    stroke = forms.CharField(
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_neurologic_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_neurologic = forms.CharField( # new
+        label="Other Neurologic Condition",
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Skin
+    acne_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    acne = forms.CharField( # new
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    eczema_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    eczema = forms.CharField( # new
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    mrsa_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    mrsa = forms.CharField(
+        label="MRSA/Staph infection",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    psoriasis_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    psoriasis = forms.CharField( # new
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_skin_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_skin = forms.CharField( # new
+        label="Other Skin Condition",
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # Autoimmune
+    hiv_aids_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    hiv_aids = forms.CharField(
+        label="HIV/AIDS",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    lupus_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    lupus = forms.CharField( # new
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    other_autoimmune_2 = forms.CharField( # new
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_autoimmune = forms.CharField( # new
+        label="Other Autoimmune Disorder",
+        help_text="Please list",
+        max_length=255,
+        widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
+    )
+    # other
+    other_condition_2 = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+    )
+    other_condition = forms.CharField(
+        label="""
+            Do you have any illness or medical condition not listed above
+        """,
+        help_text = "Please list",
+        max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
     )
 
@@ -1071,19 +1229,6 @@ class MedicalConsentAgreementForm(forms.Form):
             Photo or scan of your signed medical consent and
             medical insurance agreement form
         """,
-        validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
-        ],
-        required=True,
-    )
-
-
-class Covid19VaccineCardForm(forms.Form):
-    """COVID-19 Vaccine Card form class."""
-
-    covid19_vaccine_card = forms.FileField(
-        label="Upload your file",
-        help_text="Photo or scan of your COVID-19 vaccine card.",
         validators=[
             FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS),
         ],

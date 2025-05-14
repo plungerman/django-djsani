@@ -56,9 +56,7 @@
                     <a href="#" id="{{field.name}}" data-type="text"
                         data-pk="{{data.id}}"
                         data-table="student_medical_history"
-                        data-title="{{field.label}}" class="xeditable">
-                        {{field.value|default_if_none:"&nbsp;"}}
-                    </a>
+                        data-title="{{field.label}}" class="xeditable">{{field.value|default_if_none:"&nbsp;"}}{% if not field.value %}<i class="fa fa-pencil" aria-hidden="true" title="Please answer this question"></i>{% endif %}</a>
                     {% if field.help_text %}
                         <p class="help">{{field.help_text}}</p>
                     {% endif %}

@@ -1,0 +1,273 @@
+{% extends "home.html" %}
+{% load filters %}
+{% load livewhale_api %}
+{% block title %}
+  Medical History &mdash;
+  Health and Counseling &mdash; Carthage College
+{% endblock %}
+{% block extra_style %}
+{{block.super}}
+<link rel="stylesheet" type="text/css" media="screen"
+  href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" media="screen"
+  href="https://app.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/css/bootstrapValidator.min.css">
+{% endblock %}
+{% block extra_javascript %}
+<script src="https://app.carthage.edu/static/vendor/jquery/plugins/jquery.mtz.monthpicker.js"></script>
+<script src="https://app.carthage.edu/static/vendor/jquery/plugins/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+  var mentalHealth = false;
+  var mentalHealthList = [
+    "anxiety","depression","trouble_sleeping","more_energy",
+    "recurring_thoughts","anxious_nervious","depressed","lack_confidence",
+    "overwhelmed","lack_emotional_control","self_others_harm","lost_interest",
+    "isolated_alone","counseling","eating_disorder","adhd_add",
+    "substance_abuse","self_harm","other_mental_health","despair"
+  ];
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+  options = {
+    startYear: 1980,
+    finalYear: new Date().getFullYear()
+  };
+  // hide all text fields
+  $("li[id$='_2']").hide();
+  // show text fields with content
+  $(".medical-history-verify").show();
+  // set all radios to 'no' or not
+  $("#toggle_no").on('click', function() {
+    /* we need 'prop' to manage the UI selecting of 'no' button */
+    $("input[id$='_1']").prop('checked', this.checked);
+    /* we need 'attr' to set checked="checked" for POST value */
+    if ($(this).is(':checked')) {
+      $("input[id$='_1']").attr("checked", "checked");
+      $("li[id$='_2']").hide();
+      $("input[id$='_2']").val("");
+      $("li.error").remove();
+    } else {
+      $("input[id$='_0']").removeAttr("checked");
+    }
+  });
+  $("input:radio").on('change', function() {
+    nm = $(this).attr('name');
+    id = nm + "_2";
+    val = $(this).val();
+    if (val == "Yes") {
+      $("#" + id).show();
+      if (mentalHealth == false) {
+        if( $.inArray(nm, mentalHealthList) != -1){
+          if (nm == 'self_others_harm') {
+            $('#harmModal').modal('show');
+          } else {
+            $('#mentalHealthModal').modal('show');
+          }
+          mentalHealth = true;
+        }
+      }
+    }
+    if (val == "No") {
+      $("#" + id).hide();
+    }
+  });
+  {% if form.self_others_harm.value == 'Yes' %}
+    $('#switch_mental_health_check').show();
+  {% else %}
+    $('#switch_mental_health_check').hide();
+  {% endif %}
+  $("input[name='self_others_harm']").on('change', function() {
+    val = $(this).val();
+    if (val == "Yes") {
+      $('#switch_mental_health_check').show();
+    }
+    if (val == "No") {
+      $('#switch_mental_health_check').hide();
+    }
+  });
+  {% if form.errors %}
+  $(':radio:checked').each(function() {
+    val = $(this).val();
+    if (val != "No" &&  val != "" ) {
+      nm = $(this).attr('name');
+      id = nm + "_2";
+      $("#" + id).show();
+    }
+  });
+  {% endif %}
+  $('.medical-history').submit(function( event ) {
+    var elem = document.getElementById('medical-history').elements;
+    var radios = {};
+    $(':radio').each(function() {
+      radios[$(this).attr('name')] = true;
+    });
+    var count = 0;
+    $.each(radios, function() {
+      count++;
+    });
+    if ($(':radio:checked').length === count) {
+      error = false;
+    }else{
+      error = true;
+    }
+    /* copy _2 to _1 */
+    if(!error){
+      for(var i = 0; i < elem.length; i++) {
+        var e = elem[i];
+        var yes = e.name.match(/_2$/);
+        // we can remove this "hidden" clause
+        if (yes && e.type != "hidden" && $("#" + yes).is(":visible") ) {
+          if (!e.value) {
+            error = true;
+          } else {
+              elem[i-1].value = e.value;
+          }
+        }
+      }
+      // disable submit
+      //$(this).children('input[type=submit]').attr('disabled', 'disabled');
+      $('#id_submit').prop('disabled', true);
+    }
+    if (error) {
+      if(event.preventDefault) {
+        event.preventDefault();
+      } else {
+        event.returnValue = false;
+        return false;
+      }
+      $('#errorModal').modal('show');
+    }
+  });
+});
+</script>
+{% endblock %}
+{% block content %}
+<div class="large-12 forms-container">
+  <h2>
+    Medical history for athletes
+  </h2>
+  {% get_lw_content as instructions blurbs 2223 %}
+  {{instructions.body|safe}}
+  <div class="alert alert-warning" role="alert">
+    <p>
+      All questions are 'yes' or 'no' answer,
+      where a 'yes' response requires an explanation.
+    </p>
+  </div>
+  {% include "includes/errors_text.html" %}
+  {% if request.user.is_superuser %}
+  <p><input id='toggle_no' type='checkbox'></p>
+  {% endif %}
+  <form method="post" action="." class="form medical-history">
+    {% csrf_token %}
+    <fieldset class="blockLabels">
+      <ol class="nobull">
+        {% for field in form.visible_fields %}
+          {% if field.name == 'menstrual_cycle' and gender == 'Male' %}
+          {% else %}
+            {% include "medical_history/athlete_headers.inc.html" %}
+            {% if field.name == 'mental_health_check' %}
+            <li class="form-group ctrlHolder" id="switch_{{field.name}}">
+              {% if field.label %}<h3>{{ field.label_tag }}</h3>{% endif %}
+              {% if field.errors %}
+              <div class="required warning">
+                <span class="error">{{ field.errors|join:", "}}</span>
+              {% else %}
+              <div{% if field.field.required %} class="required"{% endif %}>
+              {% endif %}
+              {% if field.help_text %}
+                  <p class="small text-muted">{{field.help_text|safe}}</p>
+              {% endif %}
+              {{field}}
+              </div>
+            </li>
+            {% else %}
+            {% if field.value == "No" or not field.value %}
+              {% include "medical_history/form_field.inc.html" %}
+            {% else %}
+              {% include "medical_history/form_verify_field.inc.html" %}
+            {% endif %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </ol>
+    </fieldset>
+    {% include "form_submit.inc.html" %}
+  </form>
+  <div id="errorModal" class="modal fade bs-example-modal-sm" tabindex="-1"
+    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">
+              Close
+            </span>
+          </button>
+          <h1 class="modal-title">Error</h1>
+        </div>
+        <div class="modal-body">
+          <p>
+            You did not respond with a "Yes" or "No" to all of the questions,
+            or you responsed "Yes" to one of the questions but did not provide
+            an explanation.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div>
+  </div>
+  <div id="mentalHealthModal" class="modal fade bs-example-modal-sm" tabindex="-1"
+    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">
+              Close
+            </span>
+          </button>
+          <h1 class="modal-title">Counseling services</h1>
+        </div>
+        <div class="modal-body">
+          <p>
+            {% get_lw_content as counseling blurbs 2174 %}
+            {{counseling.body|safe}}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div>
+  </div>
+  <div id="harmModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Counseling services</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {% get_lw_content as harm blurbs 3345 %}
+          {{harm.body|safe}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
