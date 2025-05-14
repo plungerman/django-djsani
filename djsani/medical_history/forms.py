@@ -331,7 +331,6 @@ class StudentMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(), required=False,
     )
     kidney_stones = forms.CharField( # new
-        label="",
         help_text="",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),

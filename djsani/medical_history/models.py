@@ -43,6 +43,8 @@ class StudentMedicalHistory(models.Model):
     other_urinary = models.TextField(null=True)
     other_endocrine = models.TextField(null=True)
     autism = models.TextField(null=True)
+    other_neurologic = models.TextField(null=True)
+    acne = models.TextField(null=True)
     eczema = models.TextField(null=True)
     psoriasis = models.TextField(null=True)
     other_skin = models.TextField(null=True)

@@ -2,55 +2,12 @@
 <form class="form medical-history">
     <div id="medical-history">
         <fieldset class="blockLabels">
-            <ol class="nobull" style="float:left;">
+            <p>
+                For any item to which you would answer "Yes",
+                please provide an explanation.
+            </p>
+            <ol style="float:left;">
                 {% for field in form.visible_fields %}
-                    {% if forloop.first %}
-                    <li>
-                        <p>
-                            For any item to which you would answer "Yes",
-                            please provide an explanation.
-                        </p>
-                    </li>
-                    {% endif %}
-                    {% if field.name == "organ_loss" %}
-                    </li></ol></fieldset>
-                    <fieldset class="blockLabels">
-                    {% if not update %}
-                    <p>
-                        Please check "yes" for any conditions with
-                        which you have been diagnosed. Please
-                        provide an explanation for any item to which you would
-                        answer "yes".
-                    </p>
-                    {% else %}
-                    <p>
-                        For any item to which you would answer "Yes",
-                        please provide an explanation.
-                    </p>
-                    {% endif %}
-                    <ol>
-                    {% endif %}
-                    {% if field.name == "trouble_sleeping" %}
-                    </li></ol></fieldset>
-                    <fieldset class="blockLabels">
-                      <legend>
-                        Student Mental Health Screening
-                      </legend>
-                      <p>
-                      Please answer all questions honestly.
-                      All answers are <u>confidential</u> and
-                      will not be shared. For any item to which you
-                      would answer "Yes", please provide an explanation.
-                      </p>
-                      <ol>
-                    {% endif %}
-                    {% if field.name == "depression" %}
-                    <li class="form-group ctrlHolder">
-                      <h3 style="color: #000;font-weight:700;">
-                        I have been diagnosed by a medical professional with the following:
-                      </h3>
-                    </li>
-                    {% endif %}
                     <li class="form-group ctrlHolder">
                     <h3>{{ field.label_tag }}</h3>
                     <a href="#" id="{{field.name}}" data-type="text"
