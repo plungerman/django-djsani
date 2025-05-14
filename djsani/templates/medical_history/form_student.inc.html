@@ -1,29 +1,91 @@
 {% load livewhale_api %}
 <form class="form medical-history">
-    <div id="medical-history">
-        <fieldset class="blockLabels">
-            <p>
-                For any item to which you would answer "Yes",
-                please provide an explanation.
-            </p>
-            <ol style="float:left;">
-                {% for field in form.visible_fields %}
-                    <li class="form-group ctrlHolder">
-                    <h3>{{ field.label_tag }}</h3>
-                    <a href="#" id="{{field.name}}" data-type="text"
-                        data-pk="{{data.id}}"
-                        data-table="student_medical_history"
-                        data-title="{{field.label}}" class="xeditable">{{field.value|default_if_none:"&nbsp;"}}{% if not field.value %}<i class="fa fa-pencil" aria-hidden="true" title="Please answer this question"></i>{% endif %}</a>
-                    {% if field.help_text %}
-                        <p class="help">{{field.help_text}}</p>
-                    {% endif %}
-                    </li>
-                {% endfor %}
-                <li class="form-group ctrlHolder">
-                  {% get_lw_content as mental_health blurbs 3293 %}
-                  {{mental_health.body|safe}}
-                </li>
-            </ol>
-        </fieldset>
-    </div>
+  <div id="medical-history">
+    <fieldset class="blockLabels">
+      <h2>General Medical History</h2>
+      <ol style="float:left;">
+      {% for field in form.visible_fields %}
+        {% if field.name == "depression" %}
+          </ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Mental Health</h2>
+          <ol>
+            <li class="form-group ctrlHolder">
+              <h3 style="color: #000;font-weight:700;">
+                I have been diagnosed by a medical professional
+                with the following:
+              </h3>
+            </li>
+        {% endif %}
+        {% if field.name == "blood_disorder" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Cardiovascular</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "bronchospasm" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Respiratory</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "hepatitis" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Digestive</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "kidney_disease" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Urinary</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "diabetes" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Endocrine</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "adhd_add" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Neurologic</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "acne" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Skin</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "hiv_aids" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <h2>Autoimmune</h2>
+          <ol>
+        {% endif %}
+        {% if field.name == "other_condition" %}
+          </li></ol></fieldset>
+          <fieldset class="blockLabels">
+          <ol class="nobull">
+        {% endif %}
+        <li class="form-group ctrlHolder">
+          <h3>{{ field.label_tag }}</h3>
+          <a href="#" id="{{field.name}}" data-type="text"
+              data-pk="{{data.id}}"
+              data-table="student_medical_history"
+              data-title="{{field.label}}" class="xeditable">{{field.value|default_if_none:"&nbsp;"}}{% if not field.value %}<i class="fa fa-pencil" aria-hidden="true" title="Please answer this question"></i>{% endif %}</a>
+          {% if field.help_text %}
+              <p class="help">{{field.help_text}}</p>
+          {% endif %}
+        </li>
+      {% endfor %}
+      <li class="form-group ctrlHolder">
+        {% get_lw_content as mental_health blurbs 3293 %}
+        {{mental_health.body|safe}}
+      </li>
+      </ol>
+    </fieldset>
+  </div>
 </form>

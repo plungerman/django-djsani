@@ -347,7 +347,7 @@ class StudentMedicalHistoryForm(forms.Form):
         widget=forms.HiddenInput(), required=False,
     )
     other_urinary = forms.CharField( # new
-        label="Other Endocrine Condition",
+        label="Other Urinary Condition",
         help_text="Please list",
         max_length=255,
         widget=forms.RadioSelect(choices=BINARY_CHOICES, attrs=REQ_CSS),
