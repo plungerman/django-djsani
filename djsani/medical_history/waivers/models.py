@@ -189,6 +189,7 @@ class Privacy(models.Model):
         """Attributes about the data model and admin options."""
 
         db_table = 'athlete_privacy_waiver'
+        verbose_name_plural = "Privacies"
 
     def __str__(self):
         """Default data for display."""

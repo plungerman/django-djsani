@@ -106,6 +106,7 @@ class StudentMedicalHistory(models.Model):
         """Attributes about the data model and admin options."""
 
         db_table = 'student_medical_history'
+        verbose_name_plural = "student medical histories"
 
     def __str__(self):
         """Default data for display."""
@@ -218,6 +219,7 @@ class AthleteMedicalHistory(models.Model):
         """Attributes about the data model and admin options."""
 
         db_table = 'athlete_medical_history'
+        verbose_name_plural = "athlete medical histories"
 
     def __str__(self):
         """Default data for display."""
