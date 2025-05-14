@@ -244,8 +244,8 @@ def sports(request, mid):
                 stu.save()
 
                 firstname = manager.user.first_name
-                if manager.student.alt_name:
-                    firstname = manager.student.alt_name
+                if manager.user.student.alt_name:
+                    firstname = manager.user.student.alt_name
 
                 messages.add_message(
                     request,
