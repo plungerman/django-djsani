@@ -9,6 +9,9 @@
 <link href="https://app.carthage.edu/themes/shared/css/print.css" rel="stylesheet" media="print">
 <link href="{% static 'css/print.css' %}" rel="stylesheet" type="text/css" media="print">
 {% endblock %}
+{% block jquery %}
+ <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+{% endblock %}
 {% block extra_javascript %}
 <script type="text/javascript" charset="utf-8">
 var $setVal = "{% url 'set_val' %}";
