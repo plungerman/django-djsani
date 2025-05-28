@@ -43,11 +43,14 @@ def main():
     print("select all managers")
     managers = StudentMedicalManager.objects.filter(created_at__gte=settings.START_DATE)
     for man in managers:
+        ids = []
         try:
             obj = model.objects.filter(user=man.user).filter(created_at__gte=settings.START_DATE)
             if len(obj) > 1:
-                print("Manager ID {0} has more than 1 rec: {1}".format(
-                    man.user.id, len(obj),
+                for o in obj:
+                    ids.append(o.id)
+                print("Manager ID {0} has more than 1 rec: {1} [{2}]".format(
+                    man.user.id, len(obj), ids,
                 ))
         except Exception as error:
             print(error)
