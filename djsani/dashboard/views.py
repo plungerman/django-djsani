@@ -251,7 +251,7 @@ def sports(request, mid):
                     request,
                     messages.SUCCESS,
                     "Sports for student {0}, {1} have been updated.".format(
-                        manager.user.last_name, first_name,
+                        manager.user.last_name, manager.user.first_name,
                     ),
                     extra_tags='bg-success',
                 )
