@@ -222,11 +222,19 @@ class StudentMedicalManager(models.Model):
 
     def get_insurance(self):
         """Return current insurance object"""
-        return self.insurance.filter(created_at__gte=settings.START_DATE).first()
+        try:
+            insurance = self.insurance.get(manager__id=self.id)
+        except Exception:
+            insurance = None
+        return insurance
 
     def get_meni(self):
         """Return current meni waiver"""
-        return self.meni.filter(created_at__gte=settings.START_DATE).first()
+        try:
+            meni = self.meni.get(manager__id=self.id)
+        except Exception:
+            meni = None
+        return meni
 
     def get_privacy(self):
         """Return current privacy waiver"""
@@ -238,11 +246,19 @@ class StudentMedicalManager(models.Model):
 
     def get_reporting(self):
         """Return current reporting waiver"""
-        return self.reporting.filter(created_at__gte=settings.START_DATE).first()
+        try:
+            report = self.reporting.get(manager__id=self.id)
+        except Exception:
+            report = None
+        return report
 
     def get_risk(self):
         """Return current risk waiver"""
-        return self.risk.filter(created_at__gte=settings.START_DATE).first()
+        try:
+            risk = self.risk.get(manager__id=self.id)
+        except Exception:
+            risk = None
+        return risk
 
     def get_sicklecell(self):
         """Return current risk waiver"""
