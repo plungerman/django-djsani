@@ -230,7 +230,11 @@ class StudentMedicalManager(models.Model):
 
     def get_privacy(self):
         """Return current privacy waiver"""
-        return self.privacy.filter(created_at__gte=settings.START_DATE).first()
+        try:
+            priv = self.privacy.get(manager__id=self.id)
+        except Exception:
+            priv = None
+        return priv
 
     def get_reporting(self):
         """Return current reporting waiver"""
@@ -242,7 +246,7 @@ class StudentMedicalManager(models.Model):
 
     def get_sicklecell(self):
         """Return current risk waiver"""
-        return self.sicklecell.filter(created_at__gte=settings.START_DATE).first()
+        return self.sicklecell.filter(user=self.user).first()
 
     def get_slug(self):
         """Used for the upload_to_path helper for file uplaods."""
