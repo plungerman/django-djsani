@@ -242,14 +242,23 @@
   <div class="row">
     <div class="col-lg-7">
       <h3>
-        {% if student.student.alt_name %}{{student.student.alt_name}}{% else %}{{student.first_name}}{% endif %}
+        {% if student.student.alt_name %}
+          {{student.student.alt_name}}
+        {% else %}
+          {{student.first_name}}
+        {% endif %}
         {{student.last_name}}
-        <small>
-          ({{student.student.gender}}) &mdash;
-          DOB: {{student.student.birth_date}}
-          ({{age}}) [{{student.student.class_year}}]
-        </small>
+        {% if student.student.alt_name != student.first_name %}
+        [{{student.first_name}} {{student.last_name}}]
+        {% endif %}
       </h3>
+      <h4>
+        <small>
+        ({{student.student.gender}}) &mdash;
+        DOB: {{student.student.birth_date}}
+        ({{age}}) [{{student.student.class_year}}]
+        </small>
+      </h4>
       <form class="form mb-2">
         <div class="mb-1"><strong>Sports:</strong>
         {% if manager.sports.all %}
